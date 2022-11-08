@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mybackend
+  namespace: dapr-k8s-poc
+  labels:
+    app: mybackend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mybackend
+  template:
+    metadata:
+      labels:
+        app: mybackend
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "mybackend"
+        dapr.io/app-port: "80"
+        dapr.io/enable-profiling: "true"
+        dapr.io/config: "dapr-config"
+    spec:
+      containers:
+      - name: mybackend
+        image: cesardl/mybackend:latest
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+      restartPolicy: Always
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: mybackend
+  name: mybackend
+  namespace: dapr-k8s-poc
+spec:
+  type: NodePort
+  ports:
+  - name: "web"
+    port: 8080
+    targetPort: 80
+    nodePort: 30002
+  selector:
+    app: mybackend
