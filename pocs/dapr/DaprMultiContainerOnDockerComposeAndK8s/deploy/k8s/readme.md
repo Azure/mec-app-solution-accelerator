@@ -23,6 +23,8 @@ Run this command from the root of the repo:
 
 **/> docker compose build**
 
+![image](https://user-images.githubusercontent.com/1712635/200635253-63dac1a2-b789-449a-beb3-54e4002c6af5.png)
+
 That will build the following Docker Images:
 
 **cesardl/myfrontend**
