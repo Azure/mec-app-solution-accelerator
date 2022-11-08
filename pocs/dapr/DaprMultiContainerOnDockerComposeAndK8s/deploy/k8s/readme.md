@@ -1,6 +1,6 @@
 # Instruction for building the Docker Images and deploying to Kubernetes
 
-This approach uses the same Docker Images built and used by DOCKER COMPOSE UP, but for KUBERNETES, so you can be sure that the same code/containers are running on both environments. 
+This approach uses the same Docker Images built by "DOCKER COMPOSE BUILD" and used by "DOCKER COMPOSE UP", but in this case to deploy into KUBERNETES, so you can be sure that the same code/containers are running on both environments. (Debugging with VS/docker-compose and "production/scale" in Kubernetes.)
 
 ## Set environment variable to the Docker Hub "user" so they will be registered right
 
