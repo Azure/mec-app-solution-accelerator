@@ -8,6 +8,8 @@ In this case I'm using the cesardl repo at Docker Hub, so. make sure you run the
 
 **/> $env:DOCKER_REGISTRY = 'cesardl/'**
 
+![image](https://user-images.githubusercontent.com/1712635/200633765-dbc5582c-1b00-4c56-acf8-6279b05fcf8c.png)
+
 ## Build Docker Images locally
 
 Run this command from the root of the repo:
