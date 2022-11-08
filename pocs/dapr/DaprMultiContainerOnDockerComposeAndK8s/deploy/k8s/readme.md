@@ -78,7 +78,11 @@ K8s dashboard installation:
 
 **kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.6.1/aio/deploy/recommended.yaml**
 
-- Create a admin-user to be able to enter to the dashboard, see the Kubernetes documentation.
+- Create a admin-user to be able to enter to the dashboard. Instructions here:
+
+https://github.com/Azure/solution-accelerator-mec/tree/main/pocs/dapr/DaprMultiContainerOnDockerComposeAndK8s/deploy/k8s/k8s%20dashboard%20user-token
+
+You can also read the Kubernetes dashboard documentation:
 
 https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
 
