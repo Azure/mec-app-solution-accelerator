@@ -2,6 +2,11 @@
 
 This approach uses the same Docker Images built and used by DOCKER COMPOSE UP, but for KUBERNETES, so you can be sure that the same code/containers are running on both environments. 
 
+## Set environment variable to the Docker Hub "user" so they will be registered right
+
+In this case I'm using the cesardl repo at Docker Hub, so. make sure you run the following to setup the environment variable:
+
+**/> $env:DOCKER_REGISTRY = 'cesardl/'**
 
 ## Build Docker Images locally
 
