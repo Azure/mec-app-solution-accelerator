@@ -23,6 +23,8 @@ You can check that out by running:
 
 **/> docker images**
 
+![image](https://user-images.githubusercontent.com/1712635/200630555-18704481-0e08-4bd2-bc1c-81b0b2aad5af.png)
+
 ## Push the created Docker Images to Docker Hub
 
 The images need to be in a Docker Registry so they can be deployed into any Kubernetes node, afterwards.
