@@ -90,5 +90,7 @@ Look for the service "myfrontend" and you'll see a related lik as "External Endp
 
 http://localhost:88
 
+![image](https://user-images.githubusercontent.com/1712635/200631111-7390233a-4785-4d3a-aa09-a92ca8c1a4c3.png)
+
 Click on it (or type it on the browser URL) and you should see the web app working which is accessing the backend microservice through DAPR, under the cover.
 
