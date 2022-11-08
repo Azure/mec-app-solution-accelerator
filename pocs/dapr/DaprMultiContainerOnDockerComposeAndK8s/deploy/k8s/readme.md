@@ -74,7 +74,7 @@ Go to Kubernetes Dashboard:
 
 - You need to have the K8s dashboard installed, first, see the Kubernetes documentation.
 
-K8s installation:
+K8s dashboard installation:
 
 **kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.6.1/aio/deploy/recommended.yaml**
 
@@ -84,13 +84,13 @@ https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/cre
 
 - Generate a token with (You'll need to generate a new token after some time, since they expire...):
 
-**/> kubectl -n kubernetes-dashboard create token admin-user**
+**/> kubectl -n kubernetes-dashboard create token admin-user --duration=48h --output yaml**
 
-You'd get a token similar to this:
+IMPORTANT: Use the --duration flag so the token won't expire in a few minutes. ;)
 
-eyJhbGciOiJSUzI1NiIsImtpZCI6ImpBa1kxSEFwVkdSS3ROOUU4SzhpS0U3bno3czR5aWc1SUpxcFdUTEwyTmcifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNjY3MjY5MDAwLCJpYXQiOjE2NjcyNjU0MDAsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJrdWJlcm5ldGVzLWRhc2hib2FyZCIsInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJhZG1pbi11c2VyIiwidWlkIjoiOTc5ZWU0YjgtMmIyYi00MTczLTg1YjMtNDA4MzM5MWMwNmYyIn19LCJuYmYiOjE2NjcyNjU0MDAsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlcm5ldGVzLWRhc2hib2FyZDphZG1pbi11c2VyIn0.d9oGSzfbrPPBTp4tnDpd7i4rDMqkHujR69yHvqJntdpkMmU-fnLLQG_FJ-aJD9FCsymZWgTt_6yDxGW2DPUxuIn0AVikRfdUka5Hc3lYf7XxKVZkKn709zYlFV6W8CT8MYHnihQRGVKV98j-LXaHahanOC_TSMoHclIE_1QuYfLTowNxiZXXDeCNt0LVJH9gKCFMV7tG8UiohwjbrwJBzsuE2PS7eUJluhgQCInsm1zDTu9sgGWXbgsq5HByhV7kxpNqtUMW3NX8I1MqJGijmPlLH_PBP4Vt1kYWzck01LtbUFhhFlhegAgH4OG2d-M9sNml0XUVuX9QBP5dbXhw8Q
+![image](https://user-images.githubusercontent.com/1712635/200639619-0ec3873e-a68d-4075-989e-230d13d125e4.png)
 
-Login with that in the K8s dashboard.
+Login with your token in the K8s dashboard.
 
 URL: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login
 
