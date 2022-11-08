@@ -10,6 +10,11 @@ In this case I'm using the cesardl repo at Docker Hub, so. make sure you run the
 
 ![image](https://user-images.githubusercontent.com/1712635/200633765-dbc5582c-1b00-4c56-acf8-6279b05fcf8c.png)
 
+This is because in the docker-compose.yml (used when running "docker compose build" or "docker compose run") it uses that ENVIRONMENT VARIABLE in order to create the full image name:
+
+![image](https://user-images.githubusercontent.com/1712635/200634554-fa030705-3332-42c1-a136-03772ca20de8.png)
+
+
 ## Build Docker Images locally
 
 Run this command from the root of the repo:
