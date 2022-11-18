@@ -1,0 +1,7 @@
+FROM mcr.microsoft.com/mssql/server
+
+ARG SA_PASSWORD="Password1!"
+ENV SA_PASSWORD=$SA_PASSWORD
+ENV ACCEPT_EULA="Y"
+
+EXPOSE 1433
