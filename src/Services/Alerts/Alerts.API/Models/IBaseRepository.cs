@@ -1,4 +1,4 @@
-﻿namespace Microsoft.MecSolutionAccelerator.Services.Commons
+﻿namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Models
 {
     public interface IBaseRepository<TEntity, IdType> where TEntity : AEntity
     {

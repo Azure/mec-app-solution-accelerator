@@ -1,10 +1,9 @@
-﻿using Microsoft.MecSolutionAccelerator.Services.Commons;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyFrontEnd
 {
     [Table("Alert")]
-    public class Alert : AEntity
+    public class Alert
     {
         public string Information { get; set; }
         public int Accuracy { get; set; }

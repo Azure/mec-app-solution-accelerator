@@ -7,7 +7,6 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["src/Services/Alerts/Alerts.API/Alerts.API.csproj", "src/Services/Alerts/Alerts.API/"]
-COPY ["src/Services/Commons/Commons.csproj", "src/Services/Commons/"]
 RUN dotnet restore "src/Services/Alerts/Alerts.API/Alerts.API.csproj"
 COPY . .
 WORKDIR "/src/src/Services/Alerts/Alerts.API"

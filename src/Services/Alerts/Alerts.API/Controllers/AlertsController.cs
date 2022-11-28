@@ -1,10 +1,6 @@
-﻿using Dapr;
-using Dapr.Client;
-using MediatR;
+﻿using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.Commands;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.Queries;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
 {
@@ -14,19 +10,25 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
     {
         private readonly DaprClient _daprClient;
         private readonly ILogger<AlertsController> _logger;
-        private readonly IMediator _mediator;
+        private readonly IAlertsRepository _alertsRepository;
 
-        public AlertsController(DaprClient daprClient, ILogger<AlertsController> logger, IMediator mediator)
+        public AlertsController(DaprClient daprClient, ILogger<AlertsController> logger, IAlertsRepository alertsRepository)
         {
             _daprClient = daprClient ?? throw new ArgumentNullException(nameof(daprClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _alertsRepository = alertsRepository ?? throw new ArgumentNullException(nameof(alertsRepository));
+        }
+
+        [HttpGet("{Skip}/{Take}")]
+        public async Task<IEnumerable<Alert>> GetPaged(int skip, int take)
+        {
+            return await this._alertsRepository.List(skip, take);
         }
 
         [HttpGet]
         public async Task<IEnumerable<Alert>> Get()
         {
-            return await this._mediator.Send(new GetAlertsQuery());
+            return await this._alertsRepository.List(0, 10);
         }
 
         [HttpGet("last")]
