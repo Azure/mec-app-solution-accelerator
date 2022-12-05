@@ -26,16 +26,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
         [HttpPost]
         public async Task PostDetection(object alertRaw)
         {
-            await _mediator.Send(new PersistAlertCommand()
-            {
-                Information = $"Alert {alertRaw}",
-                Accuracy = 90,
-                AlertTriggerTimeFin = DateTime.Now,
-                AlertTriggerTimeIni = DateTime.Now,
-                UrlVideoEncoded = "Example",
-                lat = 100,
-                @long = 100,
-            });
+            var test = alertRaw.ToString();
         }
 
         [Topic("pubsub", "newAlertDotNet")]
