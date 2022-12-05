@@ -1,6 +1,8 @@
 ﻿using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.MecSolutionAccelerator.Services.Alerts.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
+using SolTechnology.Avro;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
 {
@@ -36,8 +38,11 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
             => await _daprClient.GetStateAsync<Alert>("statestore", "lastalert");
 
         [HttpPost("queue")]
-        public async Task QueueAlert(Alert alert)
-            => await _daprClient.PublishEventAsync("pubsub", "newAlertDotNet", alert);
+        public async Task QueueAlert(ObjectDetected detection)
+        {
+            var serialized = AvroConvert.Serialize(detection);
+            await _daprClient.PublishEventAsync("pubsub", "objectDetected", Convert.ToBase64String(serialized));
+        }
 
     }
 }

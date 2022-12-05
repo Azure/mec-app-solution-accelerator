@@ -19,12 +19,12 @@ namespace Alerts.API.CommandHandlers
             var entity = new Alert()
             {
                 UrlVideoEncoded = request.UrlVideoEncoded,
-                Accuracy = request.Accuracy,
+                Frame = request.Frame,
                 AlertTriggerTimeFin = request.AlertTriggerTimeFin,
                 AlertTriggerTimeIni = request.AlertTriggerTimeIni,
                 Information = request.Information,
-                lat = request.lat,
-                @long = request.@long,
+                Id =id,
+                Type = request.Type,
             };
             entity.Id = id;
             await this._repository.Create(entity);

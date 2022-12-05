@@ -3,7 +3,11 @@ using Dapr.Client;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Commands;
+using Microsoft.MecSolutionAccelerator.Services.Alerts.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
+using SolTechnology.Avro;
+using System;
+using System.Globalization;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
 {
@@ -15,6 +19,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
         private readonly ILogger<AlertsProcessEventController> _logger;
         private readonly IMediator _mediator;
 
+
         public AlertsProcessEventController(DaprClient daprClient, ILogger<AlertsProcessEventController> logger, IMediator mediator)
         {
             _daprClient = daprClient ?? throw new ArgumentNullException(nameof(daprClient));
@@ -24,9 +29,21 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
 
         [Topic("pubsub", "newDetection")]
         [HttpPost]
-        public async Task PostDetection(object alertRaw)
+        public async Task PostDetection(object detectionRaw)
         {
-            var test = alertRaw.ToString();
+            var detectionStr = detectionRaw.ToString();
+            var detectionBytes = AvroConvert.Json2Avro(detectionStr);
+            var detection = AvroConvert.Deserialize<ObjectDetected>(detectionBytes);
+            await _mediator.Send(new PersistAlertCommand()
+            {
+                Information = detection.Information,
+                Frame = detection.Frame,
+                AlertTriggerTimeFin = DateTime.Now,
+                AlertTriggerTimeIni = new DateTime(detection.EveryTime),
+                UrlVideoEncoded = detection.UrlVideoEncoded,
+                Type = detection.EventType,
+            }); ;
+
         }
 
         [Topic("pubsub", "newAlertDotNet")]
