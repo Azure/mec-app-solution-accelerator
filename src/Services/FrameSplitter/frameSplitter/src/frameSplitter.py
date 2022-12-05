@@ -64,7 +64,7 @@ def main():
  
     print('dentro')
     cap = VideoCapture("../Datasets/demo.mp4")
-    
+    timestamp_general=int(time.time())
     i=0
     while True:
         # Capture frame-by-frame
@@ -82,14 +82,14 @@ def main():
         img_encode = cv2.imencode(".jpg", frame)[1]
         resized_img_bytes = img_encode.tobytes()
         bytes_string = base64.standard_b64encode(resized_img_bytes)
-
+        timestamp=int(time.time())
         with DaprClient() as client:
             # Using Dapr SDK to publish a topic
-            req_data = {"id": i, "image": bytes_string.decode()}
+            req_data = {"source_id": 'video_'+str(timestamp_general), "timestamp":timestamp, "image": bytes_string.decode()}
             resp = client.invoke_method(
                 "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
             )
-
+            print('Esperando respuesta')
             # Print the response
             print(resp.content_type, flush=True)
             print(resp.text(), flush=True) 

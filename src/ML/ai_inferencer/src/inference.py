@@ -20,26 +20,28 @@ def PublishEvent(pubsub_name: str, topic_name: str, data: str):
         print(resp)
 
 # def main(model,frame):
-def main(model,frame,detection_threshold,path):
-    print(os.listdir())
-    print('i')
+def main(source_id,timestamp,model,frame,detection_threshold,path):
+    print(source_id)
+    print(timestamp)
+    # print('i')
     # "Frame": backToBytes.decode()
     backToBytes = base64.standard_b64decode(frame)
 
     img = cv2.imdecode(np.frombuffer(backToBytes, np.uint8), cv2.IMREAD_COLOR)
-    print(img)
-    data = { "UrlVideoEncoded": "1.0",
+    # print(img)
+    data = { "SourceId":source_id,
+    "UrlVideoEncoded": "1.0",
     "Frame": frame,
     "EventName": "ObjectDetection",
     "EventType": "class",
     "OriginModule": "Ai inference detection",
     "Information": "Test message",
-    "EveryTime": int(time.time()),
+    "EveryTime": int(timestamp),
     "BoundingBoxes": []
     }
     results = model(img)
     schema = avro.schema.Parse(open(path, "rb").read())
-    # serializer = AvroJsonSerializer(schema)
+    serializer = AvroJsonSerializer(schema)
     writer = avro.io.DatumWriter(schema)
     bytes_writer = io.BytesIO()
     encoder = avro.io.BinaryEncoder(bytes_writer)
@@ -58,9 +60,10 @@ def main(model,frame,detection_threshold,path):
             data["BoundingBoxes"].append({"x": xmax, "y":ymin})
             data["BoundingBoxes"].append({"x": xmax, "y":ymax})
             # json_str = serializer.to_json(data)
+            # print(json_str)
             writer.write(data, encoder)
             bbytes = bytes_writer.getvalue()
-            print(bbytes)
+            # print(bbytes)
             PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=bbytes)
     return
     # results.print()

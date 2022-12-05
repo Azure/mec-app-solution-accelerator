@@ -4,6 +4,10 @@
 	"type": "record",
 	"fields": [
 		{
+			"name": "SourceId",
+			"type": "string"
+		},
+		{
 			"name": "UrlVideoEncoded",
 			"type": "string"
 		},
