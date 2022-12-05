@@ -14,9 +14,9 @@ from avro.io import DatumReader, DatumWriter
 import io
 
 
-def PublishEvent(pubsub_name: str, topic_name: str, data: str):
+def PublishEvent(pubsub_name: str, topic_name: str, data: bytes):
     with DaprClient() as client:
-        resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data, data_content_type='application/json')
+        resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data, data_content_type='application/octec-stream')
         print(resp)
 
 # def main(model,frame):
