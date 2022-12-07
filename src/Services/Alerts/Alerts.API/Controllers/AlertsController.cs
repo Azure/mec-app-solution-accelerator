@@ -21,7 +21,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
             _alertsRepository = alertsRepository ?? throw new ArgumentNullException(nameof(alertsRepository));
         }
 
-        [HttpGet("{Skip}/{Take}")]
+        [HttpGet("{skip}/{take}")]
         public async Task<IEnumerable<Alert>> GetPaged(int skip, int take)
         {
             return await this._alertsRepository.List(skip, take);
