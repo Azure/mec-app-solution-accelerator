@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
+using MongoDB.Driver;
 using SolTechnology.Avro;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
@@ -24,25 +25,13 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
         [HttpGet("{skip}/{take}")]
         public async Task<IEnumerable<Alert>> GetPaged(int skip, int take)
         {
-            return await this._alertsRepository.List(skip, take);
+            return this._alertsRepository.List(skip, take);
         }
 
         [HttpGet]
         public async Task<IEnumerable<Alert>> Get()
         {
-            return await this._alertsRepository.List(0, 10);
+            return this._alertsRepository.List(0, 10);
         }
-
-        [HttpGet("last")]
-        public async Task<Alert> GetAlert()
-            => await _daprClient.GetStateAsync<Alert>("statestore", "lastalert");
-
-        [HttpPost("queue")]
-        public async Task QueueAlert(ObjectDetected detection)
-        {
-            var serialized = AvroConvert.Serialize(detection);
-            await _daprClient.PublishEventAsync("pubsub", "objectDetected", Convert.ToBase64String(serialized));
-        }
-
     }
 }

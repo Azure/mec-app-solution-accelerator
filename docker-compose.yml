@@ -1,6 +1,20 @@
 version: '3.4'
 
 services:
+
+  mongodb:
+      image: mongo
+      container_name: mongodb
+      hostname: mongo
+      environment:
+        - PUID=1000
+        - PGID=1000
+      volumes:
+        - 'D:/mongodb/database:/data/db'
+      ports:
+        - 27017:27017
+      restart: "unless-stopped"
+
   aiinferencer:
       image: ${DOCKER_REGISTRY-}aiinferencer
       build:
@@ -48,6 +62,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "80"
+    depends_on:
+    - mongodb
 
   alertsapi-dapr:
     image: "daprio/daprd:latest"
@@ -82,16 +98,16 @@ services:
       - myfrontend
     network_mode: "service:myfrontend"
 
-  db:
-    container_name: sql_server_db
-    hostname: sqlserver
-    build:
-      context: .
-      dockerfile: infraestructure/mssqlserver/Dockerfile
-    # volumes:
-    #   - mssqlserver:/var/opt/mssql
-    ports:
-        - '1433:1433'
+  #db:
+  #  container_name: sql_server_db
+  #  hostname: sqlserver
+  #  build:
+  #    context: .
+  #    dockerfile: infraestructure/mssqlserver/Dockerfile
+  #  # volumes:
+  #  #   - mssqlserver:/var/opt/mssql
+  #  ports:
+  #      - '1433:1433'
 
   mosquitto:
     hostname: mosquitto
