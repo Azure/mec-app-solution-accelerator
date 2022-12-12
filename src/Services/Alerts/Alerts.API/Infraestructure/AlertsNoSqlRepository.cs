@@ -14,8 +14,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Infraestructure
 
         private IMongoDatabase GetDatabase()
         {
-            var test2 = $"{this._config.UrlPrefix}://{this._config.Hostname}:{this._config.PortNumber}/{this._config.DatabaseName}";
-            var mongoUrlBuilder = new MongoUrlBuilder(test2);
+            var mongoUrlBuilder = new MongoUrlBuilder($"{this._config.UrlPrefix}://{this._config.Hostname}:{this._config.PortNumber}/{this._config.DatabaseName}");
             MongoClient dbClient = new MongoClient(mongoUrlBuilder.ToMongoUrl());
             var database = dbClient.GetDatabase(this._config.DatabaseName);
 
