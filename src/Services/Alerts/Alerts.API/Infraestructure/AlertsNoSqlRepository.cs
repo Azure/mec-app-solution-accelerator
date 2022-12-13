@@ -20,6 +20,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Infraestructure
 
             return database;
         }
+
         public async Task Create(Alert entity)
         {
             var collection = this.GetDatabase().GetCollection<Alert>(typeof(Alert).Name);

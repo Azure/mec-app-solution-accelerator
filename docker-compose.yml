@@ -34,6 +34,27 @@ services:
       - aiinferencer
     network_mode: "service:aiinferencer"
 
+  rulesengine: 
+    image: ${DOCKER_REGISTRY-}rulesengine
+    build:
+      context: .
+      dockerfile: src/Services/Alerts/RulesEngine/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+    depends_on:
+    - mongodb
+
+  rulesengine-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", "-app-id", "rulesengine", "-app-port", "80", "-components-path", "/components"]
+    volumes:
+    - "./components/:/components"
+    depends_on:
+    - rulesengine
+    network_mode: "service:rulesengine"
+
   framesplitter:
       image: ${DOCKER_REGISTRY-}framesplitter
       build:
