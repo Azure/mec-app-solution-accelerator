@@ -2,7 +2,7 @@
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Commands;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
 
-namespace Alerts.API.CommandHandlers
+namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
 {
     public class PersistAlertHandler : IRequestHandler<PersistAlertCommand, Guid>
     {

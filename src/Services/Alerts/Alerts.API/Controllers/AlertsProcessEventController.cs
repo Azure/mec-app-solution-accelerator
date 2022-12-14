@@ -6,8 +6,6 @@ using Microsoft.MecSolutionAccelerator.Services.Alerts.Commands;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
 using SolTechnology.Avro;
-using System;
-using System.Globalization;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
 {
@@ -27,35 +25,32 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        [Topic("pubsub", "newDetection")]
+        [Topic("pubsub", "newAlert")]
         [HttpPost]
-        public async Task PostDetection(object detectionRaw)
+        public async Task PostAlert(byte[] alertBytes)
         {
-            var detectionStr = detectionRaw.ToString();
-            var detectionBytes = AvroConvert.Json2Avro(detectionStr);
-            var detection = AvroConvert.Deserialize<ObjectDetected>(detectionBytes);
+            var detection = AvroConvert.Deserialize<ObjectDetectedAlert>(alertBytes);
             await _mediator.Send(new PersistAlertCommand()
             {
                 Information = detection.Information,
-                Frame = detection.Frame,
                 AlertTriggerTimeFin = DateTime.Now,
                 AlertTriggerTimeIni = new DateTime(detection.EveryTime),
-                UrlVideoEncoded = detection.UrlVideoEncoded,
                 Type = detection.EventType,
             }); ;
-
         }
 
-        [Topic("pubsub", "newAlertDotNet")]
+        [Topic("pubsub", "newChairAlert")]
         [HttpPost("new")]
-        public async Task<Guid> Post(Alert alert)
+        public async Task PostChairAlert(byte[] alertBytes)
         {
-            alert.AlertTriggerTimeIni = DateTime.UtcNow;
-            var id = Guid.NewGuid();
-            alert.Id = id;
-            await _daprClient.SaveStateAsync("statestore", "lastalert", alert);
-
-            return id;
+            var detection = AvroConvert.Deserialize<ChairDetectedAlert>(alertBytes);
+            await _mediator.Send(new PersistAlertCommand()
+            {
+                Information = detection.Information,
+                AlertTriggerTimeFin = DateTime.Now,
+                AlertTriggerTimeIni = new DateTime(detection.EveryTime),
+                Type = detection.EventType,
+            }); ;
         }
     }
 }
