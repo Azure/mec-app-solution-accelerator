@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Dapr;
-using Dapr.Client;
 using MediatR;
 using SolTechnology.Avro;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events;
-using Google.Protobuf.WellKnownTypes;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventControllers
 {

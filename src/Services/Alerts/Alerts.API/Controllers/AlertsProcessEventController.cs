@@ -37,10 +37,11 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
                 AlertTriggerTimeIni = new DateTime(detection.EveryTime),
                 Type = detection.EventType,
             }); ;
+            _logger.LogInformation("Stored generic alert");
         }
 
         [Topic("pubsub", "newChairAlert")]
-        [HttpPost("new")]
+        [HttpPost("newChair")]
         public async Task PostChairAlert(byte[] alertBytes)
         {
             var detection = AvroConvert.Deserialize<ChairDetectedAlert>(alertBytes);
@@ -51,6 +52,38 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
                 AlertTriggerTimeIni = new DateTime(detection.EveryTime),
                 Type = detection.EventType,
             }); ;
+            _logger.LogInformation("Stored chair alert");
+        }
+
+        [Topic("pubsub", "newBoatAlert")]
+        [HttpPost("newBoat")]
+        public async Task PostBoatAlert(byte[] alertBytes)
+        {
+            var detection = AvroConvert.Deserialize<BoatDetectedAlert>(alertBytes);
+            await _mediator.Send(new PersistAlertCommand()
+            {
+                Information = detection.Information,
+                AlertTriggerTimeFin = DateTime.Now,
+                AlertTriggerTimeIni = new DateTime(detection.EveryTime),
+                Type = detection.EventType,
+            }); ;
+            _logger.LogInformation("Stored boat alert");
+        }
+
+        [Topic("pubsub", "newPersonAlert")]
+        [HttpPost("newPerson")]
+        public async Task PostPersonAlert(byte[] alertBytes)
+        {
+            var detection = AvroConvert.Deserialize<BoatDetectedAlert>(alertBytes);
+            await _mediator.Send(new PersistAlertCommand()
+            {
+                Information = detection.Information,
+                AlertTriggerTimeFin = DateTime.Now,
+                AlertTriggerTimeIni = new DateTime(detection.EveryTime),
+                Type = detection.EventType,
+            }); ;
+
+            _logger.LogInformation("Stored person alert");
         }
     }
 }

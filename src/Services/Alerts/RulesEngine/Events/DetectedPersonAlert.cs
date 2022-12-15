@@ -2,11 +2,11 @@
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events
 {
-    public class BoatDetectedAlert : BaseEvent
+    public class DetectedPersonAlert : BaseEvent
     {
-        public string Name => "boat";
         public List<DetectionFrame> Frames { get; set; }
         public DateTime AlertTriggerTimeIni { get; set; } //First detection frame date.
         public DateTime AlertTriggerTimeFin { get; set; } //Last detection frame date.
+        public long NumberOfPeople { get; set; }
     }
 }

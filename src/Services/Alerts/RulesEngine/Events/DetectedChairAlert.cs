@@ -2,7 +2,7 @@
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events
 {
-    public class ChairDetectedAlert : BaseEvent
+    public class DetectedChairAlert : BaseEvent
     {
         public List<DetectionFrame> Frames { get; set; }
         public DateTime AlertTriggerTimeIni { get; set; } //First detection frame date.

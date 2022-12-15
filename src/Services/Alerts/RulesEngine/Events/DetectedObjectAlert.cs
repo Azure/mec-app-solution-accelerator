@@ -1,8 +1,8 @@
 ﻿using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
 
-namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events
-{
-    public class PlaneDetectedAlert : BaseEvent
+namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events 
+{ 
+    public class DetectedObjectAlert : BaseEvent
     {
         public List<DetectionFrame> Frames { get; set; }
         public DateTime AlertTriggerTimeIni { get; set; } //First detection frame date.

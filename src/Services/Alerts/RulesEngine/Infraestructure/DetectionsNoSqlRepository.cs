@@ -1,38 +1,72 @@
-﻿using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Models;
+﻿using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
+using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Models;
+using MongoDB.Driver;
 
 namespace RulesEngine.Infraestructure
 {
     public class DetectionsNoSqlRepository : IDetectionsRepository
     {
-        public Task Create(Detection entity)
+        private readonly MongoDbConfiguration _config;
+        public DetectionsNoSqlRepository(MongoDbConfiguration config)
         {
-            
-            throw new NotImplementedException();
+            this._config = config;
         }
 
-        public Task Delete(Guid id)
+        private IMongoDatabase GetDatabase()
         {
-            throw new NotImplementedException();
+            var mongoUrlBuilder = new MongoUrlBuilder($"{this._config.UrlPrefix}://{this._config.Hostname}:{this._config.PortNumber}/{this._config.DatabaseName}");
+            MongoClient dbClient = new MongoClient(mongoUrlBuilder.ToMongoUrl());
+            var database = dbClient.GetDatabase(this._config.DatabaseName);
+
+            return database;
         }
 
-        public Task<Detection> GetById(Guid id)
+        private IMongoDatabase GetDatabase(string databaseName)
         {
-            throw new NotImplementedException();
+            var mongoUrlBuilder = new MongoUrlBuilder($"{this._config.UrlPrefix}://{this._config.Hostname}:{this._config.PortNumber}/{databaseName}");
+            MongoClient dbClient = new MongoClient(mongoUrlBuilder.ToMongoUrl());
+            var database = dbClient.GetDatabase(databaseName);
+
+            return database;
         }
 
-        public Task<IEnumerable<Detection>> List()
+        public async Task Create(Detection entity)
         {
-            throw new NotImplementedException();
+
+            var collection = this.GetDatabase().GetCollection<Detection>(typeof(Detection).Name);
+            await collection.InsertOneAsync(entity);
+        }
+
+        public async Task Delete(Guid id)
+        {
+            var collection = this.GetDatabase().GetCollection<Detection>(typeof(Detection).Name);
+            var deleteFilter = Builders<Detection>.Filter.Eq("Id", id);
+            await collection.DeleteOneAsync(deleteFilter);
+        }
+
+        public async Task<Detection> GetById(Guid id)
+        {
+            var collection = this.GetDatabase().GetCollection<Detection>(typeof(Detection).Name);
+            return await(await collection.FindAsync(alert => alert.Id.Equals(id))).FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Detection>> List()
+        {
+            var collection = this.GetDatabase().GetCollection<Detection>(typeof(Detection).Name);
+            return await(await collection.FindAsync(_ => true)).ToListAsync();
         }
 
         public IEnumerable<Detection> List(int skip, int take)
         {
-            throw new NotImplementedException();
+            var collection = this.GetDatabase().GetCollection<Detection>(typeof(Detection).Name);
+            return collection.Find(_ => true).Skip(skip).Limit(take).ToList();
         }
 
-        public Task Update(Detection entity)
+        public async Task Update(Detection entity)
         {
-            throw new NotImplementedException();
+            var collection = this.GetDatabase().GetCollection<Detection>(typeof(Detection).Name);
+            var updateFilter = Builders<Detection>.Filter.Eq("Id", entity.Id);
+            await collection.ReplaceOneAsync(updateFilter, entity, new ReplaceOptions() { IsUpsert = false });
         }
     }
 }

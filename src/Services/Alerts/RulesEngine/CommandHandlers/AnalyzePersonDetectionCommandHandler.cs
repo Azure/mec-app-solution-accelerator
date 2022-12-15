@@ -7,18 +7,18 @@ using SolTechnology.Avro;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHandlers
 {
-    public class AnalyzeDefaultObjectCommandHandler : IRequestHandler<AnalyzeDefaultObjectDetection>
+    public class AnalyzPersonDetectionCommandHandler : IRequestHandler<AnalyzePersonDetection>
     {
         private readonly DaprClient _daprClient;
 
-        public AnalyzeDefaultObjectCommandHandler(DaprClient daprClient)
+        public AnalyzPersonDetectionCommandHandler(DaprClient daprClient)
         {
             _daprClient = daprClient ?? throw new ArgumentNullException(nameof(daprClient));
         }
 
-        public async Task<Unit> Handle(AnalyzeDefaultObjectDetection request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(AnalyzePersonDetection request, CancellationToken cancellationToken)
         {
-            var alert = new ObjectDetectedAlert()
+            var alert = new DetectedBoatAlert()
             {
                 EventName = request.EventName,
                 AlertTriggerTimeIni = new DateTime(request.EveryTime),
@@ -27,7 +27,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
             };
 
             var serialized = AvroConvert.Serialize(alert);
-            await _daprClient.PublishEventAsync("pubsub", "newAlert", serialized);
+            await _daprClient.PublishEventAsync("pubsub", "newPersonAlert", serialized);
 
             return Unit.Value;
         }
