@@ -18,7 +18,7 @@ def framesreceiver(request: InvokeMethodRequest) -> InvokeMethodResponse:
     detection_threshold=0.7
     # print(request.metadata, flush=True)
     # print(request.text(), flush=True)
-    path='src/detection.avro'
+    path='src/detections.avro'
     main(source_id,timestamp,model,frame,detection_threshold,path)
 
     return InvokeMethodResponse(b'Frame Analyzed', "text/plain; charset=UTF-8")

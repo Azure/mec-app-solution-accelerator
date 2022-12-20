@@ -7,6 +7,7 @@ import json
 import time
 import pickle
 import base64
+import os
 
 def PublishEvent(pubsub_name: str, topic_name: str, data: str):
     with DaprClient() as client:
@@ -60,11 +61,14 @@ class VideoCapture:
 
 def main():
     print('main')
-    time.sleep(10)
+    timer= int(os.getenv('TIMEOUT'))
+    feed= (os.getenv('FEED'))
+    time.sleep(timer)
+
  
     print('dentro')
-    cap = VideoCapture("../Datasets/demo.mp4")
-    timestamp_general=int(time.time())
+    cap = VideoCapture(feed)
+    timestamp_general=int(time.time()*1000)
     i=0
     while True:
         # Capture frame-by-frame

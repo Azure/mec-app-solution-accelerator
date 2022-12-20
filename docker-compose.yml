@@ -25,6 +25,9 @@ services:
       build:
         context: src/Services/FrameSplitter/frameSplitter
         dockerfile: Dockerfile
+      environment:
+        - TIMEOUT=15
+        - FEED=rtsp://2.tcp.ngrok.io:14641/mystream
       ports:
         - "57090"
       depends_on:
