@@ -29,7 +29,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
         [HttpPost]
         public async Task PostAlert(byte[] alertBytes)
         {
-            var detection = AvroConvert.Deserialize<ObjectDetectedAlert>(alertBytes);
+            var detection = AvroConvert.Deserialize<DetectedObjectAlert>(alertBytes);
             await _mediator.Send(new PersistAlertCommand()
             {
                 Information = detection.Information,
@@ -38,52 +38,6 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
                 Type = detection.EventType,
             }); ;
             _logger.LogInformation("Stored generic alert");
-        }
-
-        [Topic("pubsub", "newChairAlert")]
-        [HttpPost("newChair")]
-        public async Task PostChairAlert(byte[] alertBytes)
-        {
-            var detection = AvroConvert.Deserialize<ChairDetectedAlert>(alertBytes);
-            await _mediator.Send(new PersistAlertCommand()
-            {
-                Information = detection.Information,
-                AlertTriggerTimeFin = DateTime.Now,
-                AlertTriggerTimeIni = new DateTime(detection.EveryTime),
-                Type = detection.EventType,
-            }); ;
-            _logger.LogInformation("Stored chair alert");
-        }
-
-        [Topic("pubsub", "newBoatAlert")]
-        [HttpPost("newBoat")]
-        public async Task PostBoatAlert(byte[] alertBytes)
-        {
-            var detection = AvroConvert.Deserialize<BoatDetectedAlert>(alertBytes);
-            await _mediator.Send(new PersistAlertCommand()
-            {
-                Information = detection.Information,
-                AlertTriggerTimeFin = DateTime.Now,
-                AlertTriggerTimeIni = new DateTime(detection.EveryTime),
-                Type = detection.EventType,
-            }); ;
-            _logger.LogInformation("Stored boat alert");
-        }
-
-        [Topic("pubsub", "newPersonAlert")]
-        [HttpPost("newPerson")]
-        public async Task PostPersonAlert(byte[] alertBytes)
-        {
-            var detection = AvroConvert.Deserialize<BoatDetectedAlert>(alertBytes);
-            await _mediator.Send(new PersistAlertCommand()
-            {
-                Information = detection.Information,
-                AlertTriggerTimeFin = DateTime.Now,
-                AlertTriggerTimeIni = new DateTime(detection.EveryTime),
-                Type = detection.EventType,
-            }); ;
-
-            _logger.LogInformation("Stored person alert");
         }
     }
 }

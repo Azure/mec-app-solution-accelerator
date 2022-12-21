@@ -3,6 +3,7 @@ using Dapr;
 using MediatR;
 using SolTechnology.Avro;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events;
+using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventControllers
 {
@@ -12,13 +13,11 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventCont
     {
         private readonly ILogger<DetectionsProcessEventController> _logger;
         private readonly IMediator _mediator;
-        private readonly Dictionary<string, System.Type> _commandsTypeByDetectionName;
 
-        public DetectionsProcessEventController(ILogger<DetectionsProcessEventController> logger, IMediator mediator, Dictionary<string, System.Type> commandsTypeByDetectionName)
+        public DetectionsProcessEventController(ILogger<DetectionsProcessEventController> logger, IMediator mediator)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            _commandsTypeByDetectionName = commandsTypeByDetectionName ?? throw new ArgumentNullException(nameof(commandsTypeByDetectionName));
         }
 
         [Topic("pubsub", "newDetection")]
@@ -28,22 +27,18 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventCont
             var detectionStr = detectionRaw.ToString();
             var detectionBytes = AvroConvert.Json2Avro(detectionStr);
             var detection = AvroConvert.Deserialize<ObjectDetected>(detectionBytes);
+            var command = new AnalyzeObjectDetectionCommand();
 
-            var defaultEvent = _commandsTypeByDetectionName.ContainsKey(detection.EventType) ? 
-                _commandsTypeByDetectionName[detection.EventType] : _commandsTypeByDetectionName["default"];
-
-            dynamic command = Activator.CreateInstance(defaultEvent);
             command.Information = detection.Information;
             command.Frame = detection.Frame;
             command.Id = detection.Id;
             command.UrlVideoEncoded = detection.UrlVideoEncoded;
             command.Frame = detection.Frame;
-            command.EventType = detection.EventType;
             command.EventName = detection.EventName;
             command.SourceId = detection.SourceId;
             command.EveryTime = detection.EveryTime;
             command.Type = detection.Type;
-            command.BoundingBoxes = detection.BoundingBoxes;
+            command.Classes = detection.Classes;
             await _mediator.Send(command);
         }
     }

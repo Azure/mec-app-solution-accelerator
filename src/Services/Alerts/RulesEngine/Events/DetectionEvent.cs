@@ -1,4 +1,5 @@
 ﻿using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
+using RulesEngine.Events.Base;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events
 {
@@ -7,6 +8,6 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events
         public string Frame { get; set; }
         public string Type { get; set; }
         public string UrlVideoEncoded { get; set; }
-        public List<BoundingBox> BoundingBoxes { get; set; }
+        public List<DetectionClass> Classes { get; set; }
     }
 }

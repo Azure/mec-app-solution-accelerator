@@ -1,21 +1,18 @@
 ﻿using MediatR;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Injection;
+using RulesEngine.Events.Base;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands
 {
-    [ObjectTag("default")]
-    public class AnalyzeDefaultObjectDetection : IRequest
+    public class AnalyzeObjectDetectionCommand : IRequest
     {
         public string Id { get; set; }
         public string Information { get; set; }
         public string UrlVideoEncoded { get; set; }
         public string Frame { get; set; }
-        public string EventType { get; set; }
         public string EventName { get; set; }
         public string SourceId { get; set; }
         public long EveryTime { get; set; }
         public string Type { get; set; }
-        public List<BoundingBox> BoundingBoxes { get; set; }
+        public List<DetectionClass> Classes { get; set; }
     }
 }

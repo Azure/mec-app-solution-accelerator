@@ -4,8 +4,9 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events
 { 
     public class DetectedObjectAlert : BaseEvent
     {
-        public List<DetectionFrame> Frames { get; set; }
-        public DateTime AlertTriggerTimeIni { get; set; } //First detection frame date.
-        public DateTime AlertTriggerTimeFin { get; set; } //Last detection frame date.
+        public string Frame { get; set; }
+        public string Type { get; set; }
+        public string UrlVideoEncoded { get; set; }
+        public List<BoundingBox> BoundingBoxes { get; set; }
     }
 }

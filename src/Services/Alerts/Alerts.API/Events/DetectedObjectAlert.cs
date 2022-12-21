@@ -1,6 +1,8 @@
-﻿namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base
+﻿using Microsoft.MecSolutionAccelerator.Services.Alerts.Events.Base;
+
+namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Events
 {
-    public class DetectionFrame
+    public class DetectedObjectAlert : BaseEvent
     {
         public string Frame { get; set; }
         public string Type { get; set; }

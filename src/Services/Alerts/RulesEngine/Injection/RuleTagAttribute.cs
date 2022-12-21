@@ -1,8 +1,8 @@
 ﻿namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Injection
 {
-    public class ObjectTagAttribute : Attribute
+    public class RuleTagAttribute : Attribute
     {
-        public ObjectTagAttribute(string name)
+        public RuleTagAttribute(string name)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
         }
