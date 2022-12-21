@@ -33,11 +33,10 @@ def main(source_id,timestamp,model,frame,detection_threshold,path):
     "UrlVideoEncoded": "1.0",
     "Frame": frame,
     "EventName": "ObjectDetection",
-    "EventType": "class",
     "OriginModule": "Ai inference detection",
     "Information": "Test message",
     "EveryTime": int(timestamp),
-    "BoundingBoxes": []
+    "Classes": []
     }
     results = model(img)
     schema = avro.schema.Parse(open(path, "rb").read())
@@ -47,19 +46,24 @@ def main(source_id,timestamp,model,frame,detection_threshold,path):
     # encoder = avro.io.BinaryEncoder(bytes_writer)
     detections = json.loads(results.pandas().xyxy[0].to_json())
     for idx,detection in enumerate(detections["name"].values()):
-        data["BoundingBoxes"]=[]
+        
+        BoundingBoxes=[]
         
         if list(detections["confidence"].values())[idx] > detection_threshold:
-            data["EventType"]=detection
+            
             xmin=list(detections["xmin"].values())[idx]
             xmax=list(detections["xmax"].values())[idx]
             ymin=list(detections["ymin"].values())[idx]
             ymax=list(detections["ymax"].values())[idx]
-            data["BoundingBoxes"].append({"x": xmin, "y":ymin})
-            data["BoundingBoxes"].append({"x": xmin, "y":ymax})
-            data["BoundingBoxes"].append({"x": xmax, "y":ymin})
-            data["BoundingBoxes"].append({"x": xmax, "y":ymax})
+            BoundingBoxes.append({"x": xmin, "y":ymin})
+            BoundingBoxes.append({"x": xmin, "y":ymax})
+            BoundingBoxes.append({"x": xmax, "y":ymin})
+            BoundingBoxes.append({"x": xmax, "y":ymax})
+
+            data["Classes"].append({"EventType": detection, "Confidence":list(detections["confidence"].values())[idx], "BoundingBoxes": BoundingBoxes})
+            # print(data)
             json_str = serializer.to_json(data)
+
             # print(json_str)
             # writer.write(data, encoder)
             # bbytes = bytes_writer.getvalue()
@@ -77,8 +81,10 @@ if __name__ == '__main__':
     #os.system("python3 invoke-sender-frames.py")
     model = torch.hub.load("ultralytics/yolov5", "yolov5s", pretrained=True,force_reload=True )
     img = cv2.imread('coches2.jpg')
-    retval, buffer = cv2.imencode('.jpg', img) 
-    frame_out=base64.b64encode(buffer)
-    path='detection.avro'
+    retval, buffer = cv2.imencode('.jpg', img)
+    resized_img_bytes = buffer.tobytes()
+    bytes_string = base64.standard_b64encode(resized_img_bytes) 
+    frame_out=bytes_string.decode()
+    path='detections.avro'
     detection_threshold=0.7
-    main(model, frame_out, detection_threshold,path)
+    main('a',time.time(),model, frame_out, detection_threshold,path)
