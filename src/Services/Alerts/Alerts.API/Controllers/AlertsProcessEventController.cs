@@ -36,7 +36,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
                 AlertTriggerTimeFin = DateTime.Now,
                 AlertTriggerTimeIni = new DateTime(detection.EveryTime),
                 Type = detection.EventName,
-            }); ;
+            });
             _logger.LogInformation("Stored generic alert");
         }
     }

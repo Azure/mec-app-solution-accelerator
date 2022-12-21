@@ -30,6 +30,12 @@ namespace RulesEngine.Infraestructure
             return database;
         }
 
+        public async Task CreateInCollection(Detection entity)
+        {
+            var collection = this.GetDatabase(entity.EventType).GetCollection<Detection>(typeof(Detection).Name);
+            await collection.InsertOneAsync(entity);
+        }
+
         public async Task Create(Detection entity)
         {
 
@@ -67,6 +73,12 @@ namespace RulesEngine.Infraestructure
             var collection = this.GetDatabase().GetCollection<Detection>(typeof(Detection).Name);
             var updateFilter = Builders<Detection>.Filter.Eq("Id", entity.Id);
             await collection.ReplaceOneAsync(updateFilter, entity, new ReplaceOptions() { IsUpsert = false });
+        }
+
+        public async Task<List<Detection>> GetFramesByClassNextInTime(long time, string @class)
+        {
+            var collection = this.GetDatabase(@class).GetCollection<Detection>(typeof(Detection).Name);
+            return collection.Find(x => x.EveryTime -time == 2 || x.EveryTime - time == -2 ).ToList();
         }
     }
 }

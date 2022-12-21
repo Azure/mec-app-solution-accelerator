@@ -12,7 +12,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
     {
         private readonly DaprClient _daprClient;
         private readonly Dictionary<string, List<AlertsConfig>> _alertsByDetectedClasses;
-        private readonly Dictionary<string, System.Type> _commandsTypeByDetectionName;
+        private readonly Dictionary<string, Type> _commandsTypeByDetectionName;
         private readonly IMediator _mediator;
 
         public AnalyzeObjectDetectionCommandHandler(DaprClient daprClient, Dictionary<string, List<AlertsConfig>> alertsByDetectedClasses, Dictionary<string, Type> commandsTypeByDetectionName, IMediator mediator)
@@ -54,7 +54,6 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                             EveryTime = everyTime,
                             UrlVideoEncoded = urlEncoded,
                             Frame = frame,
-                            SourceId = "FrameSplitter",
                             BoundingBoxes = requestClass.BoundingBoxes,
                             Type = requestClass.EventType,
                         };
