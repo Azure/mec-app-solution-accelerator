@@ -7,7 +7,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
     {
         public async Task<bool> Handle(MinimumThresholdValidationCommand request, CancellationToken cancellationToken)
         {
-            return request.RequestClass.Confidence > request.RuleConfig.MinimumThreshold;
+            return request.RequestClass.Confidence > request.RuleConfig.MinimumThreshold*0.01;
         }
     }
 }

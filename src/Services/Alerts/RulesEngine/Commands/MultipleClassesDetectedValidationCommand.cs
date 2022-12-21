@@ -5,7 +5,7 @@ using RulesEngine.Events.Base;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands
 {
-    [RuleTagAttribute("MultipleClassesDetectedValidation")]
+    [RuleTagAttribute("MultipleClassesDetected")]
     public class MultipleClassesDetectedValidationCommand : IRequest<bool>
     {
         public RulesConfig RuleConfig { get; set; }

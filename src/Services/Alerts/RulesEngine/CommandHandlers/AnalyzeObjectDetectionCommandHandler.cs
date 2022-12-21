@@ -39,25 +39,29 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
 
         private async Task ExecuteAlertsByClass(DetectionClass requestClass, List<string> foundClasses, long everyTime, string information, string urlEncoded, string frame)
         {
-            foreach(var alertConfig in _alertsByDetectedClasses[requestClass.EventType])
+            var exists =_alertsByDetectedClasses.TryGetValue(requestClass.EventType, out List<AlertsConfig> value);
+            if (exists)
             {
-               var successfull = await ExecuteAlertsRules(alertConfig, requestClass, foundClasses, everyTime);
-                if (successfull)
+                foreach (var alertConfig in value)
                 {
-                    var alert = new DetectedObjectAlert()
+                    var successfull = await ExecuteAlertsRules(alertConfig, requestClass, foundClasses, everyTime);
+                    if (successfull)
                     {
-                        EventName = alertConfig.AlertName,
-                        Information = information,
-                        EveryTime = everyTime,
-                        UrlVideoEncoded = urlEncoded,
-                        Frame = frame,
-                        SourceId = "FrameSplitter",
-                        BoundingBoxes = requestClass.BoundingBoxes,
-                        Type = requestClass.EventType,
-                    };
+                        var alert = new DetectedObjectAlert()
+                        {
+                            EventName = alertConfig.AlertName,
+                            Information = information,
+                            EveryTime = everyTime,
+                            UrlVideoEncoded = urlEncoded,
+                            Frame = frame,
+                            SourceId = "FrameSplitter",
+                            BoundingBoxes = requestClass.BoundingBoxes,
+                            Type = requestClass.EventType,
+                        };
 
-                    var serialized = AvroConvert.Serialize(alert);
-                    await _daprClient.PublishEventAsync("pubsub", "newAlert", serialized);
+                        var serialized = AvroConvert.Serialize(alert);
+                        await _daprClient.PublishEventAsync("pubsub", "newAlert", serialized);
+                    }
                 }
             }
         }
@@ -66,10 +70,10 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
         {
             foreach (var ruleConfig in config.RulesConfig)
             {
-                var eventType = _commandsTypeByDetectionName[requestClass.EventType];
+                var eventType = _commandsTypeByDetectionName[ruleConfig.RuleName];
 
                 dynamic command = Activator.CreateInstance(eventType);
-                command.EveryTime = eventType;
+                command.EveryTime = everyTime;
                 command.FoundClasses = foundClasses;
                 command.RequestClass = requestClass;
                 command.RuleConfig = ruleConfig;

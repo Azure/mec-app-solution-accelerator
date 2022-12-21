@@ -49,7 +49,9 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Infraestructure
         public IEnumerable<Alert> List(int skip, int take)
         {
             var collection = this.GetDatabase().GetCollection<Alert>(typeof(Alert).Name);
-            return collection.Find(_ => true).Skip(skip).Limit(take).ToList();
+            var today = DateTime.Now;
+            var yesterday = today.AddDays(-1);
+            return collection.Find(x => x.AlertTriggerTimeFin > yesterday).Skip(skip).Limit(take).ToList();
         }
 
         public async Task Update(Alert entity)
