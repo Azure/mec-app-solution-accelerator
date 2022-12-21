@@ -27,18 +27,18 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventCont
             var detectionStr = detectionRaw.ToString();
             var detectionBytes = AvroConvert.Json2Avro(detectionStr);
             var detection = AvroConvert.Deserialize<ObjectDetected>(detectionBytes);
-            var command = new AnalyzeObjectDetectionCommand();
+            var command = new AnalyzeObjectDetectionCommand()
+            {
+                Id = detection.Id,
+                EventName = detection.EventName,
+                EveryTime = detection.EveryTime,
+                Information = detection.Information,
+                Frame = detection.Frame,
+                Type = detection.Type,
+                UrlVideoEncoded = detection.UrlVideoEncoded,
+                Classes = detection.Classes,
+            };
 
-            command.Information = detection.Information;
-            command.Frame = detection.Frame;
-            command.Id = detection.Id;
-            command.UrlVideoEncoded = detection.UrlVideoEncoded;
-            command.Frame = detection.Frame;
-            command.EventName = detection.EventName;
-            command.SourceId = detection.SourceId;
-            command.EveryTime = detection.EveryTime;
-            command.Type = detection.Type;
-            command.Classes = detection.Classes;
             await _mediator.Send(command);
         }
     }
