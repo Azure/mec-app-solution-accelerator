@@ -1,6 +1,6 @@
 dapr-ext-grpc
 dapr
-setuptools==58.2.0
+setuptools==65.5.1
 # YOLOv5 requirements
 # Usage: pip install -r requirements.txt
 
