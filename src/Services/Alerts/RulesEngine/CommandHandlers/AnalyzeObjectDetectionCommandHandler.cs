@@ -23,34 +23,40 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        public async Task<Unit> Handle(AnalyzeObjectDetectionCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(AnalyzeObjectDetectionCommand command, CancellationToken cancellationToken)
         {
-            var foundClasses = request.Classes.Select(x => x.EventType).ToList();
-            var foundClassesDistinct = foundClasses.Distinct();
+            var foundClasses = command.Classes.Select(x => x.EventType).ToList();
             var pendingTaks = new List<Task>();
-            foreach(var foundClass in foundClassesDistinct)
+            foreach(var @class in command.Classes)
             {
-                pendingTaks.Add(this.ExecuteAlertsByClass(request.Classes.FirstOrDefault(obj => obj.EventType.Equals(foundClass)), foundClasses, request.EveryTime, request.Information, request.UrlVideoEncoded, request.Frame));
+                pendingTaks.Add(
+                    this.ValidateAlertsPerDetection( //Single class can generate multiple alerts
+                        @class, 
+                        foundClasses,
+                        command.EveryTime,
+                        command.UrlVideoEncoded,
+                        command.Frame)
+                    );
             }
             await Task.WhenAll(pendingTaks);
 
             return Unit.Value;
         }
 
-        private async Task ExecuteAlertsByClass(DetectionClass requestClass, List<string> foundClasses, long everyTime, string information, string urlEncoded, string frame)
+        private async Task ValidateAlertsPerDetection(DetectionClass requestClass, List<string> foundClasses, long everyTime, string urlEncoded, string frame)
         {
-            var exists =_alertsByDetectedClasses.TryGetValue(requestClass.EventType, out List<AlertsConfig> value);
+            var exists = _alertsByDetectedClasses.TryGetValue(requestClass.EventType, out List<AlertsConfig> alertsConfig);
             if (exists)
             {
-                foreach (var alertConfig in value)
+                foreach (var alertConfig in alertsConfig)
                 {
-                    var successfull = await ExecuteAlertsRules(alertConfig, requestClass, foundClasses, everyTime);
+                    var successfull = await ValidateAllRulesPerAlert(alertConfig, requestClass, foundClasses); //Validate all the required rules from the config, just and.
                     if (successfull)
                     {
                         var alert = new DetectedObjectAlert()
                         {
-                            EventName = alertConfig.AlertName,
-                            Information = information,
+                            
+                            Name = alertConfig.AlertName,
                             EveryTime = everyTime,
                             UrlVideoEncoded = urlEncoded,
                             Frame = frame,
@@ -65,14 +71,13 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
             }
         }
 
-        private async Task<bool> ExecuteAlertsRules(AlertsConfig config, DetectionClass requestClass, List<string> foundClasses, long everyTime)
+        private async Task<bool> ValidateAllRulesPerAlert(AlertsConfig config, DetectionClass requestClass, List<string> foundClasses)
         {
             foreach (var ruleConfig in config.RulesConfig)
             {
                 var eventType = _commandsTypeByDetectionName[ruleConfig.RuleName];
 
                 dynamic command = Activator.CreateInstance(eventType);
-                command.EveryTime = everyTime;
                 command.FoundClasses = foundClasses;
                 command.RequestClass = requestClass;
                 command.RuleConfig = ruleConfig;

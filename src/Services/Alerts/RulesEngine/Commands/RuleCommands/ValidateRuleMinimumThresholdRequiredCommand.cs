@@ -3,10 +3,10 @@ using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Injection;
 using RulesEngine.Events.Base;
 
-namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands
+namespace RulesEngine.Commands.RuleCommands
 {
-    [RuleTag("MinimumNumberOfObjectsDetected")]
-    public class MinimumNumberOfObjectsDetectedCommand : IRequest<bool>
+    [RuleTag("MinimumThresholdValidation")]
+    public class ValidateRuleMinimumThresholdRequiredCommand : IRequest<bool>
     {
         public RulesConfig RuleConfig { get; set; }
         public DetectionClass RequestClass { get; set; }
@@ -14,5 +14,3 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands
         public List<string> FoundClasses { get; set; }
     }
 }
-
-

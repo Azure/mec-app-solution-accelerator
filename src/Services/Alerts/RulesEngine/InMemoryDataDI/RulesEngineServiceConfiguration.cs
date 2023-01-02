@@ -1,8 +1,6 @@
-﻿using Google.Api;
-using MediatR;
+﻿using MediatR;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Injection
 {
@@ -13,10 +11,10 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Injection
             var rulesConfig = configuration.GetSection("AlertsClassesConfig").Get<AlertsClassesConfig>();
 
             AddRulesCommandsDictionary(services);
-            AddRulesCommandDictionary(services, configuration);
+            AddRulesConfigurationDictionary(services, configuration);
         }
 
-        private static void AddRulesCommandDictionary(IServiceCollection services, IConfiguration configuration)
+        private static void AddRulesConfigurationDictionary(IServiceCollection services, IConfiguration configuration)
         {
             var rulesEngineConfig = configuration.GetSection("AlertsClassesConfig").Get<AlertsClassesConfig>();
             var alertsConfigByClass = new Dictionary<string, List<AlertsConfig>>();

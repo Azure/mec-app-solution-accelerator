@@ -1,8 +1,6 @@
 using MediatR;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Injection;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Models;
-using RulesEngine.Infraestructure;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,10 +12,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<IDetectionsRepository, DetectionsNoSqlRepository>();
-
-var mongoConfig = builder.Configuration.GetSection("MongoDB").Get<MongoDbConfiguration>();
-builder.Services.AddSingleton(config => mongoConfig);
 builder.Services.AddRulesEngineConfiguration(builder.Configuration);
 var app = builder.Build();
 

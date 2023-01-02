@@ -22,19 +22,19 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventCont
 
         [Topic("pubsub", "newDetection")]
         [HttpPost]
-        public async Task PostDetection(object detectionRaw)
+        public async Task DetectionEventHandler(object detectionRaw)
         {
             var detectionStr = detectionRaw.ToString();
             var detectionBytes = AvroConvert.Json2Avro(detectionStr);
             var detection = AvroConvert.Deserialize<ObjectDetected>(detectionBytes);
+
             var command = new AnalyzeObjectDetectionCommand()
             {
                 Id = detection.Id,
-                EventName = detection.EventName,
+                DetectionName = detection.Name,
                 EveryTime = detection.EveryTime,
-                Information = detection.Information,
                 Frame = detection.Frame,
-                Type = detection.Type,
+                DetectionType = detection.Type,
                 UrlVideoEncoded = detection.UrlVideoEncoded,
                 Classes = detection.Classes,
             };
