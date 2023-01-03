@@ -45,7 +45,7 @@ import InspectionTable from '../components/inspection-panel/InspectionTable.vue'
 import MapImage from '../components/image/MapImage.vue'
 import WarningsMenu from '../components/inspection-panel/WarningsMenu.vue';
 
-import { ref, reactive, provide, inject, watch, onBeforeMount } from 'vue';
+import { ref, reactive, provide, watch, onBeforeMount } from 'vue';
 
 // const alerts = ref([]);
 
@@ -60,26 +60,45 @@ import { ref, reactive, provide, inject, watch, onBeforeMount } from 'vue';
 // provide('alerts', alerts);
 
 const sources = ref();
+const alerts = ref();
 
 onBeforeMount(async () => {
-    // const requestSources = await fetch('http://localhost:3001/sources/');
-    // if(requestSources.ok) {
-    //     sources.value = await requestSources.json();
-    // }
-    // console.log(sources.value);
-    // const requestAlerts = await fetch('http://localhost:3001/alertshandler/alerts');
-    // if (requestAlerts.ok) {
-    //     alerts.value = await requestAlerts.json();
-    // }
-    // console.log(requestAlerts);
-    const getAlerts = await fetch('http://localhost:50237/Alerts');
-    if (getAlerts.ok) {
-        alerts.value = await getAlerts.json();
-    }
-    console.log(getAlerts);
+    sources.value = await loadSources();
+    alerts.value = await loadAlerts();
+    console.log(sources.value);
+    console.log(alerts.value);
+    console.log(await loadSwaggerAlerts());
 });
 
+const loadAlerts = async () => {
+    let fetchedAlerts;
+    const requestAlerts = await fetch('http://localhost:3001/alertshandler/alerts');
+    if (requestAlerts.ok) {
+        fetchedAlerts = await requestAlerts.json();
+    }
+    return fetchedAlerts;
+}
+
+const loadSources = async () => {
+    let fetchedSources;
+    const requestSources = await fetch('http://localhost:3001/sources/');
+    if (requestSources.ok) {
+        fetchedSources = await requestSources.json();
+    }
+    return fetchedSources;
+}
+
+const loadSwaggerAlerts = async () => {
+    let fetchedSwaggerAlerts;
+    const requestSwaggerAlerts = await fetch('http://localhost:64118/Alerts');
+    if (requestSwaggerAlerts.ok) {
+        fetchedSwaggerAlerts = await requestSwaggerAlerts.json();
+    }
+    return fetchedSwaggerAlerts;
+}
+
 provide('sources', sources);
+provide('alerts', alerts);
 
 const getPosition = (id) => {
     let pickedSource = {};
@@ -130,7 +149,7 @@ const transformCoordinates = (coordinates) => {
     };
 }
 
-const alerts = inject('historicRoutes');
+// const alerts = inject('historicRoutes');
 
 const selectedAlert = ref({});
 const hasTwoInputs = ref(false);

@@ -1,0 +1,125 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="overflow-auto align-self-center" id="table">
+    @*@onscroll="checkScroll">*@
+    <table id="table">
+        <tr class="sticky top-0">
+            <th class="border border-t-dark border-dark font-bold tracking-wide w-1/6">
+                <div class="table-header fs-3 d-flex flex-row font-bold justify-content-center">Date</div>
+            </th>
+            <th class="border border-t-dark border-dark tracking-wide w-5/12">
+                <div class="table-header d-flex flex-row justify-content-center">
+                    <div class="fs-3 font-bold tracking-wide">Source</div>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="filter-icon active:fill-mWhite hover:fill-buttonDisabled">
+                        <path fill-rule="evenodd" d="M3.792 2.938A49.069 49.069 0 0112 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 011.541 1.836v1.044a3 3 0 01-.879 2.121l-6.182 6.182a1.5 1.5 0 00-.439 1.061v2.927a3 3 0 01-1.658 2.684l-1.757.878A.75.75 0 019.75 21v-5.818a1.5 1.5 0 00-.44-1.06L3.13 7.938a3 3 0 01-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+            </th>
+            <th class="border border-t-dark border-dark tracking-wide w-3/12">
+                <div class="table-header d-flex flex-row justify-content-center">
+                    <div class="fs-3 font-bold tracking-wide">Type</div>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="filter-icon active:fill-mWhite hover:fill-buttonDisabled">
+                        @*@click.prevent="showFilter">*@
+                        <path fill-rule="evenodd" d="M3.792 2.938A49.069 49.069 0 0112 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 011.541 1.836v1.044a3 3 0 01-.879 2.121l-6.182 6.182a1.5 1.5 0 00-.439 1.061v2.927a3 3 0 01-1.658 2.684l-1.757.878A.75.75 0 019.75 21v-5.818a1.5 1.5 0 00-.44-1.06L3.13 7.938a3 3 0 01-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+            </th>
+            <th class="border border-t-dark border-dark text-xl font-semibold tracking-wide w-1/6">
+                <div class="table-header fs-3 d-flex flex-row font-bold justify-content-center">Information</div>
+            </th>
+        </tr>
+        @foreach (var alert in Model.Alerts)
+        {
+            <tr onclick="console.log('@Model.SelectAlert(alert)')">
+                @*class="@{alert.Id == Model.selectedAlert.Id ? 'bg-mWhite' : 'bg-alertSelected';}">*@
+                @*v-for="i in max" :key="filteredAlerts[i-1].id">*@
+                <td class="cursor-pointer border border-dark text-center py-1" :class="filteredAlerts[i-1].id == selectedAlert.id ? 'bg-routeSelected' : 'bg-tableData'">@alert.AlertTriggerTimeIni.ToString("d")<br>@alert.AlertTriggerTimeIni.ToString("T")</td>
+                <td class="cursor-pointer border border-dark text-center py-1" :class="filteredAlerts[i-1].id == selectedAlert.id ? 'bg-routeSelected' : 'bg-tableData'">@Model.getSourceName(alert.SourceId)</td>
+                <td class="cursor-pointer border border-dark text-center py-1" :class="filteredAlerts[i-1].id == selectedAlert.id ? 'bg-routeSelected' : 'bg-tableData'">
+                    <div class="d-flex flex-row justify-content-center px-2">
+                        @if (alert.Priority == "high")
+                        {
+                            <div class="priority-container d-flex flex-row border rounded" id="danger" onclick="console.log('@Model.Alerts.Count')">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="priority-svg" id="danger-svg">
+                                    <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+                                </svg>
+                                <div class="text-darkRed text-center text-sm" id="danger-text">alert-danger</div>
+                            </div>
+                        }
+                        @if (alert.Priority == "medium")
+                        {
+                            <div class="priority-container d-flex flex-row border rounded" id="warning">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="priority-svg" id="warning-svg">
+                                    <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+                                </svg>
+                                <div class="text-darkYellow text-center text-sm" id="warning-text">alert-warning</div>
+                            </div>
+                        }
+                        @if (alert.Priority == "low")
+                        {
+                            <div class="priority-container d-flex flex-row border rounded" id="info">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="priority-svg" id="info-svg">
+                                    <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+                                </svg>
+                                <div class="text-buttonGray text-center text-sm" id="info-text">alert-info</div>
+                            </div>
+                        }
+                    </div>
+                </td>
+                <td class="cursor-pointer border border-dark text-center py-1" :class="filteredAlerts[i-1].id == selectedAlert.id ? 'bg-routeSelected' : 'bg-tableData'">
+                    @*<alert-information :alert="filteredAlerts[i-1]" @onselect="emit('select-input', $event)"></alert-information>*@
+                    <div class="d-flex flex-row justify-content-center px-2">
+                        @if (Model.FindInputs(alert) == "both")@*v-if= "(hasText && hasImage)"*@
+                        {
+                            <div class="mx-1 flex flex-row">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width=".7" stroke="currentColor" class="information">
+                                    @*@click="emit('select', { input: 'text', content: props.alert.information.text })">*@
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width=".7" stroke="currentColor" class="information">
+                                    @*@click="emit('select', { input: 'image', content: props.alert.information.picture })">*@
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                </svg>
+                            </div>
+                        }
+                        else if (Model.FindInputs(alert) == "text") /*v-else-if= "hasText"*/
+                        {
+                            <div class="mx-1">
+                                @*@click="emit('select', { input: 'text', content: props.alert.information.text })">*@
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width=".7" stroke="currentColor" class="information">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                </svg>
+                            </div>
+                        }
+                        else if (Model.FindInputs(alert) == "image") /*v-else-if="hasImage"*/
+                        {
+                            <div class="mx-1">
+                                @*@click="emit('select', { input: 'image', content: props.alert.information.picture })">*@
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width=".7" stroke="currentColor" class="information">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                </svg>
+                            </div>
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<div class="d-flex flex-row justify-content-end">
+    <button class="button-table me-2 px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right active:bg-mWhite" :class="bottomReached && endReached == false ? 'bg-tableHeader' : 'bg-buttonDisabled'" :disabled="(!bottomReached || endReached)" onclick="loadMore()">Load More</button>
+    <button class="button-table me-2 px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right active:bg-mWhite" :class="endReached == false ? 'bg-tableHeader' : 'bg-buttonDisabled'" :disabled="endReached" onclick="loadAll()">Load All</button>
+    <button class="button-table px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right active:bg-mWhite bg-tableHeader" id="refresh-data">Refresh Data</button>
+</div>
+
+<script type="text/javascript">
+    $("#refresh-data").click(function () {
+        console.log('@Url.Action("Get","Alert")');
+        $("#table").load('@Url.Action("Get","Alert")');
+    })
+</script>
+

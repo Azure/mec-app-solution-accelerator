@@ -60,9 +60,9 @@ const sources = ref();
 const filteredAlerts = ref();
 const max = ref(0);
 
-onMounted(() => {
-    alerts.value = inject('historicRoutes');
-    sources.value = inject('sources');
+onMounted(async () => {
+    alerts.value = await inject('alerts');
+    sources.value = await inject('sources');
     filteredAlerts.value = alerts.value;
     console.log(alerts.value);
     console.log(sources.value);
@@ -120,7 +120,7 @@ const loadAll = () => {
 
 const loadData = async () => {
 
-    const request = await fetch('http://localhost:3001/alertshandler/alerts');
+    const request = await fetch('http://localhost:50237/Alerts');
     if (request.ok) {
         alerts.value = await request.json();
         filteredAlerts.value = alerts.value;
