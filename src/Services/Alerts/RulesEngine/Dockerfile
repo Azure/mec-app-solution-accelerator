@@ -6,16 +6,16 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/Services/Alerts/RulesEngine/RulesEngine.csproj", "src/Services/Alerts/RulesEngine/"]
-RUN dotnet restore "src/Services/Alerts/RulesEngine/RulesEngine.csproj"
+COPY ["src/Services/Alerts/RulesEngine/Alerts.RulesEngine.csproj", "src/Services/Alerts/RulesEngine/"]
+RUN dotnet restore "src/Services/Alerts/RulesEngine/Alerts.RulesEngine.csproj"
 COPY . .
 WORKDIR "/src/src/Services/Alerts/RulesEngine"
-RUN dotnet build "RulesEngine.csproj" -c Release -o /app/build
+RUN dotnet build "Alerts.RulesEngine.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "RulesEngine.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Alerts.RulesEngine.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "RulesEngine.dll"]
+ENTRYPOINT ["dotnet", "Alerts.RulesEngine.dll"]

@@ -9,7 +9,7 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alerts.API", "src\Services\Alerts\Alerts.API\Alerts.API.csproj", "{D0CCD2C3-BF0C-443B-A9C0-F96DE0299922}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RulesEngine", "src\Services\Alerts\RulesEngine\RulesEngine.csproj", "{CAEA024F-0A46-4A12-92A7-15453210CCEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alerts.RulesEngine", "src\Services\Alerts\RulesEngine\Alerts.RulesEngine.csproj", "{CAEA024F-0A46-4A12-92A7-15453210CCEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
