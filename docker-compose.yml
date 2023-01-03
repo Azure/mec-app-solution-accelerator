@@ -81,7 +81,7 @@ services:
     image: ${DOCKER_REGISTRY-}alertsapi
     build:
       context: .
-      dockerfile: src/Services/Alerts/Alerts.api/Dockerfile
+      dockerfile: src/Services/Alerts/api/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:

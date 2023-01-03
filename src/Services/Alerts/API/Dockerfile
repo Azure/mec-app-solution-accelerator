@@ -6,10 +6,10 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/Services/Alerts/Alerts.API/Alerts.API.csproj", "src/Services/Alerts/Alerts.API/"]
-RUN dotnet restore "src/Services/Alerts/Alerts.API/Alerts.API.csproj"
+COPY ["src/Services/Alerts/API/Alerts.API.csproj", "src/Services/Alerts/API/"]
+RUN dotnet restore "src/Services/Alerts/API/Alerts.API.csproj"
 COPY . .
-WORKDIR "/src/src/Services/Alerts/Alerts.API"
+WORKDIR "/src/src/Services/Alerts/API"
 RUN dotnet build "Alerts.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
