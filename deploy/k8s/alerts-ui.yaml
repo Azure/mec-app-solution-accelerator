@@ -25,12 +25,12 @@ spec:
         app: myfrontend
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/id: "MyFrontEnd"
+        dapr.io/app-id: "myfrontend"
         dapr.io/port: "80"
     spec:
       containers:
       - name: myfrontend
-        image: alonedave/5gtestfront:dev
+        image: pabravil/myfrontend:latest
         # image: pabravil/myfrontend:dev
         imagePullPolicy: Always
         ports:

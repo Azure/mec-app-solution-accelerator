@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: rulesengine
-        image: alonedave/5gtestrulesengine:dev
+        image: pabravil/rulesengine:latest
         ports:
         - containerPort: 80
         imagePullPolicy: Always
@@ -44,6 +44,6 @@ spec:
   - name: "web"
     port: 8080
     targetPort: 80
-    nodePort: 30002
+    nodePort: 30003
   selector:
     app: rulesengine

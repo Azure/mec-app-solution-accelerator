@@ -17,15 +17,12 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: "alerts-api"
-        # dapr.io/app-id: "mybackend"
         dapr.io/app-port: "80"
         # dapr.io/config: "dapr-config"
     spec:
       containers:
       - name: alertshandler
-        image: alonedave/5gtest:dev
-        # image: pabravil/alertsapi:dev
-        # image: cesardl/mybackend:latest
+        image: pabravil/alertshandler:latest
         ports:
         - containerPort: 80
         imagePullPolicy: Always
