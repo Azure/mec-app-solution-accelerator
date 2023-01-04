@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: inference-model
-        image: javipercor/aiinferencer:latest
+        image: pabravil/aiinferencer:latest
         ports:
         - containerPort: 50051
         imagePullPolicy: Always
