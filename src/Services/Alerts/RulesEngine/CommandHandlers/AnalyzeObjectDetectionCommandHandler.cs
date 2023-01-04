@@ -61,7 +61,8 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                             UrlVideoEncoded = urlEncoded,
                             Frame = frame,
                             BoundingBoxes = requestClass.BoundingBoxes,
-                            Type = requestClass.EventType,
+                            Type = alertConfig.AlertName,
+                            Information = $"Generate alert {alertConfig.AlertName} detecting objects {foundClasses.ToString()}"
                         };
 
                         var serialized = AvroConvert.Serialize(alert);
