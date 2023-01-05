@@ -35,10 +35,13 @@ th {
     background-color: #8CA9BF;
     border: 1px;
     border-color: #343333 !important;
+    position: sticky;
+    top: 0;
 }
 
 td {
     background-color: #F3F3F3;
+    cursor: pointer;
 }
 
 .line {
@@ -139,6 +142,11 @@ td {
     padding-left: 2rem;
 }
 
+#data {
+    width: 100%;
+    height: 100%;
+}
+
 #logo {
     height: 3rem;
     width: 3rem;
@@ -166,19 +174,14 @@ td {
     color: #343333;
 }
 
-#data {
-    width: 100%;
-    height: 100%;
-}
-
 #left {
     width: 50%;
-    height: 100%;
+    height: 90%;
 }
 
 #right {
     width: 50%;
-    height: 100%;
+    height: 90%;
 }
 
 #canvas {

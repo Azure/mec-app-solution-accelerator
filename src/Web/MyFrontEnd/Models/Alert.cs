@@ -2,7 +2,6 @@
 
 namespace MyFrontEnd.Models
 {
-    [Table("Alert")]
     public class Alert
     {
         public string Id { get; set; }

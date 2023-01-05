@@ -7,13 +7,16 @@ using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Dapr.Client;
 using MyFrontEnd.Models;
+using MyFrontEnd.Controllers;
 
 namespace MyFrontEnd.Pages;
 
 public class IndexModel : PageModel
 {
     private readonly DaprClient _daprClient;
-    public List<Alert> Alerts { get; private set; }
+    private AlertController AlertController;
+    private SourceController SourceController;
+    public Stack<Alert> Alerts { get; private set; }
     public List<Source> Sources { get; set; }
     public Alert selectedAlert { get; set; }
     public Boolean imageSelected;
@@ -23,8 +26,13 @@ public class IndexModel : PageModel
     public IndexModel() //DaprClient daprClient
     {
         //_daprClient = daprClient;
-        Alerts = new List<Alert>();
+        AlertController = new AlertController();
+        SourceController = new SourceController();
+        Alerts = new Stack<Alert>();
+        Alerts = AlertController.Alert();
         Sources = new List<Source>();
+        Sources = SourceController.Source();
+        selectedAlert = null;
     }
 
     public async Task OnGet()
@@ -35,20 +43,14 @@ public class IndexModel : PageModel
         //    "alerts");
 
         //ViewData["AlertsData"] = alerts;
-        Alerts.Add(new Alert("alert-1", "camera-1", "high", "Suspicious individual detected!", "./assets/suspect-individual", 94, DateTime.Now));
-        Alerts.Add(new Alert("alert-2", "sensor-1", "medium",  "Sensor got wet, possible flooding!", "null", 75, DateTime.Now));
-        Alerts.Add(new Alert("alert-3", "camera-2", "low", "Animal detected!", "./assets/bird", 40, DateTime.Now));
-        Alerts.Add(new Alert("alert-4", "camera-3", "high", "Suspicious individual detected!", "./assets/suspect-individual", 94, DateTime.Now));
-        Alerts.Add(new Alert("alert-5", "camera-4", "high", "Suspicious individual detected!", "./assets/suspect-individual", 94, DateTime.Now));
+        Alerts = AlertController.Alert();
+        ViewData["Alerts"] = Alerts;
 
-        Sources.Add(new Camera("camera-1", "Camera 1", "camera", 123, 234, 50, 90));
-        Sources.Add(new Sensor("sensor-1", "Sensor 1", "sensor", 345, 456, "temperature"));
-        Sources.Add(new Camera("camera-2", "Camera 2", "camera", 189, 178, 50, 180));
-        Sources.Add(new Camera("camera-3", "Camera 3", "camera", 257, 234, 50, 135));
-        Sources.Add(new Camera("camera-4", "Camera 4", "camera", 257, 234, 50, 135));
+        Sources = SourceController.Source();
+        ViewData["Sources"] = Sources;
     }
 
-    public List<Alert> GetAlerts()
+    public Stack<Alert> GetAlerts()
     {
         foreach(var alert in Alerts)
         {
@@ -59,7 +61,7 @@ public class IndexModel : PageModel
 
     public string SelectAlert(Alert alert)
     {
-        this.selectedAlert = alert;
+        selectedAlert = alert;
         SelectInputs(selectedAlert);
         return "Alert: " + selectedAlert.Id + " has been selected, whose source is "+ selectedAlert.SourceId;
     }
@@ -123,12 +125,33 @@ public class IndexModel : PageModel
         return "";
     }
 
-    //public string RefreshData()
-    //{
-    //    Alerts.Add(new Alert("alert-6", "camera-1", "high", "Suspicious individual detected!", "./assets/suspect-individual", 94, DateTime.Now));
-    //    Alerts.Add(new Alert("alert-7", "sensor-1", "medium", "Sensor got wet, possible flooding!", "null", 75, DateTime.Now));
-    //    Alerts.Add(new Alert("alert-8", "camera-2", "low", "Animal detected!", "./assets/bird", 40, DateTime.Now));
-    //    Alerts.Add(new Alert("alert-9", "camera-3", "high", "Suspicious individual detected!", "./assets/suspect-individual", 94, DateTime.Now));
-    //    return "New data added";
-    //}
+    public string RefreshData()
+    {
+        Alerts = AlertController.RefreshData();
+        ViewData["Alerts"] = Alerts;
+        Console.WriteLine(Alerts.Count);
+        return "New data added";
+    }
+
+    public Boolean GetMax(Alert alert)
+    {
+        //foreach(var alert in AlertController.GetAlerts())
+        //int index = AlertController.GetAlerts().IndexOf(alert);
+        //int max = Math.Max(GetLoaded(), Alerts.Count);
+        //Console.WriteLine(alert.toString());
+        //Console.WriteLine($"Loaded is {GetLoaded()} and index is {index}, so max is {max}.");
+        //if (index < max)
+        //{
+            return true;
+        //}
+        //else
+        //{
+        //    return false;
+        //}
+    }
+
+    public int GetLoaded()
+    {
+        return 20;
+    }
 }
