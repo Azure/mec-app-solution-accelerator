@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertshandler
+  # namespace: mec-core
+  labels:
+    app: alertshandler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertshandler
+  template:
+    metadata:
+      labels:
+        app: alertshandler
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "alerts-api"
+        dapr.io/app-port: "80"
+        # dapr.io/config: "dapr-config"
+    spec:
+      containers:
+      - name: alertshandler
+        image: pabravil/alertshandler:latest
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+      restartPolicy: Always
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: alertshandler
+  name: alertshandler
+spec:
+  type: NodePort
+  ports:
+  - name: "web"
+    port: 8080
+    targetPort: 80
+    nodePort: 30002
+  selector:
+    app: alertshandler
