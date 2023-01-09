@@ -27,7 +27,7 @@ body {
 table, tr {
     border: 1px;
     width: 100%;
-    border-color: #343333;
+    border-color: #343333 !important;
 }
 
 th {
@@ -188,7 +188,7 @@ td {
     width: 90%;
     height: 50%;
     overflow: hidden;
-    overscroll-behavior:contain;
+    overscroll-behavior: contain;
 }
 
 #info-content {

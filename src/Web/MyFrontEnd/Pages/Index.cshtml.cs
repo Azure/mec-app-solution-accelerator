@@ -86,6 +86,22 @@ public class IndexModel : PageModel
         }
     }
 
+    public string SelectText()
+    {
+        imageSelected = false;
+        textSelected = true;
+        hasTwoInputs = false;
+        return "Text selected";
+    }
+
+    public string SelectImage()
+    {
+        imageSelected = true;
+        textSelected = false;
+        hasTwoInputs = false;
+        return "Image selected";
+    }
+
     public string FindInputs(Alert alert)
     {
         if (alert.Information != "null" && alert.UrlImageEncoded != "null")

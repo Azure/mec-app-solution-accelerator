@@ -190,17 +190,17 @@
 <script type="text/javascript">
     let refresh_alerts = true;
 
-    $("#refresh-data").click(function () {
+    $("#refresh-data").click(() => {
         console.log('@Url.Action("RefreshPage","Alert")');
         $("#data").load('@Url.Action("RefreshPage","Alert")');
         refresh = false;
     })
 
-    @*setTimeout(() => {
+    setInterval(() => {
         if(refresh_alerts) {
             console.log('@Url.Action("RefreshPage","Alert")');
             $("#data").load('@Url.Action("RefreshPage","Alert")');
         }
         refresh_alerts = !refresh_alerts;
-    }, 1000)*@
+    }, 2500)
 </script>
