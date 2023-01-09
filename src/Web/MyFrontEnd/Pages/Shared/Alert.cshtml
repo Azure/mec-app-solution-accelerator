@@ -42,7 +42,7 @@
                         <tr onclick="console.log('@Model.SelectAlert(alert)')">
                             @*class="@{alert.Id == Model.selectedAlert.Id ? 'bg-mWhite' : 'bg-alertSelected';}">*@
                             <td class="cursor-pointer border border-dark text-center py-1" :class="filteredAlerts[i-1].id == selectedAlert.id ? 'bg-routeSelected' : 'bg-tableData'">@alert.AlertTriggerTimeIni.ToString("d")<br>@alert.AlertTriggerTimeIni.ToString("T")</td>
-                            <td class="cursor-pointer border border-dark text-center py-1" :class="filteredAlerts[i-1].id == selectedAlert.id ? 'bg-routeSelected' : 'bg-tableData'">@Model.getSourceName(alert.Source.Id)</td>
+                            <td class="cursor-pointer border border-dark text-center py-1" :class="filteredAlerts[i-1].id == selectedAlert.id ? 'bg-routeSelected' : 'bg-tableData'">@alert.Source.Name</td>
                             <td class="cursor-pointer border border-dark text-center py-1" :class="filteredAlerts[i-1].id == selectedAlert.id ? 'bg-routeSelected' : 'bg-tableData'">
                                 <div class="d-flex flex-row justify-content-center px-2">
                                     @if (alert.Accuracy > 90)
@@ -119,29 +119,29 @@
             </script>
         </div>
         <div class="d-flex flex-row justify-content-end">
-            <button class="button-table me-2 px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right active:bg-mWhite" :class="bottomReached && endReached == false ? 'bg-tableHeader' : 'bg-buttonDisabled'" :disabled="(!bottomReached || endReached)" onclick="loadMore()">Load More</button>
-            <button class="button-table me-2 px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right active:bg-mWhite" :class="endReached == false ? 'bg-tableHeader' : 'bg-buttonDisabled'" :disabled="endReached" onclick="loadAll()">Load All</button>
+            @*<button class="button-table me-2 px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right active:bg-mWhite" :class="bottomReached && endReached == false ? 'bg-tableHeader' : 'bg-buttonDisabled'" :disabled="(!bottomReached || endReached)" onclick="loadMore()">Load More</button>*@
+            <!--<button class="button-table me-2 px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right active:bg-mWhite" :class="endReached == false ? 'bg-tableHeader' : 'bg-buttonDisabled'" :disabled="endReached" onclick="loadAll()">Load All</button>-->
             <button class="button-table px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right active:bg-mWhite bg-tableHeader" id="refresh-data">Refresh Data</button>
         </div>
     </div>
     <div id="right" class="d-flex flex-column justify-content-around mx-5">
-        <div id="canvas" class="position-relative overscroll-contain max-w-none justify-self-center" :style="'width:'+initialSize.width+'px; height:'+initialSize.height+'px;'">
+        <!--<div id="canvas" class="position-relative overscroll-contain max-w-none justify-self-center" :style="'width:'+initialSize.width+'px; height:'+initialSize.height+'px;'">
             <div class="d-flex flex-column" id="zoom-control">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="zoom-button p-1 rounded-top" id="zoom-in">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="zoom-button p-1 rounded-top" id="zoom-in">-->
                     @*@click.prevent="zoom(10)">*@
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
+                    <!--<path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
                 </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="zoom-button p-1 rounded-bottom">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="zoom-button p-1 rounded-bottom">-->
                     @*@click.prevent="zoom(-10)">*@
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM13.5 10.5h-6" />
+                    <!--<path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM13.5 10.5h-6" />
                 </svg>
             </div>
             <div id="container" ref="container" class="position-relative overflow-scroll ratio ratio-16x9">
-                <div id="image" ref="image" class="cursor-grab active:cursor-grabbing" :style="'transform: scale('+zoomValue+');'">
+                <div id="image" ref="image" class="cursor-grab active:cursor-grabbing" :style="'transform: scale('+zoomValue+');'">-->
                     @*@mousemove.prevent="imageScroll($event)" @mousedown="toggleClick(true)" @mouseup="toggleClick(false)" @wheel.prevent="wheelEvents" @mouseleave="toggleClick(false)" @contextmenu.prevent="emit('show-menu', $event)">*@
-                </div>
+                <!--</div>
             </div>
-        </div>
+        </div>-->
         <div class="" id="info-content" onclick="console.log('@Model.selectedAlert.toString()')">
             @if (Model.imageSelected)
             {

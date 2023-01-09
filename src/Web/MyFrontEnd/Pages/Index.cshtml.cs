@@ -117,28 +117,16 @@ public class IndexModel : PageModel
 
     public Source FindSource(Alert alert)
     {
-        var sourceId = alert.IdName;
-        var selectedSource = new Source("", "", "", 0, 0);
+        var sourceId = alert.Source.Name;
+        var selectedSource = new Source("", "", 0, 0);
         foreach (var source in Sources)
         {
-            if (source.Id == sourceId)
+            if (source.Name == sourceId)
             {
                 selectedSource = source;
             }
         }
         return selectedSource;
-    }
-
-    public string getSourceName(string id)
-    {
-        foreach(var source in Sources)
-        {
-            if(source.Id == id)
-            {
-                return source.Name;
-            }
-        }
-        return "";
     }
 
     public string RefreshData()
