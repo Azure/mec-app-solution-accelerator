@@ -12,7 +12,7 @@ namespace MyFrontEnd.Pages.Shared
 	public class AlertModel : PageModel
     {
         public IndexModel IndexModel;
-        public Stack<Alert> Alerts;
+        public IEnumerable<Alert> Alerts;
 
         public AlertModel(IndexModel indexModel)
         {

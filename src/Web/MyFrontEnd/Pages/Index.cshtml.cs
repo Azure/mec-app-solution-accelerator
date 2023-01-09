@@ -1,10 +1,4 @@
-﻿using System.IO;
-using System.Linq;
-using System.Text.Json;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Dapr.Client;
 using MyFrontEnd.Models;
 using MyFrontEnd.Controllers;
@@ -14,22 +8,19 @@ namespace MyFrontEnd.Pages;
 public class IndexModel : PageModel
 {
     private readonly DaprClient _daprClient;
-    private AlertController AlertController;
     private SourceController SourceController;
-    public Stack<Alert> Alerts { get; private set; }
+    public IEnumerable<Alert> Alerts { get; private set; }
     public List<Source> Sources { get; set; }
     public Alert selectedAlert { get; set; }
     public Boolean imageSelected;
-     public Boolean textSelected;
+    public Boolean textSelected;
     public Boolean hasTwoInputs;
 
-    public IndexModel() //DaprClient daprClient
+    public IndexModel(DaprClient daprClient) 
     {
-        //_daprClient = daprClient;
-        AlertController = new AlertController();
+        _daprClient = daprClient;
         SourceController = new SourceController();
         Alerts = new Stack<Alert>();
-        Alerts = AlertController.Alert();
         Sources = new List<Source>();
         Sources = SourceController.Source();
         selectedAlert = null;
@@ -43,27 +34,24 @@ public class IndexModel : PageModel
             "alerts");
 
         ViewData["Alerts"] = Alerts;
-        //Alerts = AlertController.Alert();
-        //ViewData["Alerts"] = Alerts;
-
         Sources = SourceController.Source();
         ViewData["Sources"] = Sources;
     }
 
-    public Stack<Alert> GetAlerts()
+    public IEnumerable<Alert> GetAlerts()
     {
         foreach(var alert in Alerts)
         {
             Console.WriteLine(alert);
         }
-        return Alerts;
+        return Alerts.OrderBy(x=> x.AlertTriggerTimeIni);
     }
 
     public string SelectAlert(Alert alert)
     {
         selectedAlert = alert;
         SelectInputs(selectedAlert);
-        return "Alert: " + selectedAlert.Id + " has been selected, whose source is "+ selectedAlert.IdName;
+        return "Alert: " + selectedAlert.Id + " has been selected, whose source is "+ selectedAlert.Source.Name;
     }
 
     public void SelectInputs(Alert alert)
@@ -129,11 +117,14 @@ public class IndexModel : PageModel
         return selectedSource;
     }
 
-    public string RefreshData()
+    public async Task<string> RefreshData()
     {
-        Alerts = AlertController.RefreshData();
+        this.Alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Alert>>(
+            HttpMethod.Get,
+            "alerts-api",
+            "alerts");
+
         ViewData["Alerts"] = Alerts;
-        Console.WriteLine(Alerts.Count);
         return "New data added";
     }
 
