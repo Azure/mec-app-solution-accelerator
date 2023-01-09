@@ -41,12 +41,11 @@
                     {
                         <tr onclick="console.log('@Model.SelectAlert(alert)')">
                             @*class="@{alert.Id == Model.selectedAlert.Id ? 'bg-mWhite' : 'bg-alertSelected';}">*@
-                            @*v-for="i in max" :key="filteredAlerts[i-1].id">*@
                             <td class="cursor-pointer border border-dark text-center py-1" :class="filteredAlerts[i-1].id == selectedAlert.id ? 'bg-routeSelected' : 'bg-tableData'">@alert.AlertTriggerTimeIni.ToString("d")<br>@alert.AlertTriggerTimeIni.ToString("T")</td>
-                            <td class="cursor-pointer border border-dark text-center py-1" :class="filteredAlerts[i-1].id == selectedAlert.id ? 'bg-routeSelected' : 'bg-tableData'">@Model.getSourceName(alert.SourceId)</td>
+                            <td class="cursor-pointer border border-dark text-center py-1" :class="filteredAlerts[i-1].id == selectedAlert.id ? 'bg-routeSelected' : 'bg-tableData'">@Model.getSourceName(alert.Source.Id)</td>
                             <td class="cursor-pointer border border-dark text-center py-1" :class="filteredAlerts[i-1].id == selectedAlert.id ? 'bg-routeSelected' : 'bg-tableData'">
                                 <div class="d-flex flex-row justify-content-center px-2">
-                                    @if (alert.Priority == "high")
+                                    @if (alert.Accuracy > 90)
                                     {
                                         <div class="priority-container d-flex flex-row border rounded" id="danger" onclick="console.log('@Model.selectedAlert.toString()')">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="priority-svg" id="danger-svg">
@@ -55,7 +54,7 @@
                                             <div class="text-darkRed text-center text-sm" id="danger-text">alert-danger</div>
                                         </div>
                                     }
-                                    @if (alert.Priority == "medium")
+                                    else if (alert.Accuracy > 70)
                                     {
                                         <div class="priority-container d-flex flex-row border rounded" id="warning">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="priority-svg" id="warning-svg">
@@ -64,7 +63,7 @@
                                             <div class="text-darkYellow text-center text-sm" id="warning-text">alert-warning</div>
                                         </div>
                                     }
-                                    @if (alert.Priority == "low")
+                                    else
                                     {
                                         <div class="priority-container d-flex flex-row border rounded" id="info">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="priority-svg" id="info-svg">
@@ -76,9 +75,8 @@
                                 </div>
                             </td>
                             <td class="cursor-pointer border border-dark text-center py-1" :class="filteredAlerts[i-1].id == selectedAlert.id ? 'bg-routeSelected' : 'bg-tableData'">
-                                @*<alert-information :alert="filteredAlerts[i-1]" @onselect="emit('select-input', $event)"></alert-information>*@
                                 <div class="d-flex flex-row justify-content-center px-2">
-                                    @if (Model.FindInputs(alert) == "both") @*v-if= "(hasText && hasImage)"*@
+                                    @if (Model.FindInputs(alert) == "both")
                                     {
                                         <div class="mx-1 flex flex-row">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width=".7" stroke="currentColor" class="information">
@@ -91,7 +89,7 @@
                                             </svg>
                                         </div>
                                         }
-                                        else if (Model.FindInputs(alert) == "text") /*v-else-if= "hasText"*/
+                                     else if (Model.FindInputs(alert) == "text")
                                     {
                                         <div class="mx-1">
                                             @*@click="emit('select', { input: 'text', content: props.alert.information.text })">*@
@@ -99,8 +97,8 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                                             </svg>
                                         </div>
-                                        }
-                                        else if (Model.FindInputs(alert) == "image") /*v-else-if="hasImage"*/
+                                    }
+                                     else if (Model.FindInputs(alert) == "image")
                                     {
                                         <div class="mx-1">
                                             @*@click="emit('select', { input: 'image', content: props.alert.information.picture })">*@
@@ -123,7 +121,7 @@
         <div class="d-flex flex-row justify-content-end">
             <button class="button-table me-2 px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right active:bg-mWhite" :class="bottomReached && endReached == false ? 'bg-tableHeader' : 'bg-buttonDisabled'" :disabled="(!bottomReached || endReached)" onclick="loadMore()">Load More</button>
             <button class="button-table me-2 px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right active:bg-mWhite" :class="endReached == false ? 'bg-tableHeader' : 'bg-buttonDisabled'" :disabled="endReached" onclick="loadAll()">Load All</button>
-            <button class="button-table px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right active:bg-mWhite bg-tableHeader" id="refresh-data" @*onclick="console.log('@Model.RefreshData()')"*@>Refresh Data</button>
+            <button class="button-table px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right active:bg-mWhite bg-tableHeader" id="refresh-data">Refresh Data</button>
         </div>
     </div>
     <div id="right" class="d-flex flex-column justify-content-around mx-5">
@@ -141,7 +139,6 @@
             <div id="container" ref="container" class="position-relative overflow-scroll ratio ratio-16x9">
                 <div id="image" ref="image" class="cursor-grab active:cursor-grabbing" :style="'transform: scale('+zoomValue+');'">
                     @*@mousemove.prevent="imageScroll($event)" @mousedown="toggleClick(true)" @mouseup="toggleClick(false)" @wheel.prevent="wheelEvents" @mouseleave="toggleClick(false)" @contextmenu.prevent="emit('show-menu', $event)">*@
-                    @*<source-icons></source-icons>*@
                 </div>
             </div>
         </div>

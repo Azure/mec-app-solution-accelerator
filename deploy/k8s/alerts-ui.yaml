@@ -30,7 +30,8 @@ spec:
     spec:
       containers:
       - name: myfrontend
-        image: pabravil/myfrontend:latest
+        image: pabravil/myfrontend:jalerts-mock
+        # image: jaimedeclemente/myfrontend:latest
         # image: pabravil/myfrontend:dev
         imagePullPolicy: Always
         ports:

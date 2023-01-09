@@ -20,7 +20,7 @@ public class IndexModel : PageModel
     public List<Source> Sources { get; set; }
     public Alert selectedAlert { get; set; }
     public Boolean imageSelected;
-    public Boolean textSelected;
+     public Boolean textSelected;
     public Boolean hasTwoInputs;
 
     public IndexModel() //DaprClient daprClient
@@ -37,14 +37,14 @@ public class IndexModel : PageModel
 
     public async Task OnGet()
     {
-        //var alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Alert>>(
-        //    HttpMethod.Get,
-        //    "alerts-api",
-        //    "alerts");
+        var Alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Alert>>(
+            HttpMethod.Get,
+            "alerts-api",
+            "alerts");
 
-        //ViewData["AlertsData"] = alerts;
-        Alerts = AlertController.Alert();
         ViewData["Alerts"] = Alerts;
+        //Alerts = AlertController.Alert();
+        //ViewData["Alerts"] = Alerts;
 
         Sources = SourceController.Source();
         ViewData["Sources"] = Sources;
@@ -54,7 +54,7 @@ public class IndexModel : PageModel
     {
         foreach(var alert in Alerts)
         {
-            Console.WriteLine(alert.toString());
+            Console.WriteLine(alert);
         }
         return Alerts;
     }
@@ -63,12 +63,12 @@ public class IndexModel : PageModel
     {
         selectedAlert = alert;
         SelectInputs(selectedAlert);
-        return "Alert: " + selectedAlert.Id + " has been selected, whose source is "+ selectedAlert.SourceId;
+        return "Alert: " + selectedAlert.Id + " has been selected, whose source is "+ selectedAlert.IdName;
     }
 
     public void SelectInputs(Alert alert)
     {
-        if(alert.Information != "null" && alert.UrlImageEncoded != "null")
+        if(alert.Information != "null" && alert.Frame != "null")
         {
             imageSelected = false;
             textSelected = false;
@@ -104,7 +104,7 @@ public class IndexModel : PageModel
 
     public string FindInputs(Alert alert)
     {
-        if (alert.Information != "null" && alert.UrlImageEncoded != "null")
+        if (alert.Information != "null" && alert.Frame != "null")
         {
             return "both";
         }
@@ -117,7 +117,7 @@ public class IndexModel : PageModel
 
     public Source FindSource(Alert alert)
     {
-        var sourceId = alert.SourceId;
+        var sourceId = alert.IdName;
         var selectedSource = new Source("", "", "", 0, 0);
         foreach (var source in Sources)
         {
