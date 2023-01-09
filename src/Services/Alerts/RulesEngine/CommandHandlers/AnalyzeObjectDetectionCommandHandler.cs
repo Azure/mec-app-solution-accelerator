@@ -62,7 +62,9 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                             Frame = frame,
                             BoundingBoxes = requestClass.BoundingBoxes,
                             Type = alertConfig.AlertName,
-                            Information = $"Generate alert {alertConfig.AlertName} detecting objects {foundClasses.ToString()}"
+                            Information = $"Generate alert {alertConfig.AlertName} detecting objects {string.Join(",", foundClasses.ToArray())}",
+                            Accuracy = requestClass.Confidence,
+
                         };
 
                         var serialized = AvroConvert.Serialize(alert);

@@ -8,5 +8,6 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Events
         public string Type { get; set; }
         public string UrlVideoEncoded { get; set; }
         public List<BoundingBox> BoundingBoxes { get; set; }
+        public float Accuracy { get; set; }
     }
 }

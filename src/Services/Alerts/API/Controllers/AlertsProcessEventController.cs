@@ -33,10 +33,10 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
             await _mediator.Send(new PersistAlertCommand()
             {
                 Information = detection.Information,
-                AlertTriggerTimeFin = DateTime.Now,
                 AlertTriggerTimeIni = new DateTime(detection.EveryTime),
                 Type = detection.Type,
                 Frame = detection.Frame,
+                Accuracy = detection.Accuracy
             });
             _logger.LogInformation("Stored generic alert");
         }

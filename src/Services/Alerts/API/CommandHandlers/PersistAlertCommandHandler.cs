@@ -18,17 +18,29 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             var id = Guid.NewGuid();
             var entity = new Alert()
             {
-                UrlVideoEncoded = request.UrlVideoEncoded,
                 Frame = request.Frame,
-                AlertTriggerTimeFin = request.AlertTriggerTimeFin,
                 AlertTriggerTimeIni = request.AlertTriggerTimeIni,
                 Information = request.Information,
-                Id =id,
+                Id = id,
                 Type = request.Type,
+                Accuracy = request.Accuracy,
             };
-            entity.Id = id;
+            entity.Source = this.SetHardwareMockInformation();
             await this._repository.Create(entity);
             return id;
+        }
+
+        private Source SetHardwareMockInformation()
+        {
+            var randomGenerator = new Random();
+            var randomCameraNumber = randomGenerator.Next(1, 10);
+            var source = new Source();
+            source.Name = $"Camera {randomCameraNumber}";
+            source.lat = randomGenerator.Next(1, 100);
+            source.@long = randomGenerator.Next(1, 10);
+            source.Type = "Camera";
+
+            return source;
         }
     }
 }
