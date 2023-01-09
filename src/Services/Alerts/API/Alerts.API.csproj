@@ -10,6 +10,7 @@
     <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Alerts.api' " />
   <ItemGroup>
     <PackageReference Include="AvroConvert" Version="3.3.0" />
     <PackageReference Include="Dapr.AspNetCore" Version="1.9.0" />

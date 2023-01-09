@@ -1,0 +1,12 @@
+[
+    { "id": 1, "name": "Far North-East section 5", "warnings": { "name": "breach detected!", "priority": "high", "url": "../assets/bye.png", "start_time": 100, "end_time": 150 }, "route_time": "01:10:49", "robot": "Drone-0301" },
+    { "id": 7, "name": "Circular fence route 12", "warnings": { "name": "", "priority": "high", "url": "../assets/bye.png", "start_time": 100, "end_time": 150 }, "route_time": "01:20:37", "robot": "Drone-0402" },
+    { "id": 6, "name": "Circular fence route 13", "warnings": { "name": "", "priority": "high", "url": "../assets/bye.png", "start_time": 100, "end_time": 150 }, "route_time": "01:20:37", "robot": "Drone-0401" },
+    { "id": 5, "name": "Circular fence route 14", "warnings": { "name": "suspicious individual!", "priority": "high", "url": "../assets/bye.png", "start_time": 100, "end_time": 150 }, "route_time": "01:20:37", "robot": "Drone-0305" },
+    { "id": 4, "name": "Circular fence route 15", "warnings": { "name": "", "priority": "high", "url": "../assets/bye.png", "start_time": 100, "end_time": 150 }, "route_time": "01:20:37", "robot": "Drone-0304" },
+    { "id": 3, "name": "Circular fence route 16", "warnings": { "name": "obstacle encountered!", "priority": "high", "url": "../assets/bye.png", "start_time": 100, "end_time": 150 }, "route_time": "01:20:37", "robot": "Robot-0303"},
+    { "id": 2, "name": "Circular fence route 17", "warnings": { "name": "", "priority": "high", "url": "../assets/bye.png", "start_time": 100, "end_time": 150 }, "route_time": "01:20:37", "robot": "Drone-0302" },
+    { "id": 8, "name": "Circular fence route 18", "warnings": { "name": "", "priority": "high", "url": "../assets/bye.png", "start_time": 100, "end_time": 150 }, "route_time": "01:20:37", "robot": "Robot-0001" },
+    { "id": 9, "name": "Circular fence route 19", "warnings": { "name": "", "priority": "high", "url": "../assets/bye.png", "start_time": 100, "end_time": 150 }, "route_time": "01:20:37", "robot": "Robot-0101" },
+    { "id": 10, "name": "Circular fence route 10", "warnings": { "name": "", "priority": "high", "url": "../assets/bye.png", "start_time": 100, "end_time": 150 }, "route_time": "01:20:37", "robot": "Robot-0201" }
+]

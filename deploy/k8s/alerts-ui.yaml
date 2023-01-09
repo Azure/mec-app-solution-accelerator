@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: myfrontend
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: myfrontend
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myfrontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myfrontend
+  template:
+    metadata:
+      labels:
+        app: myfrontend
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "myfrontend"
+        dapr.io/port: "80"
+    spec:
+      containers:
+      - name: myfrontend
+        image: pabravil/myfrontend:jalerts-mock
+        # image: jaimedeclemente/myfrontend:latest
+        # image: pabravil/myfrontend:dev
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        # - containerPort: 443
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Development
+        - name: ASPNETCORE_URLS
+          value: http://+:80
+        # volumeMounts:
+        # - name: secrets
+        #   mountPath: /root/.microsoft/usersecrets
