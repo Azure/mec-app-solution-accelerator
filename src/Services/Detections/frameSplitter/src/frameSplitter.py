@@ -61,13 +61,14 @@ class VideoCapture:
 
 def main():
     print('main')
+    timer=0
     timer= int(os.getenv('TIMEOUT'))
     feed= (os.getenv('FEED'))
     time.sleep(timer)
 
  
     print('dentro')
-    cap = VideoCapture("../Datasets/demo.mp4")
+    cap = VideoCapture(feed)
     timestamp_general=int(time.time()*1000)
     i=0
     while True:
@@ -79,7 +80,7 @@ def main():
         while not ret:
             print('not ret')
             cap.release()
-            cap = VideoCapture("../Datasets/demo.mp4")
+            cap = VideoCapture(feed)
             ret, frame = cap.read()
         # print(frame)
        
