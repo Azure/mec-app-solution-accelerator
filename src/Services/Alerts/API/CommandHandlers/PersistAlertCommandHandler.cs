@@ -37,7 +37,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             var source = new Source();
             source.Name = $"Camera {randomCameraNumber}";
             source.lat = randomGenerator.Next(1, 100);
-            source.@long = randomGenerator.Next(1, 10);
+            source.@lon = randomGenerator.Next(1, 10);
             source.Type = "Camera";
 
             return source;
