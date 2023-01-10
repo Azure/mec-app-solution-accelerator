@@ -49,7 +49,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Infraestructure
         public IEnumerable<Alert> List(int skip, int take)
         {
             var collection = this.GetDatabase().GetCollection<Alert>(typeof(Alert).Name);
-            return collection.Find(_ => true).Skip(skip).Limit(take).ToList();
+            return collection.Find(_ => true).SortByDescending(bson => bson.AlertTriggerTimeIni).Skip(skip).Limit(take).ToList();
         }
 
         public async Task Update(Alert entity)
