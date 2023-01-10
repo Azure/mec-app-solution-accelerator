@@ -12,7 +12,7 @@ services:
       volumes:
         - 'C:/mongodb/database:/data/db'
       ports:
-        - 27017:27017
+        - 27027:27027
       restart: "unless-stopped"
 
   aiinferencer:
