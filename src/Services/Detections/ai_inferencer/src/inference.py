@@ -62,13 +62,14 @@ def main(source_id,timestamp,model,frame,detection_threshold,path):
 
             data["Classes"].append({"EventType": detection, "Confidence":list(detections["confidence"].values())[idx], "BoundingBoxes": BoundingBoxes})
             # print(data)
-            json_str = serializer.to_json(data)
+    json_str = serializer.to_json(data)
 
             # print(json_str)
             # writer.write(data, encoder)
             # bbytes = bytes_writer.getvalue()
             # print(bbytes)
-            PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
+    # print(json_str)
+    PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
     return
     # results.print()
 
