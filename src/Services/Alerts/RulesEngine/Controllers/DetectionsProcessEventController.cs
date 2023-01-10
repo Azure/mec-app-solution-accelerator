@@ -27,7 +27,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventCont
             var detectionStr = detectionRaw.ToString();
             var detectionBytes = AvroConvert.Json2Avro(detectionStr);
             var detection = AvroConvert.Deserialize<ObjectDetected>(detectionBytes);
-
+            _logger.LogInformation($"Received detection at {detection.EveryTime}");
             var command = new AnalyzeObjectDetectionCommand()
             {
                 Id = detection.Id,
