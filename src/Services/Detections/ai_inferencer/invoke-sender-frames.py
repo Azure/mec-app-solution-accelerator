@@ -15,7 +15,7 @@ def framesreceiver(request: InvokeMethodRequest) -> InvokeMethodResponse:
     source_id = json.loads(request.text())['source_id']
     timestamp = json.loads(request.text())['timestamp']
     # frame=numpy.array(image_list)
-    detection_threshold=0.7
+    detection_threshold=0.0
     # print(request.metadata, flush=True)
     # print(request.text(), flush=True)
     path='src/detections.avro'
