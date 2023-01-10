@@ -62,7 +62,7 @@ services:
         dockerfile: Dockerfile
       environment:
         - TIMEOUT=15
-        - FEED=rtsp://2.tcp.ngrok.io:14641/mystream
+        - FEED=rtsp://0.tcp.ngrok.io:13684/mystream
       ports:
         - "57090"
       depends_on:
