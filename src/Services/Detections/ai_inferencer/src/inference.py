@@ -45,7 +45,9 @@ def main(source_id,timestamp,model,frame,detection_threshold,path):
     # bytes_writer = io.BytesIO()
     # encoder = avro.io.BinaryEncoder(bytes_writer)
     detections = json.loads(results.pandas().xyxy[0].to_json())
-    if detections!=[]:
+    
+    if detections["name"]!={}:
+        print(detections)
         for idx,detection in enumerate(detections["name"].values()):
             
             BoundingBoxes=[]
@@ -69,7 +71,7 @@ def main(source_id,timestamp,model,frame,detection_threshold,path):
                 # writer.write(data, encoder)
                 # bbytes = bytes_writer.getvalue()
                 # print(bbytes)
-        print(json_str)
+        # print(json_str)
         PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
     return
     # results.print()
