@@ -30,10 +30,12 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
         public async Task PostAlert(byte[] alertBytes)
         {
             var detection = AvroConvert.Deserialize<DetectedObjectAlert>(alertBytes);
+            TimeSpan time = TimeSpan.FromMilliseconds(detection.EveryTime);
+            DateTime startdate = new DateTime(1970, 1, 1) + time;
             await _mediator.Send(new PersistAlertCommand()
             {
                 Information = detection.Information,
-                AlertTriggerTimeIni = new DateTime(detection.EveryTime),
+                AlertTriggerTimeIni = startdate,
                 Type = detection.Type,
                 Frame = detection.Frame,
                 Accuracy = detection.Accuracy
