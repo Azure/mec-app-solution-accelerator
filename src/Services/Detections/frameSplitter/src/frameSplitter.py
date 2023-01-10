@@ -64,8 +64,9 @@ def main():
     timer=0
     timer= int(os.getenv('TIMEOUT'))
     feed= (os.getenv('FEED'))
-    time.sleep(timer)
 
+    time.sleep(timer)
+    
  
     print('dentro')
     cap = VideoCapture(feed)
@@ -73,12 +74,11 @@ def main():
     i=0
     while True:
         # Capture frame-by-frame
-        print('in')
         ret,frame = cap.read()
-        print(ret)
+
         
         while not ret:
-            print('not ret')
+            print('not possible to access RTSP')
             cap.release()
             cap = VideoCapture(feed)
             ret, frame = cap.read()
@@ -88,20 +88,21 @@ def main():
         resized_img_bytes = img_encode.tobytes()
         bytes_string = base64.standard_b64encode(resized_img_bytes)
         timestamp=int(time.time()*1000)
+        print('Sending frame')
         with DaprClient() as client:
             # Using Dapr SDK to publish a topic
             req_data = {"source_id": 'video_'+str(timestamp_general), "timestamp":timestamp, "image": bytes_string.decode()}
             resp = client.invoke_method(
                 "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
             )
-            print('Esperando respuesta')
+            print('Waiting for response')
             # Print the response
             print(resp.content_type, flush=True)
             print(resp.text(), flush=True) 
         i+=1
     # cap.release()
         # cv2.destroyAllWindows()
-        print('fin')
+        print('End')
 
 if __name__ == '__main__':
     main()

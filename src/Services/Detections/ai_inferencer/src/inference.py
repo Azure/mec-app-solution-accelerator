@@ -45,31 +45,32 @@ def main(source_id,timestamp,model,frame,detection_threshold,path):
     # bytes_writer = io.BytesIO()
     # encoder = avro.io.BinaryEncoder(bytes_writer)
     detections = json.loads(results.pandas().xyxy[0].to_json())
-    for idx,detection in enumerate(detections["name"].values()):
-        
-        BoundingBoxes=[]
-        
-        if list(detections["confidence"].values())[idx] > detection_threshold:
+    if detections!=[]:
+        for idx,detection in enumerate(detections["name"].values()):
             
-            xmin=list(detections["xmin"].values())[idx]
-            xmax=list(detections["xmax"].values())[idx]
-            ymin=list(detections["ymin"].values())[idx]
-            ymax=list(detections["ymax"].values())[idx]
-            BoundingBoxes.append({"x": xmin, "y":ymin})
-            BoundingBoxes.append({"x": xmin, "y":ymax})
-            BoundingBoxes.append({"x": xmax, "y":ymin})
-            BoundingBoxes.append({"x": xmax, "y":ymax})
+            BoundingBoxes=[]
+            
+            if list(detections["confidence"].values())[idx] > detection_threshold:
+                
+                xmin=list(detections["xmin"].values())[idx]
+                xmax=list(detections["xmax"].values())[idx]
+                ymin=list(detections["ymin"].values())[idx]
+                ymax=list(detections["ymax"].values())[idx]
+                BoundingBoxes.append({"x": xmin, "y":ymin})
+                BoundingBoxes.append({"x": xmin, "y":ymax})
+                BoundingBoxes.append({"x": xmax, "y":ymin})
+                BoundingBoxes.append({"x": xmax, "y":ymax})
 
-            data["Classes"].append({"EventType": detection, "Confidence":list(detections["confidence"].values())[idx], "BoundingBoxes": BoundingBoxes})
-            # print(data)
-    json_str = serializer.to_json(data)
+                data["Classes"].append({"EventType": detection, "Confidence":list(detections["confidence"].values())[idx], "BoundingBoxes": BoundingBoxes})
+                # print(data)
+        json_str = serializer.to_json(data)
 
-            # print(json_str)
-            # writer.write(data, encoder)
-            # bbytes = bytes_writer.getvalue()
-            # print(bbytes)
-    # print(json_str)
-    PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
+                # print(json_str)
+                # writer.write(data, encoder)
+                # bbytes = bytes_writer.getvalue()
+                # print(bbytes)
+        print(json_str)
+        PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
     return
     # results.print()
 
