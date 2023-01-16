@@ -28,6 +28,22 @@ http://localhost:52708/swagger/index.html
 <img width="481" alt="image" src="https://user-images.githubusercontent.com/1712635/212743730-a75e728c-8d6d-4267-9847-1f141d7ad7f9.png">
 
 
+
+### Possible deployments
+
+This sample microservice application can run locally using a local Kubernetes cluster such as "Kubernetes in Docker for Desktop" or any other Kubernetes distribution.
+For development purposes, you can also run it on plain Docker with "docker compose up" or Visual Studio.
+Refer to these additional procedure information pages to Get Started on each environment:
+
+
+**TBD - PLEASE ADD PAGES and URLs here:**
+
+- [Local Kubernetes](https://tbd-url)
+- [Visual Studio (F5 experience)](https://tbd-url)
+- [Docker compose on windows](https://tbd-url)
+- [Docker compose on macOS](https://tbd-url)
+
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
