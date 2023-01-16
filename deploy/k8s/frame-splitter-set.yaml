@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: frame-splitter-set
+spec:
+  selector:
+    matchLabels:
+        app: frame-splitter
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: frame-splitter
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "frame-splitter"
+        dapr.io/app-protocol: "grpc"
+        # dapr.io/app-port: "50052"
+        dapr.io/log-level: "debug"
+        dapr.io/enable-api-logging: "true"
+    spec:
+      containers:
+      - name: frame-splitter
+        image: javipercor/framesplitter:latest
+        ports:
+        - containerPort: 50052
+        imagePullPolicy: Always
+        env:
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: FEED
+            valueFrom:
+              configMapKeyRef:
+                name: my-config
+                key: feed-1
+          # - name: FEED-ordinal-dependant
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       name: my-config
+          #       key: MY_POD_NAME
+          - name: FEEDS
+            valueFrom:
+              configMapKeyRef:
+                name: my-config
+                key: feeds
+          - name: TIMEOUT
+            value: "15"
+          # - name: POD_ORDINAL
+          #   valueFrom:
+          #     fieldRef:
+          #       fieldPath: metadata.labels['statefulset.kubernetes.io/pod-name']
+          # - name: ZOO_MY_ID
+          #   valueFrom:
+          #     fieldRef:
+          #       fieldPath: metadata.annotations['spec.pod.beta.kubernetes.io/statefulset-index']
