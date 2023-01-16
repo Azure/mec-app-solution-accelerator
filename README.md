@@ -15,17 +15,17 @@ You should see docker compose up starting like in the following screenshot:
 
 You should be able to browse different components of the application by using the below URLs :
 
-**TBD - PLEASE ADD URLs here:**
+**TBD - PLEASE ADD URLs to use when using "docker compose up" here:**
 
-**Temporal for MyFrontEnd web app:**
-https://localhost:52710/
-or
-https://host.docker.internal:52710/
+**UI web app:**
+https://tbd
+
+(Add screenshot for UI web app)
 
 **Alerts.API service Swagger page:**
-http://localhost:52708/swagger/index.html
+https://tbd
 
-<img width="481" alt="image" src="https://user-images.githubusercontent.com/1712635/212743730-a75e728c-8d6d-4267-9847-1f141d7ad7f9.png">
+(Add screenshot for Alerts.API service Swagger page)
 
 
 
@@ -42,6 +42,19 @@ Refer to these additional procedure information pages to Get Started on each env
 - [Visual Studio (F5 experience)](https://tbd-url)
 - [Docker compose on windows](https://tbd-url)
 - [Docker compose on macOS](https://tbd-url)
+
+
+### URLs when using Visual Studio (Move to VS page to create)
+
+**Temporal for MyFrontEnd web app:**
+https://localhost:52710/
+or
+https://host.docker.internal:52710/
+
+**Alerts.API service Swagger page:**
+http://localhost:52708/swagger/index.html
+
+<img width="481" alt="image" src="https://user-images.githubusercontent.com/1712635/212743730-a75e728c-8d6d-4267-9847-1f141d7ad7f9.png">
 
 
 ## Contributing
