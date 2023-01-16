@@ -14,8 +14,8 @@ namespace MyFrontEnd.Models
 			Id = id;
 			Name = name;
 			Type = type;
-			Lat = latitude;
-			Long = longitude;
+			lat = latitude;
+			lon = longitude;
 		}
 	}
 }

@@ -13,11 +13,6 @@ html {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-/*html {
-  position: relative;
-  min-height: 100%;
-}*/
-
 body {
     margin-bottom: 60px;
     height: 100%;
@@ -50,14 +45,6 @@ td {
     margin-right: 1rem;
     background-color: #F3F3F3;
     opacity: 1;
-}
-
-.zoom-button {
-    height: 2rem;
-    width: 2rem;
-    stroke: #343333;
-    background-color: rgba(152, 162, 172, .8);
-    z-index: 2;
 }
 
 .filter-icon {
@@ -120,13 +107,56 @@ td {
 
 .info-container {
     width: 100%;
-    height: 80%;
-    margin-top: 1rem;
-    border: dashed !important;
+    height: 100%;
 }
 
-.bg-alertSelected {
-    background-color: #E3F8FF;
+.alert-description {
+    width: 100%;
+    height: 45%;
+    background-color: #F3F3F3;
+}
+
+.alert-image {
+    width: 100%;
+    height: 45%;
+}
+
+.selected-alert {
+    background-color: #D8F6FF;
+}
+
+.text-mWhite {
+    color: #F3F3F3;
+    font-weight: 200;
+    font-size: medium;
+}
+
+.hide {
+    display: none !important;
+}
+
+.show {
+    display: block !important;
+}
+
+.filter-button {
+    background-color: #5E7EA7;
+    margin-left: 1px;
+    margin-right: 1px;
+    padding-left: 0.125rem;
+    padding-right: 0.125rem;
+    border-color: #5E7EA7 !important;
+}
+    .filter-button:hover {
+        background-color: #38495C;
+    }
+    .filter-button:active {
+        background-color: #F3F3F3;
+    }
+
+.alert-text {
+    display: inline-block;
+    text-align: left;
 }
 
 #page {
@@ -161,10 +191,9 @@ td {
     padding-bottom: 1rem;
     padding-left: .75rem;
     padding-right: .75rem;
+    background-color: #B9B9B9;
+    cursor: pointer;
 }
-    #icon:hover {
-        background-color: #B9B9B9;
-    }
     #icon:active {
         background-color: #d1d5db;
     }
@@ -184,34 +213,13 @@ td {
     height: 90%;
 }
 
-#canvas {
-    width: 90%;
-    height: 50%;
-    overflow: hidden;
-    overscroll-behavior: contain;
+#s {
+    background-color: #E3F8FF;
 }
 
 #info-content {
     width: 90%;
-    height: 50%;
-}
-
-#container {
-    overflow: scroll;
-}
-
-#image {
-    background-image: url('../assets/map.jpg');
-}
-
-#zoom-control {
-    position: absolute;
-    bottom: 3.5rem;
-    right: .25rem;
-}
-
-#zoom-in {
-    margin-bottom: 2px;
+    height: 100%;
 }
 
 #table {
@@ -273,3 +281,29 @@ td {
 #info-text {
     color: #343333;
 }
+
+#no-alert {
+    border: dashed !important;
+}
+
+#text-selected {
+    width: 100%;
+    height: 100%;
+    background-color: #F3F3F3;
+    text-align: left;
+}
+
+#alert-filter {
+    background-color: rgba(52, 51, 51, .9);
+    position: absolute;
+    top: 100px;
+    left: 525px;
+}
+
+#source-filter {
+    background-color: rgba(52, 51, 51, .9);
+    position: absolute;
+    top: 100px;
+    left: 330px;
+}
+
