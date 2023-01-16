@@ -13,6 +13,20 @@ docker-compose up
 You should see docker compose up starting like in the following screenshot:
 <img width="1126" alt="image" src="https://user-images.githubusercontent.com/1712635/212741292-4396cc66-3ce9-451b-8d2f-bb3e6ec8e8b2.png">
 
+You should be able to browse different components of the application by using the below URLs :
+
+**TBD - PLEASE ADD URLs here:**
+
+**Temporal for MyFrontEnd web app:**
+https://localhost:52710/
+or
+https://host.docker.internal:52710/
+
+**Alerts.API service Swagger page:**
+http://localhost:52708/swagger/index.html
+
+<img width="481" alt="image" src="https://user-images.githubusercontent.com/1712635/212743730-a75e728c-8d6d-4267-9847-1f141d7ad7f9.png">
+
 
 ## Contributing
 
