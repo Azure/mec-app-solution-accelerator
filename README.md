@@ -1,14 +1,8 @@
-# Project
+# MEC Solution Accelerator Sample Reference Application
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+Sample MEC (Multi-Access Edge Compute) reference application, powered by Microsoft, based on a microservices architecture and Docker containers running at the Edge (Kubernetes cluster at Edge compute).
 
-As the maintainer of this project, please make a few updates:
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
 
 ## Contributing
 
