@@ -63,24 +63,42 @@ def main():
     print('main')
     timer=0
     timer= int(os.getenv('TIMEOUT'))
-    feed= (os.getenv('FEED'))
+    try:
+        feed=(os.getenv('FEED'))
+        MY_POD_NAME=(os.getenv('MY_POD_NAME'))
+        FEEDS=(os.getenv('FEEDS'))
 
+        FEEDS=list(eval(FEEDS))
+
+        dict_pos=MY_POD_NAME.split('-')[-1]
+        feeds_dict=FEEDS[int(dict_pos)]
+
+        feed_id=feeds_dict['id']
+        feed_URL=feeds_dict['url']
+        print('kubernetes execution')
+        print('feed id: ' + str(feed_id))
+        print('feed url: ' +feed_URL)
+    except:
+        print('docker-compose execution')
+        feed_URL=(os.getenv('FEED'))
+        feed_id=1
+        print('feed url: ' +feed_URL)
     time.sleep(timer)
     
  
-    print('dentro')
-    cap = VideoCapture(feed)
+    print('capturing frames')
+    cap = VideoCapture(feed_URL)
     timestamp_general=int(time.time()*1000)
     i=0
     while True:
         # Capture frame-by-frame
         ret,frame = cap.read()
-
+        print('feed url: ' +feed_URL)
         
         while not ret:
             print('not possible to access RTSP')
             cap.release()
-            cap = VideoCapture(feed)
+            cap = VideoCapture(feed_URL)
             ret, frame = cap.read()
         # print(frame)
        
@@ -89,16 +107,19 @@ def main():
         bytes_string = base64.standard_b64encode(resized_img_bytes)
         timestamp=int(time.time()*1000)
         print('Sending frame')
-        with DaprClient() as client:
-            # Using Dapr SDK to publish a topic
-            req_data = {"source_id": 'video_'+str(timestamp_general), "timestamp":timestamp, "image": bytes_string.decode()}
-            resp = client.invoke_method(
-                "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
-            )
-            print('Waiting for response')
-            # Print the response
-            print(resp.content_type, flush=True)
-            print(resp.text(), flush=True) 
+        try:
+            with DaprClient() as client:
+                # Using Dapr SDK to publish a topic
+                req_data = {"source_id": 'video_'+str(feed_id), "timestamp":timestamp, "image": bytes_string.decode()}
+                resp = client.invoke_method(
+                    "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
+                )
+                print('Waiting for response')
+                # Print the response
+                print(resp.content_type, flush=True)
+                print(resp.text(), flush=True) 
+        except:
+            print('Inference pod busy')
         i+=1
     # cap.release()
         # cv2.destroyAllWindows()
