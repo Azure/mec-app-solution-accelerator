@@ -10,7 +10,7 @@ services:
         - PUID=1000
         - PGID=1000
       volumes:
-        - 'C:/mongodb/database:/data/db'
+        - './mongodb/database:/data/db'
       ports:
         - 27027:27027
       restart: "unless-stopped"
@@ -62,7 +62,7 @@ services:
         dockerfile: Dockerfile
       environment:
         - TIMEOUT=15
-        - FEED=rtsp://0.tcp.ngrok.io:13684/mystream
+        - FEED=rtsp://0.tcp.ngrok.io:13571/mystream
       ports:
         - "57090"
       depends_on:
@@ -113,7 +113,7 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
     depends_on:
-      - alerts-api
+      - alertsapi-dapr
 
   myfrontend-dapr:
     image: "daprio/daprd:latest"
