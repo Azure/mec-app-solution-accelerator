@@ -1,7 +1,10 @@
 # Instruction for building the Docker Images and deploying to Kubernetes
 ## Set environment variable to the Docker Hub "user" so they will be registered right
+**--> Please, add instructions and example commands ----**
 ## Build Docker Images locally
+**--> Please, add instructions and example commands ----**
 ## Push the created Docker Images to Docker Hub
+**--> Please, add instructions and example commands ----**
 
 WIP, no extra steps for image building. Hardocded image references for the moment until compose build contexts work for both docker compose up and k8,
 
