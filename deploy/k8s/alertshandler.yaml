@@ -44,6 +44,6 @@ spec:
   - name: "web"
     port: 8080
     targetPort: 80
-    nodePort: 30002
+    nodePort: 30004
   selector:
     app: alertshandler
