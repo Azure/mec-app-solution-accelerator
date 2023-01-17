@@ -30,6 +30,6 @@ spec:
         imagePullPolicy: Always
         env:
           - name: FEED
-            value: "rtsp://0.tcp.ngrok.io:13684/mystream"
+            value: "rtsp://0.tcp.ngrok.io:13571/mystream"
           - name: TIMEOUT
             value: "15"
