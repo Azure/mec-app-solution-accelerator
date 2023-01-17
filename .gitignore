@@ -92,7 +92,7 @@ StyleCopReport.xml
 *.pidb
 *.svclog
 *.scc
-
+mongodb/
 # Chutzpah Test files
 _Chutzpah*
 

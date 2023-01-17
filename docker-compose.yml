@@ -10,7 +10,7 @@ services:
         - PUID=1000
         - PGID=1000
       volumes:
-        - 'C:/mongodb/database:/data/db'
+        - './mongodb/database:/data/db'
       ports:
         - 27027:27027
       restart: "unless-stopped"
@@ -107,13 +107,13 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
     ports:
-      - "80"
-      - "443"
+      - "50052:80"
+      - "50058:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
     depends_on:
-      - alerts-api
+      - alertsapi-dapr
 
   myfrontend-dapr:
     image: "daprio/daprd:latest"
