@@ -1,0 +1,6 @@
+kubectl apply -f dashboard-adminuser.yaml 
+
+kubectl apply -f adminuser-cluster-role-binding.yaml
+
+
+kubectl -n kubernetes-dashboard create token admin-user --duration=48h --output yaml
