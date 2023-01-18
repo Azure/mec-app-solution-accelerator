@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using RulesEngine.Events.Base;
+using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands
 {

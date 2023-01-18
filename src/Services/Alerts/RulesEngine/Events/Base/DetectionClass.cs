@@ -1,6 +1,4 @@
-﻿using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
-
-namespace RulesEngine.Events.Base
+﻿namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base
 {
     public class DetectionClass
     {

@@ -25,6 +25,11 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
 
         public async Task<Unit> Handle(AnalyzeObjectDetectionCommand command, CancellationToken cancellationToken)
         {
+            if(command.Classes == null || command.Classes.Count == 0)
+            {
+                throw new ArgumentException("Classes are required");
+            }
+
             var foundClasses = command.Classes.Select(x => x.EventType).ToList();
             var pendingTaks = new List<Task>();
             foreach(var @class in command.Classes)
