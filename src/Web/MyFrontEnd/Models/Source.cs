@@ -16,16 +16,6 @@ namespace MyFrontEnd.Models
 		public string Type { get; set; }
 		public double Lat { get; set; }
 		public double Lon { get; set; }
-
-
-		public Source(string id, string name, string type, double latitude, double longitude)
-		{
-			Id = id;
-			Name = name;
-			Type = type;
-			lat = latitude;
-			lon = longitude;
-		}
 	}
 }
 

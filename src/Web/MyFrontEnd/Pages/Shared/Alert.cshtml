@@ -36,7 +36,7 @@
         </tr>
         @foreach (var alert in (IEnumerable<Models.Alert>)ViewData["Alerts"]!)
         {
-            <tr class="click-change-color" onclick="selectAlert('@Model.FindInputs(alert)', '@alert.Id', '@alert.Type', @alert.Source.lat, @alert.Source.lon, '@alert.CaptureTime', '@alert.AlertTime', @alert.Accuracy, '@alert.Information', '@alert.Frame')" id="@alert.Id">
+            <tr class="click-change-color" onclick="selectAlert('@Model.FindInputs(alert)', '@alert.Id', '@alert.Type', @alert.Source.Lat, @alert.Source.Lon, '@alert.CaptureTime', '@alert.AlertTime', @alert.Accuracy, '@alert.Information', '@alert.Frame')" id="@alert.Id">
                 <td class="cursor-pointer border border-dark text-center py-1">@alert.CaptureTime.ToString("d")<br>@alert.CaptureTime.ToString("T")</td>
                 <td class="cursor-pointer border border-dark text-center py-1">@alert.AlertTime.ToString("d")<br>@alert.AlertTime.ToString("T")</td>
                 <td class="cursor-pointer border border-dark text-center py-1">@alert.Source.Name</td>

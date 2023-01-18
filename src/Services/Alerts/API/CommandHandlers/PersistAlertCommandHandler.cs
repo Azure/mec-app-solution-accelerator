@@ -19,7 +19,8 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             var entity = new Alert()
             {
                 Frame = request.Frame,
-                AlertTriggerTimeIni = request.AlertTriggerTimeIni,
+                CaptureTime = request.AlertTriggerTimeIni,
+                AlertTime = DateTime.UtcNow,
                 Information = request.Information,
                 Id = id,
                 Type = request.Type,

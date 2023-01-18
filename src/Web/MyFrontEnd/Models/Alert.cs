@@ -11,16 +11,19 @@ namespace MyFrontEnd.Models
         public string? Frame { get; set; }
         public float Accuracy { get; set; }
         public DateTime CaptureTime { get; set; }
+        public DateTime AlertTime { get; set; }
 
-        public Alert(string id, Source source, string type, string information, string urlImageEnconded, int accuracy, DateTime captureTime)
+
+        public Alert(string id, Source source, string type, string? information, string? frame, float accuracy, DateTime captureTime, DateTime alertTime)
         {
-            Id = id;
-            Source = source;
-            Type = type;
+            Id = id ?? throw new ArgumentNullException(nameof(id));
+            Source = source ?? throw new ArgumentNullException(nameof(source));
+            Type = type ?? throw new ArgumentNullException(nameof(type));
             Information = information;
-            Frame = urlImageEnconded;
+            Frame = frame;
             Accuracy = accuracy;
             CaptureTime = captureTime;
+            AlertTime = alertTime;
         }
 
         public string toString()

@@ -49,8 +49,8 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
                     .Returns(Task.CompletedTask);
 
             var commandHandler = new AnalyzeObjectDetectionCommandHandler(mockDaprClient.Object, alertsByDetectedClasses, commandsTypeByDetectionName, mockMediator.Object);
-            //act
 
+            //act
             var task = await commandHandler.Handle(new AnalyzeObjectDetectionCommand()
             {
                 Classes = new List<DetectionClass>() 

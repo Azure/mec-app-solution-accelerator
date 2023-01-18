@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events;
-using RulesEngine.Events.Base;
+using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
 using SolTechnology.Avro;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHandlers
