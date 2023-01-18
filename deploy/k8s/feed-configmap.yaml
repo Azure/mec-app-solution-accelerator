@@ -3,6 +3,4 @@ kind: ConfigMap
 metadata:
   name: my-config
 data:
-  feed-1: "rtsp://0.tcp.ngrok.io:13571/mystream"
-  feed-2: "rtsp://0.tcp.ngrok.io:13571/mystream"
   feeds: "[{'id':'1', 'url':'rtsp://0.tcp.ngrok.io:13571/mystream'},{'id':'2', 'url':'rtsp://0.tcp.ngrok.io:13571/mystream'}]"
