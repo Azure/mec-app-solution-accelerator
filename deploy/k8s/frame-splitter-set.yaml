@@ -30,16 +30,6 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.name
-          - name: FEED
-            valueFrom:
-              configMapKeyRef:
-                name: my-config
-                key: feed-1
-          # - name: FEED-ordinal-dependant
-          #   valueFrom:
-          #     configMapKeyRef:
-          #       name: my-config
-          #       key: MY_POD_NAME
           - name: FEEDS
             valueFrom:
               configMapKeyRef:
@@ -47,11 +37,3 @@ spec:
                 key: feeds
           - name: TIMEOUT
             value: "15"
-          # - name: POD_ORDINAL
-          #   valueFrom:
-          #     fieldRef:
-          #       fieldPath: metadata.labels['statefulset.kubernetes.io/pod-name']
-          # - name: ZOO_MY_ID
-          #   valueFrom:
-          #     fieldRef:
-          #       fieldPath: metadata.annotations['spec.pod.beta.kubernetes.io/statefulset-index']
