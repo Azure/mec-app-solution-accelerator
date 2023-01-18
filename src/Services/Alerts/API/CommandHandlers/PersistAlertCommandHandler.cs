@@ -24,7 +24,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                 Information = request.Information,
                 Id = id,
                 Type = request.Type,
-                Accuracy = request.Accuracy,
+                Accuracy = request.Accuracy * 100,
             };
             entity.Source = this.SetHardwareMockInformation();
             await this._repository.Create(entity);
