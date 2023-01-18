@@ -18,6 +18,14 @@ namespace MyFrontEnd.Models
 		public double Lon { get; set; }
 
 
+		public Source(string id, string name, string type, double latitude, double longitude)
+		{
+			Id = id;
+			Name = name;
+			Type = type;
+			lat = latitude;
+			lon = longitude;
+		}
 	}
 }
 

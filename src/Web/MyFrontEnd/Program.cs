@@ -1,5 +1,6 @@
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddMvc();
 builder.Services.AddDaprClient();
 // Add services to the container.
 builder.Services.AddRazorPages();

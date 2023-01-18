@@ -1,15 +1,9 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Inspection Panel";
+    ViewData["Title"] = "Events Dashboard";
 }
 
-<div class="text-center">
-    @*@foreach (var alert in (IEnumerable<Alert>)ViewData["AlertsData"]!)
-        {
-            <p>Alert received on @alert.AlertTriggerTimeIni related with @alert.Information!</p>
-        }*@
-</div>
 <div class="d-flex flex-row" id="page">
     <div class="d-flex flex-column justify-content-between" style="background-color: #777777; width: 65px;">
         <div>
@@ -24,7 +18,199 @@
         </div>
     </div>
     <div id="content" class="d-flex flex-column">
-        <h1 class="fw-semibold" id="page-title">Inspection Panel</h1>
-        <partial name="Alert" />
+        <h1 class="fw-semibold" id="page-title">Alerts Dashboard</h1>
+        <div class="d-flex flex-row" id="data">
+            <div id="left" class="d-flex flex-column overflow-auto">
+                <partial name="Alert" />
+            </div>
+            <div id="right" class="d-flex flex-column justify-content-around align-items-start mx-5">
+                <div class="" id="info-content">
+                    <div class="info-container border border-dark d-flex flex-column border rounded justify-content-center" id="no-alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width=".5" stroke="currentColor" class="empty-folder align-self-center">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776" />
+                        </svg>
+                        <center><p class="font-sans text-2xl font-light text-dark align-self-center">No alert chosen yet...<br>Choose an alert from the table to display it!</p></center>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    localStorage.clear();
+    var refresh_alerts = true;
+
+    @*setTimeout(() => {
+        if (refresh_alerts) {
+            $("#left").load('@Url.Action("RefreshPage","Alert")');
+        }
+        refresh_alerts = !refresh_alerts;
+    }, 50);*@
+
+    $("#refresh-data").click(() => {
+        refresh_alerts = false;
+        $("#left").load('@Url.Action("RefreshPage","Alert")');
+    })
+
+    setInterval(() => {
+        if (refresh_alerts) {
+            $("#left").load('@Url.Action("RefreshPage","Alert")');
+        }
+        refresh_alerts = !refresh_alerts;
+    }, 5000);
+
+    var observer = new MutationObserver(() => {
+        let rows = $("table").find("tr");
+        for (let i = 0; i < rows.length; i++) {
+            if (localStorage.getItem("selectedId") != null) {
+                if (rows[i].id == localStorage.getItem("selectedId")) {
+                    selectAlert(localStorage.getItem("selectedInputs"), localStorage.getItem("selectedId"), localStorage.getItem("selectedType"),
+                        localStorage.getItem("selectedLat"), localStorage.getItem("selectedLon"), localStorage.getItem("selectedCaptureTime"), localStorage.getItem("selectedAlertTime"), localStorage.getItem("selectedAccuracy"),
+                        localStorage.getItem("selectedInfo"), localStorage.getItem("selectedFrame"));
+                }
+            }
+        }
+        if (localStorage.getItem("alertFilter") != null || localStorage.getItem("sourceFilter") != null) {
+            alertFilter = JSON.parse(localStorage.getItem("alertFilter"));
+            sourceFilter = JSON.parse(localStorage.getItem("sourceFilter"));
+            let alertCheckboxes = $("#alert-filter").find("input");
+            let alertLabels = ["danger", "warning", "info"]
+            for (let i = 0; i < alertCheckboxes.length; i++) {
+                alertCheckboxes[i].checked = alertFilter[alertLabels[i]];
+            }
+            let sourceCheckboxes = $("#source-filter").find("input");
+            let sourceLabels = $("#source-filter").find("label");
+            for (let i = 0; i < sourceLabels.length; i++) {
+                if (Object.keys(sourceFilter).includes(sourceLabels[i].textContent)) {
+                    if (!sourceFilter[sourceLabels[i].textContent]) {
+                        sourceCheckboxes[i].checked = false;
+                    }
+                }
+            }
+            applyFilters("");
+        }
+        if (localStorage.getItem("alertFilterIsVisible") != null) {
+            console.log(localStorage.getItem("alertFilterIsVisible"));
+        }
+    });
+
+    observer.observe(document.getElementById("left"), { childList: true, subtree: true });
+
+    const selectAlert = (inputs, id, type, lat, lon, captureTime, alertTime, accuracy, info, frame) => {
+        $("td").removeClass("selected-alert");
+        $("#"+id).find("td").addClass("selected-alert");
+        if (inputs == "both") {
+            $("#info-content").html(`
+                <div class="info-container d-flex flex-column justify-content-between">
+                    <img src="data:image/jpeg;base64,${frame}" alt="Alert Information Image" class="alert-image">
+                    <div class="alert-description border border-dark position-relative rounded overflow-auto">
+                        <pre class="alert-text position-absolute top-0 left-0 font-sans p-1">
+<strong>Alert: ${id}</strong><br>
+<strong>${type}</strong><br>
+&emsp; – Position: (${lat},${lon})<br>
+&emsp; - Capture Day/Time: ${captureTime}<br>
+&emsp; - Alert Day/Time: ${alertTime}<br>
+&emsp; - Detection Confidence: ${accuracy} %<br>
+${info}
+                        </pre>
+                    </div>
+                </div>
+            `);
+        } else if (inputs == "text") {
+            $("#info-content").html(`
+                <div class="border border-dark position-relative rounded overflow-auto" id="text-selected">
+                    <pre class="alert-text position-absolute top-0 left-0 font-sans p-1">
+<strong>Alert: ${id}</strong><br>
+<strong>${type}</strong><br>
+&emsp; – Position: (${lat},${lon})<br>
+&emsp; - Capture Day/Time: ${captureTime}<br>
+&emsp; - Alert Day/Time: ${alertTime}<br>
+&emsp; - Detection Confidence: ${accuracy} %<br>
+${info}
+                    </pre>
+                </div>
+            `);
+        } else {
+            $("#info-content").html(`
+                <div class="info-container d-flex flex-column justify-content-center">
+                    <img src="data:image/jpeg;base64,${frame}" alt="Alert Information Image" class="alert-image">
+                </div>
+            `);
+        }
+        localStorage.setItem("selectedInputs", inputs);
+        localStorage.setItem("selectedId", id);
+        localStorage.setItem("selectedType", type);
+        localStorage.setItem("selectedLat", lat);
+        localStorage.setItem("selectedLon", lon);
+        localStorage.setItem("selectedCaptureTime", captureTime);
+        localStorage.setItem("selectedAlertTime", alertTime);
+        localStorage.setItem("selectedAccuracy", accuracy);
+        localStorage.setItem("selectedInfo", info);
+        localStorage.setItem("selectedFrame", frame);
+    }
+
+    const toggleAlertFilter = () => {
+        if ($("#alert-filter").attr("class").includes("hide")) {
+            $("#alert-filter").removeClass("hide");
+            $("#alert-filter").addClass("show");
+            localStorage.setItem("alertFilterIsVisible", true);
+        }
+        else {
+            $("#alert-filter").removeClass("show");
+            $("#alert-filter").addClass("hide");
+            localStorage.setItem("alertFilterIsVisible", false);
+        }
+    }
+
+    const toggleSourceFilter = () => {
+        if ($("#source-filter").attr("class").includes("hide")) {
+            $("#source-filter").removeClass("hide");
+            $("#source-filter").addClass("show");
+            localStorage.setItem("sourceFilterIsVisible", true);
+        }
+        else {
+            $("#source-filter").removeClass("show");
+            $("#source-filter").addClass("hide");
+            localStorage.setItem("sourceFilterIsVisible", false);
+        }
+    }
+
+    const applyFilters = (source) => {
+        let alertCheckboxes = $("#alert-filter").find("input");
+        let alertLabels = ["danger", "warning", "info"]
+        let alertFilter = {};
+        for (let i = 0; i < alertCheckboxes.length; i++) {
+            alertFilter[alertLabels[i]] = alertCheckboxes[i].checked;
+        }
+        let sourceCheckboxes = $("#source-filter").find("input");
+        let sourceLabels = $("#source-filter").find("label");
+        let sourceFilter = {};
+        for (let i = 0; i < sourceCheckboxes.length; i++) {
+            sourceFilter[sourceLabels[i].textContent] = sourceCheckboxes[i].checked;
+        }
+        let rows = $("table").find("tr");
+        for (let i = 0; i < rows.length; i++) {
+            let count = 0
+            let data = rows[i].querySelectorAll("td");
+            for (let j = 0; j < data.length; j++) {
+                if (Object.keys(sourceFilter).includes(data[j].textContent) || Object.keys(alertFilter).includes(data[j].textContent.trim().split("-")[1])) {
+                    rows[i].classList.add("hide");
+                    if (sourceFilter[data[j].textContent] || alertFilter[data[j].textContent.trim().split("-")[1]]) {
+                        count++;
+                    }
+                }
+            }
+            if (count == 2) {
+                rows[i].classList.remove("hide");
+            }
+        }
+        if (source == "alert") {
+            toggleAlertFilter();
+        } else if (source == "source") {
+            toggleSourceFilter();
+        }
+        localStorage.setItem("sourceFilter", JSON.stringify(sourceFilter));
+        localStorage.setItem("alertFilter", JSON.stringify(alertFilter));
+    }
+</script>
