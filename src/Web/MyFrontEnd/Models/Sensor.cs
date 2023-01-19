@@ -5,7 +5,7 @@ namespace MyFrontEnd.Models
 	{
 		public string SensorType { get; set; }
 
-		public Sensor(string id, string name, string type, double latitude, double longitude, string sensorType) : base( name, type, latitude, longitude)
+		public Sensor(string name, string type, double latitude, double longitude, string sensorType) : base(name, type, latitude, longitude)
 		{
 			SensorType = sensorType;
 		}

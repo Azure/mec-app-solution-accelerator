@@ -41,17 +41,18 @@
     localStorage.clear();
     var refresh_alerts = true;
 
-    @*setTimeout(() => {
+    setTimeout(() => {
         if (refresh_alerts) {
             $("#left").load('@Url.Action("RefreshPage","Alert")');
         }
         refresh_alerts = !refresh_alerts;
-    }, 50);*@
+    }, 50);
 
-    $("#refresh-data").click(() => {
+    const refreshData = () => {
+        console.log("I'm refreshing!");
         refresh_alerts = false;
         $("#left").load('@Url.Action("RefreshPage","Alert")');
-    })
+    }
 
     setInterval(() => {
         if (refresh_alerts) {
@@ -91,7 +92,16 @@
             applyFilters("");
         }
         if (localStorage.getItem("alertFilterIsVisible") != null) {
-            console.log(localStorage.getItem("alertFilterIsVisible"));
+            if (localStorage.getItem("alertFilterIsVisible") == 'true') {
+                $("#alert-filter").removeClass("hide");
+                $("#alert-filter").addClass("show");
+            }
+        }
+        if (localStorage.getItem("sourceFilterIsVisible") != null) {
+            if (localStorage.getItem("sourceFilterIsVisible") == 'true') {
+                $("#source-filter").removeClass("hide");
+                $("#source-filter").addClass("show");
+            }
         }
     });
 

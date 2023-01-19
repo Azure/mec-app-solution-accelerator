@@ -15,13 +15,13 @@ namespace MyFrontEnd.Controllers
 {
     public class AlertController : Controller
     {
-        public List<Alert> Alerts;
-        //private readonly DaprClient _daprClient;
+        public IEnumerable<Alert> Alerts;
+        private readonly DaprClient _daprClient;
 
-        //public AlertController(DaprClient daprClient)
-        //{
-        //    _daprClient = daprClient;
-        //}
+        public AlertController(DaprClient daprClient)
+        {
+            _daprClient = daprClient;
+        }
 
         // GET: /<controller>/
         public IEnumerable<Alert> Alert()
@@ -34,21 +34,20 @@ namespace MyFrontEnd.Controllers
         public async Task<ActionResult> RefreshPage()
         {
             await RefreshData();
-            this.Alerts = new List<Alert>();
             IndexModel Model = new IndexModel();
-            Model.Alerts = this.Alerts;
+            Model.Alerts = Alerts;
             return View("Alert", Model);
         }
 
-        private async Task RefreshData()
+        private async Task<string> RefreshData()
         {
-            //this.Alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Alert>>(
-            //    HttpMethod.Get,
-            //    "alerts-api",
-            //    "alerts");
-            Alerts.Add(new Alert("alert-1", new Sensor("sensor-1", "Sensor 1", "sensor", 222, 333, "temperature"), "High temperature", "Very haigh temperature has been detected!", null, 95, DateTime.Now, DateTime.Now));
-            Alerts.Add(new Alert("alert-2", new Camera("camera-1", "Camera 1", "camera", 222, 333, 50, 125), "Individual detected", "A suspect individual has been detected!", null, 65, DateTime.Now, DateTime.Now));
+            this.Alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Alert>>(
+                HttpMethod.Get,
+                "alerts-api",
+                "alerts");
+
             ViewData["Alerts"] = Alerts;
+            return "New data added";
         }
     }
 }
