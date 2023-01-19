@@ -11,7 +11,7 @@
     "MyFrontEnd": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7102;http://localhost:5102",
+      "applicationUrl": "http://localhost:45937",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

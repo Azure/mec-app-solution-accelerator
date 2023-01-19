@@ -13,7 +13,6 @@ namespace MyFrontEnd.Models
         public DateTime CaptureTime { get; set; }
         public DateTime AlertTime { get; set; }
 
-
         public Alert(string id, Source source, string type, string? information, string? frame, float accuracy, DateTime captureTime, DateTime alertTime)
         {
             Id = id ?? throw new ArgumentNullException(nameof(id));
