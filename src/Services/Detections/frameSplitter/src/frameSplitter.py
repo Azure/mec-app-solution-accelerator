@@ -3,12 +3,14 @@ import numpy as np
 import queue
 import threading
 from dapr.clients import DaprClient
+from dapr.ext.grpc import App, InvokeMethodRequest, InvokeMethodResponse
 import json
 import time
 import pickle
 import base64
 import os
-
+app = App()
+@app.method(name='frames-sender')
 def PublishEvent(pubsub_name: str, topic_name: str, data: str):
     with DaprClient() as client:
         resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data)
@@ -46,8 +48,7 @@ class VideoCapture:
             return self.q_ret.get(timeout=.1),frame
         except:
             return False,None
-        print('c viene el frame')
-        print(frame)
+
         # if frame==None:
         #     self.q_ret.get()
         #     return False,None
@@ -106,7 +107,7 @@ def main():
         resized_img_bytes = img_encode.tobytes()
         bytes_string = base64.standard_b64encode(resized_img_bytes)
         timestamp=int(time.time()*1000)
-        print('Sending frame')
+        print('Sending frame to inference')
         try:
             with DaprClient() as client:
                 # Using Dapr SDK to publish a topic
@@ -126,4 +127,5 @@ def main():
         print('End')
 
 if __name__ == '__main__':
+    app.run(50051)
     main()

@@ -64,13 +64,13 @@ services:
         - TIMEOUT=15
         - FEED=rtsp://0.tcp.ngrok.io:13571/mystream
       ports:
-        - "57090"
+        - "57090:57090"
       depends_on:
         - aiinferencer-dapr
 
   framesplitter-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "Framesplitter","--app-protocol", "grpc","--dapr-http-port", "3500", "-components-path", "/components" ]
+    command: [ "./daprd", "-app-id", "Framesplitter","--app-protocol", "grpc", "--app-port", "57090","--dapr-http-port", "3500", "-components-path", "/components" ]
     volumes:
     - "./components/:/components"
     depends_on:
