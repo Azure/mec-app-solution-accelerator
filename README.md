@@ -1,6 +1,8 @@
-# MEC Application Solution Accelerator (Example Reference Application)
+# MEC Application Solution Accelerator (Example Reference Application for Edge/MEC)
 
 Example MEC (Multi-Access Edge Compute) reference application, powered by Microsoft, based on a microservices architecture and Docker containers running at the Edge (Kubernetes cluster at Edge compute).
+
+Typical deployment would be at the Edge and using a wireless 5G network to connect the devices, cameras, etc. to the application's services.
 
 ## Getting Started
 
