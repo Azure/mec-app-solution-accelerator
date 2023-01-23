@@ -1,6 +1,6 @@
-# MEC Solution Accelerator Sample Reference Application
+# MEC Application Solution Accelerator (Example Reference Application)
 
-Sample MEC (Multi-Access Edge Compute) reference application, powered by Microsoft, based on a microservices architecture and Docker containers running at the Edge (Kubernetes cluster at Edge compute).
+Example MEC (Multi-Access Edge Compute) reference application, powered by Microsoft, based on a microservices architecture and Docker containers running at the Edge (Kubernetes cluster at Edge compute).
 
 ## Getting Started
 
