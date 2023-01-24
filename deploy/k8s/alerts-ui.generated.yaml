@@ -1,0 +1,75 @@
+# Source: alerts-ui/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: alerts-alerts-ui
+  labels:
+    helm.sh/chart: alerts-ui-0.1.0
+    app.kubernetes.io/name: alerts-ui
+    app.kubernetes.io/instance: alerts
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: alerts-ui
+    app.kubernetes.io/instance: alerts
+---
+# Source: alerts-ui/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alerts-alerts-ui
+  labels:
+    helm.sh/chart: alerts-ui-0.1.0
+    app.kubernetes.io/name: alerts-ui
+    app.kubernetes.io/instance: alerts
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: alerts-ui
+      app.kubernetes.io/instance: alerts
+  template:
+    metadata:
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: alerts-alerts-ui
+        dapr.io/app-port: "80"
+      labels:
+        app.kubernetes.io/name: alerts-ui
+        app.kubernetes.io/instance: alerts
+    spec:
+      serviceAccountName: alerts-alerts-ui
+      securityContext:
+        {}
+      containers:
+        - name: alerts-ui
+          securityContext:
+            {}
+          image: "pabravil/myfrontend:demo2"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: 'Development'
+            - name: ASPNETCORE_URLS
+              value: 'http://+:80'
+
+          resources:
+            {}

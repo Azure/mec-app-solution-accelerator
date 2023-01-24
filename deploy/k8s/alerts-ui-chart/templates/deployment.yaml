@@ -1,30 +1,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "alerts-ui-chart.fullname" . }}
+  name: {{ include "alerts-ui.fullname" . }}
   labels:
-    {{- include "alerts-ui-chart.labels" . | nindent 4 }}
+    {{- include "alerts-ui.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "alerts-ui-chart.selectorLabels" . | nindent 6 }}
+      {{- include "alerts-ui.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- if or (.Values.podAnnotations) (.Values.dapr.enabled) }}
       annotations:
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.dapr.enabled }}
+        dapr.io/enabled: "true"
+        dapr.io/app-id: {{ include "alerts-ui.fullname" . }}
+        dapr.io/app-port: "{{ .Values.dapr.port }}"
+        {{- end }}
       {{- end }}
       labels:
-        {{- include "alerts-ui-chart.selectorLabels" . | nindent 8 }}
+        {{- include "alerts-ui.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "alerts-ui-chart.serviceAccountName" . }}
+      serviceAccountName: {{ include "alerts-ui.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -37,14 +44,21 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          {{- with .Values.deployment.livenessProbe }}
           livenessProbe:
-            httpGet:
-              path: /
-              port: http
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.deployment.readinessProbe }}
           readinessProbe:
-            httpGet:
-              path: /
-              port: http
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          
+          env:
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: '{{ $value }}'
+            {{- end }}
+
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
