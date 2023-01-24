@@ -5,10 +5,11 @@ using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
 using SolTechnology.Avro;
+using System.Threading.Tasks;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHandlers
 {
-    public class AnalyzeObjectDetectionCommandHandler : IRequestHandler<AnalyzeObjectDetectionCommand>
+    public class AnalyzeObjectDetectionCommandHandler : IRequestHandler<AnalyzeObjectDetectionCommand, bool>
     {
         private readonly DaprClient _daprClient;
         private readonly Dictionary<string, List<AlertsConfig>> _alertsByDetectedClasses;
@@ -23,7 +24,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        public async Task<Unit> Handle(AnalyzeObjectDetectionCommand command, CancellationToken cancellationToken)
+        public async Task<bool> Handle(AnalyzeObjectDetectionCommand command, CancellationToken cancellationToken)
         {
             if(command.Classes == null || command.Classes.Count == 0)
             {
@@ -31,7 +32,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
             }
 
             var foundClasses = command.Classes.Select(x => x.EventType).ToList();
-            var pendingTaks = new List<Task>();
+            var pendingTaks = new List<Task<bool>>();
             foreach(var @class in command.Classes)
             {
                 pendingTaks.Add(
@@ -44,12 +45,17 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                     );
             }
             await Task.WhenAll(pendingTaks);
+            var result = pendingTaks
+                .Where(task => task.Status == TaskStatus.RanToCompletion)
+                .Select(x => x.Result)
+                .ToList().Any(x => x);
 
-            return Unit.Value;
+            return result;
         }
 
-        private async Task ValidateAlertsPerDetection(DetectionClass requestClass, List<string> foundClasses, long everyTime, string urlEncoded, string frame)
+        private async Task<bool> ValidateAlertsPerDetection(DetectionClass requestClass, List<string> foundClasses, long everyTime, string urlEncoded, string frame)
         {
+            var triggeredAlert = false;
             var exists = _alertsByDetectedClasses.TryGetValue(requestClass.EventType, out List<AlertsConfig> alertsConfig);
             if (exists)
             {
@@ -58,6 +64,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                     var successfull = await ValidateAllRulesPerAlert(alertConfig, requestClass, foundClasses); //Validate all the required rules from the config, just and.
                     if (successfull)
                     {
+                        triggeredAlert = successfull;
                         var alert = new DetectedObjectAlert()
                         {
                             
@@ -77,6 +84,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                     }
                 }
             }
+            return triggeredAlert;
         }
 
         private async Task<bool> ValidateAllRulesPerAlert(AlertsConfig config, DetectionClass requestClass, List<string> foundClasses)

@@ -1,16 +1,27 @@
 version: '3.4'
 
 services:
+  mongodb:
+    environment:
+    - PUID=1000
+    - PGID=1000
+    volumes:
+    - './mongodb/database:/data/db'
+    ports:
+    - 27027:27027
+    restart: "unless-stopped"
+  
   myfrontend:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
     ports:
-      - "80"
-      - "443"
+      - "50052:80"
+      - "50058:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
   alerts-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -22,3 +33,22 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "80"
+
+  aiinferencer:
+    ports:
+    - "50051:50051"
+
+  framesplitter:
+    environment:
+    - TIMEOUT=15
+    - FEED=rtsp://0.tcp.ngrok.io:13571/mystream
+    ports:
+    - "57090"
+
+  mosquitto:
+    ports:
+      - '1883:1883'
+ 
+  redis:
+    ports:
+      - "6379:6379"

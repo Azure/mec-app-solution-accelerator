@@ -6,22 +6,12 @@ services:
       image: mongo
       container_name: mongodb
       hostname: mongo
-      environment:
-        - PUID=1000
-        - PGID=1000
-      volumes:
-        - './mongodb/database:/data/db'
-      ports:
-        - 27027:27027
-      restart: "unless-stopped"
 
   aiinferencer:
       image: ${DOCKER_REGISTRY-}aiinferencer
       build:
         context: src/Services/Detections/ai_inferencer
         dockerfile: Dockerfile
-      ports:
-        - "50051:50051"
       depends_on: 
         - alertsapi-dapr
         
@@ -39,10 +29,6 @@ services:
     build:
       context: .
       dockerfile: src/Services/Alerts/RulesEngine/Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "80"
     depends_on:
     - mongodb
 
@@ -60,11 +46,6 @@ services:
       build:
         context: src/Services/Detections/frameSplitter
         dockerfile: Dockerfile
-      environment:
-        - TIMEOUT=15
-        - FEED=rtsp://0.tcp.ngrok.io:13571/mystream
-      ports:
-        - "57090"
       depends_on:
         - aiinferencer-dapr
 
@@ -82,10 +63,6 @@ services:
     build:
       context: .
       dockerfile: src/Services/Alerts/api/Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "50055:80"
     depends_on:
     - mongodb
 
@@ -103,15 +80,6 @@ services:
     build:
       context: .
       dockerfile: src/Web/myfrontend/Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-    ports:
-      - "50052:80"
-      - "50058:443"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
     depends_on:
       - alertsapi-dapr
 
@@ -137,11 +105,7 @@ services:
     hostname: mosquitto
     container_name: mosquitto_container
     image: eclipse-mosquitto:1.6.10
-    ports:
-      - '1883:1883'
  
   redis:
     image: "redis:alpine"
     hostname: statestorage
-    ports:
-      - "6379:6379"
