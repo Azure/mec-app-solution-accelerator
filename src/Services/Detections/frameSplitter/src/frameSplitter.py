@@ -10,8 +10,8 @@ import pickle
 import base64
 import os
 app = App()
-@app.method(name='frames-sender')
-def PublishEvent(pubsub_name: str, topic_name: str, data: str):
+
+def PublishEvent(pubsub_name: str, topic_name: str, data: json):
     with DaprClient() as client:
         resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data)
         print(resp)
@@ -115,6 +115,7 @@ def main():
                 resp = client.invoke_method(
                     "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
                 )
+                PublishEvent(pubsub_name="pubsub", topic_name="newFrame", data=json.dumps({'frame_sent':True}))
                 print('Waiting for response')
                 # Print the response
                 print(resp.content_type, flush=True)
@@ -127,5 +128,4 @@ def main():
         print('End')
 
 if __name__ == '__main__':
-    app.run(50051)
     main()
