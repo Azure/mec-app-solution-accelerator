@@ -63,17 +63,10 @@ This sample microservice application can run locally using a local Kubernetes cl
 For development purposes, you can also run it on plain Docker with "docker compose up" or Visual Studio.
 Refer to these additional procedure information pages to Get Started on each environment:
 
+| Logo 1 | [Visual Studio (F5 experience)](./VS_DOCKER_DEPLOY.MD) |
 |--------|--------|
-| Logo 1 | text 1 |
-| Logo 2 | text 2 |
-| Logo 3 | text 3 |
-
-
-
-
-- [Visual Studio (F5 experience)](./VS_DOCKER_DEPLOY.MD)
-- [Local Kubernetes by Docker for Desktop](https://tbd-url)
-- [Local MiniKube](https://tbd-url)
+| Logo 2 | [Local Kubernetes by Docker for Desktop](https://tbd-url) |
+| Logo 3 | [Local MiniKube](https://tbd-url) |
 
 
 ### URLs when using Visual Studio (Move to VS page to create)
