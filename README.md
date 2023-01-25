@@ -1,8 +1,13 @@
 # MEC Application Solution Accelerator (Example Reference Application for Edge/MEC)
 
-Reference example of MEC (Multi-Access Edge Compute) application, based on an event driven microservices architecture, using Docker containers running at the Edge. Supported on Kubernetes cluster at Edge compute & 'docker compose' for easy test and development.
+This repo provides a reference MEC (Multi-Access Edge Compute) application example, powered by Microsoft and based on an event-driven microservices architecture, using Docker containers running at the Edge. 
 
-A typical deployment of this application/services would be performed at the Edge, such as using a wireless 5G network to connect the devices, cameras, etc. to the application's services.
+## Supported deployments:
+
+- **"Production" environment:** On any Kubernetes cluster typically deployed at Edge compute, such as on-premises AKS on an Azure Stack Edge server or any Azure Stack HCI / Arc-Enabled. For testing purposes, is can be deployd on any Kubernetes environment, including a development PC with Docker for Desktop and Kubernetes, or in the cloud, into Azure AKS.
+- **Development environment:** On any local Docker host, with 'docker compose' or Visual Studio, for easy test and development in dev environments.
+
+A typical deployment of this application/services would be performed at the Edge, such as in a 5G Private MEC, using a wireless 5G network to connect the devices, cameras, etc. to the application's services. However, this application can be tested by itself without any specific network requirement.
 
 ## Getting Started
 
