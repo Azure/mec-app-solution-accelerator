@@ -6,8 +6,8 @@ A typical deployment of this application/services would be performed at the Edge
 
 ## Getting Started
 
-** IMPORTANT NOTE: For getting the latest version of the code, **use the DEV branch of the repo**. 
-Until March 2023, the MAIN branch can be significantly outdated compared to code in the DEV branch. **
+** IMPORTANT NOTE:** For getting the latest version of the code, **use the DEV branch of the repo**. 
+Until March 2023, the MAIN branch can be significantly outdated compared to code in the DEV branch.
 
 Make sure you have [installed](https://docs.docker.com/desktop/install/windows-install/) and configured docker in your environment. After that, you can run the below commands from the solution's root directory and get started trying it.
 
