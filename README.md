@@ -82,6 +82,24 @@ However, this is not just about 'Video analytics'. The important value of this a
 
 Therefore, the importance of this example applications is about the event-driven design patterns implemented by using light MQTT messaging brokers and effective dedicated microservices leveraging DAPR (Microsoft's framework specialized on microservices patters) and deployed on Kubernetes so the solution can be deployed on most EDGE environments supporting Kubernetes.   
 
+## Example deployment on 5G Private MEC
+
+A typical deployment of this type of solution would be to deploy it into a **5G Private MEC** such as the one supported by **Azure Private MEC** solution and **Azure Private 5G Core (AP5GC)**, as shown in the diagram below which would define a sinple 5G Lab for a 5G Private MEC.
+
+This MEC application Solution Accelerator (example application) would be deployed into the highlighted area in the following 5G Private MEC diagram:
+
+![image](https://user-images.githubusercontent.com/1712635/214719118-1191fac7-b424-44eb-b81c-f8ec10e18124.png)
+
+When moving to production you would need to scale out the number of 5G RANs depending on how large is the area to cover, the number of servers for Azure Private 5G Core depending on the number of 5G network sites and the number of servers for application compute depending on the compute requirements demanded by AI models and application process which can vary depending on the number of video cameras and/or IoT devices to handle.
+
+## Backlog
+
+tbd
+
+## Roadmap
+
+tbd
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
