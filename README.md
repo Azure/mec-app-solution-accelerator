@@ -32,33 +32,32 @@ git checkout dev
 
 Make sure you have [installed](https://docs.docker.com/desktop/install/windows-install/) and configured docker in your environment. After that, you can run the below commands from the solution's root directory and get started trying it.
 
-Build the Docker images:
+**Build the Docker images:**
 ```powershell
 docker-compose build
 ```
+<img width="800" alt="image" src="https://user-images.githubusercontent.com/1712635/214674622-c404aa17-8b16-4df8-b958-ff8423995d67.png">
 
-Run the solution:
+**Run the solution:**
 
 ```powershell
 docker-compose up
 ```
-
 You should see 'docker compose up' starting like in the following screenshot:
-<img width="1126" alt="image" src="https://user-images.githubusercontent.com/1712635/212741292-4396cc66-3ce9-451b-8d2f-bb3e6ec8e8b2.png">
+<img width="800" alt="image" src="https://user-images.githubusercontent.com/1712635/212741292-4396cc66-3ce9-451b-8d2f-bb3e6ec8e8b2.png">
 
 Wait until all containers are up and running and you start seeing traces related to detections performed by the AI model and events raised because of them, like in the following screenshot:
+<img width="796" alt="image" src="https://user-images.githubusercontent.com/1712635/214675605-954ceeb1-70b0-40a4-9a9a-138313cc9b86.png">
 
 At this point, you should be able to run the "Alerts Dashboard" web app with the following URL in any browser:
 
+**Alerts Dashboard UI web app:**
 ```code
 https://localhost:50058
 ```
+![image](https://user-images.githubusercontent.com/1712635/214681991-849c0252-3279-40ec-b087-5f008ee42cfe.png)
 
-
-**UI web app:**
-https://tbd
-
-(Add screenshot for UI web app)
+Additionally you can also access the Swagger pages to test individual microservices, such as this one:
 
 **Alerts.API service Swagger page:**
 https://tbd
@@ -67,12 +66,11 @@ https://tbd
 
 
 
-### Possible deployments
+### Additional supported deployments
 
 This sample microservice application can run locally using a local Kubernetes cluster such as "Kubernetes in Docker for Desktop" or any other Kubernetes distribution.
 For development purposes, you can also run it on plain Docker with "docker compose up" or Visual Studio.
 Refer to these additional procedure information pages to Get Started on each environment:
-
 
 **TBD - PLEASE ADD PAGES and URLs here:**
 
