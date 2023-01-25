@@ -18,10 +18,11 @@ spec:
         # dapr.io/app-port: "50052"
         dapr.io/log-level: "debug"
         dapr.io/enable-api-logging: "true"
+        dapr.io/config: "dapr-config"
     spec:
       containers:
       - name: frame-splitter
-        image: javipercor/framesplitter:demo4
+        image: javipercor/framesplitter:demo6
         ports:
         - containerPort: 50052
         imagePullPolicy: Always
@@ -37,3 +38,22 @@ spec:
                 key: feeds
           - name: TIMEOUT
             value: "15"
+          # - name: FEED
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       name: my-config
+          #       key: feed-${metada.name}
+          # - name: FEED-ordinal-dependant
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       name: my-config
+          #       key: MY_POD_NAME
+
+          # - name: POD_ORDINAL
+          #   valueFrom:
+          #     fieldRef:
+          #       fieldPath: metadata.labels['statefulset.kubernetes.io/pod-name']
+          # - name: FEED
+          #   valueFrom:
+          #     fieldRef:
+          #       fieldPath: feed-metadata.annotations['spec.pod.beta.kubernetes.io/statefulset-index']

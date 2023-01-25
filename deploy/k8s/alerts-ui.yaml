@@ -27,6 +27,7 @@ spec:
         dapr.io/enabled: "true"
         dapr.io/app-id: "myfrontend"
         dapr.io/port: "80"
+        dapr.io/config: "dapr-config"
     spec:
       containers:
       - name: myfrontend
