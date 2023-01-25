@@ -42,10 +42,13 @@ Run the solution:
 ```powershell
 docker-compose up
 ```
-You should see docker compose up starting like in the following screenshot:
+
+You should see 'docker compose up' starting like in the following screenshot:
 <img width="1126" alt="image" src="https://user-images.githubusercontent.com/1712635/212741292-4396cc66-3ce9-451b-8d2f-bb3e6ec8e8b2.png">
 
-You should be able to browse different components of the application by using the below URL:
+Wait until all containers are up and running and you start seeing traces related to detections performed by the AI model and events raised because of them, like in the following screenshot:
+
+At this point, you should be able to run the "Alerts Dashboard" web app with the following URL in any browser:
 
 ```code
 https://localhost:50058
