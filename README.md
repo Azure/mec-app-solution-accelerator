@@ -76,7 +76,7 @@ Refer to these additional procedure information pages to Get Started on each env
 
 This reference application proposes an event-driven and microservice oriented architecture implementation with multiple autonomous microservices. The main goal is to ingress data from client IoT/edge devices. The initial functionality for this sample application is to ingress video from wireless cameras, analyze it with AI models, detect issues, create events and submit them to a messaging broker thorugh a Publish/Subscription approach so additional microservices evaluate if the events need to be converted to Alerts and publish the alerts to the multiple event handlers related, such as an "Alerts dashboard" app or any other integrated process that needs to react in real-time thanks to the low latency provided by the Edge, as shown in the below architecture diagram.
 
-![image](https://user-images.githubusercontent.com/1712635/214715944-9cf3ade2-e620-449b-b1cc-3f8602fbb6d3.png)
+![image](https://user-images.githubusercontent.com/1712635/214716588-cc19eb48-4aa8-44e3-a9a6-340a4cc5b7aa.png)
 
 However, this is not just about 'Video analytics'. The important value of this architecture and reference applications is based on the event-driven architecture which can be very easily customized to support different types of "input data" from IoT devices, so instead of video, it coud ingress data from IoT sensors, or manufacturing machines, analyze it with different type of AI models in the same MEC's network and again generate comparable events and derived alerts with a very low latency.
 
