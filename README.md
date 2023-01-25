@@ -22,26 +22,35 @@ Get the GitHub repo's code:
 git clone git@github.com:Azure/mec-app-solution-accelerator.git
 ```
 
-Select the 'dev' branch:
+Select the 'dev' branch with git:
 ```powershell
 cd <your local path>
 git checkout dev
 ```
 
-### Try/deploy on Docker ('docker compose')
+### Deploy on Docker ('docker compose')
 
 Make sure you have [installed](https://docs.docker.com/desktop/install/windows-install/) and configured docker in your environment. After that, you can run the below commands from the solution's root directory and get started trying it.
 
+Build the Docker images:
 ```powershell
 docker-compose build
+```
+
+Run the solution:
+
+```powershell
 docker-compose up
 ```
 You should see docker compose up starting like in the following screenshot:
 <img width="1126" alt="image" src="https://user-images.githubusercontent.com/1712635/212741292-4396cc66-3ce9-451b-8d2f-bb3e6ec8e8b2.png">
 
-You should be able to browse different components of the application by using the below URLs :
+You should be able to browse different components of the application by using the below URL:
 
-**TBD - PLEASE ADD URLs to use when using "docker compose up" here:**
+```code
+https://localhost:50058
+```
+
 
 **UI web app:**
 https://tbd
