@@ -67,9 +67,9 @@ https://user-images.githubusercontent.com/1712635/214689990-47bd981b-c756-444e-8
 
 | <img width="50" alt="image" src="https://user-images.githubusercontent.com/1712635/214689990-47bd981b-c756-444e-84f1-140a63d3ca7f.png"> | [Visual Studio (F5 experience)](./VS_DOCKER_DEPLOY.MD) |
 |--------|--------|
-| ![image](https://user-images.githubusercontent.com/1712635/214690304-eca6fc41-b4d5-4122-bf0c-47c5dc955da3.png) | [Local Kubernetes by Docker for Desktop](https://tbd-url) |
-| ![image](https://user-images.githubusercontent.com/1712635/214690383-05f86a79-3edd-4b7e-af46-4889273e9910.png) | [Local MiniKube](https://tbd-url) |
 
+| <img width="50" alt="image" src="https://user-images.githubusercontent.com/1712635/214690304-eca6fc41-b4d5-4122-bf0c-47c5dc955da3.png"> | [Local Kubernetes by Docker for Desktop](https://tbd-url) |
+| <img width="50" alt="image" src="https://user-images.githubusercontent.com/1712635/214690383-05f86a79-3edd-4b7e-af46-4889273e9910.png"> | [Local MiniKube](https://tbd-url) |
 
 ### URLs when using Visual Studio (Move to VS page to create)
 
