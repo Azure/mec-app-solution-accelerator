@@ -55,7 +55,7 @@ At this point, you should be able to run the "Alerts Dashboard" web app with the
 ```code
 https://localhost:50058
 ```
-<img width="444" alt="image" src="https://user-images.githubusercontent.com/1712635/214684282-2aa3739e-cd61-47b5-a7e9-2a01e9d040ae.png">
+<img width="800" alt="image" src="https://user-images.githubusercontent.com/1712635/214684282-2aa3739e-cd61-47b5-a7e9-2a01e9d040ae.png">
 
 ### Additional supported deployments
 
