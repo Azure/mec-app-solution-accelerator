@@ -55,7 +55,7 @@ At this point, you should be able to run the "Alerts Dashboard" web app with the
 ```code
 https://localhost:50058
 ```
-![image](https://user-images.githubusercontent.com/1712635/214681991-849c0252-3279-40ec-b087-5f008ee42cfe.png)
+<img width="800" alt="image" src="[https://user-images.githubusercontent.com/1712635/214674622-c404aa17-8b16-4df8-b958-ff8423995d67.png](https://user-images.githubusercontent.com/1712635/214681991-849c0252-3279-40ec-b087-5f008ee42cfe.png)">
 
 Additionally you can also access the Swagger pages to test individual microservices, such as this one:
 
