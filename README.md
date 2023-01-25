@@ -73,17 +73,7 @@ https://user-images.githubusercontent.com/1712635/214689990-47bd981b-c756-444e-8
 | <img width="100" alt="image" src="https://user-images.githubusercontent.com/1712635/214690304-eca6fc41-b4d5-4122-bf0c-47c5dc955da3.png"> | **Deployment on [Local Kubernetes by Docker for Desktop](https://tbd-url)** |
 | <img width="120" alt="image" src="https://user-images.githubusercontent.com/1712635/214690383-05f86a79-3edd-4b7e-af46-4889273e9910.png"> | **Deployment on [Local MiniKube](https://tbd-url)** |
 
-### URLs when using Visual Studio (Move to VS page to create)
 
-**Temporal for MyFrontEnd web app:**
-https://localhost:52710/
-or
-https://host.docker.internal:52710/
-
-**Alerts.API service Swagger page:**
-http://localhost:52708/swagger/index.html
-
-<img width="481" alt="image" src="https://user-images.githubusercontent.com/1712635/212743730-a75e728c-8d6d-4267-9847-1f141d7ad7f9.png">
 
 
 ## Contributing
