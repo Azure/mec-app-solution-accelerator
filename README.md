@@ -63,15 +63,12 @@ This sample microservice application can run locally using a local Kubernetes cl
 For development purposes, you can also run it on plain Docker with "docker compose up" or Visual Studio.
 Refer to these additional procedure information pages to Get Started on each environment:
 
-| logo 1 | text 1 |
 |--------|--------|
+| Logo 1 | text 1 |
 | Logo 2 | text 2 |
 | Logo 3 | text 3 |
 
 
-| logo 1 | text 1 |
-| Logo 2 | text 2 |
-| Logo 3 | text 3 |
 
 
 - [Visual Studio (F5 experience)](./VS_DOCKER_DEPLOY.MD)
