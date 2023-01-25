@@ -69,6 +69,11 @@ Refer to these additional procedure information pages to Get Started on each env
 | Logo 3 | text 3 |
 
 
+| logo 1 | text 1 |
+| Logo 2 | text 2 |
+| Logo 3 | text 3 |
+
+
 - [Visual Studio (F5 experience)](./VS_DOCKER_DEPLOY.MD)
 - [Local Kubernetes by Docker for Desktop](https://tbd-url)
 - [Local MiniKube](https://tbd-url)
