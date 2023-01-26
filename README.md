@@ -18,8 +18,10 @@ Therefore, the main needs for this kind of applications are:
 - High bandwidth for heavy communication (i.e. video)
 - High network reliability for mission-critical
 - Support for massive number of IoT devices wirelesly communicated
-- Cover borad / large areas, wirelessly
+- Able to cover broad/large areas, wirelessly
 - Dynamic and on-demand network QoS 
+
+Those needs are provided most of them by typical environments such as 5G Private MEC and 5G Public MEC, but Wi-Fi and cabled network is also complementary.
 
 ## Supported deployments for this example application:
 
