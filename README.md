@@ -14,6 +14,8 @@ This new application development paradigm targeting scenarios not possible years
 
 Therefore, the main needs for this kind of applications are:
 
+- Event-Driven based on light message brokers
+- AI/ML models
 - Low latency (Instant reaction is a must)
 - High bandwidth for heavy communication (i.e. video)
 - High network reliability for mission-critical
