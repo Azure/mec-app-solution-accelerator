@@ -144,11 +144,11 @@ Both approaches are good approaches depending on the needs and shown below.
 
 ## Backlog
 
-tbd
+The backlog is defined in detail here: [Backlog](BACKLOG.MD)
 
 ## Roadmap
 
-tbd
+The roadmap is defined here: [Roadmap](ROADMAP.MD)
 
 ## Contributing
 
