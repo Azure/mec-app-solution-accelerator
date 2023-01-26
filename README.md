@@ -4,7 +4,7 @@ This repo provides a reference MEC (Multi-Access Edge Compute) application examp
 
 ## What is a MEC Application?
 
-A MEC Application is basically an application composed by a set of services that in order to provide the right functionality on-time to the users it needs to run at the EDGE so it can react on real-time to events happening. 
+A MEC Application is basically an application composed by a set of services that in order to provide the right functionality and on-time to the users it needs to run at the EDGE (very close to the data source), so it can react real-time and instantly to events happening. 
 
 In most use cases, IoT devices, video analysis and AI/Deep-Learning models to detect/predict based on the data coming from the devices, are part of this type of applications.
 
