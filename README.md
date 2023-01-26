@@ -33,7 +33,10 @@ However, aspects such as being able to create and event-driven application (Devi
 - Recommended event-driven and microservices architecture and example implementation
 - Showcase of design patterns to implement (Event Pub/Sub, microservices autonomy, extensible events/alerts metadata schemas, etc.)
 
-The initial use case is about video analytics, but video analytics / computer vision is not the main goal of this example application but to provide a "backbone" to create your own event-driven microservice application running at the EDGE, on Kubernetes.  
+The initial use case is about video analytics, but video analytics / computer vision is not the main goal of this example application but to provide a "backbone" to create your own event-driven microservice application running at the EDGE, on Kubernetes. This "backbone" is also applicable for other types of data processing such as data coming from IoT sensors that need to be automatically analyzed by AI models and events/alerts raised if needed.
+
+> **DISCLAIMER:** This is an example application providing patterns, approaches and best practices targeting applications to be deployed at MEC/EDGE. 
+> However, this is still an example application with no "production-ready" code but just for exploring architecture and implementation approaches.
 
 ## Supported deployments for this example application:
 
