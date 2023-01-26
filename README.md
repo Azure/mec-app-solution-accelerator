@@ -25,7 +25,15 @@ Therefore, the main needs for this kind of applications are:
 
 The network related needs are usually provided by environments such as 5G Private MEC and 5G Public MEC, but Wi-Fi and cabled network are also complementary.
 
-However, aspects such as application low latency and event-driven are provided by this app. 
+## Goals of this MEC app Solution Accelerator (Example application)
+
+As mentioned, the network needs ar eprovided by the infrastructure such as a 5G network and EDGE compute.
+However, aspects such as being able to create and event-driven application (Devices-->AI-->Events-->Logic-->Alerts-->Handlers) need to be implemented by your applciation and it's precisele what this example application provides:
+
+- Recommended event-driven and microservices architecture and example implementation
+- Showcase of design patterns to implement (Event Pub/Sub, microservices autonomy, extensible events/alerts metadata schemas, etc.)
+
+The initial use case is about video analytics, but video analytics / computer vision is not the main goal of this example application but to provide a "backbone" to create your own event-driven microservice application running at the EDGE, on Kubernetes.  
 
 ## Supported deployments for this example application:
 
