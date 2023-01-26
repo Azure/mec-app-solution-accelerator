@@ -23,7 +23,7 @@ Therefore, the main needs for this kind of applications are:
 - Able to cover broad/large areas, wirelessly
 - Dynamic and on-demand network QoS 
 
-Those needs are provided most of them by typical environments such as 5G Private MEC and 5G Public MEC, but Wi-Fi and cabled network is also complementary.
+The network related needs are usually provided by environments such as 5G Private MEC and 5G Public MEC, but Wi-Fi and cabled network are also complementary.
 
 ## Supported deployments for this example application:
 
