@@ -2,7 +2,26 @@
 
 This repo provides a reference MEC (Multi-Access Edge Compute) application example, powered by Microsoft and based on an event-driven microservices architecture, using Docker containers running at the Edge. 
 
-## Supported deployments:
+## What is a MEC Application?
+
+A MEC Application is basically an application composed by a set of services that in order to provide the right functionality on-time to the users it needs to run at the EDGE so it can react on real-time to events happening. 
+
+In most use cases, IoT devices, video analysis and AI/Deep-Learning models to detect/predict based on the data coming from the devices, are part of this type of applications.
+
+This new application development paradigm targeting scenarios not possible years ago is what Microsoft defines as Modern Connected Applications:
+
+<img width="800" alt="image" src="https://user-images.githubusercontent.com/1712635/214922412-efc15e6b-166b-450e-a0cd-d139dc7b54eb.png">
+
+Therefore, the main needs for this kind of applications are:
+
+- Low latency (Instant reaction is a must)
+- High bandwidth for heavy communication (i.e. video)
+- High network reliability for mission-critical
+- Support for massive number of IoT devices wirelesly communicated
+- Cover borad / large areas, wirelessly
+- Dynamic and on-demand network QoS 
+
+## Supported deployments for this example application:
 
 | | |
 |--------|--------|
