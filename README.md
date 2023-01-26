@@ -127,6 +127,15 @@ Only what's highlighted in yellow is purely related to this MEC application Solu
 
 When moving to production you would need to scale out the number of 5G RANs depending on how large is the area to cover, the number of servers for Azure Private 5G Core depending on the number of 5G network sites and the number of servers for application compute depending on the compute requirements demanded by AI models and application process which can vary depending on the number of video cameras and/or IoT devices to handle.
 
+### "Heavy EDGE" as the selected approach for this example application
+
+It's important to highlight that the selected approach for this example application is "centralized per EDGE site", what's called "Heavy Edge, so you have a single or few sets of EDGE compute servers/appliances on-premises, versus one compute-machine per camera or cluster of devices (such as NVDIA ORIN). Both are good approaches depending on the needs, but in this project we wanted to target the "global approach" which in most cases allows a lower cost because of a centralized management plus a smaller number of compute appliances because of shareing compute with Kubernetes scalability.
+
+Both approaches are shown below. "Heavy EDGE" is therefore the selected approach for this example application.
+
+<img width="976" alt="image" src="https://user-images.githubusercontent.com/1712635/214955088-2d15fbfb-1548-4665-8145-59f301b0d70a.png">
+
+
 ## Backlog
 
 tbd
