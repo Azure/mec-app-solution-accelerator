@@ -21,13 +21,13 @@ services:
         context: src/Services/Detections/ai_inferencer
         dockerfile: Dockerfile
       ports:
-        - "50051:50051"
+        - "50060:50060"
       depends_on: 
         - alertsapi-dapr
         
   aiinferencer-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "invoke-sender-frames", "--app-protocol", "grpc", "--app-port", "50051","--dapr-http-port", "3600", "--components-path", "./components"]
+    command: [ "./daprd", "-app-id", "invoke-sender-frames", "--app-protocol", "grpc", "--app-port", "50060","--dapr-http-port", "3600", "--components-path", "./components"]
     volumes:
     - "./components/:/components"
     depends_on:

@@ -23,4 +23,4 @@ def framesreceiver(request: InvokeMethodRequest) -> InvokeMethodResponse:
 
     return InvokeMethodResponse(b'Frame Analyzed', "text/plain; charset=UTF-8")
 
-app.run(50051)
+app.run(50060)
