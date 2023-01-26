@@ -7,7 +7,7 @@
 
 ### Security
 
-- **Authentication/Authorization:** Authentication/Authorization based on an Identity Server such as Keycloak or Duende (aka.IdentityServer4) 
+- **Authentication/Authorization:** Authentication/Authorization based on an Identity Server such as **Keycloak** or **Duende** (**aka.IdentityServer4**) 
 
 ### Automated provisioning of cameras/devices
 - **Automated provisioning of cameras/devices with AKRI**
