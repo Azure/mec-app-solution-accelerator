@@ -129,9 +129,15 @@ When moving to production you would need to scale out the number of 5G RANs depe
 
 ### "Heavy EDGE" as the selected approach for this example application
 
-It's important to highlight that the selected approach for this example application is "centralized per EDGE site", what's called "Heavy Edge, so you have a single or few sets of EDGE compute servers/appliances on-premises, versus one compute-machine per camera or cluster of devices (such as NVDIA ORIN). Both are good approaches depending on the needs, but in this project we wanted to target the "global approach" which in most cases allows a lower cost because of a centralized management plus a smaller number of compute appliances because of shareing compute with Kubernetes scalability.
+It's important to highlight that the selected approach for this example application is "centralized per EDGE site", which is called **"Heavy Edge"**, so you have a single or few sets of EDGE compute servers/appliances on-premises in central places, versus **"Heavy User Equipment Edge"** which needs one compute-machine (such as NVDIA ORIN) per camera or cluster of IoT devices. 
 
-Both approaches are shown below. "Heavy EDGE" is therefore the selected approach for this example application.
+With **"Heavy User Equipment Edge"** because you are placing the AI models compute besides the data source, then network bandwidth needed can be much lighter in the MEC's wireless network.
+
+However, in this project we wanted to target the "global approach" because in most cases allows a lower cost (TCO) because of a enabling a centralized management of the compute with a smaller number of compute appliances to manage because of sharing the compute with Kubernetes scalability (compute shared across many Kubernetes pods).
+
+  
+Both approaches are good approaches depending on the needs and shown below. 
+"Heavy EDGE" is therefore the selected approach for this example application.
 
 <img width="976" alt="image" src="https://user-images.githubusercontent.com/1712635/214955088-2d15fbfb-1548-4665-8145-59f301b0d70a.png">
 
