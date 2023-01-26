@@ -4,7 +4,6 @@
 
 ### Light Event Bus
 - **Replace Mosquito by Microsoft E4K as the light MQTT message broker:** E4K will provide much better integration with Azure management, security, etc.
-- 
 
 ### Security
 
@@ -33,7 +32,7 @@
 ## Cloud scope
 
 ### Global aggregated Data in the cloud 
-- **Application data upload to cloud for consolidation and aggregation:** Upload events and alerts through **Azure Event Hub**
+- **Application data upload to cloud for consolidation and aggregation:** Upload events and alerts through **Azure Event Hub** based on **Kafka connector from E4K** (Dependency on E4K at the EDGE).
 - **Global Telemetry uploaded to cloud**. 
 - **Storage:**: Application data aggregation in **Azure CosmosDB** and logs into **Azure Data Explorer**.  
 
