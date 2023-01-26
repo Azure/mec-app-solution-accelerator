@@ -25,6 +25,8 @@ Therefore, the main needs for this kind of applications are:
 
 The network related needs are usually provided by environments such as 5G Private MEC and 5G Public MEC, but Wi-Fi and cabled network are also complementary.
 
+However, aspects such as application low latency and event-driven are provided by this app. 
+
 ## Supported deployments for this example application:
 
 | | |
