@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: alertshandler
-        image: pabravil/alertshandler:demo3
+        image: mecsolutionaccelerator/alertshandler:latest
         ports:
         - containerPort: 80
         imagePullPolicy: Always
