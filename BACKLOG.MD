@@ -14,7 +14,7 @@
 
 ### Custom code and Kubernetes
 
-- **Versioning Microservices (semantic)**
+- **Advanced Versioning of Microservices (semantic)**: Implement a more advanced versioning system based on aspnet-api-versioning or comparable system: https://github.com/Microsoft/aspnet-api-versioning
 - **Migrate K8s deployment YAML to HELM charts**
 - **High coverage of Unit Tests and Functional Tests**
 - **Local MEC error loging**
@@ -38,6 +38,7 @@
 
 ### Global observability, logging and performance/scalability analysis
 - Performance analisys, execution time-spans, average per 95% percentile, etc. based on **Azure Log Analytics**. 
+- Monitoring/Diagnostics of microservices based on Application Insights with custom perfkeys.
 
 ### Application level in the cloud
 - **Global application alerts dashboard aggregating multiple MEC:** "Single Pane of Glass" as a global dashboard aggregating multiple MEC sites (Custom development).
