@@ -20,8 +20,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             TimeSpan time = TimeSpan.FromMilliseconds(request.CaptureTime);
             DateTime captureDate = new DateTime(1970, 1, 1) + time;
             DateTime alertDate = DateTime.UtcNow;
-            var t = (alertDate - captureDate).TotalMilliseconds;
-            var t2 = (captureDate - alertDate).TotalMilliseconds;
+
             var entity = new Alert()
             {
                 Frame = request.Frame,
@@ -33,7 +32,10 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                 Type = request.Type,
                 Accuracy = request.Accuracy * 100,
             };
-            entity.Source = this.SetHardwareMockInformation();
+            if (entity.Source == null)
+            {
+                entity.Source = this.SetHardwareMockInformation();
+            }
             await this._repository.Create(entity);
             return id;
         }

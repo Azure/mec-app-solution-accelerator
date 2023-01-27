@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Commands;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Events;
+using Microsoft.MecSolutionAccelerator.Services.Alerts.Events.Base;
 using SolTechnology.Avro;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
@@ -27,6 +28,12 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
         public async Task PostAlert(byte[] alertBytes)
         {
             var detection = AvroConvert.Deserialize<DetectedObjectAlert>(alertBytes);
+            var bytes = Convert.FromBase64String(detection.Frame);
+            using( var origStream = new StreamContent(new MemoryStream(bytes)))
+            {
+                this.PaintBoundingBoxes(origStream, detection.BoundingBoxes);
+            }
+            var contents = new StreamContent(new MemoryStream(bytes));
 
             await _mediator.Send(new PersistAlertCommand()
             {
@@ -38,5 +45,16 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
             });
             _logger.LogInformation("Stored generic alert");
         }
+
+        private string PaintBoundingBoxes(MemoryStream image, List<BoundingBox> boxes)
+        {
+            foreach(BoundingBox box in boxes)
+            {
+
+            }
+
+            return "";
+        }
+
     }
 }
