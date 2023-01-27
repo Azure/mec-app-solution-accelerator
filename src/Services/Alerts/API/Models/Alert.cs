@@ -9,6 +9,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Models
         public string Frame { get; set; }
         public DateTime CaptureTime { get; set; }
         public DateTime AlertTime { get; set; }
+        public double MsExecutionTime { get; set; }
         public string Type { get; set; }
         public float Accuracy { get; set; }
         public Source Source { get; set; }

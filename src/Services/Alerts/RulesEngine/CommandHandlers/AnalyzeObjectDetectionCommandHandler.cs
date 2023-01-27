@@ -67,7 +67,6 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                         triggeredAlert = successfull;
                         var alert = new DetectedObjectAlert()
                         {
-                            
                             Name = alertConfig.AlertName,
                             EveryTime = everyTime,
                             UrlVideoEncoded = urlEncoded,
@@ -76,7 +75,6 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                             Type = alertConfig.AlertName,
                             Information = $"Generate alert {alertConfig.AlertName} detecting objects {string.Join(",", foundClasses.ToArray())}",
                             Accuracy = requestClass.Confidence,
-
                         };
 
                         var serialized = AvroConvert.Serialize(alert);

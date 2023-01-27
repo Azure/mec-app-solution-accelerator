@@ -68,7 +68,7 @@
                 if (rows[i].id == localStorage.getItem("selectedId")) {
                     selectAlert(localStorage.getItem("selectedInputs"), localStorage.getItem("selectedId"), localStorage.getItem("selectedType"),
                         localStorage.getItem("selectedLat"), localStorage.getItem("selectedLon"), localStorage.getItem("selectedCaptureTime"), localStorage.getItem("selectedAlertTime"), localStorage.getItem("selectedAccuracy"),
-                        localStorage.getItem("selectedInfo"), localStorage.getItem("selectedFrame"));
+                        localStorage.getItem("selectedInfo"), localStorage.getItem("selectedFrame"), localStorage.getItem("selectedMsTime"));
                 }
             }
         }
@@ -107,7 +107,7 @@
 
     observer.observe(document.getElementById("left"), { childList: true, subtree: true });
 
-    const selectAlert = (inputs, id, type, lat, lon, captureTime, alertTime, accuracy, info, frame) => {
+    const selectAlert = (inputs, id, type, lat, lon, captureTime, alertTime, accuracy, info, frame, msTime) => {
         $("td").removeClass("selected-alert");
         $("#"+id).find("td").addClass("selected-alert");
         if (inputs == "both") {
@@ -121,6 +121,7 @@
 &emsp; – Position: (${lat},${lon})<br>
 &emsp; - Capture Day/Time: ${captureTime}<br>
 &emsp; - Alert Day/Time: ${alertTime}<br>
+&emsp; - Execution Time: ${msTime} <br>
 &emsp; - Detection Confidence: ${accuracy} %<br>
 ${info}
                         </pre>
@@ -136,6 +137,7 @@ ${info}
 &emsp; – Position: (${lat},${lon})<br>
 &emsp; - Capture Day/Time: ${captureTime}<br>
 &emsp; - Alert Day/Time: ${alertTime}<br>
+&emsp; - Execution Time: ${msTime} <br>
 &emsp; - Detection Confidence: ${accuracy} %<br>
 ${info}
                     </pre>
@@ -155,6 +157,7 @@ ${info}
         localStorage.setItem("selectedLon", lon);
         localStorage.setItem("selectedCaptureTime", captureTime);
         localStorage.setItem("selectedAlertTime", alertTime);
+        localStorage.setItem("selectedMsTime", msTime);
         localStorage.setItem("selectedAccuracy", accuracy);
         localStorage.setItem("selectedInfo", info);
         localStorage.setItem("selectedFrame", frame);

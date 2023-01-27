@@ -6,7 +6,6 @@ using Dapr.Client;
 using MediatR;
 using RulesEngine.Commands.RuleCommands;
 using RulesEngine.CommandHandlers.RulesCommandHandler;
-using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventControllers;
 
