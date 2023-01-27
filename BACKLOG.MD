@@ -42,9 +42,11 @@
 - **Global Telemetry uploaded to cloud**. 
 - **Storage:**: Application data aggregation in **Azure CosmosDB** and logs into **Azure Data Explorer**.  
 
-### Global observability, logging and performance/scalability analysis
+### Global monitoring, observability, logging and performance/scalability analysis
 - Performance analisys, execution time-spans, average per 95% percentile, etc. based on **Azure Log Analytics**. 
-- Monitoring/Diagnostics of microservices based on Application Insights with custom perfkeys.
+- Monitoring/Diagnostics of microservices based on:
+  - **Azure Monitor for EDGE**
+  - **Application Insights** with custom perfkeys.
 
 ### Application level in the cloud
 - **Global application alerts dashboard aggregating multiple MEC:** "Single Pane of Glass" probably based on **"TRIDENT" (aka.PowerBI vNEXT)** as a global dashboard aggregating multiple MEC sites (Custom development).
