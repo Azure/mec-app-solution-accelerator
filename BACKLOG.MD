@@ -28,6 +28,12 @@
 
 ### AI / ML / DeepLearning
 - **Cascade Models support**
+- **Shared GPU across K8s Pods:** Use NVIDIA DeepStream to potentially share GPUs for multiple Kuberentes Pods. References:
+  - **NVIDIA GPU sharing in Kubernetes**: https://developer.nvidia.com/blog/improving-gpu-utilization-in-kubernetes/
+  - **GPU time slicing in K8s** may help to have pods share GPUs: https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/gpu-sharing.html
+  - **Azure DeepStream architecture**, to compare code using NVIDIA DeepStream from Azure IoT Edge: https://github.com/microsoft/AzureDeepStreamAccelerator#azure-deepstream-accelerator-architecture
+  - https://blog.ml6.eu/a-guide-to-gpu-sharing-on-top-of-kubernetes-6097935ababf
+  - **Schedule GPUs in Kubernetes:** https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/
 
 ## Cloud scope
 
