@@ -32,6 +32,7 @@ However, aspects such as being able to create and event-driven application (Devi
 
 - Recommended event-driven and microservices architecture and example implementation
 - Showcase of design patterns to implement (Event Pub/Sub, microservices autonomy, extensible events/alerts metadata schemas, etc.)
+- Show how to inference with deep-learning models from a microservice, in this case for video/image analytics, then generate the related detection event.
 
 The initial use case is about video analytics, but video analytics / computer vision is not the main goal of this example application but to provide a "backbone" to create your own event-driven microservice application running at the EDGE, on Kubernetes. This "backbone" is also applicable for other types of data processing such as data coming from IoT sensors that need to be automatically analyzed by AI models and events/alerts raised if needed.
 
