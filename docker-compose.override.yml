@@ -36,7 +36,7 @@ services:
 
   aiinferencer:
     ports:
-    - "50060:50060"
+    - "2060:2060"
 
   framesplitter:
     environment:
