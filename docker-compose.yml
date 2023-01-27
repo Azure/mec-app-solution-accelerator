@@ -17,7 +17,7 @@ services:
         
   aiinferencer-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "invoke-sender-frames", "--app-protocol", "grpc", "--app-port", "50060","--dapr-http-port", "3600", "--components-path", "./components"]
+    command: [ "./daprd", "-app-id", "invoke-sender-frames", "--app-protocol", "grpc", "--app-port", "2060","--dapr-http-port", "3600", "--components-path", "./components"]
     volumes:
     - "./components/:/components"
     depends_on:
