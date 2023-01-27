@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: frame-splitter
-        image: javipercor/framesplitter:demo4
+        image: mecsolutionaccelerator/framesplitter:latest
         ports:
         - containerPort: 50052
         imagePullPolicy: Always
