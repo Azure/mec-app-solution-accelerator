@@ -47,7 +47,7 @@
 - Monitoring/Diagnostics of microservices based on Application Insights with custom perfkeys.
 
 ### Application level in the cloud
-- **Global application alerts dashboard aggregating multiple MEC:** "Single Pane of Glass" as a global dashboard aggregating multiple MEC sites (Custom development).
+- **Global application alerts dashboard aggregating multiple MEC:** "Single Pane of Glass" probably based on **"TRIDENT" (aka.PowerBI vNEXT)** as a global dashboard aggregating multiple MEC sites (Custom development).
 - **Global Digital Twin in cloud:** Global visibility with **Azure Digital Twin** about all elements/devices handled in the multiple MEC sites. 
 
 ### Security
