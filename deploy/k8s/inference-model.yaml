@@ -27,5 +27,5 @@ spec:
       - name: inference-model
         image: javipercor/aiinferencer:demo3
         ports:
-        - containerPort: 50051
+        - containerPort: 50060
         imagePullPolicy: Always
