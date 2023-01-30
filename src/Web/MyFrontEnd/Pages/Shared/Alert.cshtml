@@ -110,9 +110,14 @@
         }
     </table>
 </div>
-<div class="d-flex flex-row justify-content-end">
-    <button class="button-table px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right active:bg-mWhite bg-tableHeader" id="refresh-data" onclick="refreshData()">Refresh Data</button>
-    </div>
+<div class="d-flex flex-row justify-content-end align-items-center">
+    <button class="button-table px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right" id="refresh-data" onclick="refreshData()">Refresh Data</button>
+    <label class="m-2 font-sans fw-light fs-6">Automatic Refresh:</label>
+    <label class="switch my-2">
+        <input type="checkbox" onclick="toggleAutomaticRefresh()" id="switch">
+        <span class="slider round"></span>
+    </label>
+</div>
 
 
 <div class="d-flex flex-column position-absolute p-1 rounded hide" id="alert-filter">

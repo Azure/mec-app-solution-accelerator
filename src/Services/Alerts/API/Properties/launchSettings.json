@@ -12,7 +12,7 @@
     "Alerts.api": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:49444",
+      "applicationUrl": "http://localhost:29513",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
