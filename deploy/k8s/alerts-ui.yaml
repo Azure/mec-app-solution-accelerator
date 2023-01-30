@@ -30,9 +30,7 @@ spec:
     spec:
       containers:
       - name: myfrontend
-        image: pabravil/myfrontend:demo2
-        # image: jaimedeclemente/myfrontend:latest
-        # image: pabravil/myfrontend:dev
+        image: mecsolutionaccelerator/alerts-ui:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
