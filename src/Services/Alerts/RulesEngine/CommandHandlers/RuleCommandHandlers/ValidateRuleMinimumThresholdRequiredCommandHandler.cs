@@ -7,6 +7,7 @@ namespace RulesEngine.CommandHandlers.RulesCommandHandler
     {
         public async Task<bool> Handle(ValidateRuleMinimumThresholdRequiredCommand request, CancellationToken cancellationToken)
         {
+            request.MatchingClassesBoxes.AddRange(request.RequestClass.BoundingBoxes);
             return request.RequestClass.Confidence > request.RuleConfig.MinimumThreshold * 0.01;
         }
     }

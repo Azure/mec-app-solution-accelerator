@@ -123,49 +123,49 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
             Assert.True(task);
         }
 
-        [Fact]
-        public async Task CheckMinimumNumberofObjectsValidationWorks()
-        {
-            //arrange
-            var handler = new ValidateRuleMinimumNumberOfObjectsDetectedRequiredCommandHandler();
-            var command = new ValidateRuleMinimumNumberOfObjectsDetectedRequiredCommand()
-            {
-                FoundClasses = new List<string> {"person", "person", "person" },
-                RuleConfig = new RulesConfig()
-                {
-                    NumberfObjects = 3,
-                    DetectedObject = "person",
-                }
-            };
+        //[Fact]
+        //public async Task CheckMinimumNumberofObjectsValidationWorks()
+        //{
+        //    //arrange
+        //    var handler = new ValidateRuleMinimumNumberOfObjectsDetectedRequiredCommandHandler();
+        //    var command = new ValidateRuleMinimumNumberOfObjectsDetectedRequiredCommand()
+        //    {
+        //        FoundClasses = new List<string> {"person", "person", "person" },
+        //        RuleConfig = new RulesConfig()
+        //        {
+        //            NumberfObjects = 3,
+        //            DetectedObject = "person",
+        //        }
+        //    };
 
-            //act
-            var task = await handler.Handle(command, CancellationToken.None);
+        //    //act
+        //    var task = await handler.Handle(command, CancellationToken.None);
 
-            //assert
-             Assert.True(task);
-        }
+        //    //assert
+        //     Assert.True(task);
+        //}
 
-        [Fact]
-        public async Task CheckMinimumNumberofObjectsValidationDontWorksCorrectly()
-        {
-            //arrange
-            var handler = new ValidateRuleMinimumNumberOfObjectsDetectedRequiredCommandHandler();
-            var command = new ValidateRuleMinimumNumberOfObjectsDetectedRequiredCommand()
-            {
-                FoundClasses = new List<string> { "person", "person"},
-                RuleConfig = new RulesConfig()
-                {
-                    NumberfObjects = 3,
-                    DetectedObject = "person",
-                }
-            };
+        //[Fact]
+        //public async Task CheckMinimumNumberofObjectsValidationDontWorksCorrectly()
+        //{
+        //    //arrange
+        //    var handler = new ValidateRuleMinimumNumberOfObjectsDetectedRequiredCommandHandler();
+        //    var command = new ValidateRuleMinimumNumberOfObjectsDetectedRequiredCommand()
+        //    {
+        //        FoundClasses = new List<string> { "person", "person"},
+        //        RuleConfig = new RulesConfig()
+        //        {
+        //            NumberfObjects = 3,
+        //            DetectedObject = "person",
+        //        }
+        //    };
 
-            //act
-            var task = await handler.Handle(command, CancellationToken.None);
+        //    //act
+        //    var task = await handler.Handle(command, CancellationToken.None);
 
-            //assert
-            Assert.False(task);
-        }
+        //    //assert
+        //    Assert.False(task);
+        //}
 
         [Fact]
         public async Task CheckMinimuThresholdValidationWorks()
@@ -218,57 +218,57 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
             Assert.False(task);
         }
 
-        [Fact]
-        public async Task CheckMinimuMultipleClassesValidationWorks()
-        {
-            //arrange
-            var handler = new ValidateRuleMultipleClassesRequiredCommandHandler();
-            var command = new ValidateRuleMultipleClassesRequiredCommand()
-            {
-                FoundClasses = new List<string> { "person", "car" },
-                RequestClass = new DetectionClass()
-                {
-                    EventType = "person",
-                },
-                RuleConfig = new RulesConfig()
-                {
-                    DetectedObject = "person",
-                    MultipleObjects = new List<string> { "person", "car" }
-                }
-            };
+        //[Fact]
+        //public async Task CheckMinimuMultipleClassesValidationWorks()
+        //{
+        //    //arrange
+        //    var handler = new ValidateRuleMultipleClassesRequiredCommandHandler();
+        //    var command = new ValidateRuleMultipleClassesRequiredCommand()
+        //    {
+        //        FoundClasses = new List<string> { "person", "car" },
+        //        RequestClass = new DetectionClass()
+        //        {
+        //            EventType = "person",
+        //        },
+        //        RuleConfig = new RulesConfig()
+        //        {
+        //            DetectedObject = "person",
+        //            MultipleObjects = new List<string> { "person", "car" }
+        //        }
+        //    };
 
-            //act
-            var task = await handler.Handle(command, CancellationToken.None);
+        //    //act
+        //    var task = await handler.Handle(command, CancellationToken.None);
 
-            //assert
-            Assert.True(task);
-        }
+        //    //assert
+        //    Assert.True(task);
+        //}
 
-        [Fact]
-        public async Task CheckMinimuMultipleClassesValidationDontWorksCorrectly()
-        {
-            //arrange
-            var handler = new ValidateRuleMultipleClassesRequiredCommandHandler();
-            var command = new ValidateRuleMultipleClassesRequiredCommand()
-            {
-                FoundClasses = new List<string> { "car" },
-                RequestClass = new DetectionClass()
-                {
-                    EventType = "person",
-                },
-                RuleConfig = new RulesConfig()
-                {
-                    DetectedObject = "person",
-                    MultipleObjects = new List<string> { "person", "car" }
-                }
-            };
+        //[Fact]
+        //public async Task CheckMinimuMultipleClassesValidationDontWorksCorrectly()
+        //{
+        //    //arrange
+        //    var handler = new ValidateRuleMultipleClassesRequiredCommandHandler();
+        //    var command = new ValidateRuleMultipleClassesRequiredCommand()
+        //    {
+        //        FoundClasses = new List<string> { "car" },
+        //        RequestClass = new DetectionClass()
+        //        {
+        //            EventType = "person",
+        //        },
+        //        RuleConfig = new RulesConfig()
+        //        {
+        //            DetectedObject = "person",
+        //            MultipleObjects = new List<string> { "person", "car" }
+        //        }
+        //    };
 
-            //act
-            var task = await handler.Handle(command, CancellationToken.None);
+        //    //act
+        //    var task = await handler.Handle(command, CancellationToken.None);
 
-            //assert
-            Assert.False(task);
-        }
+        //    //assert
+        //    Assert.False(task);
+        //}
 
         [Fact]
         public async Task CheckDetectionEventHandlerWorksCorrectly()

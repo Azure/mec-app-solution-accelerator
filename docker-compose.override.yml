@@ -36,11 +36,7 @@ services:
 
   aiinferencer:
     ports:
-<<<<<<< HEAD
-    - "50051:50051"
-=======
     - "2060:2060"
->>>>>>> 9c5897fcc91f2b51f17c5f5ce39d69140cb6645b
 
   framesplitter:
     environment:
