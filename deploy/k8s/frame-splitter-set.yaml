@@ -18,6 +18,7 @@ spec:
         # dapr.io/app-port: "50052"
         dapr.io/log-level: "debug"
         dapr.io/enable-api-logging: "true"
+        dapr.io/config: "dapr-config"
     spec:
       containers:
       - name: frame-splitter
