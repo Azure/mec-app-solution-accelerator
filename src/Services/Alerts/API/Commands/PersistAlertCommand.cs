@@ -11,7 +11,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Commands
 
         public string Information { get; set; }
         public string Frame { get; set; }
-        public DateTime AlertTriggerTimeIni { get; set; }
+        public long CaptureTime { get; set; }
         public string Type { get; set; }
         public float Accuracy { get; set; }
     }

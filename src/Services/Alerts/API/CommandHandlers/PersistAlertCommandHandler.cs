@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Commands;
+using Microsoft.MecSolutionAccelerator.Services.Alerts.Events.Base;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
@@ -16,17 +17,25 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
         public async Task<Guid> Handle(PersistAlertCommand request, CancellationToken cancellationToken)
         {
             var id = Guid.NewGuid();
+            TimeSpan time = TimeSpan.FromMilliseconds(request.CaptureTime);
+            DateTime captureDate = new DateTime(1970, 1, 1) + time;
+            DateTime alertDate = DateTime.UtcNow;
+
             var entity = new Alert()
             {
                 Frame = request.Frame,
-                CaptureTime = request.AlertTriggerTimeIni,
-                AlertTime = DateTime.UtcNow,
+                CaptureTime = captureDate,
+                AlertTime = alertDate,
                 Information = request.Information,
+                MsExecutionTime = (alertDate - captureDate).TotalMilliseconds,
                 Id = id,
                 Type = request.Type,
                 Accuracy = request.Accuracy * 100,
             };
-            entity.Source = this.SetHardwareMockInformation();
+            if (entity.Source == null)
+            {
+                entity.Source = this.SetHardwareMockInformation();
+            }
             await this._repository.Create(entity);
             return id;
         }

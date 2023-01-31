@@ -12,8 +12,9 @@ namespace MyFrontEnd.Models
         public float Accuracy { get; set; }
         public DateTime CaptureTime { get; set; }
         public DateTime AlertTime { get; set; }
+        public double MsExecutionTime { get; set; }
 
-        public Alert(string id, Source source, string type, string? information, string? frame, float accuracy, DateTime captureTime, DateTime alertTime)
+        public Alert(string id, Source source, string type, string? information, string? frame, float accuracy, DateTime captureTime, DateTime alertTime, double msExecutionTime)
         {
             Id = id ?? throw new ArgumentNullException(nameof(id));
             Source = source ?? throw new ArgumentNullException(nameof(source));
@@ -23,6 +24,7 @@ namespace MyFrontEnd.Models
             Accuracy = accuracy;
             CaptureTime = captureTime;
             AlertTime = alertTime;
+            MsExecutionTime = msExecutionTime;
         }
 
         public string toString()

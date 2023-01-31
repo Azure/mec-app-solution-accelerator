@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
+using System.Data;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Injection
 {
@@ -34,9 +36,19 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Injection
         private static void AddRulesCommandsDictionary(IServiceCollection services)
         {
             var commandsType = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
-                .Where(x => typeof(IRequest<bool>).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract).ToList();
+                .Where(x => typeof(IRequest<bool>).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)
+                .ToList();
             var types = new Dictionary<string, Type>();
-            commandsType.ForEach(commandType => types.Add(((RuleTagAttribute)commandType.GetCustomAttribute(typeof(RuleTagAttribute))).Name, commandType));
+
+            foreach(var commandType in commandsType)
+            {
+                var tag = (RuleTagAttribute)commandType.GetCustomAttribute(typeof(RuleTagAttribute));
+                if(tag != null)
+                {
+                    var tagName = tag.Name;
+                    types.Add(tag.Name, commandType);
+                }
+            }
 
             services.AddSingleton(commandTypesDictionary => types);
         }

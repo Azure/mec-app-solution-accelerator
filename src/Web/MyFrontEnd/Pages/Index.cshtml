@@ -42,20 +42,31 @@
     var refresh_alerts = true;
 
     setTimeout(() => {
-        if (refresh_alerts) {
-            $("#left").load('@Url.Action("RefreshPage","Alert")');
-        }
-        refresh_alerts = !refresh_alerts;
+        $("#switch")[0].checked = true;
+        localStorage.setItem("automaticRefresh", true);
+        $("#left").load('@Url.Action("RefreshPage","Alert")');
     }, 50);
 
     const refreshData = () => {
-        console.log("I'm refreshing!");
         refresh_alerts = false;
+        localStorage.setItem("tableScroll", $("#table").scrollTop());
         $("#left").load('@Url.Action("RefreshPage","Alert")');
     }
 
+    const toggleAutomaticRefresh = () => {
+        localStorage.setItem("automaticRefresh", $("#switch")[0].checked);
+        if ($("#switch")[0].checked) {
+            console.log("I refreshed from switch");
+            $("#left").load('@Url.Action("RefreshPage","Alert")');
+            refresh_alerts = false;
+        }
+    }
+
     setInterval(() => {
-        if (refresh_alerts) {
+        //console.log($("#table").scrollTop());
+        if (refresh_alerts && $("#switch")[0].checked) {
+            localStorage.setItem("tableScroll", $("#table").scrollTop());
+            console.log("I'm trying to refresh!");
             $("#left").load('@Url.Action("RefreshPage","Alert")');
         }
         refresh_alerts = !refresh_alerts;
@@ -68,7 +79,7 @@
                 if (rows[i].id == localStorage.getItem("selectedId")) {
                     selectAlert(localStorage.getItem("selectedInputs"), localStorage.getItem("selectedId"), localStorage.getItem("selectedType"),
                         localStorage.getItem("selectedLat"), localStorage.getItem("selectedLon"), localStorage.getItem("selectedCaptureTime"), localStorage.getItem("selectedAlertTime"), localStorage.getItem("selectedAccuracy"),
-                        localStorage.getItem("selectedInfo"), localStorage.getItem("selectedFrame"));
+                        localStorage.getItem("selectedInfo"), localStorage.getItem("selectedFrame"), localStorage.getItem("selectedMsTime"));
                 }
             }
         }
@@ -103,11 +114,20 @@
                 $("#source-filter").addClass("show");
             }
         }
+        if (localStorage.getItem("automaticRefresh") != null) {
+            if (localStorage.getItem("automaticRefresh") == 'true') {
+                $("#switch")[0].checked = true;
+            }
+        }
+        if (localStorage.getItem("tableScroll") != null) {
+            $("#table").scrollTop(localStorage.getItem("tableScroll"));
+            console.log("Scrolled to " + $("#table").scrollTop());
+        }
     });
 
     observer.observe(document.getElementById("left"), { childList: true, subtree: true });
 
-    const selectAlert = (inputs, id, type, lat, lon, captureTime, alertTime, accuracy, info, frame) => {
+    const selectAlert = (inputs, id, type, lat, lon, captureTime, alertTime, accuracy, info, frame, msTime) => {
         $("td").removeClass("selected-alert");
         $("#"+id).find("td").addClass("selected-alert");
         if (inputs == "both") {
@@ -121,6 +141,7 @@
 &emsp; – Position: (${lat},${lon})<br>
 &emsp; - Capture Day/Time: ${captureTime}<br>
 &emsp; - Alert Day/Time: ${alertTime}<br>
+&emsp; - Execution Time: ${msTime} <br>
 &emsp; - Detection Confidence: ${accuracy} %<br>
 ${info}
                         </pre>
@@ -136,6 +157,7 @@ ${info}
 &emsp; – Position: (${lat},${lon})<br>
 &emsp; - Capture Day/Time: ${captureTime}<br>
 &emsp; - Alert Day/Time: ${alertTime}<br>
+&emsp; - Execution Time: ${msTime} <br>
 &emsp; - Detection Confidence: ${accuracy} %<br>
 ${info}
                     </pre>
@@ -155,6 +177,7 @@ ${info}
         localStorage.setItem("selectedLon", lon);
         localStorage.setItem("selectedCaptureTime", captureTime);
         localStorage.setItem("selectedAlertTime", alertTime);
+        localStorage.setItem("selectedMsTime", msTime);
         localStorage.setItem("selectedAccuracy", accuracy);
         localStorage.setItem("selectedInfo", info);
         localStorage.setItem("selectedFrame", frame);

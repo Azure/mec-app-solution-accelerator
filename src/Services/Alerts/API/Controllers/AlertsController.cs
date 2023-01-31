@@ -1,9 +1,6 @@
 ﻿using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
-using MongoDB.Driver;
-using SolTechnology.Avro;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
 {
@@ -31,7 +28,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
         [HttpGet]
         public async Task<IEnumerable<Alert>> Get()
         {
-            return this._alertsRepository.List(0, 20);
+            return this._alertsRepository.List(0, 30);
         }
     }
 }

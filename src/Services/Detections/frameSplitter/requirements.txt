@@ -1,3 +1,4 @@
+dapr-ext-grpc
 dapr
 setuptools==58.2.0
 opencv-python

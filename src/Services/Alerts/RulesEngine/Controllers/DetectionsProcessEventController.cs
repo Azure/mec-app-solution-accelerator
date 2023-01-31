@@ -22,7 +22,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventCont
 
         [Topic("pubsub", "newDetection")]
         [HttpPost]
-        public async Task DetectionEventHandler(object detectionRaw)
+        public async Task<bool> DetectionEventHandler(object detectionRaw)
         {
             var detectionStr = detectionRaw.ToString();
             var detectionBytes = AvroConvert.Json2Avro(detectionStr);
@@ -39,7 +39,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventCont
                 Classes = detection.Classes,
             };
 
-            await _mediator.Send(command);
+            return await _mediator.Send(command);
         }
     }
 }

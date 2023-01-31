@@ -1,9 +1,4 @@
 ﻿using Dapr.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
 using MyFrontEnd.Models;
 using MyFrontEnd.Pages;
@@ -16,6 +11,7 @@ namespace MyFrontEnd.Controllers
     public class AlertController : Controller
     {
         public IEnumerable<Alert> Alerts;
+        //public List<Alert> Alerts;
         private readonly DaprClient _daprClient;
 
         public AlertController(DaprClient daprClient)

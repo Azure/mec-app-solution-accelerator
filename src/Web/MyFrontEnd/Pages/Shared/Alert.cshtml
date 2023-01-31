@@ -14,6 +14,9 @@
             <th class="border border-dark font-bold tracking-wide w-1/6">
                 <div class="table-header fs-3 d-flex flex-row font-bold justify-content-center">Alert Time</div>
             </th>
+            <th class="border border-dark font-bold tracking-wide w-1/6">
+                <div class="table-header fs-3 d-flex flex-row font-bold justify-content-center">Execution Time</div>
+            </th>
             <th class="border border-t-dark border-dark tracking-wide w-5/12">
                 <div class="table-header d-flex flex-row justify-content-center">
                     <div class="fs-3 font-bold tracking-wide">Source</div>
@@ -36,9 +39,10 @@
         </tr>
         @foreach (var alert in (IEnumerable<Models.Alert>)ViewData["Alerts"]!)
         {
-            <tr class="click-change-color" onclick="selectAlert('@Model.FindInputs(alert)', '@alert.Id', '@alert.Type', @alert.Source.Lat, @alert.Source.Lon, '@alert.CaptureTime', '@alert.AlertTime', @alert.Accuracy, '@alert.Information', '@alert.Frame')" id="@alert.Id">
+            <tr class="click-change-color" onclick="selectAlert('@Model.FindInputs(alert)', '@alert.Id', '@alert.Type', @alert.Source.Lat, @alert.Source.Lon, '@alert.CaptureTime', '@alert.AlertTime', @alert.Accuracy, '@alert.Information', '@alert.Frame', '@alert.MsExecutionTime')" id="@alert.Id">
                 <td class="cursor-pointer border border-dark text-center py-1">@alert.CaptureTime.ToString("d")<br>@alert.CaptureTime.ToString("T")</td>
                 <td class="cursor-pointer border border-dark text-center py-1">@alert.AlertTime.ToString("d")<br>@alert.AlertTime.ToString("T")</td>
+                <td class="cursor-pointer border border-dark text-center py-1">@alert.MsExecutionTime</td>
                 <td class="cursor-pointer border border-dark text-center py-1">@alert.Source.Name</td>
                 <td class="cursor-pointer border border-dark text-center py-1">
                     <div class="d-flex flex-row justify-content-center px-2">
@@ -106,9 +110,14 @@
         }
     </table>
 </div>
-<div class="d-flex flex-row justify-content-end">
-    <button class="button-table px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right active:bg-mWhite bg-tableHeader" id="refresh-data" onclick="refreshData()">Refresh Data</button>
-    </div>
+<div class="d-flex flex-row justify-content-end align-items-center">
+    <button class="button-table px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right" id="refresh-data" onclick="refreshData()">Refresh Data</button>
+    <label class="m-2 font-sans fw-light fs-6">Automatic Refresh:</label>
+    <label class="switch my-2">
+        <input type="checkbox" onclick="toggleAutomaticRefresh()" id="switch">
+        <span class="slider round"></span>
+    </label>
+</div>
 
 
 <div class="d-flex flex-column position-absolute p-1 rounded hide" id="alert-filter">
