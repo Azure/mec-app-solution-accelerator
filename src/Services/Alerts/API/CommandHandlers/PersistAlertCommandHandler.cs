@@ -43,10 +43,10 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
         private IEnumerable<StepTimeAsDate> SetDurations(List<StepTime> stepTrace)
         {
             var stepTimes = new List<StepTimeAsDate>();
-            DateTime? previousEnd = null;
+            long previousEnd = 0;
             foreach(var stepTraceItem in stepTrace)
             {
-                if(previousEnd == null)
+                if(previousEnd == 0)
                 {
                     var v = new StepTimeAsDate()
                     {
@@ -56,19 +56,19 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                         StepDuration = stepTraceItem.StepEnd - stepTraceItem.StepStart
                     };
                     stepTimes.Add(v);
-                    previousEnd = v.StepStop;
+                    previousEnd = stepTraceItem.StepEnd;
                 }
                 else
                 {
                     var v = new StepTimeAsDate()
                     {
                         StepStart = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepStart),
-                        StepStop = previousEnd.Value,
+                        StepStop = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepEnd),
                         StepName = stepTraceItem.StepName,
-                        StepDuration = stepTraceItem.StepEnd - stepTraceItem.StepStart
                     };
+                    v.StepDuration = stepTraceItem.StepEnd - previousEnd;
                     stepTimes.Add(v);
-                    previousEnd = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepEnd);
+                    previousEnd = stepTraceItem.StepEnd;
                 }
             }
 
