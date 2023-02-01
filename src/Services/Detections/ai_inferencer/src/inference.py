@@ -22,10 +22,8 @@ def PublishEvent(pubsub_name: str, topic_name: str, data: json):
 # def main(model,frame):
 def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
     timestamp_init=int(time.time()*1000)
-    print(time_trace)
 
     print(source_id)
-    print(timestamp)
     # print('i')
     # "Frame": backToBytes.decode()
     backToBytes = base64.standard_b64decode(frame)
@@ -74,7 +72,6 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
         
         # data['time_trace']=time_trace
         json_str = serializer.to_json(data)
-        print(type(json_str))
 
         
                 # print(json_str)
@@ -82,8 +79,10 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
                 # bbytes = bytes_writer.getvalue()
                 # print(bbytes)
         # print(json_str)
+        # print((int(time.time()*1000)-timestamp_init)/1000)
         PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
     return
+    # return (int(time.time()*1000)-timestamp_init)/1000
     # results.print()
 
         

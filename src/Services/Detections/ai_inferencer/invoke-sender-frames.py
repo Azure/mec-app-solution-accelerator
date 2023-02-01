@@ -9,7 +9,7 @@ model = torch.hub.load("ultralytics/yolov5", "yolov5s")
 @app.method(name='frames-receiver')
 def framesreceiver(request: InvokeMethodRequest) -> InvokeMethodResponse:
     # model = torch.hub.load("ultralytics/yolov5", "yolov5s")
-    print("in")
+    print("frame received")
 
     frame = json.loads(request.text())['image']
     source_id = json.loads(request.text())['source_id']
