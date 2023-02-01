@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.MecSolutionAccelerator.Services.Alerts.Events;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Models
 {
@@ -13,5 +14,6 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Models
         public string Type { get; set; }
         public float Accuracy { get; set; }
         public Source Source { get; set; }
+        public string StepTimes { get; set; }
     }
 }

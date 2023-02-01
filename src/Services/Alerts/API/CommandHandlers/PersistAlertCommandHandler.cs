@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Commands;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.Events.Base;
+using Microsoft.MecSolutionAccelerator.Services.Alerts.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
+using Newtonsoft.Json;
+using static Google.Rpc.Context.AttributeContext.Types;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
 {
@@ -31,6 +33,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                 Id = id,
                 Type = request.Type,
                 Accuracy = request.Accuracy * 100,
+                StepTimes = JsonConvert.SerializeObject(SetDurations(request.StepTrace)),
             };
             if (entity.Source == null)
             {
@@ -38,6 +41,19 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             }
             await this._repository.Create(entity);
             return id;
+        }
+
+        private IEnumerable<StepTimeAsDate> SetDurations(List<StepTime> stepTrace)
+        {
+            var stepTimes = new List<StepTimeAsDate>();
+            stepTrace.ForEach(stepTime => stepTimes.Add(new StepTimeAsDate()
+            { 
+                StepStart = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTime.StepStart),
+                StepStop = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTime.StepEnd),
+                StepName = stepTime.StepName,
+                StepDuration = stepTime.StepEnd - stepTime.StepStart 
+            }));
+            return stepTimes;
         }
 
         private Source SetHardwareMockInformation()
