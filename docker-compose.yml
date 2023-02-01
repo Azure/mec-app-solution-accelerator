@@ -50,7 +50,11 @@ services:
       #   - 'video_path:/data/videos'
       environment:
         - TIMEOUT=15
-        - FEED=rtsp://0.tcp.ngrok.io:13571/mystream
+        # - FEED=rtsp://0.tcp.ngrok.io:13571/mystream
+        # - FEED=../Datasets/frames/avion.jpg
+        - FEED=../Datasets/frames/brindadores.jpg
+        # - FEED=../Datasets/frames/hamacas.jpg
+        # - FEED=../Datasets/frames/saltador.jpg
       depends_on:
         - aiinferencer-dapr
 
