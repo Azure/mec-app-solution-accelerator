@@ -25,7 +25,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
 
         public async Task<bool> Handle(AnalyzeObjectDetectionCommand command, CancellationToken cancellationToken)
         {
-            var stepTime = new StepTime() { StepName = "RuleEngine", StepStart = DateTime.Now };
+            var stepTime = new StepTime() { StepName = "RuleEngine", StepStart = DateTime.Now.Ticks };
 
             if(command.Classes == null || command.Classes.Count == 0)
             {
@@ -69,7 +69,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                     {
                         triggeredAlert = successfull;
 
-                        stepTime.StepStop = DateTime.Now;
+                        stepTime.StepStop = DateTime.Now.Ticks;
                         stepTrace.Add(stepTime);
                         var alert = new DetectedObjectAlert()
                         {

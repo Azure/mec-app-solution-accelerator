@@ -1,6 +1,4 @@
-﻿using Alerts.RulesEngine.Events;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
-using Newtonsoft.Json;
+﻿using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events
 {

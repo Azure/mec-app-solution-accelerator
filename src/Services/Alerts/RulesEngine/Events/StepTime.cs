@@ -3,8 +3,8 @@
     public class StepTime
     {
         public string StepName { get; set; }
-        public DateTime StepStart { get; set; }
-        public DateTime StepStop { get; set; }
+        public long StepStart { get; set; }
+        public long StepStop { get; set; }
         public long StepDuration { get; set; }
     }
 }
