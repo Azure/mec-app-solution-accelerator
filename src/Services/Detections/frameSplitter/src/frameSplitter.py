@@ -112,9 +112,9 @@ def main():
         try:
             with DaprClient() as client:
                 # Using Dapr SDK to publish a topic
-                time_trace={"startStep": str(timestamp_init), "endStep":str(int(time.time()*1000)), "stepName": "frameSplitter"}
-                req_data = {"source_id": 'video_'+str(feed_id), "timestamp":timestamp, "image": bytes_string.decode(), 'time_trace': [time_trace]}
-                print(req_data)
+                time_trace={"stepStart": timestamp_init, "stepEnd":int(time.time()*1000), "stepName": "frameSplitter"}
+                req_data = {"source_id": 'video_'+str(feed_id), "timestamp":timestamp, "image": bytes_string.decode(), 'time_trace': time_trace}
+                print(time_trace)
                 resp = client.invoke_method(
                     "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
                 )
