@@ -40,6 +40,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
 
             paintTime.StepEnd = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
             detection.TimeTrace.Add(paintTime);
+            var saveTime = new StepTimeAsDate() { StepName = "PersistData", StepStart = DateTime.Now };
 
             var alert = await _mediator.Send(new PersistAlertCommand()
             {
@@ -49,7 +50,27 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
                 Frame = nFrame,
                 Accuracy = detection.Accuracy,
                 StepTrace = detection.TimeTrace,
+
             });
+
+            alert.AlertTime = DateTime.Now;
+
+            alert.MsExecutionTime = (alert.AlertTime - alert.CaptureTime).TotalMilliseconds;
+
+            saveTime.StepStop = alert.AlertTime;
+
+            saveTime.StepDuration = (saveTime.StepStop - saveTime.StepStart).TotalMilliseconds;
+
+            var times = Newtonsoft.Json.JsonConvert.DeserializeObject<List<StepTimeAsDate>>(alert.StepTimes);
+
+            times.Add(saveTime);
+
+            alert.StepTimes = Newtonsoft.Json.JsonConvert.SerializeObject(times);
+
+            await this.alertsRepository.Delete(alert.Id);
+            await this.alertsRepository.Create(alert);
+
+            _logger.LogInformation("Stored generic alert");
         }
     }
 }
