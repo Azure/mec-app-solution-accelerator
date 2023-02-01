@@ -3,7 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Commands;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Events;
+using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
+using MongoDB.Bson.IO;
 using SolTechnology.Avro;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
 {
@@ -13,12 +16,13 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
     {
         private readonly ILogger<AlertsProcessEventController> _logger;
         private readonly IMediator _mediator;
+        private readonly IAlertsRepository alertsRepository;
 
-
-        public AlertsProcessEventController(ILogger<AlertsProcessEventController> logger, IMediator mediator)
+        public AlertsProcessEventController(ILogger<AlertsProcessEventController> logger, IMediator mediator, IAlertsRepository alertsRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            this.alertsRepository = alertsRepository ?? throw new ArgumentNullException(nameof(alertsRepository));
         }
 
         [Topic("pubsub", "newAlert")]
@@ -36,9 +40,9 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
 
             paintTime.StepEnd = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
             detection.TimeTrace.Add(paintTime);
+            var saveTime = new StepTimeAsDate() { StepName = "PersistData", StepStart = DateTime.Now };
 
-
-            await _mediator.Send(new PersistAlertCommand()
+            var alert = await _mediator.Send(new PersistAlertCommand()
             {
                 Information = detection.Information,
                 CaptureTime = detection.EveryTime,
@@ -48,6 +52,23 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
                 StepTrace = detection.TimeTrace,
 
             });
+
+            alert.AlertTime = DateTime.Now;
+
+            alert.MsExecutionTime = (alert.AlertTime - alert.CaptureTime).TotalMilliseconds;
+
+            saveTime.StepStop = alert.AlertTime;
+
+            saveTime.StepDuration = (saveTime.StepStop - saveTime.StepStart).TotalMilliseconds;
+
+            var times = Newtonsoft.Json.JsonConvert.DeserializeObject<List<StepTimeAsDate>>(alert.StepTimes);
+
+            times.Add(saveTime);
+
+            alert.StepTimes = Newtonsoft.Json.JsonConvert.SerializeObject(times);
+
+            await this.alertsRepository.Update(alert);
+
             _logger.LogInformation("Stored generic alert");
         }
     }

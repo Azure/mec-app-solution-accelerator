@@ -4,7 +4,7 @@ using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Commands
 {
-    public class PersistAlertCommand : IRequest<Guid>
+    public class PersistAlertCommand : IRequest<Alert>
     {
         public PersistAlertCommand()
         {

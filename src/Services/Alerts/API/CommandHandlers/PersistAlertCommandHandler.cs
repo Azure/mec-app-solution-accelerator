@@ -7,7 +7,7 @@ using static Google.Rpc.Context.AttributeContext.Types;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
 {
-    public class PersistAlertHandler : IRequestHandler<PersistAlertCommand, Guid>
+    public class PersistAlertHandler : IRequestHandler<PersistAlertCommand, Alert>
     {
         private readonly IAlertsRepository _repository;
 
@@ -16,20 +16,17 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task<Guid> Handle(PersistAlertCommand request, CancellationToken cancellationToken)
+        public async Task<Alert> Handle(PersistAlertCommand request, CancellationToken cancellationToken)
         {
             var id = Guid.NewGuid();
             TimeSpan time = TimeSpan.FromMilliseconds(request.CaptureTime);
             DateTime captureDate = new DateTime(1970, 1, 1) + time;
-            DateTime alertDate = DateTime.UtcNow;
 
             var entity = new Alert()
             {
                 Frame = request.Frame,
                 CaptureTime = captureDate,
-                AlertTime = alertDate,
                 Information = request.Information,
-                MsExecutionTime = (alertDate - captureDate).TotalMilliseconds,
                 Id = id,
                 Type = request.Type,
                 Accuracy = request.Accuracy * 100,
@@ -40,12 +37,41 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                 entity.Source = this.SetHardwareMockInformation();
             }
             await this._repository.Create(entity);
-            return id;
+            return entity;
         }
 
         private IEnumerable<StepTimeAsDate> SetDurations(List<StepTime> stepTrace)
         {
             var stepTimes = new List<StepTimeAsDate>();
+            DateTime? previousEnd = null;
+            foreach(var stepTraceItem in stepTrace)
+            {
+                if(previousEnd == null)
+                {
+                    var v = new StepTimeAsDate()
+                    {
+                        StepStart = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepStart),
+                        StepStop = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepEnd),
+                        StepName = stepTraceItem.StepName,
+                        StepDuration = stepTraceItem.StepEnd - stepTraceItem.StepStart
+                    };
+                    stepTimes.Add(v);
+                    previousEnd = v.StepStop;
+                }
+                else
+                {
+                    var v = new StepTimeAsDate()
+                    {
+                        StepStart = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepStart),
+                        StepStop = previousEnd.Value,
+                        StepName = stepTraceItem.StepName,
+                        StepDuration = stepTraceItem.StepEnd - stepTraceItem.StepStart
+                    };
+                    stepTimes.Add(v);
+                    previousEnd = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepEnd);
+                }
+            }
+
             stepTrace.ForEach(stepTime => stepTimes.Add(new StepTimeAsDate()
             { 
                 StepStart = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTime.StepStart),
