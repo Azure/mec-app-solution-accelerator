@@ -25,6 +25,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
         [HttpPost]
         public async Task PostAlert(byte[] alertBytes)
         {
+            var paintTime = new StepTime() { StepName = "PaintAlert" , StepStart = DateTime.UtcNow, };
             var detection = AvroConvert.Deserialize<DetectedObjectAlert>(alertBytes);
 
             var nFrame = await _mediator.Send(new PaintBoundingBoxesCommand() 
@@ -33,13 +34,19 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
                 OriginalImageBase64 = detection.Frame, 
             });
 
+            paintTime.StepStop = DateTime.UtcNow;
+            detection.TimeTrace.Add(paintTime);
+
+
             await _mediator.Send(new PersistAlertCommand()
             {
                 Information = detection.Information,
                 CaptureTime = detection.EveryTime,
                 Type = detection.Type,
                 Frame = nFrame,
-                Accuracy = detection.Accuracy
+                Accuracy = detection.Accuracy,
+                StepTrace = detection.TimeTrace,
+
             });
             _logger.LogInformation("Stored generic alert");
         }

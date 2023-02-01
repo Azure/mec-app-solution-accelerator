@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Commands;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.Events.Base;
+using Microsoft.MecSolutionAccelerator.Services.Alerts.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
@@ -31,6 +31,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                 Id = id,
                 Type = request.Type,
                 Accuracy = request.Accuracy * 100,
+                StepTimes = this.SetDurations(request.StepTrace),
             };
             if (entity.Source == null)
             {
@@ -38,6 +39,12 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             }
             await this._repository.Create(entity);
             return id;
+        }
+
+        private IEnumerable<StepTime> SetDurations(List<StepTime> stepTrace)
+        {
+            stepTrace.ForEach(stepTime => stepTime.StepDuration = (stepTime.StepStop - stepTime.StepStart).TotalMilliseconds);
+            return stepTrace;
         }
 
         private Source SetHardwareMockInformation()

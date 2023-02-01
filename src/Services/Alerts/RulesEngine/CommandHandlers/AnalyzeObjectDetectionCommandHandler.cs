@@ -5,7 +5,6 @@ using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
 using SolTechnology.Avro;
-using System.Threading.Tasks;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHandlers
 {
@@ -26,6 +25,8 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
 
         public async Task<bool> Handle(AnalyzeObjectDetectionCommand command, CancellationToken cancellationToken)
         {
+            var stepTime = new StepTime() { StepName = "RuleEngine", StepStart = DateTime.Now };
+
             if(command.Classes == null || command.Classes.Count == 0)
             {
                 throw new ArgumentException("Classes are required");
@@ -40,7 +41,9 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                         command.Classes,
                         command.EveryTime,
                         command.UrlVideoEncoded,
-                        command.Frame)
+                        command.Frame,
+                        command.TimeTrace,
+                        stepTime)
                     );
             }
             await Task.WhenAll(pendingTaks);
@@ -52,7 +55,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
             return result;
         }
 
-        private async Task<bool> ValidateAlertsPerDetection(DetectionClass requestClass, List<DetectionClass> foundClasses, long everyTime, string urlEncoded, string frame)
+        private async Task<bool> ValidateAlertsPerDetection(DetectionClass requestClass, List<DetectionClass> foundClasses, long everyTime, string urlEncoded, string frame, List<StepTime> stepTrace, StepTime stepTime)
         {
             var triggeredAlert = false;
             var exists = _alertsByDetectedClasses.TryGetValue(requestClass.EventType, out List<AlertsConfig> alertsConfig);
@@ -65,6 +68,9 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                     if (successfull)
                     {
                         triggeredAlert = successfull;
+
+                        stepTime.StepStop = DateTime.Now;
+                        stepTrace.Add(stepTime);
                         var alert = new DetectedObjectAlert()
                         {
                             Name = alertConfig.AlertName,
@@ -75,6 +81,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                             Type = alertConfig.AlertName,
                             Information = $"Generate alert {alertConfig.AlertName} detecting objects {string.Join(",", foundClasses.Select(x => x.EventType).ToArray())}",
                             Accuracy = requestClass.Confidence,
+                            TimeTrace = stepTrace,
                         };
 
                         var serialized = AvroConvert.Serialize(alert);
