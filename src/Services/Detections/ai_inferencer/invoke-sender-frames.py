@@ -14,12 +14,13 @@ def framesreceiver(request: InvokeMethodRequest) -> InvokeMethodResponse:
     frame = json.loads(request.text())['image']
     source_id = json.loads(request.text())['source_id']
     timestamp = json.loads(request.text())['timestamp']
+    time_trace = json.loads(request.text())['time_trace']
     # frame=numpy.array(image_list)
     detection_threshold=0.0
     # print(request.metadata, flush=True)
     # print(request.text(), flush=True)
     path='src/detections.avro'
-    main(source_id,timestamp,model,frame,detection_threshold,path)
+    main(source_id,timestamp,model,frame,detection_threshold,path,time_trace)
 
     return InvokeMethodResponse(b'Frame Analyzed', "text/plain; charset=UTF-8")
 

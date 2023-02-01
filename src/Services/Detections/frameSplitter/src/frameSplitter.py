@@ -61,6 +61,7 @@ class VideoCapture:
         self.cap.release()
 
 def main():
+    timestamp_init=int(time.time()*1000)
     print('main')
     timer=0
     timer= int(os.getenv('TIMEOUT'))
@@ -111,7 +112,9 @@ def main():
         try:
             with DaprClient() as client:
                 # Using Dapr SDK to publish a topic
-                req_data = {"source_id": 'video_'+str(feed_id), "timestamp":timestamp, "image": bytes_string.decode()}
+                time_trace={"startStep": str(timestamp_init), "endStep":str(int(time.time()*1000)), "stepName": "frameSplitter"}
+                req_data = {"source_id": 'video_'+str(feed_id), "timestamp":timestamp, "image": bytes_string.decode(), 'time_trace': [time_trace]}
+                print(req_data)
                 resp = client.invoke_method(
                     "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
                 )

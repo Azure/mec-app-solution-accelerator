@@ -20,7 +20,10 @@ def PublishEvent(pubsub_name: str, topic_name: str, data: json):
         print(resp)
 
 # def main(model,frame):
-def main(source_id,timestamp,model,frame,detection_threshold,path):
+def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
+    timestamp_init=int(time.time()*1000)
+    print(time_trace)
+    
     print(source_id)
     print(timestamp)
     # print('i')
@@ -65,8 +68,13 @@ def main(source_id,timestamp,model,frame,detection_threshold,path):
 
                 data["Classes"].append({"EventType": detection, "Confidence":list(detections["confidence"].values())[idx], "BoundingBoxes": BoundingBoxes})
                 # print(data)
+        time_trace.append({"startStep": str(timestamp_init), "endStep":str(int(time.time()*1000)), "stepName": "ai_inferencer"})
+        print(time_trace)
+        data['time_trace']=time_trace
         json_str = serializer.to_json(data)
+        print(type(json_str))
 
+        
                 # print(json_str)
                 # writer.write(data, encoder)
                 # bbytes = bytes_writer.getvalue()

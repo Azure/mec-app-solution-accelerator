@@ -75,6 +75,31 @@
 					]
 				}
 			}
+		},
+		{
+			"name": "time_trace",
+			"type": {
+				"type": "array",
+				"items": {
+					"name": "trace",
+					"namespace": "Microsoft.MecSolutionAccelerator.Services.Alerts.Events.Base",
+					"type": "record",
+					"fields": [
+						{
+							"name": "startStep",
+							"type": "string"
+						},
+						{
+							"name": "endStep",
+							"type": "double"
+						},
+						{
+							"name": "stepName",
+							"type": "double"
+						}
+					]
+				}
+			}
 		}
 	]
 }
