@@ -71,7 +71,7 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
                 data["Classes"].append({"EventType": detection, "Confidence":list(detections["confidence"].values())[idx], "BoundingBoxes": BoundingBoxes})
                 # print(data)
         data['time_trace'].append({"stepStart": timestamp_init, "stepEnd":int(time.time()*1000), "stepName": "ai_inferencer"})
-        print(data)
+        
         # data['time_trace']=time_trace
         json_str = serializer.to_json(data)
         print(type(json_str))
