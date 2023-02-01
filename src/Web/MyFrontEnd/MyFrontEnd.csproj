@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Dapr.AspNetCore" Version="1.9.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,7 +21,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\assets\" />
-    <Folder Include="Models\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
