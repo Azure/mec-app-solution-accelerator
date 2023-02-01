@@ -4,7 +4,6 @@
     {
         public string StepName { get; set; }
         public long StepStart { get; set; }
-        public long StepStop { get; set; }
-        public long StepDuration { get; set; }
+        public long StepEnd { get; set; }
     }
 }

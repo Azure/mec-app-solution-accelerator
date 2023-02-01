@@ -49,9 +49,9 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             stepTrace.ForEach(stepTime => stepTimes.Add(new StepTimeAsDate()
             { 
                 StepStart = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTime.StepStart),
-                StepStop = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTime.StepStop),
+                StepStop = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTime.StepEnd),
                 StepName = stepTime.StepName,
-                StepDuration = stepTime.StepStop - stepTime.StepStart 
+                StepDuration = stepTime.StepEnd - stepTime.StepStart 
             }));
             return stepTimes;
         }
