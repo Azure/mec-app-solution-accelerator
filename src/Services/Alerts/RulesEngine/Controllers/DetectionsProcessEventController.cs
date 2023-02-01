@@ -37,6 +37,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventCont
                 DetectionType = detection.Type,
                 UrlVideoEncoded = detection.UrlVideoEncoded,
                 Classes = detection.Classes,
+                TimeTrace = detection.time_trace,
             };
 
             return await _mediator.Send(command);
