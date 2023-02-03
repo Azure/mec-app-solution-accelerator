@@ -20,7 +20,7 @@
     <div id="content" class="d-flex flex-column">
         <h1 class="fw-semibold" id="page-title">Alerts Dashboard</h1>
         <div class="d-flex flex-row" id="data">
-            <div id="left" class="d-flex flex-column overflow-auto">
+            <div id="left" class="d-flex flex-column">
                 <partial name="Alert" />
             </div>
             <div id="right" class="d-flex flex-column justify-content-around align-items-start mx-5">
@@ -79,7 +79,7 @@
                 if (rows[i].id == localStorage.getItem("selectedId")) {
                     selectAlert(localStorage.getItem("selectedInputs"), localStorage.getItem("selectedId"), localStorage.getItem("selectedType"),
                         localStorage.getItem("selectedLat"), localStorage.getItem("selectedLon"), localStorage.getItem("selectedCaptureTime"), localStorage.getItem("selectedAlertTime"), localStorage.getItem("selectedAccuracy"),
-                        localStorage.getItem("selectedInfo"), localStorage.getItem("selectedFrame"), localStorage.getItem("selectedMsTime"));
+                        localStorage.getItem("selectedInfo"), localStorage.getItem("selectedFrame"), Math.round(localStorage.getItem("selectedMsTime")));
                 }
             }
         }
@@ -141,7 +141,7 @@
 &emsp; – Position: (${lat},${lon})<br>
 &emsp; - Capture Day/Time: ${captureTime}<br>
 &emsp; - Alert Day/Time: ${alertTime}<br>
-&emsp; - Execution Time: ${msTime} <br>
+&emsp; - Execution Time: ${Math.round(msTime)} <br>
 &emsp; - Detection Confidence: ${accuracy} %<br>
 ${info}
                         </pre>
@@ -157,7 +157,7 @@ ${info}
 &emsp; – Position: (${lat},${lon})<br>
 &emsp; - Capture Day/Time: ${captureTime}<br>
 &emsp; - Alert Day/Time: ${alertTime}<br>
-&emsp; - Execution Time: ${msTime} <br>
+&emsp; - Execution Time: ${Math.round(msTime)} <br>
 &emsp; - Detection Confidence: ${accuracy} %<br>
 ${info}
                     </pre>
