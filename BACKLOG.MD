@@ -16,7 +16,7 @@
 
 - **Advanced Versioning of Microservices (semantic)**: Implement a more advanced versioning system based on aspnet-api-versioning or comparable system: https://github.com/Microsoft/aspnet-api-versioning
 - **Migrate K8s deployment YAML to HELM charts**: Related to Open Application Model [OAM](https://oam.dev/) which uses HELM.
-- **Refactor to comply with Open Application Model [OAM](https://oam.dev/)** for a app definition decoupled from app deployment on multiple supported environments.
+- **Refactor to comply with Open Application Model [OAM](https://oam.dev/)** to have the app definition decoupled from app deployment on multiple supported environments.
   -   https://oam.dev/
   -   https://github.com/oam-dev
   -   https://cloudblogs.microsoft.com/opensource/2019/10/16/announcing-open-application-model/
