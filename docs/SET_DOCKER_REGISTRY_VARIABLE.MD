@@ -41,5 +41,9 @@ Now, when using `docker compose build` to build your Docker images, they will be
 
 ![image](https://user-images.githubusercontent.com/1712635/218833081-0f5708ac-4391-468c-a37b-cbad5f95b535.png)
 
+Then, you'd be ready to upload/push your Docker images to Docker hub with `docker push`, such as:
+
+`docker push mecsolutionaccelerator/alertshandler`
+
 
 
