@@ -14,6 +14,28 @@ For instance, since we want this solution to have all the Docker images uploaded
 
 ![image](https://user-images.githubusercontent.com/1712635/218830882-29ece9ca-6fb7-4212-b5ca-06227f81fc60.png)
 
-
 If you'd like to use your own repository/user name (namespace) in Docker Hub or any Docker Registry, you can initialize the 'DOCKER_REGISTRY' environment variable with the name you prefer, such as "mydockeruser/".
+
+# How to set the DOCKER_REGISTRY environment variable
+
+You set this environment variable like you do with any other OS environment vairable.
+For instance, in Windows, you can do it from `System-->About-->Advanced-->Environment Variables` as shown in the following screenshot:
+
+![image](https://user-images.githubusercontent.com/1712635/218831802-a1a3a522-ea43-4294-aa8a-99f078859d18.png)
+
+After that, from a CMD console or PowerShell yu should be able to check that it's correctly set up:
+
+**From CMD console:**
+Type `echo %DOCKER_REGISTRY%`
+![image](https://user-images.githubusercontent.com/1712635/218832133-195d5aa4-5c59-49c3-b3ed-d8e73067ae7d.png)
+
+**From PowerShell console:**
+Type `Get-ChildItem -Path Env:\DOCKER_REGISTRY`
+![image](https://user-images.githubusercontent.com/1712635/218832228-47e55c9d-c581-4d5a-8205-b247ebd857ff.png)
+
+Now, when using `docker compose build` to build your Doccker images, they will be using the prefix specified in that environment variable, as you can see in this screenshot by running `docker images` after building the images:
+
+![image](https://user-images.githubusercontent.com/1712635/218833081-0f5708ac-4391-468c-a37b-cbad5f95b535.png)
+
+
 
