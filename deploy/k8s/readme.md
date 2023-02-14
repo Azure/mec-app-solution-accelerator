@@ -143,10 +143,16 @@ Note that if you were able to run the application on plain Docker, you should ha
     ```powershell
     /> kubectl proxy
     ```
+    
+    ![image](https://user-images.githubusercontent.com/1712635/218886875-0f4f1c1f-1791-4bdb-93e0-cc3ab437750a.png)
 
     Kubectl will make Dashboard available at  
 http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
 
+![image](https://user-images.githubusercontent.com/1712635/218886986-d838bc24-b103-437c-8f60-ebe5c2cc1095.png)
+
+However, at this point you need to provide a security token to athenticate and enter the dashboard.
+Let's do that in the following steps.
 
 ### Configure Bearer Tokens from Kuberentes to access the Dashboard
 
