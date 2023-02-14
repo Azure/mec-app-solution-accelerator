@@ -19,7 +19,7 @@ If you'd like to use your own repository/user name (namespace) in Docker Hub or 
 # How to set the DOCKER_REGISTRY environment variable
 
 You set this environment variable like you do with any other OS environment vairable.
-For instance, in Windows, you can do it from `System-->About-->Advanced-->Environment Variables` as shown in the following screenshot:
+For instance, in Windows, you can do it from `System --> About --> Advanced System Settings --> Environment Variables` as shown in the following screenshot:
 
 ![image](https://user-images.githubusercontent.com/1712635/218831802-a1a3a522-ea43-4294-aa8a-99f078859d18.png)
 
