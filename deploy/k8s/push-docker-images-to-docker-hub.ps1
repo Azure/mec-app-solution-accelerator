@@ -1,0 +1,5 @@
+docker push mecsolutionaccelerator/alerts-ui:latest
+docker push mecsolutionaccelerator/framesplitter:latest
+docker push mecsolutionaccelerator/aiinferencer:latest
+docker push mecsolutionaccelerator/alertshandler:latest
+docker push mecsolutionaccelerator/rulesengine:latest
