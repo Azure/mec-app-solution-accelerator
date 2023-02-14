@@ -83,17 +83,29 @@ The Kubernetes server runs locally within your Docker instance, is not configura
 
 Note that if you were able to run the application on plain Docker, you should have installed DAPR already, but it needs to be initialized in Kuberentes, now.
 
-4. Initialize DAPR by running:
+4. Initialize DAPR in the Kubernetes cluster by running this command:
+5. 
     ```powershell
     dapr init -k
     ```
+    
+    ![image](https://user-images.githubusercontent.com/1712635/218881163-9ba81fa3-f72c-4c12-bbf6-8ec25f2dba55.png)
 
     You can test DAPR status with:
     ```powershell
     dapr status -k
     ```
     
+    If DAPR is initialized, you should get this list of Dapr pods running:
+    
+    ![image](https://user-images.githubusercontent.com/1712635/218881242-aa2c74ef-14a4-4a79-a149-3bbd12f4fa3d.png)
 
+    
+    Otherwise, if it's not initialized it'd be like this:
+    
+    ![image](https://user-images.githubusercontent.com/1712635/218880976-94b42767-40e3-4d9c-a640-2dfa029cb510.png)
+
+    
 ### Deploy the application's services to Kubernetes
 
 5. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
