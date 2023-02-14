@@ -121,6 +121,8 @@ Note that if you were able to run the application on plain Docker, you should ha
     ```
 
     All services will be created in the specified Kubernetes namespace for this application.
+    
+    ![image](https://user-images.githubusercontent.com/1712635/218882611-43e8d207-af79-4077-8c1b-fd1cbee73bb4.png)
 
     When you are finsihed trying, you can always uninstall the application pods and all related resources from your Kuberentes by running this command:
 
