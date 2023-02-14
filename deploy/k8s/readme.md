@@ -155,6 +155,9 @@ http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kube
 
     kubectl apply -f adminuser-cluster-role-binding.yaml
     ```
+    
+    ![image](https://user-images.githubusercontent.com/1712635/218881848-92de552c-a0f3-4fa8-ab87-2ca2512956f2.png)
+
 
 ### Generate and copy the token to provide to Kubernetes Dashboard
 
@@ -163,15 +166,18 @@ http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kube
     ```powershell
     kubectl -n kubernetes-dashboard create token admin-user --duration=48h --output yaml
     ```
-
-    Copy the token to the clipboard.
     
+    Select and copy the token to the clipboard.
+    
+    ![image](https://user-images.githubusercontent.com/1712635/218882035-61318473-b7e1-4fe5-b253-69479e8a20b0.png)
 
 ### Provide the token to Kubernetes dashboard
 
-11. Open 'http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login' in your browser and paste the token you copied previously.
+11. Open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login in your browser and paste the token you copied previously.
 
-    In Kubernetes dashboard you should be able to explore the application's pods, services, etc.
+![image](https://user-images.githubusercontent.com/1712635/218882193-938f14f0-06ca-4bba-979f-da9266706f8e.png)
+
+    In the Kubernetes dashboard you should be able to explore the application's pods, services, etc.
 
 ### Access the application's UI to see Alerts originated from AI model detections
 
