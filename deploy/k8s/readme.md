@@ -1,14 +1,18 @@
 # Deployment to Kubernetes from Docker Desktop
 
-## Instructions for building the Docker Images to deploy to Kubernetes
+## (Optional) Instructions for building your own Docker Images to deploy to Kubernetes
 
-### Set environment variable to the Docker Hub "user/namespace" so they will be registered right
+You can deploy to Kubernetes and test the images we have already uploaded into Docker Hub, so creating the images and uploading to Docker Hub is optional, initially.
+
+However, if you make changes or want to use your own Docker Images for any reason, you'd need to create them and upload the images frist to Docker Hub.
+
+### (Optional) Set environment variable to the Docker Hub "user/namespace" so they will be registered right
 
 Before creating the Docker images it's important to setup the DOCKER_REGISTRY environment variable in your dev system (Windows / Linux) so the images will be created with the right prefix (i.e. Docker hub user). This is important in order to be able to upload the Docker images into Docker Hub or any other Docker Registry from where you will deploy the images to Kuberentes.
 
 Please, read here why and [How to setup the DOCKER_REGISTRY environment variable](./docs/SET_DOCKER_REGISTRY_VARIABLE.MD).
 
-### Build Docker Images locally
+### (Optional) Build Docker Images locally
 
 In order to make sure you have built the Docker Images with tha latest code, build the Docker images with `docker compose build` from the root folder of this solution, such as:
 
@@ -20,7 +24,7 @@ docker compose build
 
 You could also create the Docker Images with a Script and a line using `docker build` for each Image. But using `docker compose build` is more consistent so you make sure you create and use the same images with the same image's name in Docker (dev time) and later in Kubernetes ("production" time). Note that using a different script with multiple `docker build` lines you could specify different image's names.
 
-### Push the created Docker Images to Docker Hub
+### (Optional) Push the created Docker Images to Docker Hub
 
 You can directly run this PowerShell script from the `deploy\k8s` folder:
 
@@ -38,10 +42,14 @@ docker push mecsolutionaccelerator/alertshandler:latest
 docker push mecsolutionaccelerator/rulesengine:latest
 ```
 
+So the Docker images are now uploaded into Docker Hub:
+![image](https://user-images.githubusercontent.com/1712635/218880119-10fd6062-85d7-428f-8122-7957605ae725.png)
+
+
 **--> WIP: The names of those images need to be consistent to the images in docker-compose.yml ----**
 
 
-## Deploy to Kubernetes from 'Docker Desktop'
+## Deploy the Application to Kubernetes in 'Docker Desktop'
 
 Make sure you have installed ["Docker Desktop"](https://docs.docker.com/desktop/install/windows-install/).
 
