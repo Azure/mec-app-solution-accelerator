@@ -177,7 +177,7 @@ http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kube
 
 ![image](https://user-images.githubusercontent.com/1712635/218882193-938f14f0-06ca-4bba-979f-da9266706f8e.png)
 
-    In the Kubernetes dashboard you should be able to explore the application's pods, services, etc.
+In the Kubernetes dashboard you should be able to explore the application's pods, services, etc.
 
 ### Access the application's UI to see Alerts originated from AI model detections
 
