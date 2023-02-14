@@ -181,9 +181,18 @@ http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kube
 
 In the Kubernetes dashboard you should be able to explore the application's pods, services, etc.
 
+![image](https://user-images.githubusercontent.com/1712635/218882870-46e5782b-658d-4146-b613-7f6d99906d6c.png)
+
+
 ### Access the application's UI to see Alerts originated from AI model detections
 
-12. To access the front-end, go to 'http://localhost/' on your borwser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url near the UI service.
+12. To access the front-end, go to 'http://localhost/' on your borwser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the UI service row.
+
+![image](https://user-images.githubusercontent.com/1712635/218883329-5641f19c-f3d9-402f-a75e-2fe44aa6c9eb.png)
+
+Either way, you should be able to run the application's UI and check out the Alerts originated from the AI models:
+
+![image](https://user-images.githubusercontent.com/1712635/218885207-5d720a2d-f5a6-4e29-bfd1-bad384803805.png)
 
 ### Remove the application from Kubernetes 
 
