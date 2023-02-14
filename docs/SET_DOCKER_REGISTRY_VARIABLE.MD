@@ -37,7 +37,7 @@ Type `Get-ChildItem -Path Env:\DOCKER_REGISTRY`
 
 ![image](https://user-images.githubusercontent.com/1712635/218832228-47e55c9d-c581-4d5a-8205-b247ebd857ff.png)
 
-Now, when using `docker compose build` to build your Doccker images, they will be using the prefix specified in that environment variable, as you can see in this screenshot by running `docker images` after building the images:
+Now, when using `docker compose build` to build your Docker images, they will be using the prefix specified in that environment variable, as you can see in this screenshot by running `docker images` after building the images:
 
 ![image](https://user-images.githubusercontent.com/1712635/218833081-0f5708ac-4391-468c-a37b-cbad5f95b535.png)
 
