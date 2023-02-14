@@ -26,11 +26,15 @@ For instance, in Windows, you can do it from `System --> About --> Advanced Syst
 After that, from a CMD console or PowerShell yu should be able to check that it's correctly set up:
 
 **From CMD console:**
+
 Type `echo %DOCKER_REGISTRY%`
+
 ![image](https://user-images.githubusercontent.com/1712635/218832133-195d5aa4-5c59-49c3-b3ed-d8e73067ae7d.png)
 
 **From PowerShell console:**
+
 Type `Get-ChildItem -Path Env:\DOCKER_REGISTRY`
+
 ![image](https://user-images.githubusercontent.com/1712635/218832228-47e55c9d-c581-4d5a-8205-b247ebd857ff.png)
 
 Now, when using `docker compose build` to build your Doccker images, they will be using the prefix specified in that environment variable, as you can see in this screenshot by running `docker images` after building the images:
