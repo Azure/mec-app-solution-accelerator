@@ -46,8 +46,6 @@ services:
       build:
         context: src/Services/Detections/frameSplitter
         dockerfile: Dockerfile
-      # volumes:
-      #   - 'video_path:/data/videos'
       depends_on:
         - aiinferencer-dapr
 

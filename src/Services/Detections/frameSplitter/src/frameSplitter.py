@@ -61,6 +61,7 @@ class VideoCapture:
         self.cap.release()
 
 def main():
+    
     print('main')
     timer=0
     timer= int(os.getenv('TIMEOUT'))
@@ -94,6 +95,7 @@ def main():
     while True:
         # Capture frame-by-frame
         ret,frame = cap.read()
+        timestamp_init=int(time.time()*1000)
         print('feed url: ' +feed_URL)
         
         while not ret:
@@ -111,11 +113,13 @@ def main():
         try:
             with DaprClient() as client:
                 # Using Dapr SDK to publish a topic
-                req_data = {"source_id": 'video_'+str(feed_id), "timestamp":timestamp, "image": bytes_string.decode()}
+                time_trace={"stepStart": timestamp_init, "stepEnd":int(time.time()*1000), "stepName": "frameSplitter"}
+                
+                req_data = {"source_id": 'video_'+str(feed_id), "timestamp":timestamp, "image": bytes_string.decode(), 'time_trace': time_trace}
                 resp = client.invoke_method(
                     "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
                 )
-                PublishEvent(pubsub_name="pubsub", topic_name="newFrame", data=json.dumps({'frame_sent':True}))
+                # PublishEvent(pubsub_name="pubsub", topic_name="newFrame", data=json.dumps({'frame_sent':True}))
                 print('Waiting for response')
                 # Print the response
                 print(resp.content_type, flush=True)

@@ -3,4 +3,11 @@ kind: ConfigMap
 metadata:
   name: my-config
 data:
-  feeds: "[{'id':'1', 'url':'rtsp://0.tcp.ngrok.io:13571/mystream'},{'id':'2', 'url':'rtsp://0.tcp.ngrok.io:13571/mystream'}]"
+  # feeds: "[{'id':'1', 'url':'rtsp://0.tcp.ngrok.io:13571/mystream'},{'id':'2', 'url':'rtsp://0.tcp.ngrok.io:13571/mystream'}]"
+  feeds: "[{'id':'1', 'url':'../Datasets/frames/brindadores.jpg'},{'id':'2', 'url':'../Datasets/frames/avion.jpg'}]"
+
+
+# - FEED=../Datasets/frames/avion.jpg
+# - FEED=../Datasets/frames/brindadores.jpg
+# - FEED=../Datasets/frames/hamacas.jpg
+# - FEED=../Datasets/frames/saltador.jpg
