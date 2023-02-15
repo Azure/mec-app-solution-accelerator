@@ -19,7 +19,7 @@ services:
     image: "daprio/daprd:latest"
     command: [ "./daprd", "-app-id", "invoke-sender-frames", "--app-protocol", "grpc", "--app-port", "2060","--dapr-http-port", "3600", "--components-path", "./components"]
     volumes:
-    - "./components/:/components"
+    - "./dapr/components/:/components"
     depends_on:
       - aiinferencer
     network_mode: "service:aiinferencer"
@@ -36,7 +36,7 @@ services:
     image: "daprio/daprd:latest"
     command: [ "./daprd", "-app-id", "rulesengine", "-app-port", "80", "-components-path", "/components"]
     volumes:
-    - "./components/:/components"
+    - "./dapr/components/:/components"
     depends_on:
     - rulesengine
     network_mode: "service:rulesengine"
@@ -58,7 +58,7 @@ services:
     image: "daprio/daprd:latest"
     command: [ "./daprd", "-app-id", "Framesplitter","--app-protocol", "grpc","--dapr-http-port", "3500", "-components-path", "/components" ]
     volumes:
-    - "./components/:/components"
+    - "./dapr/components/:/components"
     depends_on:
       - framesplitter
     network_mode: "service:framesplitter"
@@ -75,7 +75,7 @@ services:
     image: "daprio/daprd:latest"
     command: [ "./daprd", "-app-id", "alerts-api", "-app-port", "80", "-components-path", "/components"]
     volumes:
-    - "./components/:/components"
+    - "./dapr/components/:/components"
     depends_on:
     - alerts-api
     network_mode: "service:alerts-api"
