@@ -28,6 +28,7 @@
 - **Shared folder in Kubernetes for images/video files:** Instead of embeded/serialized images in JSON and MongoDB database.
 - **NGINX ingress in Kubernetes** (if needed)
 - **Support of shared GPU across multiple pods in Kubernetes:** When supported by K8s, needed changes in implementation for inferencing the AI models with GPU.
+- **ACR & MAR vs. Docker Hub:** Evaluate if we'll use ACR or MAR as Docker Registry instead of Docker Hub. TBD. 
 
 ### Alerts Rule Engine
 - **Comprehensive Alerts Rule Engine based on industry/OSS solutions such as Kuiper, or Neuron**
