@@ -95,22 +95,8 @@ services:
       - myfrontend
     network_mode: "service:myfrontend"
 
-  #db:
-  #  container_name: sql_server_db
-  #  hostname: sqlserver
-  #  build:
-  #    context: .
-  #    dockerfile: infraestructure/mssqlserver/Dockerfile
-  #  # volumes:
-  #  #   - mssqlserver:/var/opt/mssql
-  #  ports:
-  #      - '1433:1433'
-
   mosquitto:
     hostname: mosquitto
     container_name: mosquitto_container
     image: eclipse-mosquitto:1.6.10
  
-  redis:
-    image: "redis:alpine"
-    hostname: statestorage

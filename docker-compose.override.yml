@@ -49,6 +49,3 @@ services:
     ports:
       - '1883:1883'
  
-  redis:
-    ports:
-      - "6379:6379"
