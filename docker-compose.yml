@@ -78,7 +78,7 @@ services:
     network_mode: "service:alerts-api"
   
   myfrontend:
-    image: ${DOCKER_REGISTRY-}myfrontend
+    image: ${DOCKER_REGISTRY-}alerts-ui
     build:
       context: .
       dockerfile: src/Web/myfrontend/Dockerfile

@@ -38,7 +38,7 @@ Internally, that script is pushing the multiple Docker Images into Docker Hub, l
 docker push mecsolutionaccelerator/alerts-ui:latest
 docker push mecsolutionaccelerator/framesplitter:latest
 docker push mecsolutionaccelerator/aiinferencer:latest
-docker push mecsolutionaccelerator/alertshandler:latest
+docker push mecsolutionaccelerator/alerts-api:latest
 docker push mecsolutionaccelerator/rulesengine:latest
 ```
 

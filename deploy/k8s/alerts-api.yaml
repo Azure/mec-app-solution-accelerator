@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: alertshandler
+  name: alerts-api
   # namespace: mec-core
   labels:
-    app: alertshandler
+    app: alerts-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: alertshandler
+      app: alerts-api
   template:
     metadata:
       labels:
-        app: alertshandler
+        app: alerts-api
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: "alerts-api"
@@ -21,8 +21,8 @@ spec:
         dapr.io/config: "dapr-config"
     spec:
       containers:
-      - name: alertshandler
-        image: mecsolutionaccelerator/alertshandler:latest
+      - name: alerts-api
+        image: mecsolutionaccelerator/alerts-api:latest
         ports:
         - containerPort: 80
         imagePullPolicy: Always
@@ -36,8 +36,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: alertshandler
-  name: alertshandler
+    app: alerts-api
+  name: alerts-api
 spec:
   type: NodePort
   ports:
@@ -46,4 +46,4 @@ spec:
     targetPort: 80
     nodePort: 30004
   selector:
-    app: alertshandler
+    app: alerts-api
