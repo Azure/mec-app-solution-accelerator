@@ -31,7 +31,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             var thirdLane = new PointF[2];
             var fourthLane = new PointF[2];
             var imgResult = string.Empty;
-            var color = Brushes.Solid(Color.Black);
+            var color = Brushes.Solid(Color.Yellow);
 
             using (var image = Image.Load(stream))
             {
