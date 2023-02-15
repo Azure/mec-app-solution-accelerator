@@ -62,3 +62,7 @@
 
 ### Security
 - **Secrets in Azure KeyVault**
+
+### CI/CD
+- **Deployment/CI with GitOps and Flux into AKS EE Arc enabled:** Deploy applications to your Arc-enabled AKS Edge Essentials cluster. Example: https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-use-gitops
+
