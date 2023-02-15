@@ -8,7 +8,7 @@ However, if you make changes or want to use your own Docker Images for any reaso
 
 ### (Optional) Set environment variable to the Docker Hub "user/namespace" so they will be registered right
 
-Before creating the Docker images it's important to setup the DOCKER_REGISTRY environment variable in your dev system (Windows / Linux) so the images will be created with the right prefix (i.e. Docker hub user). This is important in order to be able to upload the Docker images into Docker Hub or any other Docker Registry from where you will deploy the images to Kuberentes.
+Before creating the Docker images it's important to setup the DOCKER_REGISTRY environment variable in your dev system (Windows / Linux) so the images will be created with the right prefix (i.e. Docker hub user). This is important in order to be able to upload the Docker images into Docker Hub or any other Docker Registry from where you will deploy the images to Kubernetes.
 
 Please, read here why and [How to setup the DOCKER_REGISTRY environment variable](./docs/SET_DOCKER_REGISTRY_VARIABLE.MD).
 
