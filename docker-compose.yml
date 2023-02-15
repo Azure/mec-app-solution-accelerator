@@ -48,9 +48,6 @@ services:
         dockerfile: Dockerfile
       # volumes:
       #   - 'video_path:/data/videos'
-      environment:
-        - TIMEOUT=15
-        - FEED=rtsp://0.tcp.ngrok.io:13571/mystream
       depends_on:
         - aiinferencer-dapr
 
