@@ -1,6 +1,6 @@
 # MEC Application Solution Accelerator (Example Reference Application for Edge/MEC)
 
-This repo provides a reference MEC (Multi-Access Edge Compute) application example, powered by Microsoft and based on an event-driven microservices architecture, using Docker containers running at the Edge. 
+This repo provides a reference MEC (Multi-Access Edge Compute) application example (curent state is *Alpha*), based on an event-driven microservices architecture, using Docker containers running at the Edge. 
 
 ## What is a MEC Application?
 
@@ -38,6 +38,7 @@ The initial use case is about video analytics, but video analytics / computer vi
 
 > **DISCLAIMER:** This is an example application providing patterns, approaches and best practices targeting applications to be deployed at MEC/EDGE. 
 > However, this is still an example application with no "production-ready" code but just for exploring architecture and implementation approaches.
+> This application's code will be evolving, new features will be added and growing in the spirit of improving its quality thanks to open source contributions (PRs) from you.
 
 ## Supported deployments for this example application:
 
