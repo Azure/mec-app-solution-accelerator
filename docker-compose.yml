@@ -45,7 +45,7 @@ services:
     network_mode: "service:framesplitter"
 
   alerts-api: 
-    image: ${DOCKER_REGISTRY-}alertsapi
+    image: ${DOCKER_REGISTRY-}alerts-api
     build:
       context: .
       dockerfile: src/Services/Alerts/api/Dockerfile
