@@ -5,7 +5,6 @@ using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
 using SolTechnology.Avro;
-using System.Threading.Tasks;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHandlers
 {
@@ -26,22 +25,25 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
 
         public async Task<bool> Handle(AnalyzeObjectDetectionCommand command, CancellationToken cancellationToken)
         {
+            var stepTime = new StepTime() { StepName = "RuleEngine", StepStart = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds };
+
             if(command.Classes == null || command.Classes.Count == 0)
             {
                 throw new ArgumentException("Classes are required");
             }
 
-            var foundClasses = command.Classes.Select(x => x.EventType).ToList();
             var pendingTaks = new List<Task<bool>>();
             foreach(var @class in command.Classes)
             {
                 pendingTaks.Add(
                     this.ValidateAlertsPerDetection( //Single class can generate multiple alerts
-                        @class, 
-                        foundClasses,
+                        @class,
+                        command.Classes,
                         command.EveryTime,
                         command.UrlVideoEncoded,
-                        command.Frame)
+                        command.Frame,
+                        command.TimeTrace,
+                        stepTime)
                     );
             }
             await Task.WhenAll(pendingTaks);
@@ -53,7 +55,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
             return result;
         }
 
-        private async Task<bool> ValidateAlertsPerDetection(DetectionClass requestClass, List<string> foundClasses, long everyTime, string urlEncoded, string frame)
+        private async Task<bool> ValidateAlertsPerDetection(DetectionClass requestClass, List<DetectionClass> foundClasses, long everyTime, string urlEncoded, string frame, List<StepTime> stepTrace, StepTime stepTime)
         {
             var triggeredAlert = false;
             var exists = _alertsByDetectedClasses.TryGetValue(requestClass.EventType, out List<AlertsConfig> alertsConfig);
@@ -61,20 +63,25 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
             {
                 foreach (var alertConfig in alertsConfig)
                 {
-                    var successfull = await ValidateAllRulesPerAlert(alertConfig, requestClass, foundClasses); //Validate all the required rules from the config, just and.
+                    var matchingClassesBoxes = new List<BoundingBox>();
+                    var successfull = await ValidateAllRulesPerAlert(alertConfig, requestClass, foundClasses, matchingClassesBoxes); //Validate all the required rules from the config, just and.
                     if (successfull)
                     {
                         triggeredAlert = successfull;
+
+                        stepTime.StepEnd = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
+                        stepTrace.Add(stepTime);
                         var alert = new DetectedObjectAlert()
                         {
                             Name = alertConfig.AlertName,
                             EveryTime = everyTime,
                             UrlVideoEncoded = urlEncoded,
                             Frame = frame,
-                            BoundingBoxes = requestClass.BoundingBoxes,
+                            BoundingBoxes = matchingClassesBoxes,
                             Type = alertConfig.AlertName,
-                            Information = $"Generate alert {alertConfig.AlertName} detecting objects {string.Join(",", foundClasses.ToArray())}",
+                            Information = $"Generate alert {alertConfig.AlertName} detecting objects {string.Join(" ,", foundClasses.Select(x => x.EventType).ToArray())}",
                             Accuracy = requestClass.Confidence,
+                            TimeTrace = stepTrace,
                         };
 
                         var serialized = AvroConvert.Serialize(alert);
@@ -85,7 +92,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
             return triggeredAlert;
         }
 
-        private async Task<bool> ValidateAllRulesPerAlert(AlertsConfig config, DetectionClass requestClass, List<string> foundClasses)
+        private async Task<bool> ValidateAllRulesPerAlert(AlertsConfig config, DetectionClass requestClass, List<DetectionClass> foundClasses, List<BoundingBox> matchingClassesBoxes)
         {
             foreach (var ruleConfig in config.RulesConfig)
             {
@@ -95,6 +102,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                 command.FoundClasses = foundClasses;
                 command.RequestClass = requestClass;
                 command.RuleConfig = ruleConfig;
+                command.MatchingClassesBoxes = matchingClassesBoxes;
                 var result = await _mediator.Send(command);
                 if (!(bool)result)
                 {

@@ -19,10 +19,11 @@ spec:
         # dapr.io/app-port: "50052"
         dapr.io/log-level: "debug"
         dapr.io/enable-api-logging: "true"
+        dapr.io/config: "dapr-config"
     spec:
       containers:
       - name: frame-splitter
-        image: javipercor/framesplitter:demo4
+        image: mecsolutionaccelerator/framesplitter:latest
         ports:
         - containerPort: 50052
         imagePullPolicy: Always

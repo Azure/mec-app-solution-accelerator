@@ -7,7 +7,16 @@ namespace RulesEngine.CommandHandlers.RulesCommandHandler
     {
         public async Task<bool> Handle(ValidateRuleMinimumNumberOfObjectsDetectedRequiredCommand request, CancellationToken cancellationToken)
         {
-            return request.FoundClasses.Where(foundClass => foundClass == request.RuleConfig.DetectedObject).Count() >= request.RuleConfig.NumberfObjects;
+            var count = 0;
+            foreach(var f in request.FoundClasses)
+            {
+                if(f.EventType == request.RuleConfig.DetectedObject)
+                {
+                    request.MatchingClassesBoxes.AddRange(f.BoundingBoxes);
+                    count++;
+                }
+            }
+            return count >= request.RuleConfig.NumberfObjects;
         }
     }
 }

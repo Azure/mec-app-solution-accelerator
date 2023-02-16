@@ -130,19 +130,24 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
             var handler = new ValidateRuleMinimumNumberOfObjectsDetectedRequiredCommandHandler();
             var command = new ValidateRuleMinimumNumberOfObjectsDetectedRequiredCommand()
             {
-                FoundClasses = new List<string> {"person", "person", "person" },
+                FoundClasses = new List<DetectionClass> { 
+                    new DetectionClass() { EventType = "person", BoundingBoxes = new List<BoundingBox>(), Confidence = 90, }, 
+                    new DetectionClass() { EventType = "person", BoundingBoxes = new List<BoundingBox>(), Confidence = 90, }, 
+                    new DetectionClass() { EventType = "person", BoundingBoxes = new List<BoundingBox>(), Confidence = 90, } 
+                },
                 RuleConfig = new RulesConfig()
                 {
                     NumberfObjects = 3,
                     DetectedObject = "person",
-                }
+                },
+                MatchingClassesBoxes = new List<BoundingBox>(),
             };
 
             //act
             var task = await handler.Handle(command, CancellationToken.None);
 
             //assert
-             Assert.True(task);
+            Assert.True(task);
         }
 
         [Fact]
@@ -152,12 +157,15 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
             var handler = new ValidateRuleMinimumNumberOfObjectsDetectedRequiredCommandHandler();
             var command = new ValidateRuleMinimumNumberOfObjectsDetectedRequiredCommand()
             {
-                FoundClasses = new List<string> { "person", "person"},
+                FoundClasses = new List<DetectionClass> { 
+                    new DetectionClass() { EventType = "person", BoundingBoxes = new List<BoundingBox>(), Confidence = 90, }, 
+                    new DetectionClass() { EventType = "person", BoundingBoxes = new List<BoundingBox>(), Confidence = 90, } },
                 RuleConfig = new RulesConfig()
                 {
                     NumberfObjects = 3,
                     DetectedObject = "person",
-                }
+                },
+                MatchingClassesBoxes = new List<BoundingBox>(),
             };
 
             //act
@@ -178,12 +186,14 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
                 { 
                     EventType = "person", 
                     Confidence = 70, 
+                    BoundingBoxes = new List<BoundingBox>(),
                 },
                 RuleConfig = new RulesConfig()
                 {
                     DetectedObject = "person",
                     MinimumThreshold = 70,
-                }
+                },
+                MatchingClassesBoxes = new List<BoundingBox>(),
             };
 
             //act
@@ -203,12 +213,15 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
                 RequestClass = new DetectionClass()
                 {
                     EventType = "person",
+                    Confidence = 0.65F,
+                    BoundingBoxes = new List<BoundingBox>(),
                 },
                 RuleConfig = new RulesConfig()
                 {
                     DetectedObject = "person",
                     MinimumThreshold = 70,
-                }
+                },
+                MatchingClassesBoxes = new List<BoundingBox>(),
             };
 
             //act
@@ -225,7 +238,10 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
             var handler = new ValidateRuleMultipleClassesRequiredCommandHandler();
             var command = new ValidateRuleMultipleClassesRequiredCommand()
             {
-                FoundClasses = new List<string> { "person", "car" },
+                FoundClasses = new List<DetectionClass> { 
+                    new DetectionClass() { EventType = "person", BoundingBoxes  = new List<BoundingBox>(), Confidence = 90, } , 
+                    new DetectionClass() { EventType = "car", BoundingBoxes = new List<BoundingBox>(), Confidence = 90, } },
+                MatchingClassesBoxes = new List<BoundingBox>(),
                 RequestClass = new DetectionClass()
                 {
                     EventType = "person",
@@ -251,7 +267,9 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
             var handler = new ValidateRuleMultipleClassesRequiredCommandHandler();
             var command = new ValidateRuleMultipleClassesRequiredCommand()
             {
-                FoundClasses = new List<string> { "car" },
+                FoundClasses = new List<DetectionClass> { 
+                    new DetectionClass() { EventType = "car", BoundingBoxes = new List<BoundingBox>(), Confidence = 90, }, 
+                },
                 RequestClass = new DetectionClass()
                 {
                     EventType = "person",

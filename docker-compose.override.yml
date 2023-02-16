@@ -11,7 +11,7 @@ services:
     - 27027:27027
     restart: "unless-stopped"
   
-  myfrontend:
+  alerts-ui:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -41,7 +41,11 @@ services:
   framesplitter:
     environment:
     - TIMEOUT=15
-    - FEED=rtsp://0.tcp.ngrok.io:13571/mystream
+    # - FEED=rtsp://0.tcp.ngrok.io:13571/mystream
+    # - FEED=../Datasets/frames/avion.jpg
+    - FEED=../Datasets/Demo.mp4
+    # - FEED=../Datasets/frames/hamacas.jpg
+    # - FEED=../Datasets/frames/saltador.jpg
     ports:
     - "57090"
 
@@ -49,6 +53,3 @@ services:
     ports:
       - '1883:1883'
  
-  redis:
-    ports:
-      - "6379:6379"

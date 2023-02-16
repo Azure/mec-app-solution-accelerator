@@ -75,6 +75,36 @@
 					]
 				}
 			}
+		},
+		{
+			"name": "time_trace",
+			"type": {
+				"type": "array",
+				"items": {
+					"name": "trace",
+					"type": "record",
+					"fields": [
+						{
+							"name": "stepStart",
+							"type": {
+								"type": "long",
+								"logicalType": "timestamp-millis"
+							}
+						},
+						{
+							"name": "stepEnd",
+							"type": {
+								"type": "long",
+								"logicalType": "timestamp-millis"
+							}
+						},
+						{
+							"name": "stepName",
+							"type": "string"
+						}
+					]
+				}
+			}
 		}
 	]
 }
