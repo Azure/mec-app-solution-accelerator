@@ -43,11 +43,8 @@ docker push mecsolutionaccelerator/rulesengine:latest
 ```
 
 So the Docker images are now uploaded into Docker Hub:
-![image](https://user-images.githubusercontent.com/1712635/218880119-10fd6062-85d7-428f-8122-7957605ae725.png)
 
-
-**--> WIP: The names of those images need to be consistent to the images in docker-compose.yml ----**
-
+![image](https://user-images.githubusercontent.com/1712635/219430508-84358f3a-b1e6-4d8c-9da2-2f5c308bf5b0.png)
 
 ## Deploy the Application to Kubernetes in 'Docker Desktop'
 
