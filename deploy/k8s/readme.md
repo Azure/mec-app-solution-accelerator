@@ -26,7 +26,9 @@ You could also create the Docker Images with a Script and a line using `docker b
 
 ### (Optional) Push the created Docker Images to Docker Hub
 
-You can directly run this PowerShell script from the `deploy\k8s` folder:
+You can directly run this PowerShell script from the `deploy\k8s` folder.
+
+Of course, before doing so, you'd need to change the namespace/user for Docker Registry, since "mecsolutionaccelerator" is secured for our team and if you need to authenticate against your selected Docker Registry (Docker Hub, ACR, etc.).
 
 ```powershell
 ./push-docker-images-to-docker-hub.ps1
