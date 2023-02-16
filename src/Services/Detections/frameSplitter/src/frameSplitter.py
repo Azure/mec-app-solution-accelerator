@@ -1,20 +1,18 @@
-import cv2
-import numpy as np
+import base64
+import json
+import logging
+import os
 import queue
 import threading
-from dapr.clients import DaprClient
-from dapr.ext.grpc import App, InvokeMethodRequest, InvokeMethodResponse
-import json
 import time
-import pickle
-import base64
-import os
-app = App()
 
-def PublishEvent(pubsub_name: str, topic_name: str, data: json):
-    with DaprClient() as client:
-        resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data)
-        print(resp)
+import cv2
+import numpy as np
+from dapr.clients import DaprClient
+from dapr.ext.grpc import App
+
+
+app = App()
 
 
 class VideoCapture:
@@ -31,7 +29,6 @@ class VideoCapture:
         while not self.stop:
             ret, frame = self.cap.read()
             if not ret:
-                #self.release()
                 break
             if not self.q.empty():
                 try:
@@ -44,78 +41,40 @@ class VideoCapture:
 
     def read(self):
         try:
-            frame=self.q.get(timeout=1)
-            return self.q_ret.get(timeout=.1),frame
+            frame = self.q.get(timeout=1)
+            return self.q_ret.get(timeout=.1), frame
         except:
-            return False,None
+            return False, None
 
     def release(self):
         self.stop = True
         self.t.join()
         self.cap.release()
 
+
+def publish_event(pubsub_name: str, topic_name: str, data: dict):
+    with DaprClient() as client:
+        resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data)
+        logging.debug(resp)
+
+
 def main():
-    
-    timer=0
-    timer= int(os.getenv('TIMEOUT'))
+    logging.basicConfig(level=logging.DEBUG)
+
+    timer = int(os.getenv('TIMEOUT'))
+    feed = os.getenv('FEED')
     try:
-        feed=(os.getenv('FEED'))
-        MY_POD_NAME=(os.getenv('MY_POD_NAME'))
-        FEEDS=(os.getenv('FEEDS'))
-
-        FEEDS=list(eval(FEEDS))
-
-        dict_pos=MY_POD_NAME.split('-')[-1]
-        feeds_dict=FEEDS[int(dict_pos)]
-
-        feed_id=feeds_dict['id']
-        feed_URL=feeds_dict['url']
-        print('feed url: ' +feed_URL)
+        feeds = json.loads(os.getenv('FEEDS'))
+        pod_name = os.getenv('MY_POD_NAME')
+        dict_pos = pod_name.split('-')[-1]
+        feed_id, feed_url = feeds[int(dict_pos)]['id'], feeds[int(dict_pos)]['url']
     except:
-        
-        feed_URL=(os.getenv('FEED'))
-        feed_id=1
-        print('feed url: ' +feed_URL)
-    time.sleep(timer)
-    
- 
-    cap = VideoCapture(feed_URL)
-    i=0
+        feed_url, feed_id = feed, 1
+    logging.info(f'feed url: {feed_url}')
+
+    cap = VideoCapture(feed_url)
+    i = 0
     while True:
         # Capture frame-by-frame
-        ret,frame = cap.read()
-        timestamp_init=int(time.time()*1000)
-        print('feed url: ' +feed_URL)
-        
-        while not ret:
-            print('not possible to access feed')
-            cap.release()
-            cap = VideoCapture(feed_URL)
-            ret, frame = cap.read()
+        ret, frame = cap.read()
        
-        img_encode = cv2.imencode(".jpg", frame)[1]
-        resized_img_bytes = img_encode.tobytes()
-        bytes_string = base64.standard_b64encode(resized_img_bytes)
-        timestamp=int(time.time()*1000)
-        print('Sending frame to inference')
-        try:
-            with DaprClient() as client:
-                # Using Dapr SDK to publish a topic
-                time_trace={"stepStart": timestamp_init, "stepEnd":int(time.time()*1000), "stepName": "frameSplitter"}
-                
-                req_data = {"source_id": 'video_'+str(feed_id), "timestamp":timestamp, "image": bytes_string.decode(), 'time_trace': time_trace}
-                resp = client.invoke_method(
-                    "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
-                )
-                
-                print('Waiting for response')
-                
-                print(resp.text(), flush=True) 
-        except:
-            print('Inference pod unreachable')
-        i+=1
-
-        
-
-if __name__ == '__main__':
-    main()
