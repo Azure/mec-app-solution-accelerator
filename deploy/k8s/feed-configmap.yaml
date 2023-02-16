@@ -2,9 +2,10 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: my-config
+  namespace: solution-accelerator-mec
 data:
-  # feeds: "[{'id':'1', 'url':'rtsp://0.tcp.ngrok.io:13571/mystream'},{'id':'2', 'url':'rtsp://0.tcp.ngrok.io:13571/mystream'}]"
-  feeds: "[{'id':'1', 'url':'../Datasets/frames/brindadores.jpg'},{'id':'2', 'url':'../Datasets/frames/avion.jpg'}]"
+  feeds: "[{'id':'1', 'url':'rtsp://4.tcp.ngrok.io:17883/mystream'},{'id':'2', 'url':'rtsp://4.tcp.ngrok.io:17883/mystream'}]"
+  # feeds: "[{'id':'1', 'url':'../Datasets/frames/brindadores.jpg'},{'id':'2', 'url':'../Datasets/frames/avion.jpg'}]"
 
 
 # - FEED=../Datasets/frames/avion.jpg
