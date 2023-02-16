@@ -5,6 +5,6 @@
         public string StepName { get; set; }
         public DateTime StepStart { get; set; }
         public DateTime StepStop { get; set; }
-        public double StepDuration { get; set; }
+        public decimal StepDuration { get; set; }
     }
 }

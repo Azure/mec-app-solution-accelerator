@@ -59,7 +59,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
 
             saveTime.StepStop = alert.AlertTime;
 
-            saveTime.StepDuration = (saveTime.StepStop - saveTime.StepStart).TotalMilliseconds;
+            saveTime.StepDuration = Math.Round(Convert.ToDecimal((saveTime.StepStop - saveTime.StepStart).TotalMilliseconds));
 
             var times = Newtonsoft.Json.JsonConvert.DeserializeObject<List<StepTimeAsDate>>(alert.StepTimes);
 
