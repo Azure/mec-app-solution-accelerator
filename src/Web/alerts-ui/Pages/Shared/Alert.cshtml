@@ -8,33 +8,33 @@
 <div class="overflow-auto align-self-center" id="table">
     <table id="table">
         <tr>
-            <th class="border border-dark font-bold tracking-wide w-1/6">
-                <div class="table-header fs-3 d-flex flex-row font-bold justify-content-center">Capture Time</div>
+            <th class="border border-dark font-bold">
+                <div class="table-header fs-6 d-flex flex-row font-bold justify-content-center">Capture Time</div>
             </th>
-            <th class="border border-dark font-bold tracking-wide w-1/6">
-                <div class="table-header fs-3 d-flex flex-row font-bold justify-content-center">Alert Time</div>
+            <th class="border border-dark font-bold">
+                <div class="table-header fs-6 d-flex flex-row font-bold justify-content-center">Alert Time</div>
             </th>
-            <th class="border border-dark font-bold tracking-wide w-1/6">
-                <div class="table-header fs-3 d-flex flex-row font-bold justify-content-center">Execution Time</div>
+            <th class="border border-dark font-bold">
+                <div class="table-header fs-6 d-flex flex-row font-bold justify-content-center">Exec Time</div>
             </th>
-            <th class="border border-t-dark border-dark tracking-wide w-5/12">
+            <th class="border border-t-dark border-dark">
                 <div class="table-header d-flex flex-row justify-content-center">
-                    <div class="fs-3 font-bold tracking-wide">Source</div>
+                    <div class="fs-6 font-bold">Source</div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="filter-icon" onclick="toggleSourceFilter()">
                         <path fill-rule="evenodd" d="M3.792 2.938A49.069 49.069 0 0112 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 011.541 1.836v1.044a3 3 0 01-.879 2.121l-6.182 6.182a1.5 1.5 0 00-.439 1.061v2.927a3 3 0 01-1.658 2.684l-1.757.878A.75.75 0 019.75 21v-5.818a1.5 1.5 0 00-.44-1.06L3.13 7.938a3 3 0 01-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836z" clip-rule="evenodd" />
                     </svg>
                 </div>
             </th>
-            <th class="border border-t-dark border-dark tracking-wide w-3/12">
+            <th class="border border-t-dark border-dark">
                 <div class="table-header d-flex flex-row justify-content-center">
-                    <div class="fs-3 font-bold tracking-wide">Type</div>
+                    <div class="fs-6 font-bold">Type</div>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="filter-icon" onclick="toggleAlertFilter()">
                         <path fill-rule="evenodd" d="M3.792 2.938A49.069 49.069 0 0112 2.25c2.797 0 5.54.236 8.209.688a1.857 1.857 0 011.541 1.836v1.044a3 3 0 01-.879 2.121l-6.182 6.182a1.5 1.5 0 00-.439 1.061v2.927a3 3 0 01-1.658 2.684l-1.757.878A.75.75 0 019.75 21v-5.818a1.5 1.5 0 00-.44-1.06L3.13 7.938a3 3 0 01-.879-2.121V4.774c0-.897.64-1.683 1.542-1.836z" clip-rule="evenodd" />
                     </svg>
                 </div>
             </th>
-            <th class="border border-t-dark border-dark text-xl font-semibold tracking-wide w-1/6">
-                <div class="table-header fs-3 d-flex flex-row font-bold justify-content-center">Information</div>
+            <th class="border border-t-dark border-dark text-xl font-semibold">
+                <div class="table-header fs-6 d-flex flex-row font-bold justify-content-center">Information</div>
             </th>
         </tr>
         @foreach (var alert in (IEnumerable<Models.Alert>)ViewData["Alerts"]!)
@@ -42,7 +42,7 @@
             <tr class="click-change-color" onclick="selectAlert('@Model.FindInputs(alert)', '@alert.Id', '@alert.Type', @alert.Source.Lat, @alert.Source.Lon, '@alert.CaptureTime', '@alert.AlertTime', @alert.Accuracy, '@alert.Information', '@alert.Frame', '@alert.MsExecutionTime', '@alert.StepTimes')" id="@alert.Id">
                 <td class="cursor-pointer border border-dark text-center py-1">@alert.CaptureTime.ToString("d")<br>@alert.CaptureTime.ToString("T")</td>
                 <td class="cursor-pointer border border-dark text-center py-1">@alert.AlertTime.ToString("d")<br>@alert.AlertTime.ToString("T")</td>
-                <td class="cursor-pointer border border-dark text-center py-1">@alert.MsExecutionTime</td>
+                <td class="cursor-pointer border border-dark text-center py-1">@Math.Round(alert.MsExecutionTime)</td>
                 <td class="cursor-pointer border border-dark text-center py-1">@alert.Source.Name</td>
                 <td class="cursor-pointer border border-dark text-center py-1">
                     <div class="d-flex flex-row justify-content-center px-2">

@@ -6,7 +6,7 @@
     <ProjectGuid>e7e4f38c-d0a2-46cf-abfb-a5c3c5a481fe</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/</DockerServiceUrl>
-    <DockerServiceName>myfrontend</DockerServiceName>
+    <DockerServiceName>alerts-ui</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">

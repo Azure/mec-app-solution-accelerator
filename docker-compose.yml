@@ -59,7 +59,7 @@ services:
     network_mode: "service:framesplitter"
 
   alerts-api: 
-    image: ${DOCKER_REGISTRY-}alertsapi
+    image: ${DOCKER_REGISTRY-}alerts-api
     build:
       context: .
       dockerfile: src/Services/Alerts/api/Dockerfile
@@ -75,20 +75,20 @@ services:
     - alerts-api
     network_mode: "service:alerts-api"
   
-  myfrontend:
+  alerts-ui:
     image: ${DOCKER_REGISTRY-}alerts-ui
     build:
       context: .
-      dockerfile: src/Web/myfrontend/Dockerfile
+      dockerfile: src/Web/alerts-ui/Dockerfile
     depends_on:
       - alertsapi-dapr
 
-  myfrontend-dapr:
+  alerts-ui-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "MyFrontEnd", "-app-port", "80" ]
+    command: [ "./daprd", "-app-id", "alerts-ui", "-app-port", "80" ]
     depends_on:
-      - myfrontend
-    network_mode: "service:myfrontend"
+      - alerts-ui
+    network_mode: "service:alerts-ui"
 
   mosquitto:
     hostname: mosquitto

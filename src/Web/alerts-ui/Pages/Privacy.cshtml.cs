@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace MyFrontEnd.Pages
+namespace Microsoft.MecSolutionAccelerator.AlertsUI.Pages
 {
     public class PrivacyModel : PageModel
     {

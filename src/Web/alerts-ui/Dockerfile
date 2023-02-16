@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/Web/MyFrontEnd/MyFrontEnd.csproj", "src/Web/MyFrontEnd/"]
-RUN dotnet restore "src/Web/MyFrontEnd/MyFrontEnd.csproj"
+COPY ["src/Web/alerts-ui/Alerts.UI.csproj", "src/Web/alerts-ui/"]
+RUN dotnet restore "src/Web/alerts-ui/Alerts.UI.csproj"
 COPY . .
-WORKDIR "/src/src/Web/MyFrontEnd"
-RUN dotnet build "MyFrontEnd.csproj" -c Release -o /app/build
+WORKDIR "/src/src/Web/alerts-ui"
+RUN dotnet build "Alerts.UI.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "MyFrontEnd.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Alerts.UI.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "MyFrontEnd.dll"]
+ENTRYPOINT ["dotnet", "Alerts.UI.dll"]
