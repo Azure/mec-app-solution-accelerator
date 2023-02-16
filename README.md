@@ -85,7 +85,7 @@ But if you just want to try the solution with `docker compose up` or Visual Stud
 Now, build the Docker images with `docker compose build`:
 
 ```powershell
-docker-compose build
+docker compose build
 ```
 <img width="800" alt="image" src="https://user-images.githubusercontent.com/1712635/214674622-c404aa17-8b16-4df8-b958-ff8423995d67.png">
 
