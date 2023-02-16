@@ -92,7 +92,7 @@ def main():
         print('feed url: ' +feed_URL)
         
         while not ret:
-            print('not possible to access RTSP')
+            print('not possible to access feed')
             cap.release()
             cap = VideoCapture(feed_URL)
             ret, frame = cap.read()
