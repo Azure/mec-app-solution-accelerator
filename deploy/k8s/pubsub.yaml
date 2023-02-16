@@ -2,7 +2,7 @@ apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
   name: pubsub
-  namespace: solution-accelerator-mec
+  namespace: mec-accelerator
 spec:
   type: pubsub.mqtt
   version: v1

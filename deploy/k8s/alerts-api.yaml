@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: alerts-api
-  namespace: solution-accelerator-mec
+  namespace: mec-accelerator
   labels:
     app: alerts-api
 spec:
@@ -30,7 +30,7 @@ spec:
           - name: ASPNETCORE_ENVIRONMENT
             value: Development
           - name: MONGODB__HOSTNAME
-            value: mongodb.solution-accelerator-mec.svc.cluster.local
+            value: mongodb.mec-accelerator.svc.cluster.local
       restartPolicy: Always
 ---
 
@@ -40,7 +40,7 @@ metadata:
   labels:
     app: alerts-api
   name: alerts-api
-  namespace: solution-accelerator-mec
+  namespace: mec-accelerator
 spec:
   type: NodePort
   ports:

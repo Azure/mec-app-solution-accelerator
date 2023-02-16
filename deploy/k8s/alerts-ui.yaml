@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: alerts-ui
-  namespace: solution-accelerator-mec
+  namespace: mec-accelerator
 spec:
   ports:
   - port: 80
@@ -15,7 +15,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: alerts-ui
-  namespace: solution-accelerator-mec
+  namespace: mec-accelerator
 spec:
   replicas: 1
   selector:
@@ -30,6 +30,7 @@ spec:
         dapr.io/app-id: "alerts-ui"
         dapr.io/port: "80"
         dapr.io/config: "dapr-config"
+        dapr.io/protocol: "http"
     spec:
       containers:
       - name: alerts-ui
