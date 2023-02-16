@@ -1,32 +1,31 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Microsoft.MecSolutionAccelerator.AlertsUI.Models
+﻿namespace Microsoft.MecSolutionAccelerator.AlertsUI.Models
 {
     public class Alert
     {
-        public string Id { get; set; }
-        public Source Source { get; set; }
-        public string Type { get; set; }
-        public string? Information { get; set; }
-        public string? Frame { get; set; }
-        public float Accuracy { get; set; }
-        public DateTime CaptureTime { get; set; }
-        public DateTime AlertTime { get; set; }
-        public double MsExecutionTime { get; set; }
-        public string StepTimes { get; set; }
-
-        public Alert(string id, Source source, string type, string? information, string? frame, float accuracy, DateTime captureTime, DateTime alertTime, double msExecutionTime)
+        public Alert(string id, string information, string frame, DateTime captureTime, DateTime alertTime, double msExecutionTime, string type, float accuracy, Source source, string stepTimes)
         {
             Id = id ?? throw new ArgumentNullException(nameof(id));
-            Source = source ?? throw new ArgumentNullException(nameof(source));
-            Type = type ?? throw new ArgumentNullException(nameof(type));
-            Information = information;
-            Frame = frame;
-            Accuracy = accuracy;
+            Information = information ?? throw new ArgumentNullException(nameof(information));
+            Frame = frame ?? throw new ArgumentNullException(nameof(frame));
             CaptureTime = captureTime;
             AlertTime = alertTime;
             MsExecutionTime = msExecutionTime;
+            Type = type ?? throw new ArgumentNullException(nameof(type));
+            Accuracy = accuracy;
+            Source = source ?? throw new ArgumentNullException(nameof(source));
+            StepTimes = stepTimes ?? throw new ArgumentNullException(nameof(stepTimes));
         }
+
+        public string Id { get; set; }
+        public string Information { get; set; }
+        public string Frame { get; set; }
+        public DateTime CaptureTime { get; set; }
+        public DateTime AlertTime { get; set; }
+        public double MsExecutionTime { get; set; }
+        public string Type { get; set; }
+        public float Accuracy { get; set; }
+        public Source Source { get; set; }
+        public string StepTimes { get; set; }
 
         public string toString()
         {

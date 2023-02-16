@@ -2,11 +2,6 @@ version: '3.4'
 
 services:
 
-  mongodb:
-      image: mongo
-      container_name: mongodb
-      hostname: mongo
-
   aiinferencer:
       image: ${DOCKER_REGISTRY-}aiinferencer
       build:
@@ -17,9 +12,6 @@ services:
         
   aiinferencer-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "invoke-sender-frames", "--app-protocol", "grpc", "--app-port", "2060","--dapr-http-port", "3600", "--components-path", "./components"]
-    volumes:
-    - "./dapr/components/:/components"
     depends_on:
       - aiinferencer
     network_mode: "service:aiinferencer"
@@ -34,9 +26,6 @@ services:
 
   rulesengine-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "rulesengine", "-app-port", "80", "-components-path", "/components"]
-    volumes:
-    - "./dapr/components/:/components"
     depends_on:
     - rulesengine
     network_mode: "service:rulesengine"
@@ -51,15 +40,12 @@ services:
 
   framesplitter-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "Framesplitter","--app-protocol", "grpc","--dapr-http-port", "3500", "-components-path", "/components" ]
-    volumes:
-    - "./dapr/components/:/components"
     depends_on:
       - framesplitter
     network_mode: "service:framesplitter"
 
   alerts-api: 
-    image: ${DOCKER_REGISTRY-}alerts-api
+    image: ${DOCKER_REGISTRY-}alertsapi
     build:
       context: .
       dockerfile: src/Services/Alerts/api/Dockerfile
@@ -68,9 +54,6 @@ services:
 
   alertsapi-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "alerts-api", "-app-port", "80", "-components-path", "/components"]
-    volumes:
-    - "./dapr/components/:/components"
     depends_on:
     - alerts-api
     network_mode: "service:alerts-api"
@@ -85,7 +68,6 @@ services:
 
   alerts-ui-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "alerts-ui", "-app-port", "80" ]
     depends_on:
       - alerts-ui
     network_mode: "service:alerts-ui"
@@ -95,3 +77,7 @@ services:
     container_name: mosquitto_container
     image: eclipse-mosquitto:1.6.10
  
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    hostname: mongo
