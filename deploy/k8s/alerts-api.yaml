@@ -29,6 +29,8 @@ spec:
         env:
           - name: ASPNETCORE_ENVIRONMENT
             value: Development
+          - name: MONGODB__HOSTNAME
+            value: mongodb.default.svc.cluster.local
       restartPolicy: Always
 ---
 
