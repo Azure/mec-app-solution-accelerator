@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Linq;
 
-namespace Alerts.UI.Models
+namespace Microsoft.MecSolutionAccelerator.AlertsUI.Models
 {
 	public class Camera : Source
 	{

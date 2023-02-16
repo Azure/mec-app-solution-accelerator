@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Alerts.UI.Models;
+using Microsoft.MecSolutionAccelerator.AlertsUI.Models;
 
-namespace Alerts.UI.Pages;
+namespace Microsoft.MecSolutionAccelerator.AlertsUI.Pages;
 
 public class IndexModel : PageModel
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Alerts.UI.Models
+namespace Microsoft.MecSolutionAccelerator.AlertsUI.Models
 {
     public class Alert
     {

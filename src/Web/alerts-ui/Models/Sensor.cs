@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Alerts.UI.Models
+namespace Microsoft.MecSolutionAccelerator.AlertsUI.Models
 {
 	public class Sensor : Source
 	{

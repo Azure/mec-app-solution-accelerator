@@ -1,12 +1,12 @@
 ﻿using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
-using Alerts.UI.Models;
-using Alerts.UI.Pages;
+using Microsoft.MecSolutionAccelerator.AlertsUI.Models;
+using Microsoft.MecSolutionAccelerator.AlertsUI.Pages;
 
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Alerts.UI.Controllers
+namespace Microsoft.MecSolutionAccelerator.AlertsUI.Controllers
 {
     public class AlertController : Controller
     {
