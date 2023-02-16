@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "MyFrontEnd": {
+    "Alerts.UI": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "http://localhost:45937",
