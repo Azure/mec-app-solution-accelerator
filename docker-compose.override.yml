@@ -43,7 +43,7 @@ services:
     - TIMEOUT=15
     # - FEED=rtsp://0.tcp.ngrok.io:13571/mystream
     # - FEED=../Datasets/frames/avion.jpg
-    - FEED=../Datasets/frames/brindadores.jpg
+    - FEED=../Datasets/Demo.mp4
     # - FEED=../Datasets/frames/hamacas.jpg
     # - FEED=../Datasets/frames/saltador.jpg
     ports:

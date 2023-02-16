@@ -49,12 +49,6 @@ class VideoCapture:
         except:
             return False,None
 
-        # if frame==None:
-        #     self.q_ret.get()
-        #     return False,None
-        # else:
-        return self.q_ret.get(timeout=.1),frame
-
     def release(self):
         self.stop = True
         self.t.join()
@@ -90,7 +84,6 @@ def main():
  
     print('capturing frames')
     cap = VideoCapture(feed_URL)
-    timestamp_general=int(time.time()*1000)
     i=0
     while True:
         # Capture frame-by-frame
@@ -103,7 +96,6 @@ def main():
             cap.release()
             cap = VideoCapture(feed_URL)
             ret, frame = cap.read()
-        # print(frame)
        
         img_encode = cv2.imencode(".jpg", frame)[1]
         resized_img_bytes = img_encode.tobytes()
@@ -119,16 +111,15 @@ def main():
                 resp = client.invoke_method(
                     "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
                 )
-                # PublishEvent(pubsub_name="pubsub", topic_name="newFrame", data=json.dumps({'frame_sent':True}))
+                
                 print('Waiting for response')
-                # Print the response
+                
                 print(resp.content_type, flush=True)
                 print(resp.text(), flush=True) 
         except:
             print('Inference pod busy')
         i+=1
-    # cap.release()
-        # cv2.destroyAllWindows()
+
         print('End')
 
 if __name__ == '__main__':
