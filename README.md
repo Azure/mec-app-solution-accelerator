@@ -78,7 +78,7 @@ Before creating the Docker images it's important to setup the DOCKER_REGISTRY en
 
 Here you have additional information on why and [How to setup the DOCKER_REGISTRY environment variable](./docs/SET_DOCKER_REGISTRY_VARIABLE.MD).
 
-But if you just want to try the solution with `docker-compose up` or Visual Studio, this step is optional, as it should work locally, anyways.
+But if you just want to try the solution with `docker compose up` or Visual Studio, this step is optional, as it should work locally, anyways.
 
 **Build the Docker images:**
 
@@ -92,7 +92,7 @@ docker-compose build
 **Run the solution:**
 
 ```powershell
-docker-compose up
+docker compose up
 ```
 You should see 'docker compose up' starting like in the following screenshot:
 <img width="800" alt="image" src="https://user-images.githubusercontent.com/1712635/212741292-4396cc66-3ce9-451b-8d2f-bb3e6ec8e8b2.png">
