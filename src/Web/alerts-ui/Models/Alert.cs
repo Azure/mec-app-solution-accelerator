@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MyFrontEnd.Models
+namespace Alerts.UI.Models
 {
     public class Alert
     {

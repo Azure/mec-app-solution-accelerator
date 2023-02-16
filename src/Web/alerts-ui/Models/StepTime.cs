@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Linq;
 
-namespace MyFrontEnd.Models
+namespace Alerts.UI.Models
 {
     public class StepTime
     {

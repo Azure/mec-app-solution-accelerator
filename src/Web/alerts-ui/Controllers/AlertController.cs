@@ -1,12 +1,12 @@
 ﻿using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
-using MyFrontEnd.Models;
-using MyFrontEnd.Pages;
+using Alerts.UI.Models;
+using Alerts.UI.Pages;
 
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace MyFrontEnd.Controllers
+namespace Alerts.UI.Controllers
 {
     public class AlertController : Controller
     {
