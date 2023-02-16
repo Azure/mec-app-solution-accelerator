@@ -162,9 +162,6 @@ Both approaches are good approaches depending on the needs and shown below.
 
 The backlog is defined in detail here: [Backlog](BACKLOG.MD)
 
-## Roadmap
-
-The roadmap is defined here: [Roadmap](ROADMAP.MD)
 
 ## Contributing
 
