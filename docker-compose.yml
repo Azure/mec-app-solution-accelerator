@@ -19,7 +19,7 @@ services:
     image: "daprio/daprd:latest"
     command: [ "./daprd", "-app-id", "invoke-sender-frames", "--app-protocol", "grpc", "--app-port", "2060","--dapr-http-port", "3600", "--components-path", "./components"]
     volumes:
-    - "./components/:/components"
+    - "./dapr/components/:/components"
     depends_on:
       - aiinferencer
     network_mode: "service:aiinferencer"
@@ -36,7 +36,7 @@ services:
     image: "daprio/daprd:latest"
     command: [ "./daprd", "-app-id", "rulesengine", "-app-port", "80", "-components-path", "/components"]
     volumes:
-    - "./components/:/components"
+    - "./dapr/components/:/components"
     depends_on:
     - rulesengine
     network_mode: "service:rulesengine"
@@ -46,11 +46,6 @@ services:
       build:
         context: src/Services/Detections/frameSplitter
         dockerfile: Dockerfile
-      # volumes:
-      #   - 'video_path:/data/videos'
-      environment:
-        - TIMEOUT=15
-        - FEED=rtsp://0.tcp.ngrok.io:13571/mystream
       depends_on:
         - aiinferencer-dapr
 
@@ -58,7 +53,7 @@ services:
     image: "daprio/daprd:latest"
     command: [ "./daprd", "-app-id", "Framesplitter","--app-protocol", "grpc","--dapr-http-port", "3500", "-components-path", "/components" ]
     volumes:
-    - "./components/:/components"
+    - "./dapr/components/:/components"
     depends_on:
       - framesplitter
     network_mode: "service:framesplitter"
@@ -75,13 +70,13 @@ services:
     image: "daprio/daprd:latest"
     command: [ "./daprd", "-app-id", "alerts-api", "-app-port", "80", "-components-path", "/components"]
     volumes:
-    - "./components/:/components"
+    - "./dapr/components/:/components"
     depends_on:
     - alerts-api
     network_mode: "service:alerts-api"
   
   myfrontend:
-    image: ${DOCKER_REGISTRY-}myfrontend
+    image: ${DOCKER_REGISTRY-}alerts-ui
     build:
       context: .
       dockerfile: src/Web/myfrontend/Dockerfile
@@ -95,22 +90,8 @@ services:
       - myfrontend
     network_mode: "service:myfrontend"
 
-  #db:
-  #  container_name: sql_server_db
-  #  hostname: sqlserver
-  #  build:
-  #    context: .
-  #    dockerfile: infraestructure/mssqlserver/Dockerfile
-  #  # volumes:
-  #  #   - mssqlserver:/var/opt/mssql
-  #  ports:
-  #      - '1433:1433'
-
   mosquitto:
     hostname: mosquitto
     container_name: mosquitto_container
     image: eclipse-mosquitto:1.6.10
  
-  redis:
-    image: "redis:alpine"
-    hostname: statestorage

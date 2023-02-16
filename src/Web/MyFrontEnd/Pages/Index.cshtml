@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model IndexModel
 @{
     ViewData["Title"] = "Events Dashboard";
@@ -77,9 +77,9 @@
         for (let i = 0; i < rows.length; i++) {
             if (localStorage.getItem("selectedId") != null) {
                 if (rows[i].id == localStorage.getItem("selectedId")) {
-                    selectAlert(localStorage.getItem("selectedInputs"), localStorage.getItem("selectedId"), localStorage.getItem("selectedType"),
+                    selectAlert(localStorage.getItem("selectggitedInputs"), localStorage.getItem("selectedId"), localStorage.getItem("selectedType"),
                         localStorage.getItem("selectedLat"), localStorage.getItem("selectedLon"), localStorage.getItem("selectedCaptureTime"), localStorage.getItem("selectedAlertTime"), localStorage.getItem("selectedAccuracy"),
-                        localStorage.getItem("selectedInfo"), localStorage.getItem("selectedFrame"), Math.round(localStorage.getItem("selectedMsTime")));
+                        localStorage.getItem("selectedInfo"), localStorage.getItem("selectedFrame"), Math.round(localStorage.getItem("selectedMsTime")), localStorage.getItem("selectedSteps"));
                 }
             }
         }
@@ -127,49 +127,64 @@
 
     observer.observe(document.getElementById("left"), { childList: true, subtree: true });
 
-    const selectAlert = (inputs, id, type, lat, lon, captureTime, alertTime, accuracy, info, frame, msTime) => {
+    const selectAlert = (inputs, id, type, lat, lon, captureTime, alertTime, accuracy, info, frame, msTime, steps) => {
         $("td").removeClass("selected-alert");
         $("#"+id).find("td").addClass("selected-alert");
+        let j = 0;
+        let stepsObject = [];
+        if (steps) {
+            stepsObject = JSON.parse(steps);
+        }
         if (inputs == "both") {
             $("#info-content").html(`
                 <div class="info-container d-flex flex-column justify-content-between">
-                    <img src="data:image/jpeg;base64,${frame}" alt="Alert Information Image" class="alert-image">
-                    <div class="alert-description border border-dark position-relative rounded overflow-auto">
-                        <pre class="alert-text position-absolute top-0 left-0 font-sans p-1">
+                <img src="data:image/jpeg;base64,${frame}" alt="Alert Information Image" class="alert-image">
+                <div class="alert-description border border-dark position-relative rounded overflow-auto">
+                <pre class="alert-text position-absolute top-0 left-0 font-sans p-1">
 <strong>Alert: ${id}</strong><br>
 <strong>${type}</strong><br>
-&emsp; – Position: (${lat},${lon})<br>
-&emsp; - Capture Day/Time: ${captureTime}<br>
-&emsp; - Alert Day/Time: ${alertTime}<br>
-&emsp; - Execution Time: ${Math.round(msTime)} <br>
-&emsp; - Detection Confidence: ${accuracy} %<br>
-${info}
-                        </pre>
-                    </div>
-                </div>
-            `);
-        } else if (inputs == "text") {
-            $("#info-content").html(`
-                <div class="border border-dark position-relative rounded overflow-auto" id="text-selected">
-                    <pre class="alert-text position-absolute top-0 left-0 font-sans p-1">
-<strong>Alert: ${id}</strong><br>
-<strong>${type}</strong><br>
-&emsp; – Position: (${lat},${lon})<br>
-&emsp; - Capture Day/Time: ${captureTime}<br>
-&emsp; - Alert Day/Time: ${alertTime}<br>
-&emsp; - Execution Time: ${Math.round(msTime)} <br>
-&emsp; - Detection Confidence: ${accuracy} %<br>
-${info}
-                    </pre>
-                </div>
-            `);
-        } else {
-            $("#info-content").html(`
-                <div class="info-container d-flex flex-column justify-content-center">
-                    <img src="data:image/jpeg;base64,${frame}" alt="Alert Information Image" class="alert-image">
-                </div>
+&emsp; – Position: (${lat},${lon})
+&emsp; - Capture Day/Time: ${captureTime}
+&emsp; - Alert Day/Time: ${alertTime}
+&emsp; - Detection Confidence: ${accuracy}%<br>
+    ${info}<br>
+<strong>Execution time: ${msTime}</strong>
+<div id="stepsContainer"></div>
+        </pre>
+        </div>
+        </div>
+        `);
+
+        let stepsContainer = $('#stepsContainer');
+        for (let i = 0; i < stepsObject.length; i++) {
+            stepsContainer.append(`
+&emsp; - Step Name: ${stepsObject[i].StepName}
+&emsp; - Duration: ${stepsObject[i].StepDuration}
+&emsp; - Start Time: ${stepsObject[i].StepStart}
+&emsp; - End Time: ${stepsObject[i].StepStop}
             `);
         }
+        } else if (inputs == "text") {
+            $("#info-content").html(`
+            <div class="border border-dark position-relative rounded overflow-auto" id="text-selected">
+            <pre class="alert-text position-absolute top-0 left-0 font-sans p-1">
+<strong>Alert: ${id}</strong><br>
+<strong>${type}</strong><br>
+&emsp; – Position: (${lat},${lon})<br>
+&emsp; - Capture Day/Time: ${captureTime}<br>
+&emsp; - Alert Day/Time: ${alertTime}<br>
+&emsp; - Detection Confidence: ${accuracy}%<br>
+${info}
+            </pre>
+            </div>
+        `);
+    } else {
+    $("#info-content").html(`
+        <div class="info-container d-flex flex-column justify-content-center">
+            <img src="data:image/jpeg;base64,${frame}" alt="Alert Information Image" class="alert-image">
+        </div>
+    `);
+    }
         localStorage.setItem("selectedInputs", inputs);
         localStorage.setItem("selectedId", id);
         localStorage.setItem("selectedType", type);
@@ -178,6 +193,7 @@ ${info}
         localStorage.setItem("selectedCaptureTime", captureTime);
         localStorage.setItem("selectedAlertTime", alertTime);
         localStorage.setItem("selectedMsTime", msTime);
+        localStorage.setItem("selectedSteps", steps);
         localStorage.setItem("selectedAccuracy", accuracy);
         localStorage.setItem("selectedInfo", info);
         localStorage.setItem("selectedFrame", frame);
