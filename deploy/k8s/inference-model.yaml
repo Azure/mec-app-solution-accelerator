@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: inference-model
-  # namespace: mec-core
+  namespace: mec-accelerator
   labels:
     app: inference-model
 spec:

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: rulesengine
-  # namespace: mec-core
+  namespace: mec-accelerator
   labels:
     app: rulesengine
 spec:
@@ -38,6 +38,7 @@ metadata:
   labels:
     app: rulesengine
   name: rulesengine
+  namespace: mec-accelerator
 spec:
   type: NodePort
   ports:
