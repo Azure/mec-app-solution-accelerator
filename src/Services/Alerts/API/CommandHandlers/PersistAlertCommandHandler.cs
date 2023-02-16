@@ -53,7 +53,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                         StepStart = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepStart),
                         StepStop = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepEnd),
                         StepName = stepTraceItem.StepName,
-                        StepDuration = stepTraceItem.StepEnd - stepTraceItem.StepStart
+                        StepDuration = Math.Round(Convert.ToDecimal(stepTraceItem.StepEnd - stepTraceItem.StepStart)),
                     };
                     stepTimes.Add(v);
                     previousEnd = stepTraceItem.StepEnd;
@@ -66,7 +66,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                         StepStop = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepEnd),
                         StepName = stepTraceItem.StepName,
                     };
-                    v.StepDuration = stepTraceItem.StepEnd - previousEnd;
+                    v.StepDuration = Math.Round(Convert.ToDecimal(stepTraceItem.StepEnd - previousEnd));
                     stepTimes.Add(v);
                     previousEnd = stepTraceItem.StepEnd;
                 }
@@ -77,7 +77,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                 StepStart = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTime.StepStart),
                 StepStop = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTime.StepEnd),
                 StepName = stepTime.StepName,
-                StepDuration = stepTime.StepEnd - stepTime.StepStart 
+                StepDuration = Math.Round(Convert.ToDecimal(stepTime.StepEnd - stepTime.StepStart))
             }));
             return stepTimes;
         }

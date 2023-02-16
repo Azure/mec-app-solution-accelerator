@@ -158,10 +158,10 @@
         let stepsContainer = $('#stepsContainer');
         for (let i = 0; i < stepsObject.length; i++) {
             stepsContainer.append(`
-&emsp; - Step Name: ${stepsObject[i].StepName}
-&emsp; - Duration: ${stepsObject[i].StepDuration}
-&emsp; - Start Time: ${stepsObject[i].StepStart}
-&emsp; - End Time: ${stepsObject[i].StepStop}
+                &emsp; - Step Name: ${stepsObject[i].StepName}
+                &emsp; - Duration: ${stepsObject[i].StepDuration} Ms
+                &emsp; - Start Time: ${stepsObject[i].StepStart}
+                &emsp; - End Time: ${stepsObject[i].StepStop}
             `);
         }
         } else if (inputs == "text") {

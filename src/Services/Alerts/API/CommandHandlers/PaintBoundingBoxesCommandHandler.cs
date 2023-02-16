@@ -63,6 +63,10 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
 
                 }
 
+                int width = image.Width / 4;
+                int height = image.Height / 4;
+                image.Mutate(x => x.Resize(width, height));
+
                 using (var streamResult = new MemoryStream())
                 {
                     image.SaveAsJpeg(streamResult);

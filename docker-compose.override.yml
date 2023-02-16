@@ -1,16 +1,52 @@
 version: '3.4'
 
 services:
-  mongodb:
-    environment:
-    - PUID=1000
-    - PGID=1000
-    volumes:
-    - './mongodb/database:/data/db'
+
+  aiinferencer:
     ports:
-    - 27027:27027
-    restart: "unless-stopped"
+    - "2060:2060"
   
+  aiinferencer-dapr:
+    command: [ "./daprd", "-app-id", "invoke-sender-frames", "--app-protocol", "grpc", "--app-port", "2060","--dapr-http-port", "3600", "--components-path", "./components"]
+    volumes:
+    - "./dapr/components/:/components"
+
+  rulesengine:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+
+  rulesengine-dapr:
+    command: [ "./daprd", "-app-id", "rulesengine", "-app-port", "80", "-components-path", "/components"]
+    volumes:
+    - "./dapr/components/:/components"
+
+  framesplitter:
+    environment:
+    - TIMEOUT=15
+    # - FEED=rtsp://0.tcp.ngrok.io:13571/mystream
+    #- FEED=../Datasets/demo.mp4
+    - FEED=../Datasets/PerimeterDemo.mp4
+    ports:
+    - "57090"
+
+  framesplitter-dapr:
+    command: [ "./daprd", "-app-id", "Framesplitter","--app-protocol", "grpc","--dapr-http-port", "3500", "-components-path", "/components" ]
+    volumes:
+    - "./dapr/components/:/components"
+
+  alerts-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "50055:80"
+
+  alertsapi-dapr:
+    command: [ "./daprd", "-app-id", "alerts-api", "-app-port", "80", "-components-path", "/components"]
+    volumes:
+    - "./dapr/components/:/components"
+
   alerts-ui:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -22,34 +58,19 @@ services:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
-  alerts-api:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "50055:80"
-
-  rulesengine:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "80"
-
-  aiinferencer:
-    ports:
-    - "2060:2060"
-
-  framesplitter:
-    environment:
-    - TIMEOUT=15
-    # - FEED=rtsp://0.tcp.ngrok.io:13571/mystream
-    # - FEED=../Datasets/frames/avion.jpg
-    - FEED=../Datasets/Demo.mp4
-    # - FEED=../Datasets/frames/hamacas.jpg
-    # - FEED=../Datasets/frames/saltador.jpg
-    ports:
-    - "57090"
+  alerts-ui-dapr:
+    command: [ "./daprd", "-app-id", "alerts-ui", "-app-port", "80" ]
 
   mosquitto:
     ports:
       - '1883:1883'
- 
+
+  mongodb:
+    environment:
+    - PUID=1000
+    - PGID=1000
+    volumes:
+    - './mongodb/database:/data/db'
+    ports:
+    - 27027:27027
+    restart: "unless-stopped"
