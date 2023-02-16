@@ -11,6 +11,7 @@
 
 ### Automated provisioning of cameras/devices
 - **Automated provisioning of cameras/devices with AKRI**
+    - https://github.com/project-akri/akri
 
 ### Custom code and Kubernetes
 
