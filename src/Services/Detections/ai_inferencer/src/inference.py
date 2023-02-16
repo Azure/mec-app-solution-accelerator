@@ -47,7 +47,7 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
     detections = json.loads(results.pandas().xyxy[0].to_json())
     
     if detections["name"]!={}:
-        print(detections)
+        print('Objects Detected')
         for idx,detection in enumerate(detections["name"].values()):
             
             BoundingBoxes=[]

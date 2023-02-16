@@ -56,7 +56,6 @@ class VideoCapture:
 
 def main():
     
-    print('main')
     timer=0
     timer= int(os.getenv('TIMEOUT'))
     try:
@@ -71,18 +70,15 @@ def main():
 
         feed_id=feeds_dict['id']
         feed_URL=feeds_dict['url']
-        print('kubernetes execution')
-        print('feed id: ' + str(feed_id))
         print('feed url: ' +feed_URL)
     except:
-        print('docker-compose execution')
+        
         feed_URL=(os.getenv('FEED'))
         feed_id=1
         print('feed url: ' +feed_URL)
     time.sleep(timer)
     
  
-    print('capturing frames')
     cap = VideoCapture(feed_URL)
     i=0
     while True:
@@ -114,13 +110,12 @@ def main():
                 
                 print('Waiting for response')
                 
-                print(resp.content_type, flush=True)
                 print(resp.text(), flush=True) 
         except:
-            print('Inference pod busy')
+            print('Inference pod unreachable')
         i+=1
 
-        print('End')
+        
 
 if __name__ == '__main__':
     main()
