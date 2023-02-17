@@ -33,7 +33,7 @@
 - **ACR & MAR vs. Docker Hub:** Evaluate if we'll use ACR or MAR as Docker Registry instead of Docker Hub. TBD. 
 
 ### Deployment
-- **FLUX and GitOps:** Evaluate FLUX and GitOps for deployment of multiple sites and multiple Kubenetes config in sync:
+- **Flux and GitOps:** Evaluate Flux and GitOps for deployment of multiple sites and multiple Kubenetes config in sync. Flux is a tool for _keeping Kubernetes clusters in sync with sources of configuration (like Git repositories)_, and automating updates to configuration when there is new code to deploy.
     - https://fluxcd.io/flux/
     - https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/tutorial-use-gitops-flux2?tabs=azure-cli
     - https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/conceptual-gitops-flux2
