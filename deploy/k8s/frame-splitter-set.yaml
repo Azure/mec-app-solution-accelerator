@@ -4,6 +4,7 @@ metadata:
   name: frame-splitter-set
   namespace: mec-accelerator
 spec:
+  serviceName: frame-splitter-service
   selector:
     matchLabels:
         app: frame-splitter
