@@ -1,9 +1,27 @@
-﻿@page
+﻿@page "/"
 @model NewAlertsUI.Pages.Alerts.IndexAlertModel
 @{
-    
+    ViewBag.Title = "Alerts";
+}
 
-    <div>
-        @await Html.PartialAsync("_AlertsTable", Model.alerts)
-    </div>
+<div id="alertsTableDiv">
+    @await Html.PartialAsync("_AlertsTable", Model.alerts)
+</div>
+
+<button id="refreshButton">Refresh</button>
+
+@section scripts{
+    <script>
+        $(function () {
+            $('#refreshButton').click(function (e) {
+                e.preventDefault();
+                $.get({
+                    url: '/?handler=Refresh',
+                    success: function (result) {
+                        $('#alertsTableDiv').html(result);
+                    }
+                });
+            });
+        });
+    </script>
 }

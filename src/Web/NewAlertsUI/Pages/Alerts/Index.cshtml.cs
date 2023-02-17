@@ -13,12 +13,13 @@ namespace NewAlertsUI.Pages.Alerts
             alerts.Add(new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert("2", "2", "123", new DateTime(), new DateTime(), 20, "type", 10, new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Source("name", "type", 10, 10), "50"));
         }
 
-        public IActionResult Mockup()
+        [HttpGet]
+        public IActionResult OnGetRefresh()
         {
-            alerts.Add(new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert("3", "3", "123", new DateTime(), new DateTime(), 20, "type", 10, new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Source("name", "type", 10, 10), "50"));
-            alerts.Add(new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert("4", "4", "123", new DateTime(), new DateTime(), 20, "type", 10, new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Source("name", "type", 10, 10), "50"));
-            return Page();
-        }
+            alerts = new List<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert>();
+            alerts.Add(new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert("1", "3", "123", new DateTime(), new DateTime(), 20, "type", 10, new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Source("name", "type", 10, 10), "50"));
+            return Partial("_AlertsTable", alerts);
+        }       
     }
 }
 
