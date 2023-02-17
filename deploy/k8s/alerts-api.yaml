@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alerts-api
+  namespace: mec-accelerator
+  labels:
+    app: alerts-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alerts-api
+  template:
+    metadata:
+      labels:
+        app: alerts-api
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "alerts-api"
+        dapr.io/app-port: "80"
+        dapr.io/config: "dapr-config"
+    spec:
+      containers:
+      - name: alerts-api
+        image: mecsolutionaccelerator/alerts-api:latest
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+          - name: MONGODB__HOSTNAME
+            value: mongodb.mec-accelerator.svc.cluster.local
+      restartPolicy: Always
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: alerts-api
+  name: alerts-api
+  namespace: mec-accelerator
+spec:
+  type: NodePort
+  ports:
+  - name: "web"
+    port: 8080
+    targetPort: 80
+    nodePort: 30004
+  selector:
+    app: alerts-api

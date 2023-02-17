@@ -1,2 +1,0 @@
-dapr
-setuptools==58.2.0

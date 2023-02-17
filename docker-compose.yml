@@ -2,122 +2,82 @@ version: '3.4'
 
 services:
 
-  mongodb:
-      image: mongo
-      container_name: mongodb
-      hostname: mongo
-      environment:
-        - PUID=1000
-        - PGID=1000
-      volumes:
-        - 'D:/mongodb/database:/data/db'
-      ports:
-        - 27017:27017
-      restart: "unless-stopped"
-
   aiinferencer:
       image: ${DOCKER_REGISTRY-}aiinferencer
       build:
-        context: src/ML/ai_inferencer
+        context: src/Services/Detections/ai_inferencer
         dockerfile: Dockerfile
-      ports:
-        - "50051:50051"
       depends_on: 
         - alertsapi-dapr
         
   aiinferencer-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "invoke-sender-frames", "--app-protocol", "grpc", "--app-port", "50051","--dapr-http-port", "3600", "--components-path", "./components"]
-    volumes:
-    - "./components/:/components"
     depends_on:
       - aiinferencer
     network_mode: "service:aiinferencer"
 
+  rulesengine: 
+    image: ${DOCKER_REGISTRY-}rulesengine
+    build:
+      context: .
+      dockerfile: src/Services/Alerts/RulesEngine/Dockerfile
+    depends_on:
+    - mongodb
+
+  rulesengine-dapr:
+    image: "daprio/daprd:latest"
+    depends_on:
+    - rulesengine
+    network_mode: "service:rulesengine"
+
   framesplitter:
       image: ${DOCKER_REGISTRY-}framesplitter
       build:
-        context: src/Services/FrameSplitter/frameSplitter
+        context: src/Services/Detections/frameSplitter
         dockerfile: Dockerfile
-      ports:
-        - "57090"
       depends_on:
         - aiinferencer-dapr
 
   framesplitter-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "Framesplitter","--app-protocol", "grpc","--dapr-http-port", "3500", "-components-path", "/components" ]
-    volumes:
-    - "./components/:/components"
     depends_on:
       - framesplitter
     network_mode: "service:framesplitter"
 
   alerts-api: 
-    image: ${DOCKER_REGISTRY-}alertsapi
+    image: ${DOCKER_REGISTRY-}alerts-api
     build:
       context: .
-      dockerfile: src/Services/Alerts/Alerts.api/Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "80"
+      dockerfile: src/Services/Alerts/api/Dockerfile
     depends_on:
     - mongodb
 
   alertsapi-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "alerts-api", "-app-port", "80", "-components-path", "/components"]
-    volumes:
-    - "./components/:/components"
     depends_on:
     - alerts-api
     network_mode: "service:alerts-api"
   
-  myfrontend:
-    image: ${DOCKER_REGISTRY-}myfrontend
+  alerts-ui:
+    image: ${DOCKER_REGISTRY-}alerts-ui
     build:
       context: .
-      dockerfile: src/Web/myfrontend/Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-    ports:
-      - "80"
-      - "443"
-    volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      dockerfile: src/Web/alerts-ui/Dockerfile
     depends_on:
-      - alerts-api
+      - alertsapi-dapr
 
-  myfrontend-dapr:
+  alerts-ui-dapr:
     image: "daprio/daprd:latest"
-    command: [ "./daprd", "-app-id", "MyFrontEnd", "-app-port", "80" ]
     depends_on:
-      - myfrontend
-    network_mode: "service:myfrontend"
-
-  #db:
-  #  container_name: sql_server_db
-  #  hostname: sqlserver
-  #  build:
-  #    context: .
-  #    dockerfile: infraestructure/mssqlserver/Dockerfile
-  #  # volumes:
-  #  #   - mssqlserver:/var/opt/mssql
-  #  ports:
-  #      - '1433:1433'
+      - alerts-ui
+    network_mode: "service:alerts-ui"
 
   mosquitto:
     hostname: mosquitto
     container_name: mosquitto_container
     image: eclipse-mosquitto:1.6.10
-    ports:
-      - '1883:1883'
  
-  redis:
-    image: "redis:alpine"
-    hostname: statestorage
-    ports:
-      - "6379:6379"
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    hostname: mongo

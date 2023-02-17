@@ -1,11 +1,22 @@
-FROM node:latest as build-stage
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY ./ .
-RUN npm run build
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM nginx as production-stage
-RUN mkdir /app
-COPY --from=build-stage /app/dist /app
-COPY nginx.conf /etc/nginx/nginx.conf
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+COPY ["src/Web/alerts-ui/Alerts.UI.csproj", "src/Web/alerts-ui/"]
+RUN dotnet restore "src/Web/alerts-ui/Alerts.UI.csproj"
+COPY . .
+WORKDIR "/src/src/Web/alerts-ui"
+RUN dotnet build "Alerts.UI.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "Alerts.UI.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "Alerts.UI.dll"]

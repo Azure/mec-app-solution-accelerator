@@ -1,0 +1,14 @@
+
+RUN ONE TIME:
+=============
+
+kubectl apply -f dashboard-adminuser.yaml 
+
+kubectl apply -f adminuser-cluster-role-binding.yaml
+
+
+
+RUN WHENEVER THE DASHBOARD ASKS YOU FOR A TOKEN:
+================================================
+
+kubectl -n kubernetes-dashboard create token admin-user --duration=48h --output yaml
