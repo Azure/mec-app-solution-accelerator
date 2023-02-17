@@ -4,6 +4,7 @@ using MediatR;
 using SolTechnology.Avro;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands;
+using Alerts.RulesEngine.Commands;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventControllers
 {
@@ -21,26 +22,42 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventCont
         }
 
         [Topic("pubsub", "newDetection")]
-        [HttpPost]
-        public async Task<bool> DetectionEventHandler(object detectionRaw)
+        [HttpPost("newDetection")]
+        public async Task<IActionResult> DetectionEventHandler(object detectionRaw)
         {
-            var detectionStr = detectionRaw.ToString();
-            var detectionBytes = AvroConvert.Json2Avro(detectionStr);
-            var detection = AvroConvert.Deserialize<ObjectDetected>(detectionBytes);
-            _logger.LogInformation($"Received detection at {detection.EveryTime}");
-            var command = new AnalyzeObjectDetectionCommand()
-            {
-                Id = detection.Id,
-                DetectionName = detection.Name,
-                EveryTime = detection.EveryTime,
-                Frame = detection.Frame,
-                DetectionType = detection.Type,
-                UrlVideoEncoded = detection.UrlVideoEncoded,
-                Classes = detection.Classes,
-                TimeTrace = detection.time_trace,
-            };
+            try 
+            { 
+                var detectionStr = detectionRaw.ToString();
+                var detectionBytes = AvroConvert.Json2Avro(detectionStr);
+                var detection = AvroConvert.Deserialize<ObjectDetected>(detectionBytes);
+                _logger.LogInformation($"Received detection at {detection.EveryTime}");
+                var command = new AnalyzeObjectDetectionCommand()
+                {
+                    Id = detection.Id,
+                    DetectionName = detection.Name,
+                    EveryTime = detection.EveryTime,
+                    Frame = detection.Frame,
+                    DetectionType = detection.Type,
+                    UrlVideoEncoded = detection.UrlVideoEncoded,
+                    Classes = detection.Classes,
+                    TimeTrace = detection.time_trace,
+                };
 
-            return await _mediator.Send(command);
+                await _mediator.Send(command);
+
+                return Ok();
+            }
+            catch(ArgumentException ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the detection event");
+                return BadRequest("Invalid detection event: " + ex.Message);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the detection event");
+                return StatusCode(500, "An error occurred while processing the detection event");
+
+            }
         }
     }
 }

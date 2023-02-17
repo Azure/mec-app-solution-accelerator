@@ -8,7 +8,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events
         public string Type { get; set; }
         public string UrlVideoEncoded { get; set; }
         public string AlertInformation { get; set; }
-        public List<BoundingBox> BoundingBoxes { get; set; }
+        public List<DetectionClass> MatchingClasses { get; set; }
         public float Accuracy { get; set; }
         public List<StepTime> TimeTrace { get; set; }
     }
