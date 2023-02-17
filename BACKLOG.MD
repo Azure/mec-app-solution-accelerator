@@ -33,7 +33,7 @@
 - **ACR & MAR vs. Docker Hub:** Evaluate if we'll use ACR or MAR as Docker Registry instead of Docker Hub. TBD. 
 
 ### Deployment
-- **Evaluate FLUX and GitOps for deployment of multiple sites and multiple Kubenetes config in sync:** Evaluate Flux, also integrated with GitOps, etc.
+- **FLUX and GitOps:** Evaluate FLUX and GitOps for deployment of multiple sites and multiple Kubenetes config in sync:
     - https://fluxcd.io/flux/
     - https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/tutorial-use-gitops-flux2?tabs=azure-cli
     - https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/conceptual-gitops-flux2
@@ -51,6 +51,12 @@
   - **Schedule GPUs in Kubernetes:** https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/
 
 ## Cloud scope
+
+### Solution Cloud automation/deployment
+- **Azure Arc, Arc Jumpstart and Agora:** Implement end to end automation with Azure ARC being able to deploy complex *custom* automations easily (Not just infrastructure such as AKS Arc-enabled but the whole solution on multiple sites, orchestrated from Azure cloud). Integration in Azure ARC AGORA marketplace.
+    - aka.ms/AzureArcJumpstart 
+    - https://github.com/microsoft/azure_arc/blob/main/docs/ppt/jumpstart_overview.pptx
+    - https://azurearcjumpstart.io/
 
 ### Global aggregated Data in the cloud 
 - **Application data upload to cloud for consolidation and aggregation:** Upload events and alerts through **Azure Event Hub** based on **Kafka connector from E4K** (Dependency on E4K at the EDGE).
