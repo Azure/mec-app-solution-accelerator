@@ -53,7 +53,7 @@
 ## Cloud scope
 
 ### Solution Cloud automation/deployment
-- **Azure Arc, Arc Jumpstart and Agora:** Implement end to end automation with Azure ARC being able to deploy complex *custom* automations easily (Not just infrastructure such as AKS Arc-enabled but the whole solution on multiple sites, orchestrated from Azure cloud). Integration in Azure ARC AGORA marketplace.
+- **Azure Arc, Arc Jumpstart and Agora:** Implement end to end automation with Azure Arc being able to deploy complex *custom* automations easily (Not just infrastructure such as AKS Arc-enabled but the whole solution on multiple sites, orchestrated from Azure cloud). Integration in Azure Arc Agora marketplace.
     - aka.ms/AzureArcJumpstart 
     - https://github.com/microsoft/azure_arc/blob/main/docs/ppt/jumpstart_overview.pptx
     - https://azurearcjumpstart.io/
