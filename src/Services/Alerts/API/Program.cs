@@ -1,3 +1,4 @@
+using Alerts.API.Configuration;
 using MediatR;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Configuration;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Infraestructure;
@@ -12,8 +13,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAlertsRepository, AlertsNoSqlRepository>();
+
 var mongoConfig = builder.Configuration.GetSection("MongoDB").Get<MongoDbConfiguration>();
 builder.Services.AddSingleton(config => mongoConfig);
+
+var colorBoundingBoxConfiguration = builder.Configuration.GetSection("ColorBoundingBoxes").Get<ColorBoundingBoxConfiguration>();
+builder.Services.AddSingleton(config => colorBoundingBoxConfiguration);
 
 builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();

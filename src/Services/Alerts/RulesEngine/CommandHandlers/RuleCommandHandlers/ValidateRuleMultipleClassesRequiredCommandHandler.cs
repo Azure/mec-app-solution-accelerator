@@ -10,7 +10,7 @@ namespace RulesEngine.CommandHandlers.RulesCommandHandler
             foreach(var @class in request.RuleConfig.MultipleObjects)
             {
                 var classesMatched = request.FoundClasses.Where(c => c.EventType == @class);
-                classesMatched.ToList().ForEach(c => request.MatchingClassesBoxes.AddRange(c.BoundingBoxes));
+                request.MatchedClassesByAlert.AddRange(classesMatched);
                 if(classesMatched.Count() == 0)
                 {
                     return false;

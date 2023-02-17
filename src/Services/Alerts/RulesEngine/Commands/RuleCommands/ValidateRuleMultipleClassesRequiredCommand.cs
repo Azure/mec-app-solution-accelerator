@@ -12,6 +12,6 @@ namespace RulesEngine.Commands.RuleCommands
         public DetectionClass RequestClass { get; set; }
         public long EveryTime { get; set; }
         public List<DetectionClass> FoundClasses { get; set; }
-        public List<BoundingBox> MatchingClassesBoxes { get; set; }
+        public List<DetectionClass> MatchedClassesByAlert { get; set; }
     }
 }

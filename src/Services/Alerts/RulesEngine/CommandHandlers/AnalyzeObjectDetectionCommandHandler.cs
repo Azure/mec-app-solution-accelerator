@@ -1,115 +1,69 @@
-﻿using Dapr.Client;
+﻿using Alerts.RulesEngine.Commands;
+using Dapr.Client;
 using MediatR;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
-using SolTechnology.Avro;
+using Newtonsoft.Json;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHandlers
 {
-    public class AnalyzeObjectDetectionCommandHandler : IRequestHandler<AnalyzeObjectDetectionCommand, bool>
+    public class AnalyzeObjectDetectionCommandHandler : IRequestHandler<AnalyzeObjectDetectionCommand, Unit>
     {
         private readonly DaprClient _daprClient;
         private readonly Dictionary<string, List<AlertsConfig>> _alertsByDetectedClasses;
-        private readonly Dictionary<string, Type> _commandsTypeByDetectionName;
         private readonly IMediator _mediator;
 
-        public AnalyzeObjectDetectionCommandHandler(DaprClient daprClient, Dictionary<string, List<AlertsConfig>> alertsByDetectedClasses, Dictionary<string, Type> commandsTypeByDetectionName, IMediator mediator)
+        public AnalyzeObjectDetectionCommandHandler(DaprClient daprClient, Dictionary<string, List<AlertsConfig>> alertsByDetectedClasses, IMediator mediator)
         {
             _daprClient = daprClient ?? throw new ArgumentNullException(nameof(daprClient));
             _alertsByDetectedClasses = alertsByDetectedClasses ?? throw new ArgumentNullException(nameof(alertsByDetectedClasses));
-            _commandsTypeByDetectionName = commandsTypeByDetectionName ?? throw new ArgumentNullException(nameof(commandsTypeByDetectionName));
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        public async Task<bool> Handle(AnalyzeObjectDetectionCommand command, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(AnalyzeObjectDetectionCommand command, CancellationToken cancellationToken)
         {
-            var stepTime = new StepTime() { StepName = "RuleEngine", StepStart = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds };
+            var stepTime = new StepTime { StepName = "RuleEngine", StepStart = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds };
 
-            if(command.Classes == null || command.Classes.Count == 0)
+            if (command.Classes is null || command.Classes.Count == 0)
             {
-                throw new ArgumentException("Classes are required");
+                throw new ArgumentException("Classes are required", nameof(command.Classes));
             }
 
-            var pendingTaks = new List<Task<bool>>();
-            foreach(var @class in command.Classes)
+            Task[] tasks = new Task[command.Classes.Count];
+            var i = 0;
+            foreach (var @class in command.Classes)
             {
-                pendingTaks.Add(
-                    this.ValidateAlertsPerDetection( //Single class can generate multiple alerts
-                        @class,
-                        command.Classes,
-                        command.EveryTime,
-                        command.UrlVideoEncoded,
-                        command.Frame,
-                        command.TimeTrace,
-                        stepTime)
-                    );
+                tasks[i++] = ValidateAlertsPerDetection(@class, command.Classes, command.EveryTime, command.UrlVideoEncoded,  command.Frame, command.TimeTrace, stepTime);
+
             }
-            await Task.WhenAll(pendingTaks);
-            var result = pendingTaks
-                .Where(task => task.Status == TaskStatus.RanToCompletion)
-                .Select(x => x.Result)
-                .ToList().Any(x => x);
+            await Task.WhenAll(tasks);
 
-            return result;
-        }
+            return Unit.Value;
+         }
 
-        private async Task<bool> ValidateAlertsPerDetection(DetectionClass requestClass, List<DetectionClass> foundClasses, long everyTime, string urlEncoded, string frame, List<StepTime> stepTrace, StepTime stepTime)
+        private async Task ValidateAlertsPerDetection(DetectionClass requestClass, List<DetectionClass> foundClasses, long everyTime, string urlEncoded, string frame, List<StepTime> stepTrace, StepTime stepTime)
         {
-            var triggeredAlert = false;
-            var exists = _alertsByDetectedClasses.TryGetValue(requestClass.EventType, out List<AlertsConfig> alertsConfig);
-            if (exists)
+            if (_alertsByDetectedClasses.TryGetValue(requestClass.EventType, out List<AlertsConfig>? alertsConfig))
             {
                 foreach (var alertConfig in alertsConfig)
                 {
-                    var matchingClassesBoxes = new List<BoundingBox>();
-                    var successfull = await ValidateAllRulesPerAlert(alertConfig, requestClass, foundClasses, matchingClassesBoxes); //Validate all the required rules from the config, just and.
-                    if (successfull)
+                    var validationAlertCommand = new ValidateAlertCommand()
                     {
-                        triggeredAlert = successfull;
+                        EveryTime = everyTime,
+                        UrlEncoded = urlEncoded,
+                        AlertConfig = alertConfig,
+                        FoundClasses = foundClasses,
+                        Frame = frame,
+                        RequestClass = requestClass,
+                        StepTime = stepTime,
+                        StepTrace = stepTrace,
+                    };
 
-                        stepTime.StepEnd = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
-                        stepTrace.Add(stepTime);
-                        var alert = new DetectedObjectAlert()
-                        {
-                            Name = alertConfig.AlertName,
-                            EveryTime = everyTime,
-                            UrlVideoEncoded = urlEncoded,
-                            Frame = frame,
-                            BoundingBoxes = matchingClassesBoxes,
-                            Type = alertConfig.AlertName,
-                            Information = $"Generate alert {alertConfig.AlertName} detecting objects {string.Join(" ,", foundClasses.Select(x => x.EventType).ToArray())}",
-                            Accuracy = requestClass.Confidence,
-                            TimeTrace = stepTrace,
-                        };
-
-                        var serialized = AvroConvert.Serialize(alert);
-                        await _daprClient.PublishEventAsync("pubsub", "newAlert", serialized);
-                    }
+                    await this._mediator.Send(validationAlertCommand);
                 }
             }
-            return triggeredAlert;
-        }
-
-        private async Task<bool> ValidateAllRulesPerAlert(AlertsConfig config, DetectionClass requestClass, List<DetectionClass> foundClasses, List<BoundingBox> matchingClassesBoxes)
-        {
-            foreach (var ruleConfig in config.RulesConfig)
-            {
-                var eventType = _commandsTypeByDetectionName[ruleConfig.RuleName];
-
-                dynamic command = Activator.CreateInstance(eventType);
-                command.FoundClasses = foundClasses;
-                command.RequestClass = requestClass;
-                command.RuleConfig = ruleConfig;
-                command.MatchingClassesBoxes = matchingClassesBoxes;
-                var result = await _mediator.Send(command);
-                if (!(bool)result)
-                {
-                    return false;
-                }
-            }
-            return true;
         }
     }
 }
