@@ -4,7 +4,7 @@ using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands
 {
-    public class AnalyzeObjectDetectionCommand : IRequest<bool>
+    public class AnalyzeObjectDetectionCommand : IRequest
     {
         public string Id { get; set; }
         public string UrlVideoEncoded { get; set; }

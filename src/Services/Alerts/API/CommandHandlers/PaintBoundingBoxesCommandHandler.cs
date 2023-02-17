@@ -31,7 +31,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             var thirdLane = new PointF[2];
             var fourthLane = new PointF[2];
             var imgResult = string.Empty;
-            var color = Brushes.Solid(Color.Yellow);
+            var colorDefault = Brushes.Solid(Color.Yellow);
 
             using (var image = Image.Load(stream))
             {
@@ -50,10 +50,10 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                     fourthLane[0] = thirdLane[1];
                     fourthLane[1] = firstLane[0];
 
-                    image.Mutate(x => x.DrawLines(color, 5, firstLane.ToArray()));
-                    image.Mutate(x => x.DrawLines(color, 5, secondLane.ToArray()));
-                    image.Mutate(x => x.DrawLines(color, 5, thirdLane.ToArray()));
-                    image.Mutate(x => x.DrawLines(color, 5, fourthLane.ToArray()));
+                    image.Mutate(x => x.DrawLines(colorDefault, 5, firstLane.ToArray()));
+                    image.Mutate(x => x.DrawLines(colorDefault, 5, secondLane.ToArray()));
+                    image.Mutate(x => x.DrawLines(colorDefault, 5, thirdLane.ToArray()));
+                    image.Mutate(x => x.DrawLines(colorDefault, 5, fourthLane.ToArray()));
                     firstLane = new PointF[2];
                     secondLane = new PointF[2];
                     thirdLane = new PointF[2];

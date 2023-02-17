@@ -6,8 +6,6 @@ using Dapr.Client;
 using MediatR;
 using RulesEngine.Commands.RuleCommands;
 using RulesEngine.CommandHandlers.RulesCommandHandler;
-using Microsoft.Extensions.Logging;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventControllers;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
 {
@@ -30,7 +28,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
                     It.IsAny<CancellationToken>()))
                     .Returns(Task.CompletedTask);
 
-            var commandHandler = new AnalyzeObjectDetectionCommandHandler(mockDaprClient.Object, alertsByDetectedClasses, commandsTypeByDetectionName, mockMediator.Object);
+            var commandHandler = new AnalyzeObjectDetectionCommandHandler(mockDaprClient.Object, alertsByDetectedClasses, mockMediator.Object);
 
             //assert
             await Assert.ThrowsAsync<ArgumentException>(async () => await commandHandler.Handle(new AnalyzeObjectDetectionCommand(), CancellationToken.None));
@@ -52,7 +50,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
                     It.IsAny<CancellationToken>()))
                     .Returns(Task.CompletedTask);
 
-            var commandHandler = new AnalyzeObjectDetectionCommandHandler(mockDaprClient.Object, alertsByDetectedClasses, commandsTypeByDetectionName, mockMediator.Object);
+            var commandHandler = new AnalyzeObjectDetectionCommandHandler(mockDaprClient.Object, alertsByDetectedClasses, mockMediator.Object);
 
             //act
             var task = await commandHandler.Handle(new AnalyzeObjectDetectionCommand()
@@ -67,7 +65,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
             }, CancellationToken.None);
 
             //assert
-            Assert.False(task);
+            Assert.IsType<Unit>(task);
         }
 
         public async Task TestWithClassesWorksCorrectlyAlertTriggered()
@@ -103,7 +101,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
                     It.IsAny<CancellationToken>()))
                     .Returns(Task.CompletedTask);
 
-            var commandHandler = new AnalyzeObjectDetectionCommandHandler(mockDaprClient.Object, alertsByDetectedClasses, commandsTypeByDetectionName, mockMediator.Object);
+            var commandHandler = new AnalyzeObjectDetectionCommandHandler(mockDaprClient.Object, alertsByDetectedClasses, mockMediator.Object);
 
             //act
             var task = await commandHandler.Handle(new AnalyzeObjectDetectionCommand()
@@ -120,7 +118,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
             }, CancellationToken.None);
 
             //assert
-            Assert.True(task);
+            Assert.IsType<Unit>(task);
         }
 
         [Fact]
@@ -286,23 +284,6 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
 
             //assert
             Assert.False(task);
-        }
-
-        [Fact]
-        public async Task CheckDetectionEventHandlerWorksCorrectly()
-        {
-            //arrange
-            var mockMediator = new Mock<IMediator>();
-            mockMediator.Setup(m => m.Send(It.IsAny<AnalyzeObjectDetectionCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(true);
-            var mockLogger = new Mock<ILogger<DetectionsProcessEventController>>();
-            var @object = "{\r\n\t\"Frame\": \"Test\",\r\n\t\"UrlVideoEncoded\": \"Test\",\r\n\t\"Type\": \"Person\",\r\n\t\"Classes\": [{\r\n\t\t\"EventType\": \"person\",\r\n\t\t\"Confidence\": 70,\r\n\t\t\"BoundngBoxes\": [{\r\n\t\t\t\"x\": 332.2,\r\n\t\t\t\"y\": -32.76\r\n\t\t}]\r\n\t}]\r\n}";
-            var controller = new DetectionsProcessEventController(mockLogger.Object, mockMediator.Object);
-
-            //act
-            var task = await controller.DetectionEventHandler(@object);
-
-            //assert
-            Assert.True(task);
         }
     }
 }

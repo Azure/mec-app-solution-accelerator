@@ -28,7 +28,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
         [HttpGet]
         public async Task<IEnumerable<Alert>> Get()
         {
-            return this._alertsRepository.List(0, 15);
+            return this._alertsRepository.List(0, 20);
         }
     }
 }

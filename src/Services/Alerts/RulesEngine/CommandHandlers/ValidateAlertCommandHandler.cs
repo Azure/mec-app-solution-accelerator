@@ -1,12 +1,10 @@
 ﻿using Alerts.RulesEngine.Commands;
 using Dapr.Client;
 using MediatR;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events;
 using SolTechnology.Avro;
-using System.Text.Encodings.Web;
 
 namespace Alerts.RulesEngine.CommandHandlers
 {
@@ -50,29 +48,30 @@ namespace Alerts.RulesEngine.CommandHandlers
             return Unit.Value;
         }
 
-        private async Task<bool> ValidateAllRulesPerAlert(AlertsConfig config, DetectionClass requestClass, List<DetectionClass> foundClasses, List<BoundingBox> matchingClassesBoxes)
+        private async ValueTask<bool> ValidateAllRulesPerAlert(AlertsConfig config, DetectionClass requestClass, List<DetectionClass> foundClasses, List<BoundingBox> matchingClassesBoxes)
         {
-            var pendingTaks = new List<Task<bool>>();
-            bool exists = default;
+            Task<bool>[] tasks = new Task<bool>[config.RulesConfig.Count];
+            bool exists = false;
+            var i = 0;
+
             foreach (var ruleConfig in config.RulesConfig)
             {
-                exists = _commandsTypeByDetectionName.TryGetValue(requestClass.EventType, out Type eventType);
-                if (exists)
+                if (_commandsTypeByDetectionName.TryGetValue(ruleConfig.RuleName, out Type? eventType) && eventType != null)
                 {
                     dynamic command = Activator.CreateInstance(eventType);
                     command.FoundClasses = foundClasses;
                     command.RequestClass = requestClass;
                     command.RuleConfig = ruleConfig;
                     command.MatchingClassesBoxes = matchingClassesBoxes;
-                    pendingTaks.Add(_mediator.Send(command));
+                    tasks[i++] = _mediator.Send(command);
+                    exists = true;
                 }
             }
-            await Task.WhenAll(pendingTaks);
 
-            return exists ? pendingTaks
-                .Where(task => task.Status == TaskStatus.RanToCompletion)
-                .Select(x => x.Result)
-                .ToList().All(result => result) : false;
+            await Task.WhenAll(tasks);
+
+            return exists && tasks.All(task => task.IsCompletedSuccessfully && task.Result);
         }
+
     }
 }

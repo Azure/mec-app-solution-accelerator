@@ -42,47 +42,22 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
 
         private IEnumerable<StepTimeAsDate> SetDurations(List<StepTime> stepTrace)
         {
-            var stepTimes = new List<StepTimeAsDate>();
             long previousEnd = 0;
-            foreach(var stepTraceItem in stepTrace)
+            return stepTrace.Select(stepTraceItem =>
             {
-                if(previousEnd == 0)
+                var contextualTraces = new StepTimeAsDate()
                 {
-                    var v = new StepTimeAsDate()
-                    {
-                        StepStart = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepStart),
-                        StepStop = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepEnd),
-                        StepName = stepTraceItem.StepName,
-                        StepDuration = Math.Round(Convert.ToDecimal(stepTraceItem.StepEnd - stepTraceItem.StepStart)),
-                    };
-                    stepTimes.Add(v);
-                    previousEnd = stepTraceItem.StepEnd;
-                }
-                else
-                {
-                    var v = new StepTimeAsDate()
-                    {
-                        StepStart = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepStart),
-                        StepStop = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepEnd),
-                        StepName = stepTraceItem.StepName,
-                    };
-                    v.StepDuration = Math.Round(Convert.ToDecimal(stepTraceItem.StepEnd - previousEnd));
-                    stepTimes.Add(v);
-                    previousEnd = stepTraceItem.StepEnd;
-                }
-            }
-
-            stepTrace.ForEach(stepTime => stepTimes.Add(new StepTimeAsDate()
-            { 
-                StepStart = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTime.StepStart),
-                StepStop = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTime.StepEnd),
-                StepName = stepTime.StepName,
-                StepDuration = Math.Round(Convert.ToDecimal(stepTime.StepEnd - stepTime.StepStart))
-            }));
-            return stepTimes;
+                    StepStart = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepStart),
+                    StepStop = new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(stepTraceItem.StepEnd),
+                    StepName = stepTraceItem.StepName,
+                    StepDuration = previousEnd == 0 ? Math.Round(Convert.ToDecimal(stepTraceItem.StepEnd - stepTraceItem.StepStart)) : Math.Round(Convert.ToDecimal(stepTraceItem.StepEnd - previousEnd)),
+                };
+                previousEnd = stepTraceItem.StepEnd;
+                return contextualTraces;
+            }).ToList();
         }
 
-        private Source SetHardwareMockInformation()
+        private Source SetHardwareMockInformation() //Mocking real hardware
         {
             var randomGenerator = new Random();
             var randomCameraNumber = randomGenerator.Next(1, 10);

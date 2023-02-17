@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Commands;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
-using MongoDB.Bson.IO;
 using SolTechnology.Avro;
-using System.Text.RegularExpressions;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
 {
