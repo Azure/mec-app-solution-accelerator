@@ -1,0 +1,32 @@
+﻿@model List<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert>
+@{
+
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Capture Time</th>
+                    <th>AlertTime</th>
+                    <th>Execution Time</th>
+                    <th>Source</th>
+                    <th>Type</th>
+                    <th>Information</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var post in Model)
+                {
+                    <tr>
+                        <td>@post.CaptureTime</td>
+                        <td>@post.AlertTime</td>
+                        <td>@post.MsExecutionTime</td>
+                        <td>@post.Source</td>
+                        <td>@post.Type</td>
+                        <td>@post.Information</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+}

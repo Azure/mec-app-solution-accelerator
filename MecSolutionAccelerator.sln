@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alerts.API", "src\Services\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alerts.Test", "src\Services\Alerts\Tests\Alerts.Test.csproj", "{8B2DC956-EF8B-4458-AE36-3DDFF7F0A0A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewAlertsUI", "src\Web\NewAlertsUI\NewAlertsUI.csproj", "{F85D40DA-17F4-46EB-931B-7725F7D5831E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{8B2DC956-EF8B-4458-AE36-3DDFF7F0A0A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B2DC956-EF8B-4458-AE36-3DDFF7F0A0A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B2DC956-EF8B-4458-AE36-3DDFF7F0A0A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F85D40DA-17F4-46EB-931B-7725F7D5831E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F85D40DA-17F4-46EB-931B-7725F7D5831E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F85D40DA-17F4-46EB-931B-7725F7D5831E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F85D40DA-17F4-46EB-931B-7725F7D5831E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

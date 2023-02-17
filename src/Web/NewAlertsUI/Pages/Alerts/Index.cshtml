@@ -1,0 +1,9 @@
+﻿@page
+@model NewAlertsUI.Pages.Alerts.IndexAlertModel
+@{
+    
+
+    <div>
+        @await Html.PartialAsync("_AlertsTable", Model.alerts)
+    </div>
+}
