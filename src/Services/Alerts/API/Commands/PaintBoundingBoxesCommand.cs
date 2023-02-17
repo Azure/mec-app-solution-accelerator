@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.Events.Base;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Commands
 {
@@ -10,6 +9,6 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Commands
         }
 
         public string OriginalImageBase64 { get; set; }
-        public List<BoundingBoxPoint> BoundingBoxPoints { get; set; }
+        public List<DetectionClass> MatchingClasses { get; set; }
     }
 }

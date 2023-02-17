@@ -25,9 +25,9 @@ services:
   framesplitter:
     environment:
     - TIMEOUT=15
-    - FEED=rtsp://4.tcp.ngrok.io:17883/mystream
+    #- FEED=rtsp://4.tcp.ngrok.io:17883/mystream
     #- FEED=../Datasets/demo.mp4
-    #- FEED=../Datasets/PerimeterDemo.mp4
+    - FEED=../Datasets/PerimeterDemo.mp4
     ports:
     - "57090"
 
@@ -43,7 +43,7 @@ services:
       - "50055:80"
 
   alertsapi-dapr:
-    command: [ "./daprd", "-app-id", "alerts-api", "-app-port", "80", "-components-path", "/components"]
+    command: [ "./daprd", "-app-id", "alerts-api", "-app-port", "80", "-components-path", "/components", "--dapr-http-max-request-size", "50"]
     volumes:
     - "./dapr/components/:/components"
 
@@ -59,7 +59,7 @@ services:
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
   alerts-ui-dapr:
-    command: [ "./daprd", "-app-id", "alerts-ui", "-app-port", "80" ]
+    command: [ "./daprd", "-app-id", "alerts-ui", "-app-port", "80", "--dapr-http-max-request-size","50"]
 
   mosquitto:
     ports:

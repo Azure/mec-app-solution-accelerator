@@ -23,8 +23,8 @@ namespace Alerts.RulesEngine.CommandHandlers
 
         public async Task<Unit> Handle(ValidateAlertCommand request, CancellationToken cancellationToken)
         {
-            var matchingClassesBoxes = new List<BoundingBox>();
-            if (await ValidateAllRulesPerAlert(request.AlertConfig, request.RequestClass, request.FoundClasses, matchingClassesBoxes))
+        var matchingClasses = new List<DetectionClass>();
+            if (await ValidateAllRulesPerAlert(request.AlertConfig, request.RequestClass, request.FoundClasses, matchingClasses))
             {
                 request.StepTime.StepEnd = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
                 request.StepTrace.Add(request.StepTime);
@@ -34,7 +34,7 @@ namespace Alerts.RulesEngine.CommandHandlers
                     EveryTime = request.EveryTime,
                     UrlVideoEncoded = request.UrlEncoded,
                     Frame = request.Frame,
-                    BoundingBoxes = matchingClassesBoxes,
+                    MatchingClasses = matchingClasses,
                     Type = request.AlertConfig.AlertName,
                     Information = $"Generate alert {request.AlertConfig.AlertName} detecting objects {string.Join(" ,", request.FoundClasses.Select(x => x.EventType).ToArray())}",
                     Accuracy = request.RequestClass.Confidence,
@@ -48,7 +48,7 @@ namespace Alerts.RulesEngine.CommandHandlers
             return Unit.Value;
         }
 
-        private async ValueTask<bool> ValidateAllRulesPerAlert(AlertsConfig config, DetectionClass requestClass, List<DetectionClass> foundClasses, List<BoundingBox> matchingClassesBoxes)
+        private async ValueTask<bool> ValidateAllRulesPerAlert(AlertsConfig config, DetectionClass requestClass, List<DetectionClass> foundClasses, List<DetectionClass> matchingClasses)
         {
             Task<bool>[] tasks = new Task<bool>[config.RulesConfig.Count];
             bool exists = false;
@@ -62,7 +62,7 @@ namespace Alerts.RulesEngine.CommandHandlers
                     command.FoundClasses = foundClasses;
                     command.RequestClass = requestClass;
                     command.RuleConfig = ruleConfig;
-                    command.MatchingClassesBoxes = matchingClassesBoxes;
+                    command.MatchedClassesByAlert = matchingClasses;
                     tasks[i++] = _mediator.Send(command);
                     exists = true;
                 }

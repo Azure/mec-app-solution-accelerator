@@ -8,11 +8,11 @@ namespace RulesEngine.CommandHandlers.RulesCommandHandler
         public async Task<bool> Handle(ValidateRuleMinimumNumberOfObjectsDetectedRequiredCommand request, CancellationToken cancellationToken)
         {
             var count = 0;
-            foreach(var f in request.FoundClasses)
+            foreach(var foundClass in request.FoundClasses)
             {
-                if(f.EventType == request.RuleConfig.DetectedObject)
+                if(foundClass.EventType == request.RuleConfig.DetectedObject)
                 {
-                    request.MatchingClassesBoxes.AddRange(f.BoundingBoxes);
+                    request.MatchedClassesByAlert.Add(foundClass);
                     count++;
                 }
             }

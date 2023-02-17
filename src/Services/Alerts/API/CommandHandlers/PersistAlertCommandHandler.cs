@@ -21,6 +21,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             var id = Guid.NewGuid();
             TimeSpan time = TimeSpan.FromMilliseconds(request.CaptureTime);
             DateTime captureDate = new DateTime(1970, 1, 1) + time;
+            DateTime alertDate =  DateTime.Now;
 
             var entity = new Alert()
             {
@@ -31,11 +32,11 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                 Type = request.Type,
                 Accuracy = request.Accuracy * 100,
                 StepTimes = JsonConvert.SerializeObject(SetDurations(request.StepTrace)),
+                MsExecutionTime = (alertDate - captureDate).TotalMilliseconds,
+                AlertTime = alertDate,
+                Source = this.SetHardwareMockInformation(),
             };
-            if (entity.Source == null)
-            {
-                entity.Source = this.SetHardwareMockInformation();
-            }
+
             await this._repository.Create(entity);
             return entity;
         }

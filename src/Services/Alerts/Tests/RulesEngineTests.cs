@@ -138,7 +138,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
                     NumberfObjects = 3,
                     DetectedObject = "person",
                 },
-                MatchingClassesBoxes = new List<BoundingBox>(),
+                MatchedClassesByAlert = new List<DetectionClass>(),
             };
 
             //act
@@ -163,7 +163,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
                     NumberfObjects = 3,
                     DetectedObject = "person",
                 },
-                MatchingClassesBoxes = new List<BoundingBox>(),
+                MatchedClassesByAlert = new List<DetectionClass>(),
             };
 
             //act
@@ -191,7 +191,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
                     DetectedObject = "person",
                     MinimumThreshold = 70,
                 },
-                MatchingClassesBoxes = new List<BoundingBox>(),
+                MatchedClassesByAlert = new List<DetectionClass>(),
             };
 
             //act
@@ -219,7 +219,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
                     DetectedObject = "person",
                     MinimumThreshold = 70,
                 },
-                MatchingClassesBoxes = new List<BoundingBox>(),
+                MatchedClassesByAlert = new List<DetectionClass>(),
             };
 
             //act
@@ -239,7 +239,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
                 FoundClasses = new List<DetectionClass> { 
                     new DetectionClass() { EventType = "person", BoundingBoxes  = new List<BoundingBox>(), Confidence = 90, } , 
                     new DetectionClass() { EventType = "car", BoundingBoxes = new List<BoundingBox>(), Confidence = 90, } },
-                MatchingClassesBoxes = new List<BoundingBox>(),
+                MatchedClassesByAlert = new List<DetectionClass>(),
                 RequestClass = new DetectionClass()
                 {
                     EventType = "person",
