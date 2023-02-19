@@ -4,9 +4,20 @@
     ViewBag.Title = "Alerts";
 }
 
-<div id="alertsTableDiv">
-    @await Html.PartialAsync("_AlertsTable", Model.alerts)
+<div style="display: flex; width: 100%;">
+  <div style="flex: 1;">
+        <div id="alertsTableDiv">
+            @await Html.PartialAsync("_AlertsTable", Model.alerts)
+        </div>
+  </div>
+  <div style="flex: 1;">
+        <div id="alertsDetailsDiv">
+            @await Html.PartialAsync("_AlertsDetails", Model.test)
+        </div>
+  </div>
 </div>
+
+
 
 <button id="refreshButton">Refresh</button>
 
@@ -19,6 +30,21 @@
                     url: '/?handler=Refresh',
                     success: function (result) {
                         $('#alertsTableDiv').html(result);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#alertsTableDiv tbody tr').click(function () {
+                var elementId = $(this).data('element-id');
+                $.ajax({
+                    url: '/?Handler=Details' + elementId,
+                    type: 'GET',
+                    success: function (result) {
+                        $('#alertsDetailsDiv').html(result);
                     }
                 });
             });

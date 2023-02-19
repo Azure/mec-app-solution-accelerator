@@ -16,7 +16,7 @@
             <tbody>
                 @foreach (var post in Model)
                 {
-                    <tr>
+                    <tr data-element-id="@post.Id">
                         <td>@post.CaptureTime</td>
                         <td>@post.AlertTime</td>
                         <td>@post.MsExecutionTime</td>
