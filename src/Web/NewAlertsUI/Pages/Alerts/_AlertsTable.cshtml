@@ -2,7 +2,7 @@
 @{
 
     <div>
-        <table>
+        <table id="alertsTable">
             <thead>
                 <tr>
                     <th>Capture Time</th>
@@ -16,7 +16,7 @@
             <tbody>
                 @foreach (var post in Model)
                 {
-                    <tr data-element-id="@post.Id">
+                    <tr element-id="@post.Id">
                         <td>@post.CaptureTime</td>
                         <td>@post.AlertTime</td>
                         <td>@post.MsExecutionTime</td>

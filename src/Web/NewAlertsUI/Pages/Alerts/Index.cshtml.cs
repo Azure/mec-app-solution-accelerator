@@ -7,11 +7,10 @@ namespace NewAlertsUI.Pages.Alerts
 {
     public class IndexAlertModel : PageModel
     {
-        public IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert>? alerts;
+        private IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert> alerts;
         private readonly DaprClient _daprClient;
 
-        //mockup
-        public Alert test;
+       
 
         public IndexAlertModel(DaprClient daprClient)
         {
@@ -36,12 +35,7 @@ namespace NewAlertsUI.Pages.Alerts
 
         public void OnGet()
         {
-            alerts = new List<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert>();
-            ViewData["Alerts"] = alerts;
 
-
-            //mockup
-            test = new Alert("test", "", "", new DateTime(), new DateTime(), 20, "type", 10, new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Source("name", "type", 10, 10), "50");
         }
 
         [HttpGet]
@@ -52,16 +46,20 @@ namespace NewAlertsUI.Pages.Alerts
         }
 
         [HttpGet]
-        public IActionResult OnGetDetails(string alertId)
+        public IActionResult OnGetDetails(string id)
         {
             Alert alertDetail = null;
-            foreach (var alert in alerts.ToList())
-            {
-                if(alert.Id == alertId)
+            alerts = (IEnumerable<Alert>?)ViewData["Alerts"];
+            if (alerts != null) {
+                foreach (var alert in alerts.ToList())
                 {
-                    alertDetail = alert;
+                    if (alert.Id == id)
+                    {
+                        alertDetail = alert;
+                    }
                 }
             }
+            
             if (alertDetail == null)
             {
                 return NotFound();

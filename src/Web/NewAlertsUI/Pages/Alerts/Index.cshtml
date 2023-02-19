@@ -6,13 +6,11 @@
 
 <div style="display: flex; width: 100%;">
   <div style="flex: 1;">
-        <div id="alertsTableDiv">
-            @await Html.PartialAsync("_AlertsTable", Model.alerts)
+        <div id="alertsTableDiv">            
         </div>
   </div>
   <div style="flex: 1;">
         <div id="alertsDetailsDiv">
-            @await Html.PartialAsync("_AlertsDetails", Model.test)
         </div>
   </div>
 </div>
@@ -37,17 +35,15 @@
     </script>
 
     <script>
-        $(document).ready(function () {
-            $('#alertsTableDiv tbody tr').click(function () {
-                var elementId = $(this).data('element-id');
-                $.ajax({
-                    url: '/?Handler=Details' + elementId,
-                    type: 'GET',
-                    success: function (result) {
-                        $('#alertsDetailsDiv').html(result);
-                    }
-                });
+        $(document).on('click', '#alertsTable tbody tr', function () {
+            var elementId = $(this).attr('element-id');
+            $.get({
+                   url: '/?handler=Details&id=' + elementId,
+                   success: function (result) {
+                    $('#alertsDetailsDiv').html(result);
+                   }
             });
         });
+
     </script>
 }
