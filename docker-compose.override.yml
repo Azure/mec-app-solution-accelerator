@@ -25,7 +25,11 @@ services:
   framesplitter:
     environment:
     - TIMEOUT=15
+<<<<<<< HEAD
     #- FEED=rtsp://4.tcp.ngrok.io:17883/mystream
+=======
+    # - FEED=rtsp://4.tcp.ngrok.io:17972/mystream
+>>>>>>> e35fa606e000fff96f384bf61570e59139d2d036
     #- FEED=../Datasets/demo.mp4
     - FEED=../Datasets/PerimeterDemo.mp4
     ports:
