@@ -46,29 +46,17 @@ namespace NewAlertsUI.Pages.Alerts
         }
 
         [HttpGet]
-        public IActionResult OnGetDetails(string id)
+        public async Task<IActionResult> OnGetDetails(string id)
         {
-            Alert alertDetail = null;
-            alerts = (IEnumerable<Alert>?)ViewData["Alerts"];
-            if (alerts != null) {
-                foreach (var alert in alerts.ToList())
-                {
-                    if (alert.Id == id)
-                    {
-                        alertDetail = alert;
-                    }
-                }
-            }
-            
-            if (alertDetail == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return Partial("_AlertsDetails", alertDetail);
+            this.alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert>>(
+                HttpMethod.Get,
+                "alerts-api",
+                "alerts");
 
-            }
+            Alert alertDetail = alerts.Where(p => p.Id == id).DefaultIfEmpty(alerts.First()).First();
+
+            return Partial("_AlertsDetails", alertDetail);
+
         }
     }
 }
