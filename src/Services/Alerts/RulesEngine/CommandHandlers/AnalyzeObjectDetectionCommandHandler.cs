@@ -12,10 +12,10 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
     public class AnalyzeObjectDetectionCommandHandler : IRequestHandler<AnalyzeObjectDetectionCommand, Unit>
     {
         private readonly DaprClient _daprClient;
-        private readonly Dictionary<string, List<AlertsConfig>> _alertsByDetectedClasses;
+        private readonly Dictionary<string, IEnumerable<AlertsConfig>> _alertsByDetectedClasses;
         private readonly IMediator _mediator;
 
-        public AnalyzeObjectDetectionCommandHandler(DaprClient daprClient, Dictionary<string, List<AlertsConfig>> alertsByDetectedClasses, IMediator mediator)
+        public AnalyzeObjectDetectionCommandHandler(DaprClient daprClient, Dictionary<string, IEnumerable<AlertsConfig>> alertsByDetectedClasses, IMediator mediator)
         {
             _daprClient = daprClient ?? throw new ArgumentNullException(nameof(daprClient));
             _alertsByDetectedClasses = alertsByDetectedClasses ?? throw new ArgumentNullException(nameof(alertsByDetectedClasses));
@@ -45,7 +45,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
 
         private async Task ValidateAlertsPerDetection(DetectionClass requestClass, List<DetectionClass> foundClasses, long everyTime, string urlEncoded, string frame, List<StepTime> stepTrace, StepTime stepTime)
         {
-            if (_alertsByDetectedClasses.TryGetValue(requestClass.EventType, out List<AlertsConfig>? alertsConfig))
+            if (_alertsByDetectedClasses.TryGetValue(requestClass.EventType, out IEnumerable<AlertsConfig>? alertsConfig))
             {
                 foreach (var alertConfig in alertsConfig)
                 {
