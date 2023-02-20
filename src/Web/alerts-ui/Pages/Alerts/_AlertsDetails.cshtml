@@ -1,0 +1,37 @@
+﻿@using System.Text
+@model Microsoft.MecSolutionAccelerator.AlertsUI.Models.AlertDetailsModel
+@{
+}
+@if (Model != null)
+{
+    <div class="info-container d-flex flex-column justify-content-between">
+        <img src="data:image/jpeg;base64,@Model.Frame" alt="Alert Information Image" class="alert-image">
+        <div class="alert-description border border-dark position-relative rounded overflow-auto">
+            <pre class="alert-text position-absolute top-0 left-0 font-sans p-1">
+                <b>Alert: @Model.Id</b><br>
+                <b>@Model.Type</b><br>
+                &emsp; – Position: (@Model.Source.Lat,@Model.Source.Lon)
+                &emsp; - Capture Day/Time: @Model.CaptureTime
+                &emsp; - Alert Day/Time: @Model.AlertTime
+                &emsp; - Detection Confidence: @Model.Accuracy%<br>
+
+                <p>@Model.Source.Name</p>
+                <p>@Model.Source.Type</p>
+                <p>@Model.Source.Lat</p>
+                <p>@Model.Source.Lon</p>
+                <p>@Model.Accuracy</p>
+                <p>@Model.Information</p>
+                <p>@Model.AlertTime</p>
+                <p>@Model.StepTimes</p>
+
+                </pre>
+                
+        </div>
+    </div>
+
+
+
+}
+
+
+

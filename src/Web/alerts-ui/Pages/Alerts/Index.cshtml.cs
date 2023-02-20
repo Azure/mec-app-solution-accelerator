@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Dapr.Client;
 using Microsoft.MecSolutionAccelerator.AlertsUI.Models;
 
-namespace NewAlertsUI.Pages.Alerts
+namespace Microsoft.MecSolutionAccelerator.AlertsUI.Pages.Alerts
 {
     public class IndexAlertModel : PageModel
     {

@@ -59,10 +59,10 @@ services:
     network_mode: "service:alerts-api"
   
   alerts-ui:
-    image: ${DOCKER_REGISTRY-}newalerts-ui
+    image: ${DOCKER_REGISTRY-}alerts-ui
     build:
       context: .
-      dockerfile: src/Web/newalertsui/Dockerfile
+      dockerfile: src/Web/alerts-ui/Dockerfile
     depends_on:
       - alertsapi-dapr
 

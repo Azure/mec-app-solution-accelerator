@@ -10,7 +10,7 @@ namespace Microsoft.MecSolutionAccelerator.AlertsUI.Controllers
 {
     public class AlertController : Controller
     {
-        public IEnumerable<Alert> Alerts;
+        public IEnumerable<AlertDetailsModel> Alerts;
         //public List<Alert> Alerts;
         private readonly DaprClient _daprClient;
 
@@ -20,24 +20,24 @@ namespace Microsoft.MecSolutionAccelerator.AlertsUI.Controllers
         }
 
         // GET: /<controller>/
-        public IEnumerable<Alert> Alert()
+        public IEnumerable<AlertDetailsModel> Alert()
         {
-            Alerts = new List<Alert>();
+            Alerts = new List<AlertDetailsModel>();
             ViewData["Alerts"] = Alerts;
             return Alerts;
         }
 
-        public async Task<ActionResult> RefreshPage()
-        {
-            await RefreshData();
-            IndexModel Model = new IndexModel();
-            Model.Alerts = Alerts;
-            return View("Alert", Model);
-        }
+        //public async Task<ActionResult> RefreshPage()
+        //{
+        //    //await RefreshData();
+        //    //IndexModel Model = new IndexModel();
+        //    //Model.Alerts = Alerts;
+        //    //return View("Alert", Model);
+        //}
 
         private async Task<string> RefreshData()
         {
-            this.Alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Alert>>(
+            this.Alerts = await _daprClient.InvokeMethodAsync<IEnumerable<AlertDetailsModel>>(
                 HttpMethod.Get,
                 "alerts-api",
                 "alerts");
