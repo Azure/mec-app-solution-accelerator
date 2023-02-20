@@ -1,5 +1,7 @@
 ﻿using Dapr.Client;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.MecSolutionAccelerator.Services.Alerts.Commands;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
@@ -11,12 +13,14 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
         private readonly DaprClient _daprClient;
         private readonly ILogger<AlertsController> _logger;
         private readonly IAlertsRepository _alertsRepository;
+        private readonly IMediator _mediator;
 
-        public AlertsController(DaprClient daprClient, ILogger<AlertsController> logger, IAlertsRepository alertsRepository)
+        public AlertsController(DaprClient daprClient, ILogger<AlertsController> logger, IAlertsRepository alertsRepository, IMediator mediator)
         {
             _daprClient = daprClient ?? throw new ArgumentNullException(nameof(daprClient));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _alertsRepository = alertsRepository ?? throw new ArgumentNullException(nameof(alertsRepository));
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         [HttpGet("{skip}/{take}")]
@@ -29,6 +33,25 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
         public async Task<IEnumerable<Alert>> Get()
         {
             return this._alertsRepository.List(0, 10);
+        }
+
+        [HttpGet("Minimized")]
+        public async Task<IEnumerable<AlertMinimized>> GetMinimized()
+        {
+            return await this._alertsRepository.GetAlertsMinimized(0, 10);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<Alert> GetById(Guid id)
+        {
+            var alert = await this._alertsRepository.GetById(id);
+            alert.Frame = await _mediator.Send(new PaintBoundingBoxesCommand()
+            {
+                MatchingClasses = alert.MatchesClasses,
+                OriginalImageBase64 = alert.Frame,
+            });
+
+            return alert;
         }
     }
 }

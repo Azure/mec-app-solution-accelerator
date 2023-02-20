@@ -30,7 +30,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             return nFrame;
         }
 
-        private string PaintBoundingBoxes(MemoryStream stream, List<DetectionClass> matchingClasses)
+        private string PaintBoundingBoxes(MemoryStream stream, IEnumerable<DetectionClass> matchingClasses)
         {
             var c = new List<List<Vector2>>();
             var firstLane = new PointF[2];
