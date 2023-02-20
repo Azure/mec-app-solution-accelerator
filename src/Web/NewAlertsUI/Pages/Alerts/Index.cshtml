@@ -7,7 +7,6 @@
 <div style="display: flex; width: 100%;">
   <div style="flex: 1;">
         <div id="alertsTableDiv"> 
-            @await Html.PartialAsync("_AlertsTable", Model.alerts)
         </div>
   </div>
   <div style="flex: 1;">
@@ -17,21 +16,17 @@
 </div>
 
 
-
-<button id="refreshButton">Refresh</button>
-
 @section scripts{
     <script>
         $(function () {
-            $('#refreshButton').click(function (e) {
-                e.preventDefault();
+            setInterval(function () {
                 $.get({
                     url: '/?handler=Refresh',
                     success: function (result) {
                         $('#alertsTableDiv').html(result);
                     }
                 });
-            });
+            }, 3000); // 3 seconds
         });
     </script>
 
