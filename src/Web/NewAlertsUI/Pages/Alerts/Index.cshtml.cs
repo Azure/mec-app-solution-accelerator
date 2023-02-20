@@ -7,7 +7,7 @@ namespace NewAlertsUI.Pages.Alerts
 {
     public class IndexAlertModel : PageModel
     {
-        private IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert> alerts;
+        public IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.AlertDetailsModel> alerts;
         private readonly DaprClient _daprClient;
 
        
@@ -18,18 +18,17 @@ namespace NewAlertsUI.Pages.Alerts
         }
         private async Task<string> RefreshData()
         {
-            //this.alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert>>(
-            //    HttpMethod.Get,
-            //    "alerts-api",
-            //    "alerts");
+            this.alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.AlertDetailsModel>>(
+                HttpMethod.Get,
+                "alerts-api",
+                "alerts");
 
             //mockup
-            List<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert> alertsList = new List<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert>();
-            alertsList.Add(new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert("1", "1", "123", new DateTime(), new DateTime(), 20, "type", 10, new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Source("name", "type", 10, 10), "50"));
-            alerts = alertsList;
+            //List<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert> alertsList = new List<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert>();
+            //alertsList.Add(new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert("1", "1", "123", new DateTime(), new DateTime(), 20, "type", 10, new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Source("name", "type", 10, 10), "50"));
+            //alerts = alertsList;
 
 
-            ViewData["Alerts"] = alerts;
             return "New data added";
         }
 
@@ -42,18 +41,24 @@ namespace NewAlertsUI.Pages.Alerts
         public async Task<IActionResult> OnGetRefresh()
         {
             await RefreshData();
-            return Partial("_AlertsTable", alerts);
+            List<AlertReducedModel> alertsReduced = new List<AlertReducedModel>();
+            foreach (AlertDetailsModel alert in alerts)
+            {
+                AlertReducedModel alertReduced = new AlertReducedModel(alert.Id, alert.CaptureTime, alert.AlertTime, alert.MsExecutionTime, alert.Source, alert.Type, alert.Information);
+                alertsReduced.Add(alertReduced);
+            }
+            return Partial("_AlertsTable", alertsReduced);
         }
 
         [HttpGet]
         public async Task<IActionResult> OnGetDetails(string id)
         {
-            this.alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert>>(
+            this.alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.AlertDetailsModel>>(
                 HttpMethod.Get,
                 "alerts-api",
                 "alerts");
 
-            Alert alertDetail = alerts.Where(p => p.Id == id).DefaultIfEmpty(alerts.First()).First();
+            AlertDetailsModel alertDetail = alerts.Where(p => p.Id == id).DefaultIfEmpty(alerts.First()).First();
 
             return Partial("_AlertsDetails", alertDetail);
 

@@ -1,8 +1,8 @@
 ﻿namespace Microsoft.MecSolutionAccelerator.AlertsUI.Models
 {
-    public class Alert
+    public class AlertDetailsModel
     {
-        public Alert(string id, string information, string frame, DateTime captureTime, DateTime alertTime, double msExecutionTime, string type, float accuracy, Source source, string stepTimes)
+        public AlertDetailsModel(string id, string information, string frame, DateTime captureTime, DateTime alertTime, double msExecutionTime, string type, float accuracy, SourceModel source, string stepTimes)
         {
             Id = id ?? throw new ArgumentNullException(nameof(id));
             Information = information ?? throw new ArgumentNullException(nameof(information));
@@ -24,7 +24,7 @@
         public double MsExecutionTime { get; set; }
         public string Type { get; set; }
         public float Accuracy { get; set; }
-        public Source Source { get; set; }
+        public SourceModel Source { get; set; }
         public string StepTimes { get; set; }
 
         public string toString()

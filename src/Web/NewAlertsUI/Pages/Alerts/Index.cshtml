@@ -6,7 +6,8 @@
 
 <div style="display: flex; width: 100%;">
   <div style="flex: 1;">
-        <div id="alertsTableDiv">            
+        <div id="alertsTableDiv"> 
+            @await Html.PartialAsync("_AlertsTable", Model.alerts)
         </div>
   </div>
   <div style="flex: 1;">
