@@ -73,7 +73,12 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Infraestructure
                     { "AlertTime", 1 },
                     { "MsExecutionTime", 1 },
                     { "Type", 1 },
-                    { "Accuracy", 1 }
+                    { "Accuracy", 1 },
+                    { "Source", 1 }
+                }),
+                new BsonDocument("$sort", new BsonDocument
+                {
+                    { "CaptureTime", -1 }
                 }),
                 new BsonDocument("$skip", skip),
                 new BsonDocument("$limit", take)

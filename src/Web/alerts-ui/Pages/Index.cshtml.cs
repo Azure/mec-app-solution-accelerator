@@ -13,7 +13,7 @@ namespace Microsoft.MecSolutionAccelerator.AlertsUI.Pages;
 
 public class IndexModel : PageModel
 {
-    public IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.AlertDetailsModel> alerts;
+    public IEnumerable<AlertReducedModel> alerts;
     private readonly DaprClient _daprClient;
 
 
@@ -24,7 +24,7 @@ public class IndexModel : PageModel
     }
     private async Task<string> RefreshData()
     {
-        this.alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.AlertDetailsModel>>(
+        this.alerts = await _daprClient.InvokeMethodAsync<IEnumerable<AlertReducedModel>>(
             HttpMethod.Get,
             "alerts-api",
             "alerts");
@@ -47,24 +47,16 @@ public class IndexModel : PageModel
     public async Task<IActionResult> OnGetRefresh()
     {
         await RefreshData();
-        List<AlertReducedModel> alertsReduced = new List<AlertReducedModel>();
-        foreach (AlertDetailsModel alert in alerts)
-        {
-            AlertReducedModel alertReduced = new AlertReducedModel(alert.Id, alert.CaptureTime, alert.AlertTime, alert.MsExecutionTime, alert.Source, alert.Type, alert.Accuracy);
-            alertsReduced.Add(alertReduced);
-        }
-        return Partial("Alerts/_AlertsTable", alertsReduced);
+        return Partial("Alerts/_AlertsTable", alerts);
     }
 
     [HttpGet]
     public async Task<IActionResult> OnGetDetails(string id)
     {
-        this.alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.AlertDetailsModel>>(
+        AlertDetailsModel alertDetail = await _daprClient.InvokeMethodAsync<AlertDetailsModel>(
             HttpMethod.Get,
             "alerts-api",
-            "alerts");
-
-        AlertDetailsModel alertDetail = alerts.Where(p => p.Id == id).DefaultIfEmpty(alerts.First()).First();
+            $"alerts/{id}");
 
         return Partial("Alerts/_AlertsDetails", alertDetail);
 
@@ -86,7 +78,7 @@ public class IndexModel : PageModel
     public List<SourceModel> getSources()
     {
         List<SourceModel> Sources = new List<SourceModel>();
-        foreach(AlertDetailsModel alert in alerts)
+        foreach(AlertReducedModel alert in alerts)
         {
             if(Sources.Contains(alert.Source) == false)
             {

@@ -9,5 +9,6 @@
         public double MsExecutionTime { get; set; }
         public string Type { get; set; }
         public float Accuracy { get; set; }
+        public Source Source { get; set; }
     }
 }

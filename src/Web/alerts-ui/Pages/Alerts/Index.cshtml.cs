@@ -7,7 +7,7 @@ namespace Microsoft.MecSolutionAccelerator.AlertsUI.Pages.Alerts
 {
     public class IndexAlertModel : PageModel
     {
-        public IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.AlertDetailsModel> alerts;
+        public IEnumerable<AlertReducedModel> alerts;
         private readonly DaprClient _daprClient;
 
        
@@ -18,7 +18,7 @@ namespace Microsoft.MecSolutionAccelerator.AlertsUI.Pages.Alerts
         }
         private async Task<string> RefreshData()
         {
-            this.alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.AlertDetailsModel>>(
+            this.alerts = await _daprClient.InvokeMethodAsync<IEnumerable<AlertReducedModel>>(
                 HttpMethod.Get,
                 "alerts-api",
                 "alerts");
@@ -41,27 +41,19 @@ namespace Microsoft.MecSolutionAccelerator.AlertsUI.Pages.Alerts
         public async Task<IActionResult> OnGetRefresh()
         {
             await RefreshData();
-            List<AlertReducedModel> alertsReduced = new List<AlertReducedModel>();
-            foreach (AlertDetailsModel alert in alerts)
-            {
-                AlertReducedModel alertReduced = new AlertReducedModel(alert.Id, alert.CaptureTime, alert.AlertTime, alert.MsExecutionTime, alert.Source, alert.Type, alert.Accuracy);
-                alertsReduced.Add(alertReduced);
-            }
-            return Partial("_AlertsTable", alertsReduced);
+
+            return Partial("_AlertsTable", alerts);
         }
 
         [HttpGet]
         public async Task<IActionResult> OnGetDetails(string id)
         {
-            this.alerts = await _daprClient.InvokeMethodAsync<IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.AlertDetailsModel>>(
+            AlertDetailsModel alertDetail = await _daprClient.InvokeMethodAsync<AlertDetailsModel>(
                 HttpMethod.Get,
                 "alerts-api",
-                "alerts");
-
-            AlertDetailsModel alertDetail = alerts.Where(p => p.Id == id).DefaultIfEmpty(alerts.First()).First();
+                $"alerts/{id}");
 
             return Partial("_AlertsDetails", alertDetail);
-
         }
     }
 }
