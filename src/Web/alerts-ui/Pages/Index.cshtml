@@ -28,12 +28,12 @@
             </label>
         </div>
         <div class="d-flex flex-row" id="data">
-            <div id="left" class="d-flex flex-column flex-grow-1" style="min-width: 60%;">
+            <div id="left" class="d-flex flex-column flex-grow-1 overflow-auto" style="min-width: 60%;">
                 <div id="alertsTableDiv">
                     @await Html.PartialAsync("Alerts/_AlertsTable", Model.alerts)
                 </div>
             </div>
-            <div id="right" class="d-flex flex-column justify-content-around align-items-start mx-5">
+            <div id="right" class="d-flex flex-column justify-content-around align-items-start mx-5 ">
                 <div class="info-container border border-dark d-flex flex-column border rounded justify-content-center" id="alertsDetailsDiv">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width=".5" stroke="currentColor" class="empty-folder align-self-center">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776" />
@@ -85,7 +85,28 @@
 
     </script>
     <script>
+        var refreshIntervalId = null;
+
+        function toggleAutomaticRefresh() {
+            if ($('#switch').prop('checked')) {
+                // Start refreshing data automatically
+                refreshIntervalId = setInterval(function () {
+                    $.get({
+                        url: '/?handler=Refresh',
+                        success: function (result) {
+                            $('#alertsTableDiv').html(result);
+                        }
+                    });
+                }, 3000);
+            } else {
+                // Stop refreshing data automatically
+                clearInterval(refreshIntervalId);
+                refreshIntervalId = null;
+            }
+        }
+
         $(document).on('click', '#refresh-data', function () {
+            // Manually refresh data on button click
             $.get({
                 url: '/?handler=Refresh',
                 success: function (result) {
@@ -93,7 +114,6 @@
                 }
             });
         });
-
     </script>
 
     <script type="text/javascript">

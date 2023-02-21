@@ -1,5 +1,8 @@
 ﻿@model IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.AlertReducedModel>
+@using System.Globalization;
 @{
+
+ }
 
     <table id="alertsTable">
         <thead class="fixed-header">
@@ -17,8 +20,17 @@
                 @foreach (var post in Model)
                 {
                     <tr element-id="@post.Id" class="border border-dark text-center py-1">
-                        <td>@post.CaptureTime.ToString("d")<br>@post.CaptureTime.ToString("T")</td>
-                        <td>@post.AlertTime.ToString("d")<br>@post.AlertTime.ToString("T")</td>
+                    <td>
+                        @{
+                            var captureTime = post.CaptureTime.ToUniversalTime().ToLocalTime();
+                            var alertTime = post.AlertTime.ToUniversalTime().ToLocalTime();
+                            var cultureInfo = Thread.CurrentThread.CurrentCulture;
+                        }
+                        @captureTime.ToString("d", cultureInfo)<br>@captureTime.ToString("T", cultureInfo)                        
+                    </td>
+                    <td>                        
+                        @alertTime.ToString("d", cultureInfo)<br>@alertTime.ToString("T", cultureInfo)
+                    </td>
                         <td>@Math.Round(post.MsExecutionTime) ms</td>
                         <td>@post.Source.Name</td>
                         <td class="justify-content-center px-2">
@@ -51,4 +63,4 @@
     </table>
 
 
-}
+
