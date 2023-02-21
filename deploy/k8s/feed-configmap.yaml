@@ -5,7 +5,7 @@ metadata:
   namespace: mec-accelerator
 data:
   # feeds: "[{'id':'1', 'url':'../Datasets/frames/brindadores.jpg'},{'id':'2', 'url':'../Datasets/frames/avion.jpg'}]"
-  feeds: "[{'id':'1', 'url':'rtsp://4.tcp.ngrok.io:17972/mystream'},{'id':'2', 'url':'rtsp://4.tcp.ngrok.io:17972/mystream'}]"
+  feeds: "[{'id':'1', 'url':'rtsp://20.42.105.26:8554/mystream'},{'id':'2', 'url':'rtsp://20.42.105.26:8554/mystream'}]"
 
 # - FEED=../Datasets/frames/avion.jpg
 # - FEED=../Datasets/frames/brindadores.jpg
