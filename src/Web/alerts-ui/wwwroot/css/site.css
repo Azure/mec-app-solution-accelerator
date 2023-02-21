@@ -80,6 +80,12 @@ td {
     height: 30px;
 }
 
+.fixed-header {
+    /* position: sticky; */
+    top: 0;
+    z-index: 1;
+}
+
 .information {
     width: 2.5rem;
     height: 2.5rem;

@@ -28,8 +28,8 @@
             </label>
         </div>
         <div class="d-flex flex-row" id="data">
-            <div id="left" class="d-flex flex-column">
-                <div id="alertsTableDiv" class="overflow-auto align-self-center">
+            <div id="left" class="d-flex flex-column flex-grow-1" style="min-width: 60%;">
+                <div id="alertsTableDiv">
                     @await Html.PartialAsync("Alerts/_AlertsTable", Model.alerts)
                 </div>
             </div>
