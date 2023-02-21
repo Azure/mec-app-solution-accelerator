@@ -6,7 +6,7 @@
 > 
 > This application's code will be evolving, new features will be added and growing in the spirit of improving its quality thanks to open source contributions (PRs) from you. 
 > 
-> Because of those reasons, there's no official support from Microsoft Support (CSS) about this example appilication, although the repo's owners will try to help you when possible and available. Eventually, if mature enough, Microsoft Support conditions could improved.
+> Because of those reasons, there's no official support from Microsoft Support (CSS) about this example appilication, although the repo's owners and the OSS comunity will try to help you when possible and available. Eventually, if mature enough, Microsoft Support conditions could improved.
 
 ## How to file issues and get help  
 
