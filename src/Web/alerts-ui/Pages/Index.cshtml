@@ -21,9 +21,7 @@
         <h1 class="fw-semibold" id="page-title">Alerts Dashboard</h1>
         <div class="d-flex flex-row" id="data">
             <div id="left" class="d-flex flex-column">
-                <div id="alertsTableDiv">
                     @await Html.PartialAsync("Alerts/_AlertsTable", Model.alerts)
-                </div>
             </div>
             <div id="right" class="d-flex flex-column justify-content-around align-items-start mx-5">
                 <div class="" id="alertsDetailsDiv">
@@ -69,19 +67,7 @@
 
 <script type="text/javascript">
     localStorage.clear();
-    var refresh_alerts = true;
-
-    setTimeout(() => {
-        $("#switch")[0].checked = true;
-        localStorage.setItem("automaticRefresh", true);
-        $("#left").load('@Url.Action("RefreshPage","Alert")');
-    }, 50);
-
-    const refreshData = () => {
-        refresh_alerts = false;
-        localStorage.setItem("tableScroll", $("#table").scrollTop());
-        $("#left").load('@Url.Action("RefreshPage","Alert")');
-    }
+    
 
     const toggleAutomaticRefresh = () => {
         localStorage.setItem("automaticRefresh", $("#switch")[0].checked);

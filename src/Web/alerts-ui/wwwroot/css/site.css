@@ -14,7 +14,7 @@ html {
 }
 
 body {
-    margin-bottom: 60px;
+    /* margin-bottom: 60px; */
     height: 100%;
     color: #343333;
 }
@@ -113,7 +113,7 @@ td {
 
 .alert-description {
     width: 100%;
-    height: 45%;
+    height: 100%;
     background-color: #F3F3F3;
 }
 
@@ -205,8 +205,8 @@ td {
 }
 
 #left {
-    width: 52%;
-    height: 90%;
+    /* width: 52%; */
+    /* height: 90%; */
 }
 
 #right {
