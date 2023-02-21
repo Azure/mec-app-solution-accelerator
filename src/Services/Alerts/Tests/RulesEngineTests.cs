@@ -278,7 +278,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
                     MultipleObjects = new List<string> { "person", "car" }
                 }
             };
-
+            command.MatchedClassesByAlert = new List<DetectionClass>();
             //act
             var task = await handler.Handle(command, CancellationToken.None);
 
