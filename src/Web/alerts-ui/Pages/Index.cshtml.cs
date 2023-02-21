@@ -1,9 +1,3 @@
-using System.IO;
-using System.Linq;
-using System.Text.Json;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.MecSolutionAccelerator.AlertsUI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +27,7 @@ public class IndexModel : PageModel
         //List<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert> alertsList = new List<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert>();
         //alertsList.Add(new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert("1", "1", "123", new DateTime(), new DateTime(), 20, "type", 10, new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Source("name", "type", 10, 10), "50"));
         //alerts = alertsList;
-
+        var test = Request.Cookies["timezone"];
 
         return "New data added";
     }

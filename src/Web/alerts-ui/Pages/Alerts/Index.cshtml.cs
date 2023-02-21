@@ -22,7 +22,7 @@ namespace Microsoft.MecSolutionAccelerator.AlertsUI.Pages.Alerts
                 HttpMethod.Get,
                 "alerts-api",
                 "alerts");
-            
+
             //mockup
             //List<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert> alertsList = new List<Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert>();
             //alertsList.Add(new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Alert("1", "1", "123", new DateTime(), new DateTime(), 20, "type", 10, new Microsoft.MecSolutionAccelerator.AlertsUI.Models.Source("name", "type", 10, 10), "50"));
