@@ -20,7 +20,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             var id = Guid.NewGuid();
             TimeSpan time = TimeSpan.FromMilliseconds(request.CaptureTime);
             DateTime captureDate = new DateTime(1970, 1, 1) + time;
-            DateTime alertDate =  DateTime.Now;
+            DateTime alertDate =  DateTime.UtcNow;
 
             var entity = new Alert()
             {
