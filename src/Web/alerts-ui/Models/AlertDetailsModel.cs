@@ -2,19 +2,7 @@
 {
     public class AlertDetailsModel
     {
-        public AlertDetailsModel(string id, string information, string frame, DateTime captureTime, DateTime alertTime, double msExecutionTime, string type, float accuracy, SourceModel source, string stepTimes)
-        {
-            Id = id ?? throw new ArgumentNullException(nameof(id));
-            Information = information ?? throw new ArgumentNullException(nameof(information));
-            Frame = frame ?? throw new ArgumentNullException(nameof(frame));
-            CaptureTime = captureTime;
-            AlertTime = alertTime;
-            MsExecutionTime = msExecutionTime;
-            Type = type ?? throw new ArgumentNullException(nameof(type));
-            Accuracy = accuracy;
-            Source = source ?? throw new ArgumentNullException(nameof(source));
-            StepTimes = stepTimes ?? throw new ArgumentNullException(nameof(stepTimes));
-        }
+        
 
         public string Id { get; set; }
         public string Information { get; set; }
@@ -25,7 +13,7 @@
         public string Type { get; set; }
         public float Accuracy { get; set; }
         public SourceModel Source { get; set; }
-        public string StepTimes { get; set; }
+        public IEnumerable<StepTimeModel> StepTimeAsDate { get; set; }
 
         public string toString()
         {
