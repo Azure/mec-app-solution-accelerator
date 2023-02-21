@@ -24,7 +24,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
         [HttpPost]
         public async Task PostAlert(byte[] alertBytes)
         {
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var detection = AvroConvert.Deserialize<DetectedObjectAlert>(alertBytes);
             detection.TimeTrace.FirstOrDefault(t => t.StepName.Equals("RulesEngine")).StepEnd = (long)(now - new DateTime(1970, 1, 1)).TotalMilliseconds;
             var alert = await _mediator.Send(new PersistAlertCommand()
