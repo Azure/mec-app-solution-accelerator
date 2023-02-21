@@ -15,5 +15,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Models
         public float Accuracy { get; set; }
         public Source Source { get; set; }
         public string StepTimes { get; set; }
+        public IEnumerable<StepTimeAsDate> StepTimes2 { get; set; }
+        public IEnumerable<DetectionClass> MatchesClasses { get; set; }
     }
 }

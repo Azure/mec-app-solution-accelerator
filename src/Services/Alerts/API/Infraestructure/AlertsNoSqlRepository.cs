@@ -1,5 +1,6 @@
 ﻿using Microsoft.MecSolutionAccelerator.Services.Alerts.Configuration;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Infraestructure
@@ -7,18 +8,19 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Infraestructure
     public class AlertsNoSqlRepository : IAlertsRepository
     {
         private readonly MongoDbConfiguration _config;
+        private readonly IMongoDatabase _database;
+        private readonly IMongoClient _dbClient;
+
         public AlertsNoSqlRepository(MongoDbConfiguration config)
         {
-            this._config = config;
+            var mongoUrlBuilder = new MongoUrlBuilder($"{config.UrlPrefix}://{config.Hostname}:{config.PortNumber}/{config.DatabaseName}");
+            _dbClient = new MongoClient(mongoUrlBuilder.ToMongoUrl());
+            _database = _dbClient.GetDatabase(config.DatabaseName);
         }
 
         private IMongoDatabase GetDatabase()
         {
-            var mongoUrlBuilder = new MongoUrlBuilder($"{this._config.UrlPrefix}://{this._config.Hostname}:{this._config.PortNumber}/{this._config.DatabaseName}");
-            MongoClient dbClient = new MongoClient(mongoUrlBuilder.ToMongoUrl());
-            var database = dbClient.GetDatabase(this._config.DatabaseName);
-
-            return database;
+            return _database;
         }
 
         public async Task Create(Alert entity)
@@ -57,6 +59,32 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Infraestructure
             var collection = this.GetDatabase().GetCollection<Alert>(typeof(Alert).Name);
             var updateFilter = Builders<Alert>.Filter.Eq("Id", entity.Id);
             await collection.ReplaceOneAsync(updateFilter, entity, new ReplaceOptions() { IsUpsert = false });
+        }
+
+        public async Task<IEnumerable<AlertMinimized>> GetAlertsMinimized(int skip, int take)
+        {
+            var pipeline = new BsonDocument[]
+            {
+                new BsonDocument("$project", new BsonDocument
+                {
+                    { "_id", 1 },
+                    { "Information", 1 },
+                    { "CaptureTime", 1 },
+                    { "AlertTime", 1 },
+                    { "MsExecutionTime", 1 },
+                    { "Type", 1 },
+                    { "Accuracy", 1 }
+                }),
+                new BsonDocument("$skip", skip),
+                new BsonDocument("$limit", take)
+            };
+
+            var collection = this.GetDatabase().GetCollection<Alert>(typeof(Alert).Name);
+
+            var options = new AggregateOptions { AllowDiskUse = true };
+            var result = await collection.Aggregate<AlertMinimized>(pipeline, options).ToListAsync();
+
+            return result;
         }
     }
 }
