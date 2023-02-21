@@ -14,7 +14,7 @@ issues before filing new issues to avoid duplicates.  For new issues, file your 
 feature request as a new Issue.
 
 ### Questions
-For help and questions about using this project, please create issues in this repo tagged as "Question". We'll try answer when possible, although there's no specific ETA for it defined.
+For help and questions about using this project, please create issues in this repo tagged as **"question"**. We'll try answer when possible, although there's no specific ETA for it defined.
 
 ## Microsoft Support Policy  
 
