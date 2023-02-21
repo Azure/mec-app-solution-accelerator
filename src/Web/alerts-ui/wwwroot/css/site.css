@@ -22,7 +22,7 @@ body {
 table, tr {
     border: 1px solid;
     width: 100%;
-    border-color: #343333 !important;
+    /* border-color: #343333 !important; */
 }
 
 th {

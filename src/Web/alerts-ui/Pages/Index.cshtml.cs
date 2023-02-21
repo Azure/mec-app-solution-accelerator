@@ -50,7 +50,7 @@ public class IndexModel : PageModel
         List<AlertReducedModel> alertsReduced = new List<AlertReducedModel>();
         foreach (AlertDetailsModel alert in alerts)
         {
-            AlertReducedModel alertReduced = new AlertReducedModel(alert.Id, alert.CaptureTime, alert.AlertTime, alert.MsExecutionTime, alert.Source, alert.Type, alert.Information);
+            AlertReducedModel alertReduced = new AlertReducedModel(alert.Id, alert.CaptureTime, alert.AlertTime, alert.MsExecutionTime, alert.Source, alert.Type, alert.Accuracy);
             alertsReduced.Add(alertReduced);
         }
         return Partial("Alerts/_AlertsTable", alertsReduced);

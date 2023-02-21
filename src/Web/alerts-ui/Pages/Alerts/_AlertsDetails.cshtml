@@ -4,7 +4,6 @@
 }
 @if (Model != null)
 {
-    <div class="info-container d-flex flex-column justify-content-between">
         <img src="data:image/jpeg;base64,@Model.Frame" alt="Alert Information Image" class="alert-image">
         <div class="alert-description border border-dark position-relative rounded overflow-auto">
             <pre class="alert-text position-absolute top-0 left-0 font-sans p-1">
@@ -14,6 +13,9 @@
                 &emsp; - Capture Day/Time: @Model.CaptureTime
                 &emsp; - Alert Day/Time: @Model.AlertTime
                 &emsp; - Detection Confidence: @Model.Accuracy%<br>
+                
+
+                @Math.Round(Model.MsExecutionTime)
 
                 <p>@Model.Source.Name</p>
                 <p>@Model.Source.Type</p>
@@ -27,7 +29,6 @@
                 </pre>
                 
         </div>
-    </div>
 
 
 
