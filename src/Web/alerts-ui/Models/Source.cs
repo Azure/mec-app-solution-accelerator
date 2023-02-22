@@ -1,9 +1,9 @@
 ﻿using System;
 namespace Microsoft.MecSolutionAccelerator.AlertsUI.Models
 {
-	public class SourceModel
+	public class Source
 	{
-		public SourceModel(string name, string type, double lat, double lon)
+		public Source(string name, string type, double lat, double lon)
 		{
 			Name = name ?? throw new ArgumentNullException(nameof(name));
 			Type = type ?? throw new ArgumentNullException(nameof(type));

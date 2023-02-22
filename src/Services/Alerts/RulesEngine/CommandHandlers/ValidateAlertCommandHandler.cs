@@ -26,6 +26,8 @@ namespace Alerts.RulesEngine.CommandHandlers
         var matchingClasses = new List<DetectionClass>();
             if (await ValidateAllRulesPerAlert(request.AlertConfig, request.RequestClass, request.FoundClasses, matchingClasses))
             {
+                request.StepTime.StepEnd = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
+                request.StepTrace.Add(request.StepTime);
                 var alert = new DetectedObjectAlert()
                 {
                     Name = request.AlertConfig.AlertName,

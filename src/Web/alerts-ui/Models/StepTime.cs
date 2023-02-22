@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 namespace Microsoft.MecSolutionAccelerator.AlertsUI.Models
 {
-    public class StepTimeModel
+    public class StepTime
     {
         public string StepName { get; set; }
         public DateTime StepStart { get; set; }

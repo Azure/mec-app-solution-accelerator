@@ -1,39 +1,52 @@
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.MecSolutionAccelerator.AlertsUI.Models;
-using Microsoft.AspNetCore.Mvc;
-using Dapr.Client;
 
-namespace Microsoft.MecSolutionAccelerator.AlertsUI.Pages
+namespace Microsoft.MecSolutionAccelerator.AlertsUI.Pages;
+
+public class IndexModel : PageModel
 {
-    public class IndexModel : PageModel
+    public IEnumerable<Alert> Alerts { get; set; }
+
+    public IndexModel()
     {
-        private readonly DaprClient _daprClient;
+        Alerts = new List<Alert>();
 
-        public IndexModel(DaprClient daprClient)
+    }
+
+    public async Task OnGet()
+    {
+        ViewData["Alerts"] = Alerts;
+    }
+
+    public string FindInputs(Alert alert)
+    {
+        if (alert.Information != null && alert.Frame != null)
         {
-            _daprClient = daprClient;
+            return "both";
         }
-
-        public IEnumerable<AlertReducedModel> Alerts { get; private set; }
-
-        public async Task<IActionResult> OnGetRefresh()
+        else if (alert.Information != null)
         {
-            Alerts = await _daprClient.InvokeMethodAsync<IEnumerable<AlertReducedModel>>(
-                HttpMethod.Get,
-                "alerts-api",
-                "alerts");
-
-            return Partial("Alerts/_AlertsTable", Alerts);
+            return "text";
         }
+        return "image";
+    }
 
-        public async Task<IActionResult> OnGetDetails(string id)
+    public List<Source> getSources()
+    {
+        List<Source> Sources = new List<Source>();
+        foreach(Alert alert in Alerts)
         {
-            AlertDetailsModel alertDetail = await _daprClient.InvokeMethodAsync<AlertDetailsModel>(
-                HttpMethod.Get,
-                "alerts-api",
-                $"alerts/{id}");
-
-            return Partial("Alerts/_AlertsDetails", alertDetail);
+            if(Sources.Contains(alert.Source) == false)
+            {
+                Sources.Add(alert.Source);
+            }
         }
+        return Sources.OrderBy(o => o.Name).ToList();
     }
 }
