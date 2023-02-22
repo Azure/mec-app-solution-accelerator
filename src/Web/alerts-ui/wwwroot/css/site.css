@@ -14,7 +14,7 @@ html {
 }
 
 body {
-    margin-bottom: 60px;
+    /* margin-bottom: 60px; */
     height: 100%;
     color: #343333;
 }
@@ -22,7 +22,7 @@ body {
 table, tr {
     border: 1px solid;
     width: 100%;
-    border-color: #343333 !important;
+    /* border-color: #343333 !important; */
 }
 
 th {
@@ -32,11 +32,20 @@ th {
     border-color: #343333 !important;
     position: sticky;
     top: 0;
+    text-align:center;
+    font-size: x-large !important;
 }
 
 td {
     background-color: #F3F3F3;
     cursor: pointer;
+    font-size: large !important;
+}
+
+
+text-left-align 
+{
+    text-align:left;
 }
 
 .line {
@@ -80,6 +89,12 @@ td {
     height: 30px;
 }
 
+.fixed-header {
+    /* position: sticky; */
+    top: 0;
+    z-index: 1;
+}
+
 .information {
     width: 2.5rem;
     height: 2.5rem;
@@ -113,7 +128,7 @@ td {
 
 .alert-description {
     width: 100%;
-    height: 45%;
+    height: 100%;
     background-color: #F3F3F3;
 }
 
@@ -205,8 +220,8 @@ td {
 }
 
 #left {
-    width: 52%;
-    height: 90%;
+    /* width: 52%; */
+    /* height: 90%; */
 }
 
 #right {

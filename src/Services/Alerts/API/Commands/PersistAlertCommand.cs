@@ -16,5 +16,6 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Commands
         public string Type { get; set; }
         public float Accuracy { get; set; }
         public List<StepTime> StepTrace { get; set; }
+        public List<DetectionClass> MatchingClasses { get; set; }
     }
 }
