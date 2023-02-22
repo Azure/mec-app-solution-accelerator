@@ -1,20 +1,13 @@
 import cv2
-import numpy as np
 import queue
 import threading
 from dapr.clients import DaprClient
-from dapr.ext.grpc import App, InvokeMethodRequest, InvokeMethodResponse
 import json
 import time
-import pickle
 import base64
 import os
-app = App()
+import logging
 
-def PublishEvent(pubsub_name: str, topic_name: str, data: json):
-    with DaprClient() as client:
-        resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data)
-        print(resp)
 
 
 class VideoCapture:
@@ -31,7 +24,6 @@ class VideoCapture:
         while not self.stop:
             ret, frame = self.cap.read()
             if not ret:
-                #self.release()
                 break
             if not self.q.empty():
                 try:
@@ -55,11 +47,11 @@ class VideoCapture:
         self.cap.release()
 
 def main():
+    logging.basicConfig(level=logging.DEBUG)
     
     timer=0
-    timer= int(os.getenv('TIMEOUT'))
+    timer=int(os.getenv('TIMEOUT'))
     try:
-        feed=(os.getenv('FEED'))
         MY_POD_NAME=(os.getenv('MY_POD_NAME'))
         FEEDS=(os.getenv('FEEDS'))
 
@@ -70,25 +62,23 @@ def main():
 
         feed_id=feeds_dict['id']
         feed_URL=feeds_dict['url']
-        print('feed url: ' +feed_URL)
     except:
-        
         feed_URL=(os.getenv('FEED'))
         feed_id=1
-        print('feed url: ' +feed_URL)
+
+    logging.info(f'feed url: {feed_URL}')
+        
     time.sleep(timer)
     
  
     cap = VideoCapture(feed_URL)
-    i=0
     while True:
         # Capture frame-by-frame
         ret,frame = cap.read()
         timestamp_init=int(time.time()*1000)
-        print('feed url: ' +feed_URL)
         
         while not ret:
-            print('not possible to access feed')
+            logging.info(f'not possible to access feed')
             cap.release()
             cap = VideoCapture(feed_URL)
             ret, frame = cap.read()
@@ -97,7 +87,7 @@ def main():
         resized_img_bytes = img_encode.tobytes()
         bytes_string = base64.standard_b64encode(resized_img_bytes)
         timestamp=int(time.time()*1000)
-        print('Sending frame to inference')
+        logging.info(f'Sending frame to inference')
         try:
             with DaprClient() as client:
                 # Using Dapr SDK to publish a topic
@@ -108,13 +98,11 @@ def main():
                     "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
                 )
                 
-                print('Waiting for response')
-                
-                print(resp.text(), flush=True) 
+                logging.info(f'Waiting for response')
+                response=resp.text()
+                logging.info(response)
         except:
-            print('Inference pod unreachable')
-        i+=1
-
+            logging.info(f'Inference pod unreachable')
         
 
 if __name__ == '__main__':
