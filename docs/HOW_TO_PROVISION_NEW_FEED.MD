@@ -1,7 +1,7 @@
 # New Feed Provision 
 
 The current solution supports the usage of custom images and videos for testing purposes.
-If you want to ru your own video in kubernetes, please refer to ```text
+If you want to ru your own video in kubernetes, please refer to 
 [Create RTSP Server](HOW_TO_CREATE_RTSP_SERVER.MD)
 
 ## Docker Compose
