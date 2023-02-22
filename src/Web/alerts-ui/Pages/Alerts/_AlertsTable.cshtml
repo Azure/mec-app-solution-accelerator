@@ -33,15 +33,15 @@
             <td>@TimeZoneInfo.ConvertTimeFromUtc(post.AlertTime, TimeZoneInfo.FindSystemTimeZoneById(timeZone)).ToString("d", CultureInfo.CurrentCulture)<br>@TimeZoneInfo.ConvertTimeFromUtc(post.AlertTime, TimeZoneInfo.FindSystemTimeZoneById(timeZone)).ToString("T", CultureInfo.CurrentCulture)</td>
             <td>@Math.Round(post.MsExecutionTime) ms</td>
             <td>@post.Source.Name</td>
-            <td class="justify-content-center px-2">
-                @if (post.Accuracy > 90)
+            <td class="justify-content-center px-2 text-left-align">
+                @if (post.Accuracy > 70)
                 {
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="priority-svg" id="danger-svg">
                         <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
                     </svg>
                     <span class="text-darkRed text-center text-sm" id="danger-text">alert-danger</span>
                 }
-                else if (post.Accuracy > 70)
+                else if (post.Accuracy > 50)
                 {
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="priority-svg" id="warning-svg">
                         <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />

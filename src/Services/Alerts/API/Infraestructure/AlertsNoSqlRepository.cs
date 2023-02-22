@@ -1,6 +1,5 @@
 ﻿using Microsoft.MecSolutionAccelerator.Services.Alerts.Configuration;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
-using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Infraestructure
@@ -18,76 +17,62 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Infraestructure
             _database = _dbClient.GetDatabase(config.DatabaseName);
         }
 
-        private IMongoDatabase GetDatabase()
-        {
-            return _database;
-        }
-
         public async Task Create(Alert entity)
         {
-            var collection = this.GetDatabase().GetCollection<Alert>(typeof(Alert).Name);
+            var collection = _database.GetCollection<Alert>(nameof(Alert));
             await collection.InsertOneAsync(entity);
+        }
+
+        public async Task Update(Alert entity)
+        {
+            var collection = _database.GetCollection<Alert>(nameof(Alert));
+            var updateFilter = Builders<Alert>.Filter.Eq("Id", entity.Id);
+            await collection.ReplaceOneAsync(updateFilter, entity);
         }
 
         public async Task Delete(Guid id)
         {
-            var collection = this.GetDatabase().GetCollection<Alert>(typeof(Alert).Name);
+            var collection = _database.GetCollection<Alert>(nameof(Alert));
             var deleteFilter = Builders<Alert>.Filter.Eq("Id", id);
             await collection.DeleteOneAsync(deleteFilter);
         }
 
         public async Task<Alert> GetById(Guid id)
         {
-            var collection = this.GetDatabase().GetCollection<Alert>(typeof(Alert).Name);
-            return await (await collection.FindAsync(alert => alert.Id.Equals(id))).FirstOrDefaultAsync();
+            var collection = _database.GetCollection<Alert>(nameof(Alert));
+            return await collection.Find(Builders<Alert>.Filter.Eq("Id", id)).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Alert>> List()
         {
-            var collection = this.GetDatabase().GetCollection<Alert>(typeof(Alert).Name);
-            return await(await collection.FindAsync(_ => true)).ToListAsync();
+            var collection = _database.GetCollection<Alert>(nameof(Alert));
+            return await collection.AsQueryable().ToListAsync();
         }
 
         public IEnumerable<Alert> List(int skip, int take)
         {
-            var collection = this.GetDatabase().GetCollection<Alert>(typeof(Alert).Name);
-            return collection.Find(_ => true).SortByDescending(bson => bson.CaptureTime).Skip(skip).Limit(take).ToList();
-        }
-
-        public async Task Update(Alert entity)
-        {
-            var collection = this.GetDatabase().GetCollection<Alert>(typeof(Alert).Name);
-            var updateFilter = Builders<Alert>.Filter.Eq("Id", entity.Id);
-            await collection.ReplaceOneAsync(updateFilter, entity, new ReplaceOptions() { IsUpsert = false });
+            var collection = _database.GetCollection<Alert>(nameof(Alert));
+            return collection.AsQueryable().OrderByDescending(alert => alert.CaptureTime).Skip(skip).Take(take).ToList();
         }
 
         public async Task<IEnumerable<AlertMinimized>> GetAlertsMinimized(int skip, int take)
         {
-            var pipeline = new BsonDocument[]
-            {
-                new BsonDocument("$project", new BsonDocument
-                {
-                    { "_id", 1 },
-                    { "Information", 1 },
-                    { "CaptureTime", 1 },
-                    { "AlertTime", 1 },
-                    { "MsExecutionTime", 1 },
-                    { "Type", 1 },
-                    { "Accuracy", 1 },
-                    { "Source", 1 }
-                }),
-                new BsonDocument("$sort", new BsonDocument
-                {
-                    { "CaptureTime", -1 }
-                }),
-                new BsonDocument("$skip", skip),
-                new BsonDocument("$limit", take)
-            };
+            var collection = _database.GetCollection<Alert>(nameof(Alert));
 
-            var collection = this.GetDatabase().GetCollection<Alert>(typeof(Alert).Name);
-
-            var options = new AggregateOptions { AllowDiskUse = true };
-            var result = await collection.Aggregate<AlertMinimized>(pipeline, options).ToListAsync();
+            var result = await collection
+                .Find(alert => true)
+                .Project<AlertMinimized>(Builders<Alert>.Projection
+                .Include("Information")
+                .Include("CaptureTime")
+                .Include("AlertTime")
+                .Include("MsExecutionTime")
+                .Include("Type")
+                .Include("Accuracy")
+                .Include("Source"))
+                .SortByDescending(alert => alert.CaptureTime)
+                .Skip(skip)
+                .Limit(take)
+                .ToListAsync();
 
             return result;
         }

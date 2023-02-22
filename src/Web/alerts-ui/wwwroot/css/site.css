@@ -32,11 +32,20 @@ th {
     border-color: #343333 !important;
     position: sticky;
     top: 0;
+    text-align:center;
+    font-size: x-large !important;
 }
 
 td {
     background-color: #F3F3F3;
     cursor: pointer;
+    font-size: large !important;
+}
+
+
+text-left-align 
+{
+    text-align:left;
 }
 
 .line {
