@@ -24,7 +24,7 @@ Minikube is local Kubernetes, focusing on making it easy to learn and develop fo
     kubectl config use-context minikube
     ```
     
-    ![kubectl minikube context](/imgs/deploy/minikube1.png)
+    ![kubectl minikube context](/docs/imgs/deploy/minikube1.png)
 
 ### Install and Initialize DAPR
 
@@ -96,7 +96,7 @@ Note that if you were able to run the application on plain Docker, you should ha
     /> minikube dashboard
     ```
 
-![minikube dashboard](/imgs/deploy/minikube2.png)
+![minikube dashboard](/docs/imgs/deploy/minikube2.png)
 
 ### Access the application's UI to see Alerts originated from AI model detections
 
