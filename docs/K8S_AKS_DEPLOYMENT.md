@@ -61,10 +61,8 @@ docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#inst
 
     ![kubectl minikube context](/docs/imgs/deploy/aks2.png)
 
-4. Extension prerequisites 4. Extension prerequisites 
 
-
-4. Enable the Azure CLI extension for cluster extensions and install Dapr on AKS
+5. Enable the Azure CLI extension for cluster extensions and install Dapr on AKS
 
     You will also need the k8s-extension Azure CLI extension. Install this by running the following commands:
     
@@ -90,13 +88,13 @@ docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#inst
 
 ### Deploy the application's services to Kubernetes
 
-5. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
+6. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
     ```powershell
     cd <your_path>/deploy/k8s
     ```
 
-6. Deploy the application in Kuberentes by running this command:
+7. Deploy the application in Kuberentes by running this command:
 
     ```powershell
     kubectl apply -f ./
@@ -112,16 +110,6 @@ docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#inst
     kubectl delete -f ./
     ```
 
-### Remove the application from Kubernetes 
-
-1. Open a new command-shell and change the current folder to the `deploy/k8s` folder of this repo.
-
-1. Run the following command to remove all related kubernetes resources for this application, since there is no stop action on kubectl.
-
-    ```powershell
-    kubectl delete -f ./
-    ```
-
 ### Access the application's UI to see Alerts originated from AI model detections
 
 8. To access the front-end, go to the Azure portal, find the AKS resource and navigate to the services sections. In there the alerts-ui service of type NodePort will have public IP assigned.
@@ -129,7 +117,15 @@ docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#inst
     ![kubectl minikube context](/docs/imgs/deploy/aks3.png)
 
 
+### Remove the application from Kubernetes 
 
+9. Open a new command-shell and change the current folder to the `deploy/k8s` folder of this repo.
+
+10. Run the following command to remove all related kubernetes resources for this application, since there is no stop action on kubectl.
+
+    ```powershell
+    kubectl delete -f ./
+    ```
 
 
 
