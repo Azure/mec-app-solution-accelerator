@@ -1,54 +1,55 @@
-# Deployment to Kubernetes in 'Docker Desktop'
+# Deploy to AKS Edge Essentials
 
-Docker Desktop includes a [standalone Kubernetes](https://docs.docker.com/desktop/kubernetes/) server and client, as well as Docker CLI integration that runs on your machine.
+Microsoft recently released [AKS Edge Essentials](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-overview) as GA (Generally Available) on February 21st 2023.
 
-The Kubernetes server runs locally within your Docker instance, is not configurable, and is a single-node cluster. It runs within a Docker container on your local system, and is only for local testing.
+Azure Kubernetes Service Edge Essentials is an on-premises Kubernetes implementation of Azure Kubernetes Service (AKS) that automates running containerized applications at scale. AKS Edge Essentials includes a Microsoft-supported Kubernetes platform that includes a lightweight Kubernetes distribution with a small footprint and simple installation experience, making it easy for you to deploy Kubernetes on PC-class or "light" edge hardware. AKS Edge Essentials makes it easier to get started with your containerized application, bringing cloud-native best practices to your edge application.
 
-## Install/enable Kuberentes in Docker Desktop
+## Install AKS Edge Essentials
 
-Make sure you have installed ["Docker Desktop"](https://docs.docker.com/desktop/install/windows-install/).
+You can install AKS EE by using the quick start way:
 
-Once you have installed Docker Desktop, enable Kubernetes by following these instructions.
+- [AKS Edge Essentials quickstart guide](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-quickstart)
 
-### Enable Kubernetes in Docker Desktop
+Alternatively, you can install it on a more 'step by step' way for more manual control of the installation:
 
-1. In order to Enable Kubernetes in Docker Desktop, check out the instructions from Docker:
+- [AKS Edge Essentials - Single machine deployment](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-single-node-deployment)
 
-    - [Enable Kuberentes in Docker Desktop](https://docs.docker.com/desktop/kubernetes/)
+**Important:** Note that with AKS EE you can install **[K3s](https://k3s.io/)** Kubernetes distribution (by default) or you can install the full Kubernetes distribution (**[K8s](https://kubernetes.io/)**), by using this parameter `-UseK8s` (if using the PowerShell Scripts). Both distributions should work propoerly for deplying this example application.
 
-2. If you previosly had already installed kubectl and it is pointing to some other environment, such as MiniKube, make sure the default kubectl context is pointing to docker-desktop. 
-
-    Open a new command-shell and run the following command to check your current contexts:
-
-    ```powershell
-    kubectl config get-contexts
-    ```
-
-    To set the context to point to Kuberentes from Docker Desktop:
-
-    ```powershell
-    kubectl config use-context docker-desktop
-    ```
-    
-    ![image](https://user-images.githubusercontent.com/1712635/218879865-f41a5a72-0f8e-4fc2-8d40-5543ce455942.png)
 
 ## (Optional) Instructions for building your own Docker Images to deploy to Kubernetes
 
-You can directly deploy to Kubernetes and test the images we have already uploaded into Docker Hub, so creating your own Docker images and uploading to Docker Hub is optional, initially.
+You can directly deploy to Kubernetes and test the application Docker images we have already uploaded into Docker Hub for you, so creating your own Docker images and uploading to Docker Hub is optional, initially.
 
 However, if you make changes in the code or you want to use your own Docker Images for any reason, you'd need to create your own Docker images and upload the images first to Docker Hub before deploying to Kubernetes. 
 
 Use these instructions to [Buil your own Docker Images to upload to Docker Registry and deploy to Kubernetes](./BUILD_AND_PUSH_IMAGES_TO_DOCKER_HUB.MD)
 
-## Deploy the Application to Kubernetes in 'Docker Desktop'
+## Deploy the Application to AKS EE
+
+### Check kubectl context
+
+If you previosly had already installed kubectl and it is pointing to some other environment, such as MiniKube, make sure the default kubectl context is pointing to AKS Edge Essentials context. 
+
+1. Open a new command-shell and run the following command to check your current contexts:
+
+    ```powershell
+    kubectl config get-contexts
+    ```
+
+2. To set the context to point to AKS Edge Essentials:
+
+    ```powershell
+    kubectl config use-context kubernetes-admin@kubernetes
+    ```
+
+### Install and Initialize Dapr
 
 This example application is based on **[Dapr](https://dapr.io/)** framework which is an OSS Microsoft framework specialized on microservices architecture, so you need to install it and enable in the Kubernetes cluster, first. 
 
-### Install and Initialize DAPR
+3. Install or make sure you have installed `Dapr` on your machine on a Kubernetes cluster as described in the [Deploy Dapr](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#install-with-dapr-cli). 
 
-3. Install or make sure you have installed `Dapr` on your machine on a Kubernetes cluster as described in the [Deploy dapr](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#install-with-dapr-cli). 
-
-Note that if you were able to run the application on plain Docker, you should have installed DAPR already, but it needs to be initialized in Kuberentes, now.
+    Note that if you were able to run the application on plain Docker, you should have installed DAPR already, but it needs to be initialized in Kuberentes, now.
 
 4. Initialize DAPR in the Kubernetes cluster by running this command:
 5. 
@@ -58,7 +59,7 @@ Note that if you were able to run the application on plain Docker, you should ha
     
     ![image](https://user-images.githubusercontent.com/1712635/218881163-9ba81fa3-f72c-4c12-bbf6-8ec25f2dba55.png)
 
-    **IMPORTANT:** This DAPR installation is okay for a dev machine, but when installing DAPR on a "production" AKS cluster, for example in an ASE (Azure Stack Edge) server, you need to install DAPR via AKS extension following the Doc: (https://learn.microsoft.com/en-us/azure/aks/dapr) which is how DAPR should be installed in AKS and it doesn’t require cluster admin access.
+    **IMPORTANT:** This **[Dapr](https://dapr.io/)** installation option is okay for a dev machine, but when installing **[Dapr](https://dapr.io/)** on a "production" AKS cluster, for example in an ASE (Azure Stack Edge) server, you need to install **[Dapr](https://dapr.io/)** via AKS extension following the Doc: (https://learn.microsoft.com/en-us/azure/aks/dapr) which is how **[Dapr](https://dapr.io/)** should be installed in controlled environments since it doesn’t require cluster admin access.
     
     You can test DAPR status with:
     ```powershell
@@ -74,6 +75,11 @@ Note that if you were able to run the application on plain Docker, you should ha
     
     ![image](https://user-images.githubusercontent.com/1712635/218880976-94b42767-40e3-4d9c-a640-2dfa029cb510.png)
 
+    You can also check the pods running with this kubectl command:
+
+    ```powershell
+    kubectl get pods --namespace dapr-system
+    ```
     
 ### Deploy the application's services to Kubernetes
 
@@ -161,13 +167,15 @@ In the Kubernetes dashboard you should be able to explore the application's pods
 
 ### Access the application's UI to see Alerts originated from AI model detections
 
-12. To access the front-end, go to 'http://localhost/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the UI service row.
+12. In order to know the URL to access the front-end web app, type this kubectl command to list the services owned by the application's namespace 'mec-accelerator':
 
-![image](https://user-images.githubusercontent.com/1712635/218883329-5641f19c-f3d9-402f-a75e-2fe44aa6c9eb.png)
+    ```powershell
+    kubectl get service --namespace mec-accelerator
+    ```
+    Then, look at the EXTERNAL-IP used by the service 'alerts-ui' and finally type 'http://MY-IP-ADDRESS/' on your browser.
+    
+So, you should be able to run the application's UI and check out the Alerts originated from the AI models.
 
-Either way, you should be able to run the application's UI and check out the Alerts originated from the AI models:
-
-![image](https://user-images.githubusercontent.com/1712635/218885207-5d720a2d-f5a6-4e29-bfd1-bad384803805.png)
 
 ### Remove the application from Kubernetes 
 
