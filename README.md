@@ -87,7 +87,7 @@ Both approaches are good approaches depending on the needs and shown below.
 
 <img width="976" alt="image" src="https://user-images.githubusercontent.com/1712635/214955088-2d15fbfb-1548-4665-8145-59f301b0d70a.png">
 
-# Getting Started (Development environment)
+# Getting Started
 
 > **IMPORTANT NOTE:** Get the stable code from the **main branch**. But for  getting the latest version of the code, **use the DEV branch** of the repo. However, the DEV branch might still be in testing phase and could be less stable. 
 
@@ -99,12 +99,9 @@ Get the GitHub repo's code:
 git clone git@github.com:Azure/mec-app-solution-accelerator.git
 ```
 
-## Local Docker host deployment alternatives
+## Local Docker deployment alternatives (Development and Test environment)
 
 When developing, testing and debugging the MEC application it's easier and more straightforward to deploy into Docker so, for instance, you can debug code with Visual Studio and can easily test the application with just Docker installed without further setup steps as required by Kubernetes.
-
-![image]()
-
 
 | | |
 |--------|--------|
