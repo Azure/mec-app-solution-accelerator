@@ -1,7 +1,6 @@
 # RTSP Server set-up
 
-The current solution supports the usage of custom images and videos for testing purposes.
-Eventhough there are different ways to provide a new video to the system, in this document we will focus on the rtsp approvisioning
+Eventhough there are different ways to provide a new video to the system, in this document we will focus on the rtsp provisioning
 
 ## Virtual Machine Creation - Optional
 
@@ -10,29 +9,29 @@ This step is optional if using docker compose and you can jump to RTSP Server Ru
 At first an Azure Subscription is needed.
 Then we proceed to create our Azure Virtual Machine (first one in the list)
 
-![plot](../imgs/RTSP-server/step1.png)
+![plot](./imgs/RTSP-server/step1.png)
 
 Next, machine selection is needed. In this example we have opted for a Standard_B4ms and Windows 11 system, as binaries for RTSP server are preprared to work with windows.
 
-![plot](../imgs/RTSP-server/step2.png)
+![plot](./imgs/RTSP-server/step2.png)
 
 Afterward, selection of ports is nedeed. In this example we have selected app ports and RDP port in the creation step
 
-![plot](../imgs/RTSP-server/step3.png)
+![plot](./imgs/RTSP-server/step3.png)
 
 Once the VM is created, go to the networking section and add new port as depicted in the following image
 
-![plot](../imgs/RTSP-server/step4.png)
+![plot](./imgs/RTSP-server/step4.png)
 
 After all this proccess you will be ready to connect to your VM using Windows Remote Desktop
 
-![plot](../imgs/RTSP-server/step5.png)
+![plot](./imgs/RTSP-server/step5.png)
 
 ## RTSP Server Run
 
 Navigate to RTSP-server folder or download it in your VM
 
-![plot](../imgs/RTSP-server/step6.png)
+![plot](./imgs/RTSP-server/step6.png)
 
 Navigate to rtsp folder in terminal and execute 
 ```
@@ -41,7 +40,7 @@ Navigate to rtsp folder in terminal and execute
 
 The output should be similar to the portrayed in the following image
 
-![plot](../imgs/RTSP-server/step7.png)
+![plot](./imgs/RTSP-server/step7.png)
 
 
 Open a new terminal window, navigate to the RTSP-server older , unzip de ffmpeg.zip and execute
@@ -50,7 +49,7 @@ Open a new terminal window, navigate to the RTSP-server older , unzip de ffmpeg.
 ffmpeg\bin\ffmpeg.exe -re -stream_loop -1 -i .\videos\YOURDESIREDVIDEO.mp4 -c copy -f rtsp -rtsp_transport tcp rtsp://myuser:mypass@localhost:8554/mystream
 ```
 
-![plot](../imgs/RTSP-server/step8.png)
+![plot](./imgs/RTSP-server/step8.png)
 
 ## Expose server to public internet
 
@@ -66,7 +65,7 @@ After this navigate to de ngrok folder inside de RTSP-server and execute:
 ./ngrok tcp 8554
 ```
 
-![plot](../imgs/RTSP-server/step9.png)
+![plot](./imgs/RTSP-server/step9.png)
 
 finally you will have a URL as:
 
