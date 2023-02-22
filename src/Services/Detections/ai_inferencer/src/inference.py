@@ -34,6 +34,7 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
         logging.info(f'Resizing to print')
         dim = (1280,720)
         frame_resized= cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+        frame_resized = cv2.imencode(".jpg", frame_resized)[1]
         frame_to_bytes=frame_resized.tobytes()
         frame = base64.standard_b64encode(frame_to_bytes)
         frame = frame.decode()
