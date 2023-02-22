@@ -1,6 +1,6 @@
 dapr-ext-grpc
 dapr
-setuptools==58.2.0
+setuptools==65.5.1
 
 # Base ----------------------------------------
 matplotlib>=3.2.2
