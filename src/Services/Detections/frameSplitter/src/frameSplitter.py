@@ -84,6 +84,8 @@ def main():
             ret, frame = cap.read()
        
         img_encode = cv2.imencode(".jpg", frame)[1]
+        print(frame.shape)
+        print(img_encode.shape)
         resized_img_bytes = img_encode.tobytes()
         bytes_string = base64.standard_b64encode(resized_img_bytes)
         timestamp=int(time.time()*1000)
