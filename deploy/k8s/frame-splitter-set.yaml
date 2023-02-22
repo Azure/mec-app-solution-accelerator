@@ -8,7 +8,7 @@ spec:
   selector:
     matchLabels:
         app: frame-splitter
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: frame-splitter
-        image: mecsolutionaccelerator/framesplitter:latest
+        image: mecsolutionaccelerator/framesplitter:0.1
         ports:
         - containerPort: 50052
         imagePullPolicy: Always

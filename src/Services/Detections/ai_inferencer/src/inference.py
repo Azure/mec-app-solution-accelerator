@@ -1,33 +1,39 @@
 from dapr.clients import DaprClient
 import time
-import glob
-import torch
 import json
-import os
 import base64
 import cv2
 import numpy as np
 import avro.schema
 from avro_json_serializer import AvroJsonSerializer
-from avro.datafile import DataFileReader, DataFileWriter
-from avro.io import DatumReader, DatumWriter
-import io
+import logging
+
 
 
 def PublishEvent(pubsub_name: str, topic_name: str, data: json):
     with DaprClient() as client:
         resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data, data_content_type='application/json')
-        print(resp)
+        
 
 
 def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
     timestamp_init=int(time.time()*1000)
-
-    print(source_id)
+    logging.basicConfig(level=logging.DEBUG)
+    logging.info(source_id)
 
     backToBytes = base64.standard_b64decode(frame)
 
     img = cv2.imdecode(np.frombuffer(backToBytes, np.uint8), cv2.IMREAD_COLOR)
+    val_to_compare_resize,_,_=img.shape
+    
+    if val_to_compare_resize>576:
+        logging.info(f'Resizing to print')
+        dim = (720,576)
+        img= cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+        frame_resized = cv2.imencode(".jpg", img)[1]
+        frame_to_bytes=frame_resized.tobytes()
+        frame = base64.standard_b64encode(frame_to_bytes)
+        frame = frame.decode()
 
     data = { "SourceId":source_id,
     "UrlVideoEncoded": "1.0",
@@ -47,7 +53,8 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
     detections = json.loads(results.pandas().xyxy[0].to_json())
     
     if detections["name"]!={}:
-        print('Objects Detected')
+        logging.info(f'Objects Detected')
+        
         for idx,detection in enumerate(detections["name"].values()):
             
             BoundingBoxes=[]
@@ -64,7 +71,7 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
                 BoundingBoxes.append({"x": xmax, "y":ymax})
 
                 data["Classes"].append({"EventType": detection, "Confidence":list(detections["confidence"].values())[idx], "BoundingBoxes": BoundingBoxes})
-                # print(data)
+
         data['time_trace'].append({"stepStart": timestamp_init, "stepEnd":int(time.time()*1000), "stepName": "ai_inferencer"})
         
 
@@ -73,22 +80,11 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
         
 
         PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
-    return
+        logging.info(f'Event published')
 
 
-        
-
-    
+    return 
 
 
-if __name__ == '__main__':
-    
-    model = torch.hub.load("ultralytics/yolov5", "yolov5s", pretrained=True,force_reload=True )
-    img = cv2.imread('coches2.jpg')
-    retval, buffer = cv2.imencode('.jpg', img)
-    resized_img_bytes = buffer.tobytes()
-    bytes_string = base64.standard_b64encode(resized_img_bytes) 
-    frame_out=bytes_string.decode()
-    path='detections.avro'
-    detection_threshold=0.7
-    main('a',time.time(),model, frame_out, detection_threshold,path)
+
+

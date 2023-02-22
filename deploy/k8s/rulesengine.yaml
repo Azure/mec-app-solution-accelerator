@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: rulesengine
-        image: mecsolutionaccelerator/rulesengine:latest
+        image: mecsolutionaccelerator/rulesengine:0.1
         ports:
         - containerPort: 80
         imagePullPolicy: Always
