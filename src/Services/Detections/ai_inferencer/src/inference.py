@@ -20,16 +20,12 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
     timestamp_init=int(time.time()*1000)
     logging.basicConfig(level=logging.DEBUG)
     logging.info(source_id)
-    print('Longitud inicial')
-    print(len(frame))
+
     backToBytes = base64.standard_b64decode(frame)
-    # print('yes')
 
     img = cv2.imdecode(np.frombuffer(backToBytes, np.uint8), cv2.IMREAD_COLOR)
     val_to_compare_resize,_,_=img.shape
     
-    cv2.imwrite('filename.jpg', img)
-    # print(img)
     if val_to_compare_resize>720:
         logging.info(f'Resizing to print')
         dim = (1280,720)
@@ -38,8 +34,7 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
         frame_to_bytes=frame_resized.tobytes()
         frame = base64.standard_b64encode(frame_to_bytes)
         frame = frame.decode()
-    print('Longitud final')
-    print(len(frame))
+
     data = { "SourceId":source_id,
     "UrlVideoEncoded": "1.0",
     "Frame": frame,
