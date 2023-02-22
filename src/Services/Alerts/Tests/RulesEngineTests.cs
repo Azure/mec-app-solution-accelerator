@@ -18,7 +18,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
             //arrange pending add to fixture.
             var mockDaprClient = new Mock<DaprClient>();
 
-            var alertsByDetectedClasses = new Dictionary<string, IEnumerable<AlertsConfig>>();
+            var alertsByDetectedClasses = new Dictionary<string, List<AlertsConfig>>();
             var commandsTypeByDetectionName = new Dictionary<string, Type>();
             var mockMediator = new Mock<IMediator>();
 
@@ -40,7 +40,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
             //arrange
             var mockDaprClient = new Mock<DaprClient>();
 
-            var alertsByDetectedClasses = new Dictionary<string, IEnumerable<AlertsConfig>>();
+            var alertsByDetectedClasses = new Dictionary<string, List<AlertsConfig>>();
             var commandsTypeByDetectionName = new Dictionary<string, Type>();
             var mockMediator = new Mock<IMediator>();
 
@@ -73,7 +73,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
             //arrange
             var mockDaprClient = new Mock<DaprClient>();
 
-            var alertsByDetectedClasses = new Dictionary<string, IEnumerable<AlertsConfig>>();
+            var alertsByDetectedClasses = new Dictionary<string, List<AlertsConfig>>();
             alertsByDetectedClasses.Add("person", new List<AlertsConfig>() 
             {
                 new AlertsConfig
@@ -278,7 +278,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
                     MultipleObjects = new List<string> { "person", "car" }
                 }
             };
-            command.MatchedClassesByAlert = new List<DetectionClass>();
+
             //act
             var task = await handler.Handle(command, CancellationToken.None);
 

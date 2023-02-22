@@ -10,7 +10,7 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'RulesEngine' " />
   <ItemGroup>
-    <PackageReference Include="AvroConvert" Version="3.3.2" />
+    <PackageReference Include="AvroConvert" Version="3.3.0" />
     <PackageReference Include="Dapr.AspNetCore" Version="1.9.0" />
     <PackageReference Include="MediatR" Version="11.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />

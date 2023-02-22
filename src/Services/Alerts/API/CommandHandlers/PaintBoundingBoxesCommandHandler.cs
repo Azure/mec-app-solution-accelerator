@@ -4,18 +4,19 @@ using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.Processing;
 using System.Numerics;
 using MediatR;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.API.Injection;
+using Alerts.API.Configuration;
+
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
 {
     public class PaintBoundingBoxesCommandHandler : IRequestHandler<PaintBoundingBoxesCommand, string>
     {
-        private readonly BoundingBoxesColorBrushes _colorsBrushesConfiguration;
+        private readonly ColorBoundingBoxConfiguration _colorsConfiguration;
         private const int maxwidth = 1920;
         private const int maxheight = 1080;
-        public PaintBoundingBoxesCommandHandler(BoundingBoxesColorBrushes colorsBrushesConfiguration)
+        public PaintBoundingBoxesCommandHandler(ColorBoundingBoxConfiguration colorsConfiguration)
         {
-            _colorsBrushesConfiguration = colorsBrushesConfiguration ?? throw new ArgumentNullException(nameof(colorsBrushesConfiguration));
+            _colorsConfiguration = colorsConfiguration ?? throw new ArgumentNullException(nameof(colorsConfiguration));
         }
 
         public async Task<string> Handle(PaintBoundingBoxesCommand request, CancellationToken cancellationToken)
@@ -29,7 +30,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             return nFrame;
         }
 
-        private string PaintBoundingBoxes(MemoryStream stream, IEnumerable<DetectionClass> matchingClasses)
+        private string PaintBoundingBoxes(MemoryStream stream, List<DetectionClass> matchingClasses)
         {
             var c = new List<List<Vector2>>();
             var firstLane = new PointF[2];
@@ -37,14 +38,12 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             var thirdLane = new PointF[2];
             var fourthLane = new PointF[2];
             var imgResult = string.Empty;
-
+            var colorDefault = Brushes.Solid(Color.Yellow);
 
             using (var image = Image.Load(stream))
             {
                 foreach(var matchingClass in matchingClasses)
                 {
-                    var colorDefault = _colorsBrushesConfiguration.GetColorByClass(matchingClass.EventType);
-
                     firstLane[0] = new Vector2(matchingClass.BoundingBoxes[0].x, matchingClass.BoundingBoxes[0].y);
                     firstLane[1] = new Vector2(matchingClass.BoundingBoxes[1].x, matchingClass.BoundingBoxes[1].y);
 
