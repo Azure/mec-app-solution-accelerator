@@ -20,8 +20,8 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
     timestamp_init=int(time.time()*1000)
     logging.basicConfig(level=logging.DEBUG)
     logging.info(source_id)
-    
-
+    print('Longitud inicial')
+    print(len(frame))
     backToBytes = base64.standard_b64decode(frame)
     # print('yes')
 
@@ -37,7 +37,8 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
         frame_to_bytes=frame_resized.tobytes()
         frame = base64.standard_b64encode(frame_to_bytes)
         frame = frame.decode()
-    
+    print('Longitud final')
+    print(len(frame))
     data = { "SourceId":source_id,
     "UrlVideoEncoded": "1.0",
     "Frame": frame,
