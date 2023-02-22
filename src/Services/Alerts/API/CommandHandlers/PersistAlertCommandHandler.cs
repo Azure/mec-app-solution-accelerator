@@ -3,7 +3,6 @@ using Microsoft.MecSolutionAccelerator.Services.Alerts.Commands;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
 using Newtonsoft.Json;
-using static Google.Rpc.Context.AttributeContext.Types;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
 {
@@ -21,7 +20,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             var id = Guid.NewGuid();
             TimeSpan time = TimeSpan.FromMilliseconds(request.CaptureTime);
             DateTime captureDate = new DateTime(1970, 1, 1) + time;
-            DateTime alertDate =  DateTime.Now;
+            DateTime alertDate =  DateTime.UtcNow;
 
             var entity = new Alert()
             {
@@ -31,10 +30,11 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                 Id = id,
                 Type = request.Type,
                 Accuracy = request.Accuracy * 100,
-                StepTimes = JsonConvert.SerializeObject(SetDurations(request.StepTrace)),
+                StepTimeAsDate = SetDurations(request.StepTrace),
                 MsExecutionTime = (alertDate - captureDate).TotalMilliseconds,
                 AlertTime = alertDate,
                 Source = this.SetHardwareMockInformation(),
+                MatchesClasses = request.MatchingClasses,
             };
 
             await this._repository.Create(entity);
