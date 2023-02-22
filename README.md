@@ -108,7 +108,7 @@ When developing, testing and debugging the MEC application it's easier and more 
 
 | | |
 |--------|--------|
-| <img width="100" alt="image" src="https://user-images.githubusercontent.com/1712635/214690304-eca6fc41-b4d5-4122-bf0c-47c5dc955da3.png"> | **Deployment on [Docker for Desktop with 'docker compose up'](./docs/DOCKER_COMPOSE_DEPLOYMENT.MD)** |
+| <img width="100" alt="image" src="https://user-images.githubusercontent.com/1712635/214693693-092921c1-7fb5-4878-87d4-559b075afc30.png"> | **Deployment on [Docker for Desktop with 'docker compose up'](./docs/DOCKER_COMPOSE_DEPLOYMENT.MD)** |
 | <img width="40" alt="image" src="https://user-images.githubusercontent.com/1712635/214689990-47bd981b-c756-444e-84f1-140a63d3ca7f.png"> | **Deployment on Docker with [Visual Studio (F5 experience)](./docs/VS_DOCKER_DEPLOYMENT.MD)** |
 | | |
 
