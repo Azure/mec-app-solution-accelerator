@@ -29,7 +29,7 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
     if val_to_compare_resize>720:
         logging.info(f'Resizing to print')
         dim = (720,576)
-        frame_resized= cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+        img= cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
         frame_resized = cv2.imencode(".jpg", frame_resized)[1]
         frame_to_bytes=frame_resized.tobytes()
         frame = base64.standard_b64encode(frame_to_bytes)
@@ -46,7 +46,7 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
     "time_trace":[]
     }
     data['time_trace'].append(time_trace)
-    results = model(frame_resized)
+    results = model(img)
     schema = avro.schema.Parse(open(path, "rb").read())
     serializer = AvroJsonSerializer(schema)
 
