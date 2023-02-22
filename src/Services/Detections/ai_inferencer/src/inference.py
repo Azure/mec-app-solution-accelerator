@@ -20,19 +20,24 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
     timestamp_init=int(time.time()*1000)
     logging.basicConfig(level=logging.DEBUG)
     logging.info(source_id)
-    
 
     backToBytes = base64.standard_b64decode(frame)
 
     img = cv2.imdecode(np.frombuffer(backToBytes, np.uint8), cv2.IMREAD_COLOR)
-    dim = (1280, 720)
-    frame_resized= cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-    frame_to_bytes=frame_resized.tobytes()
-    frame_to_send = base64.standard_b64encode(frame_to_bytes)
+    val_to_compare_resize,_,_=img.shape
     
+    if val_to_compare_resize>720:
+        logging.info(f'Resizing to print')
+        dim = (1280,720)
+        frame_resized= cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+        frame_resized = cv2.imencode(".jpg", frame_resized)[1]
+        frame_to_bytes=frame_resized.tobytes()
+        frame = base64.standard_b64encode(frame_to_bytes)
+        frame = frame.decode()
+
     data = { "SourceId":source_id,
     "UrlVideoEncoded": "1.0",
-    "Frame": frame_to_send.decode(),
+    "Frame": frame,
     "EventName": "ObjectDetection",
     "OriginModule": "Ai inference detection",
     "Information": "Test message",
@@ -77,9 +82,9 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
         PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
         logging.info(f'Event published')
 
-    return
+
+    return 
 
 
-        
 
 
