@@ -20,7 +20,9 @@ def framesreceiver(request: InvokeMethodRequest) -> InvokeMethodResponse:
     detection_threshold=0.0
 
     path='events_schema/detections.avro'
-    size = main(source_id,timestamp,model,frame,detection_threshold,path,time_trace)
+
+    main(source_id,timestamp,model,frame,detection_threshold,path,time_trace)
+
 
     return InvokeMethodResponse(b'Frame Analyzed', "text/plain; charset=UTF-8")
 

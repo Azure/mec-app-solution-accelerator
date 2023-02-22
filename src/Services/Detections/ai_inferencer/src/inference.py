@@ -82,9 +82,9 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
         PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
         logging.info(f'Event published')
 
+
     return 
 
 
-        
 
 

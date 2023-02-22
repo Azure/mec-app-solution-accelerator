@@ -8,5 +8,6 @@
         Task Create(TEntity entity);
         Task Update(TEntity entity);
         Task Delete(IdType id);
+        Task<IEnumerable<AlertMinimized>> GetAlertsMinimized(int skip, int take);
     }
 }

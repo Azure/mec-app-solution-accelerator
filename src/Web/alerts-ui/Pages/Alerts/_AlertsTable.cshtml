@@ -1,0 +1,70 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@model IEnumerable<Microsoft.MecSolutionAccelerator.AlertsUI.Models.AlertReducedModel>
+@using System.Globalization;
+@{
+
+}
+
+<table id="alertsTable">
+    <thead class="fixed-header">
+        <tr class="border border-dark table-header fs-6 font-bold justify-content-center">
+            <th>Capture Time</th>
+            <th>AlertTime</th>
+            <th>Execution Time</th>
+            <th>Source</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+    @if (Model != null)
+    {
+        var timeZone = "UTC";
+        @if (HttpContextAccessor.HttpContext.Request.Cookies.ContainsKey("timezone"))
+        {
+            timeZone = HttpContextAccessor.HttpContext.Request.Cookies["timezone"];
+        }
+        @foreach (var post in Model)
+        {
+            <tr element-id="@post.Id" class="border border-dark text-center py-1">
+            @{
+                var test = CultureInfo.CurrentCulture;
+            }
+            <td>@TimeZoneInfo.ConvertTimeFromUtc(post.CaptureTime, TimeZoneInfo.FindSystemTimeZoneById(timeZone)).ToString("d", CultureInfo.CurrentCulture)<br>@TimeZoneInfo.ConvertTimeFromUtc(post.CaptureTime, TimeZoneInfo.FindSystemTimeZoneById(timeZone)).ToString("T", CultureInfo.CurrentCulture)</td>
+            <td>@TimeZoneInfo.ConvertTimeFromUtc(post.AlertTime, TimeZoneInfo.FindSystemTimeZoneById(timeZone)).ToString("d", CultureInfo.CurrentCulture)<br>@TimeZoneInfo.ConvertTimeFromUtc(post.AlertTime, TimeZoneInfo.FindSystemTimeZoneById(timeZone)).ToString("T", CultureInfo.CurrentCulture)</td>
+            <td>@Math.Round(post.MsExecutionTime) ms</td>
+            <td>@post.Source.Name</td>
+            <td class="justify-content-center px-2 text-left-align">
+                @if (post.Accuracy > 70)
+                {
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="priority-svg" id="danger-svg">
+                        <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="text-darkRed text-center text-sm" id="danger-text">alert-danger</span>
+                }
+                else if (post.Accuracy > 50)
+                {
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="priority-svg" id="warning-svg">
+                        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="text-darkYellow text-center text-sm" id="warning-text">alert-warning</span>
+                }
+                else
+                {
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="priority-svg" id="info-svg">
+                        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="text-buttonGray text-center text-sm" id="info-text">alert-info</span>
+                }
+            </td>
+        </tr>
+        }
+    }
+    </tbody>
+</table>
+
+<script>
+    var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.cookie = "timezone=" + encodeURIComponent(timezone) + "; path=/";
+</script>
+
+
