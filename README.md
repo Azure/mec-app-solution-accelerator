@@ -117,10 +117,11 @@ This sample microservices application can be deployed on most Kubernetes distrib
 
 Because we're targeting deployment at the Edge and also development environments, in most cases (unless you need significant process power when scaling out to many video sources/cameras) your Kubernetes clusters will be composed by a single cluster node (like a dev machine environment or light edge environment). 
 
-Refer to the following procedure information pages to learn how to deploy to your selected Kubernetes distribution:
+Refer to the following procedure information pages to learn how to deploy this example application to your selected Kubernetes distribution:
 
 | | |
 |--------|--------|
+| <img width="130" alt="image" src="https://user-images.githubusercontent.com/1712635/220749119-85e09fa2-5744-4088-b1f9-77b22c0a4530.png"> | **Deploy application services to [local AKS Edge Essentials](/docs/K8S_AKS_EDGE_ESSENTIALS.MD)** |
 | <img width="130" alt="image" src="https://user-images.githubusercontent.com/1712635/214690304-eca6fc41-b4d5-4122-bf0c-47c5dc955da3.png"> | **Deploy application services to [local Kubernetes in 'Docker Desktop'](/docs/K8S_IN_DOCKER_DESKTOP_DEPLOYMENT.MD)** |
 | <img width="140" alt="image" src="https://user-images.githubusercontent.com/1712635/214690383-05f86a79-3edd-4b7e-af46-4889273e9910.png"> | **Deploy application services to [local MiniKube](/docs/K8S_MINIKUBE_DEPLOYMENT.MD)** |
 | <img width="140" alt="image" src="./docs/imgs/deploy/aks-logo.png"> | **Deploy application services to [Azure Kubernetes Services](/docs/K8S_AKS_DEPLOYMENT.md)** in Azure cloud (Testing in the cloud) |
