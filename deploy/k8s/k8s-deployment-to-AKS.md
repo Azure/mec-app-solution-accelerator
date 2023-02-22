@@ -19,7 +19,7 @@ Check thhe official [Dapr doc guide](https://docs.dapr.io/operations/hosting/kub
     az aks get-credentials --resource-group YOUR_RG_GROUP --name YOUR_AKS_NAME
     ```
 
-    ![kubectl minikube context](/imgs/deploy/aks1.png)
+    ![kubectl minikube context](/docs/imgs/deploy/aks1.png)
 
 
     Alternatively, check and set your current contexts using kubectl config:
@@ -59,7 +59,7 @@ docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#inst
     az feature list -o table --query "[?contains(name, 'Microsoft.ContainerService/AKS-Dapr')].{Name:name,State:properties.state}"
     ```
 
-    ![kubectl minikube context](/imgs/deploy/aks2.png)
+    ![kubectl minikube context](/docs/imgs/deploy/aks2.png)
 
 4. Extension prerequisites 4. Extension prerequisites 
 
@@ -126,7 +126,7 @@ docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#inst
 
 8. To access the front-end, go to the Azure portal, find the AKS resource and navigate to the services sections. In there the alerts-ui service of type NodePort will have public IP assigned.
 
-    ![kubectl minikube context](/imgs/deploy/aks3.png)
+    ![kubectl minikube context](/docs/imgs/deploy/aks3.png)
 
 
 

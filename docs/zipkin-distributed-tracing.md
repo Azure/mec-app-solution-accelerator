@@ -101,17 +101,17 @@ To view tracing logs in the Zipkin portal, perform the following steps:
 
 1. **Open the Zipkin portal:** Open the Zipkin portal by navigating to `http://localhost:9411/zipkin` in your web browser. If using minikube, use the cli to forward the service ports using `minikube service zipikin -n mec-accelerator`
 
-![zipkin dashboard](/imgs/zipkin/zipkin1.png)
+![zipkin dashboard](/docs/imgs/zipkin/zipkin1.png)
 
 2. **Filter the logs by service and time:** Select your application's service name in the `Service Name` dropdown, and set the time frame you want to filter by using the time range picker.
 
-![zipkin service traces](/imgs/zipkin/zipkin2.png)
+![zipkin service traces](/docs/imgs/zipkin/zipkin2.png)
 
 3. **View the logs:** View the tracing logs in the Zipkin portal. You can click on each trace to see the details and logs for each request.
 
-![zipkin tracing logs](/imgs/zipkin/zipkin3.png)
+![zipkin tracing logs](/docs/imgs/zipkin/zipkin3.png)
 
 3. **View service dependencies logs:** Because Dapr sidecars handle traffic between services, Zipkin can use the trace information to determine the dependencies between the services. To see it in action, go to the Dependencies tab on the Zipkin web page and select the button with the magnifying glass. Zipkin will show an overview of 
 the services and their dependencies
 
-![zipkin tracing dependencies](/imgs/zipkin/zipkin4.png)
+![zipkin tracing dependencies](/docs/imgs/zipkin/zipkin4.png)
