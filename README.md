@@ -12,6 +12,8 @@ This new application development paradigm targeting scenarios not possible years
 
 <img width="800" alt="image" src="https://user-images.githubusercontent.com/1712635/214922412-efc15e6b-166b-450e-a0cd-d139dc7b54eb.png">
 
+A 'MEC Application' is a subtype of application within the 'Modern Connected Applications' realm. 
+
 Therefore, the main needs for this kind of applications are:
 
 - Event-Driven based on light message brokers
@@ -27,12 +29,12 @@ The network related needs are usually provided by environments such as 5G Privat
 
 ## Goals of this MEC app Solution Accelerator (Example application)
 
-As mentioned, the network needs ar eprovided by the infrastructure such as a 5G network and EDGE compute.
-However, aspects such as being able to create and event-driven application (Devices-->AI-->Events-->Logic-->Alerts-->Handlers) need to be implemented by your applciation and it's precisele what this example application provides:
+As mentioned, the network needs are provided by the infrastructure such as a 5G network and EDGE compute.
+However, aspects such as being able to create and event-driven application (Devices-->AI-->Events-->Logic-->Alerts-->Handlers) need to be implemented by your application and it's precisely the value that this example application provides:
 
-- Recommended event-driven and microservices architecture and example implementation
-- Showcase of design patterns to implement (Event Pub/Sub, microservices autonomy, extensible events/alerts metadata schemas, etc.)
-- Show how to inference with deep-learning models from a microservice, in this case for video/image analytics, then generate the related detection event.
+- Recommendations on using event-driven and microservices architecture explained by this example implementation.
+- Showcase of design patterns to implement (Event Pub/Sub, microservices autonomy, extensible events/alerts metadata schemas, etc.).
+- Show how to inference with deep-learning models from a microservice, in this case using 'Yolo', for video/image analytics, then generate the related detection event.
 
 The initial use case is about video analytics, but video analytics / computer vision is not the main goal of this example application but to provide a "backbone" to create your own event-driven microservice application running at the EDGE, on Kubernetes. This "backbone" is also applicable for other types of data processing such as data coming from IoT sensors that need to be automatically analyzed by AI models and events/alerts raised if needed.
 
@@ -44,82 +46,10 @@ The initial use case is about video analytics, but video analytics / computer vi
 
 | | |
 |--------|--------|
-| **"Production" environment:** <img width="120" alt="image" src="https://user-images.githubusercontent.com/1712635/214693427-4d906e3a-7a1e-4623-b413-006219af1da6.png">| On any Kubernetes cluster typically deployed at Edge compute, such as on-premises AKS on an Azure Stack Edge server or any Azure Stack HCI / Arc-Enabled. For testing purposes, is can be deployd on any Kubernetes environment, including a development PC with Docker for Desktop and Kubernetes, or in the cloud, into Azure AKS. (Note: Hypothetical "production" environment.) |
+| **"Production" environment:** <img width="120" alt="image" src="https://user-images.githubusercontent.com/1712635/214693427-4d906e3a-7a1e-4623-b413-006219af1da6.png">| On any Kubernetes cluster typically deployed at Edge compute, such as on-premises AKS like AKS Edge Essentials, AKS from Azure Stack Edge server or AKS from Azure Stack HCI / Arc-Enabled. For testing purposes, is can be deployd on any Kubernetes environment, including a development machine with AKS Edge Essentials, Docker for Desktop and Kubernetes, or in the cloud, into Azure AKS. (Note: We mean a hypothetical "production" environment.) |
 | **Development environment:** <img width="120" alt="image" src="https://user-images.githubusercontent.com/1712635/214693693-092921c1-7fb5-4878-87d4-559b075afc30.png"> | On any local Docker host, with 'docker compose' directly from a console command prompt (Windows/Linux/MacOS) or from Visual Studio in Windows (running Docker host with Linux, under the covers), for easy test and development in dev environments. |
 
 A typical deployment of this application/services would be performed at the Edge, such as in a 5G Private MEC, using a wireless 5G network to connect the devices, cameras, etc. to the application's services. However, this application can be tested by itself without any specific network requirement.
-
-## Getting Started
-
-> **IMPORTANT NOTE:** For getting the latest version of the code, **use the DEV branch of the repo**. 
-> Until March 2023, the MAIN branch can be significantly outdated compared to code in the DEV branch.
-
-### Grab the GitHub repo code
-
-Get the GitHub repo's code:
-
-```powershell
-git clone git@github.com:Azure/mec-app-solution-accelerator.git
-```
-
-Select the 'dev' branch with git:
-```powershell
-cd <your local path>
-git checkout dev
-```
-
-### Deploy on Docker ('docker compose')
-
-Make sure you have [installed](https://docs.docker.com/desktop/install/windows-install/) and configured docker in your environment. After that, you can run the below commands from the solution's root directory and get started trying it.
-
-**(Optional step) Set the DOCKER_REGISTRY environment variable**
-
-Before creating the Docker images it's important to setup the DOCKER_REGISTRY environment variable in your dev system (Windows / Linux) so the images will be created with the right prefix (i.e. Docker hub user). This is important if you later want to use the same Docker images to upload them into Docker Hub or any other Docker Registry from where you will deploy the images to Kuberentes.
-
-Here you have additional information on why and [How to setup the DOCKER_REGISTRY environment variable](./docs/SET_DOCKER_REGISTRY_VARIABLE.MD).
-
-But if you just want to try the solution with `docker compose up` or Visual Studio, this step is optional, as it should work locally, anyways.
-
-**Build the Docker images:**
-
-Now, build the Docker images with `docker compose build`:
-
-```powershell
-docker compose build
-```
-<img width="800" alt="image" src="https://user-images.githubusercontent.com/1712635/214674622-c404aa17-8b16-4df8-b958-ff8423995d67.png">
-
-**Run the solution:**
-
-```powershell
-docker compose up
-```
-You should see 'docker compose up' starting like in the following screenshot:
-<img width="800" alt="image" src="https://user-images.githubusercontent.com/1712635/212741292-4396cc66-3ce9-451b-8d2f-bb3e6ec8e8b2.png">
-
-Wait until all containers are up and running and you start seeing traces related to detections performed by the AI model and events raised because of them, like in the following screenshot:
-<img width="796" alt="image" src="https://user-images.githubusercontent.com/1712635/214675605-954ceeb1-70b0-40a4-9a9a-138313cc9b86.png">
-
-At this point, you should be able to run the "Alerts Dashboard" web app with the following URL in any browser:
-
-**Alerts Dashboard UI web app:**
-```code
-https://localhost:50058
-```
-<img width="800" alt="image" src="https://user-images.githubusercontent.com/1712635/214684282-2aa3739e-cd61-47b5-a7e9-2a01e9d040ae.png">
-
-### Additional supported deployments
-
-This sample microservice application can run locally using a local Kubernetes cluster such as "Kubernetes in Docker for Desktop" or any other Kubernetes distribution.
-For development purposes, you can also run it on plain Docker with "docker compose up" or Visual Studio.
-Refer to these additional procedure information pages to Get Started on each environment:
-
-| | |
-|--------|--------|
-| <img width="40" alt="image" src="https://user-images.githubusercontent.com/1712635/214689990-47bd981b-c756-444e-84f1-140a63d3ca7f.png"> | **Deployment on [Visual Studio (F5 experience)](./VS_DOCKER_DEPLOY.MD)** |
-| <img width="100" alt="image" src="https://user-images.githubusercontent.com/1712635/214690304-eca6fc41-b4d5-4122-bf0c-47c5dc955da3.png"> | **Deployment on [Local Kubernetes by Docker for Desktop](https://tbd-url)** |
-| <img width="120" alt="image" src="https://user-images.githubusercontent.com/1712635/214690383-05f86a79-3edd-4b7e-af46-4889273e9910.png"> | **Deployment on [Local MiniKube](https://tbd-url)** |
-
 
 ## Architecture overview
 
@@ -156,6 +86,57 @@ Both approaches are good approaches depending on the needs and shown below.
 "Heavy EDGE" is therefore the selected approach for this example application.
 
 <img width="976" alt="image" src="https://user-images.githubusercontent.com/1712635/214955088-2d15fbfb-1548-4665-8145-59f301b0d70a.png">
+
+## Getting Started (Development environment)
+
+> **IMPORTANT NOTE:** Get the stable code from the **main branch**. But for  getting the latest version of the code, **use the DEV branch** of the repo. However, the DEV branch might still be in testing phase and could be less stable. 
+
+### Grab the GitHub repo code
+
+Get the GitHub repo's code:
+
+```powershell
+git clone git@github.com:Azure/mec-app-solution-accelerator.git
+```
+
+## Local Docker host deployment alternatives
+
+When developing, testing and debugging the MEC application it's easier and more straightforward to deploy into Docker so, for instance, you can debug code with Visual Studio and can easily test the application with just Docker installed without further setup steps as required by Kubernetes.
+
+| | |
+|--------|--------|
+| <img width="100" alt="image" src="https://user-images.githubusercontent.com/1712635/214690304-eca6fc41-b4d5-4122-bf0c-47c5dc955da3.png"> | **Deployment on [Docker for Desktop with 'docker compose up'](./docs/DOCKER_COMPOSE_DEPLOYMENT.MD)** |
+| <img width="40" alt="image" src="https://user-images.githubusercontent.com/1712635/214689990-47bd981b-c756-444e-84f1-140a63d3ca7f.png"> | **Deployment on Docker with [Visual Studio (F5 experience)](./docs/VS_DOCKER_DEPLOYMENT.MD)** |
+| | |
+
+
+
+## Kubernetes deployment alternatives ("Production" environment)
+
+This sample microservices application can be deployed on most Kubernetes distributions clusters. 
+
+Because we're targeting deployment at the Edge and also development environments, in most cases (unless you need significant process power when scaling out to many video sources/cameras) your Kubernetes clusters will be composed by a single cluster node (like a dev machine environment or light edge environment). 
+
+Refer to the following procedure information pages to learn how to deploy to your selected Kubernetes distribution:
+
+| | |
+|--------|--------|
+| <img width="100" alt="image" src="https://user-images.githubusercontent.com/1712635/214690304-eca6fc41-b4d5-4122-bf0c-47c5dc955da3.png"> | **Deployment on [local Kubernetes in 'Docker Desktop'](/docs/K8S_IN_DOCKER_DESKTOP_DEPLOYMENT.MD)** |
+| <img width="120" alt="image" src="https://user-images.githubusercontent.com/1712635/214690383-05f86a79-3edd-4b7e-af46-4889273e9910.png"> | **Deployment on [local MiniKube](/docs/K8S-MINIKUBE_DEPLOYMENT.MD)** |
+| | |
+
+
+## Other useful configurations
+
+In order to test your own scenarios you might want to try the following operations even before customizing or forking the application's code:
+
+| | |
+|--------|--------|
+| <img width="100" alt="image" src="TBD.png"> | **[How to provision your own video RTSP feed in the app with configuration](/docs/RTSP_START_UP.MD)** |
+| <img width="120" alt="image" src="TBD.png"> | **[How to create your own VM in Azure with a RTSP faking a camera](/docs/HOW_TO_USE_OWN_MODEL_CLASSES.MD)** |
+| <img width="120" alt="image" src="TBD.png"> | **[How to use your own 'classes' to be detected by the AI model](/docs/HOW_TO_USE_OWN_MODEL_CLASSES.MD)** |
+| <img width="120" alt="image" src="TBD.png"> | **[How to scale up the number of pods in Kubernetes deployment configuration](/docs/HOW_TO_SCALE_UP_K8S_PODS.MD)** |
+| | |
 
 
 ## Backlog
