@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: alerts-api
-        image: mecsolutionaccelerator/alerts-api:latest
+        image: mecsolutionaccelerator/alerts-api:0.1
         ports:
         - containerPort: 80
         imagePullPolicy: Always
