@@ -104,11 +104,6 @@ docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#inst
     
     ![image](https://user-images.githubusercontent.com/1712635/219480144-75f3998d-998c-464d-bc8a-7e9a1a265a0e.png)
 
-    When you are finsihed trying, you can always uninstall the application pods and all related resources from your Kuberentes by running this command:
-
-    ```powershell
-    kubectl delete -f ./
-    ```
 
 ### Access the application's UI to see Alerts originated from AI model detections
 
@@ -118,6 +113,8 @@ docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#inst
 
 
 ### Remove the application from Kubernetes 
+
+When you are finsihed trying, you can always uninstall the application pods and all related resources from your Kuberentes by running this command.
 
 9. Open a new command-shell and change the current folder to the `deploy/k8s` folder of this repo.
 
