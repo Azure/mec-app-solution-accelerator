@@ -23,7 +23,7 @@
             <button class="button-table px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right" id="refresh-data">Refresh Data</button>
             <label class="m-2 font-sans fw-light fs-6">Automatic Refresh:</label>
             <label class="switch my-2">
-                <input type="checkbox" onclick="toggleAutomaticRefresh()" id="switch">
+                <input type="checkbox" onclick="toggleAutomaticRefresh()" id="switch" checked>
                 <span class="slider round"></span>
             </label>
         </div>
@@ -78,6 +78,10 @@
                 refreshIntervalId = null;
             }
         }
+
+        $(document).ready(function () {
+            toggleAutomaticRefresh();
+        });
 
         $(document).on('click', '#refresh-data', function () {
             // Manually refresh data on button click
