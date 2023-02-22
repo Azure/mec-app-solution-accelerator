@@ -87,11 +87,11 @@ Both approaches are good approaches depending on the needs and shown below.
 
 <img width="976" alt="image" src="https://user-images.githubusercontent.com/1712635/214955088-2d15fbfb-1548-4665-8145-59f301b0d70a.png">
 
-## Getting Started (Development environment)
+# Getting Started (Development environment)
 
 > **IMPORTANT NOTE:** Get the stable code from the **main branch**. But for  getting the latest version of the code, **use the DEV branch** of the repo. However, the DEV branch might still be in testing phase and could be less stable. 
 
-### Grab the GitHub repo code
+## Grab the GitHub repo code
 
 Get the GitHub repo's code:
 
@@ -126,7 +126,7 @@ Refer to the following procedure information pages to learn how to deploy to you
 | | |
 
 
-## Other useful configurations
+# Configurations for easy customization
 
 In order to test your own scenarios you might want to try the following operations even before customizing or forking the application's code:
 
@@ -139,12 +139,12 @@ In order to test your own scenarios you might want to try the following operatio
 | | |
 
 
-## Backlog
+# Backlog
 
 The backlog is defined in detail here: [Backlog](BACKLOG.MD)
 
 
-## Contributing
+# Contributing
 
 > PLEASE Read our [branch guide](BRANCH-GUIDE.MD) to know about our branching policy when contributing with PRs.
 > **Note for Pull Requests (PRs):** We accept pull requests from the community. When doing it, please do it onto the DEV branch which is the consolidated work-in-progress branch. Do not request it onto MAIN branch. 
@@ -161,7 +161,7 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-## Trademarks
+# Trademarks
 
 This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
 trademarks or logos is subject to and must follow 
