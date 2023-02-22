@@ -1,52 +1,39 @@
-using System.IO;
-using System.Linq;
-using System.Text.Json;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.MecSolutionAccelerator.AlertsUI.Models;
+using Microsoft.AspNetCore.Mvc;
+using Dapr.Client;
 
-namespace Microsoft.MecSolutionAccelerator.AlertsUI.Pages;
-
-public class IndexModel : PageModel
+namespace Microsoft.MecSolutionAccelerator.AlertsUI.Pages
 {
-    public IEnumerable<Alert> Alerts { get; set; }
-
-    public IndexModel()
+    public class IndexModel : PageModel
     {
-        Alerts = new List<Alert>();
+        private readonly DaprClient _daprClient;
 
-    }
-
-    public async Task OnGet()
-    {
-        ViewData["Alerts"] = Alerts;
-    }
-
-    public string FindInputs(Alert alert)
-    {
-        if (alert.Information != null && alert.Frame != null)
+        public IndexModel(DaprClient daprClient)
         {
-            return "both";
+            _daprClient = daprClient;
         }
-        else if (alert.Information != null)
-        {
-            return "text";
-        }
-        return "image";
-    }
 
-    public List<Source> getSources()
-    {
-        List<Source> Sources = new List<Source>();
-        foreach(Alert alert in Alerts)
+        public IEnumerable<AlertReducedModel> Alerts { get; private set; }
+
+        public async Task<IActionResult> OnGetRefresh()
         {
-            if(Sources.Contains(alert.Source) == false)
-            {
-                Sources.Add(alert.Source);
-            }
+            Alerts = await _daprClient.InvokeMethodAsync<IEnumerable<AlertReducedModel>>(
+                HttpMethod.Get,
+                "alerts-api",
+                "alerts");
+
+            return Partial("Alerts/_AlertsTable", Alerts);
         }
-        return Sources.OrderBy(o => o.Name).ToList();
+
+        public async Task<IActionResult> OnGetDetails(string id)
+        {
+            AlertDetailsModel alertDetail = await _daprClient.InvokeMethodAsync<AlertDetailsModel>(
+                HttpMethod.Get,
+                "alerts-api",
+                $"alerts/{id}");
+
+            return Partial("Alerts/_AlertsDetails", alertDetail);
+        }
     }
 }

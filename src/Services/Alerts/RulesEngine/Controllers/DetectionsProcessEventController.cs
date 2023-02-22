@@ -26,11 +26,13 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventCont
         public async Task<IActionResult> DetectionEventHandler(object detectionRaw)
         {
             try 
-            { 
+            {
+                var stepTime = new StepTime { StepName = "RulesEngine", StepStart = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds };
                 var detectionStr = detectionRaw.ToString();
                 var detectionBytes = AvroConvert.Json2Avro(detectionStr);
                 var detection = AvroConvert.Deserialize<ObjectDetected>(detectionBytes);
                 _logger.LogInformation($"Received detection at {detection.EveryTime}");
+                detection.time_trace.Add(stepTime);
                 var command = new AnalyzeObjectDetectionCommand()
                 {
                     Id = detection.Id,

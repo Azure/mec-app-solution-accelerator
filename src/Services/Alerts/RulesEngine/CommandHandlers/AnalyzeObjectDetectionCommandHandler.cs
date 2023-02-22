@@ -12,10 +12,10 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
     public class AnalyzeObjectDetectionCommandHandler : IRequestHandler<AnalyzeObjectDetectionCommand, Unit>
     {
         private readonly DaprClient _daprClient;
-        private readonly Dictionary<string, List<AlertsConfig>> _alertsByDetectedClasses;
+        private readonly Dictionary<string, IEnumerable<AlertsConfig>> _alertsByDetectedClasses;
         private readonly IMediator _mediator;
 
-        public AnalyzeObjectDetectionCommandHandler(DaprClient daprClient, Dictionary<string, List<AlertsConfig>> alertsByDetectedClasses, IMediator mediator)
+        public AnalyzeObjectDetectionCommandHandler(DaprClient daprClient, Dictionary<string, IEnumerable<AlertsConfig>> alertsByDetectedClasses, IMediator mediator)
         {
             _daprClient = daprClient ?? throw new ArgumentNullException(nameof(daprClient));
             _alertsByDetectedClasses = alertsByDetectedClasses ?? throw new ArgumentNullException(nameof(alertsByDetectedClasses));
@@ -24,8 +24,6 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
 
         public async Task<Unit> Handle(AnalyzeObjectDetectionCommand command, CancellationToken cancellationToken)
         {
-            var stepTime = new StepTime { StepName = "RuleEngine", StepStart = (long)(DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds };
-
             if (command.Classes is null || command.Classes.Count == 0)
             {
                 throw new ArgumentException("Classes are required", nameof(command.Classes));
@@ -35,7 +33,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
             var i = 0;
             foreach (var @class in command.Classes)
             {
-                tasks[i++] = ValidateAlertsPerDetection(@class, command.Classes, command.EveryTime, command.UrlVideoEncoded,  command.Frame, command.TimeTrace, stepTime);
+                tasks[i++] = ValidateAlertsPerDetection(@class, command.Classes, command.EveryTime, command.UrlVideoEncoded,  command.Frame, command.TimeTrace);
 
             }
             await Task.WhenAll(tasks);
@@ -43,9 +41,9 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
             return Unit.Value;
          }
 
-        private async Task ValidateAlertsPerDetection(DetectionClass requestClass, List<DetectionClass> foundClasses, long everyTime, string urlEncoded, string frame, List<StepTime> stepTrace, StepTime stepTime)
+        private async Task ValidateAlertsPerDetection(DetectionClass requestClass, List<DetectionClass> foundClasses, long everyTime, string urlEncoded, string frame, List<StepTime> stepTrace)
         {
-            if (_alertsByDetectedClasses.TryGetValue(requestClass.EventType, out List<AlertsConfig>? alertsConfig))
+            if (_alertsByDetectedClasses.TryGetValue(requestClass.EventType, out IEnumerable<AlertsConfig>? alertsConfig))
             {
                 foreach (var alertConfig in alertsConfig)
                 {
@@ -57,7 +55,6 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                         FoundClasses = foundClasses,
                         Frame = frame,
                         RequestClass = requestClass,
-                        StepTime = stepTime,
                         StepTrace = stepTrace,
                     };
 

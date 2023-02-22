@@ -9,6 +9,6 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Commands
         }
 
         public string OriginalImageBase64 { get; set; }
-        public List<DetectionClass> MatchingClasses { get; set; }
+        public IEnumerable<DetectionClass> MatchingClasses { get; set; }
     }
 }

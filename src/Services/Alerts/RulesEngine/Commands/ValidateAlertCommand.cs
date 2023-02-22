@@ -13,7 +13,6 @@ namespace Alerts.RulesEngine.Commands
         public string UrlEncoded { get; set; }
         public string Frame { get; set; }
         public List<StepTime> StepTrace { get; set; }
-        public StepTime StepTime { get; set; }
         public AlertsConfig AlertConfig { get; set; }
     }
 }
