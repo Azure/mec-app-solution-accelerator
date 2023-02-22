@@ -103,17 +103,11 @@ git clone git@github.com:Azure/mec-app-solution-accelerator.git
 
 When developing, testing and debugging the MEC application it's easier and more straightforward to deploy into Docker so, for instance, you can debug code with Visual Studio and can easily test the application with just Docker installed without further setup steps as required by Kubernetes.
 
-![image]()
-
-![image]()
-
-
 | | |
 |--------|--------|
 | <img width="120" alt="image" src="https://user-images.githubusercontent.com/1712635/220490921-dc521a14-3f0a-481f-8179-7233a744dbc1.png"> | **Deployment to [Docker for Desktop with 'docker compose up'](./docs/DOCKER_COMPOSE_DEPLOYMENT.MD)** |
 | <img width="110" alt="image" src="https://user-images.githubusercontent.com/1712635/220490972-9140e540-3000-47f0-a3c4-4e64b4976266.png"> | **Deployment to Docker with [Visual Studio (F5 experience)](./docs/VS_DOCKER_DEPLOYMENT.MD)** |
 | | |
-
 
 
 ## Kubernetes deployment alternatives ("Production" environment)
