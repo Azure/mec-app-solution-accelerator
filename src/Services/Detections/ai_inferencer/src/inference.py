@@ -26,11 +26,11 @@ def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
     img = cv2.imdecode(np.frombuffer(backToBytes, np.uint8), cv2.IMREAD_COLOR)
     val_to_compare_resize,_,_=img.shape
     
-    if val_to_compare_resize>720:
+    if val_to_compare_resize>576:
         logging.info(f'Resizing to print')
         dim = (720,576)
         img= cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        frame_resized = cv2.imencode(".jpg", frame_resized)[1]
+        frame_resized = cv2.imencode(".jpg", img)[1]
         frame_to_bytes=frame_resized.tobytes()
         frame = base64.standard_b64encode(frame_to_bytes)
         frame = frame.decode()
