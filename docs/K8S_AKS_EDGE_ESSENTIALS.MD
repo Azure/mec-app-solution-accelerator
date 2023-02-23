@@ -176,8 +176,54 @@ In the Kubernetes dashboard you should be able to explore the application's pods
     ```
     Then, look at the EXTERNAL-IP used by the service 'alerts-ui' and finally type 'http://MY-IP-ADDRESS/' on your browser.
     
-So, you should be able to run the application's UI and check out the Alerts originated from the AI models.
+Finally, you should be able to run the application's UI and check out the Alerts originated from the AI models.
 
+**IMPORTANT:** When using full K8s in AKS EE with a single node, on single machine clusters, if you deployed your Kubernetes cluster without specifying a -ServiceIPRangeSize, you will not have allocated IPs for your workload services and you won't have an external IP address. Hence, the alerts.ui service will be stuck on "pending state", like the following:
+
+![image](https://user-images.githubusercontent.com/1712635/220791666-14a2238e-1826-4433-b55f-c57e7f53ec36.png)
+
+![image](https://user-images.githubusercontent.com/1712635/220791688-a814e1fb-5b16-48bf-9d0e-5d270c41fb9f.png)
+
+**Solution:** You can add an `externalIPs` spec to your service YAML. You can use the IP associated with your node's primary interface. You can then access the service externally, using the external IP of the node.
+
+**Find the external IP address:** You can find the IP address of your Linux VM with the PowerShell command `Get-AksEdgeNodeAddr`, like below:
+
+![image](https://user-images.githubusercontent.com/1712635/220792476-aa6094a4-0593-413b-a0b0-cb7f4c063b6d.png)
+
+**Update/extend the `alerts-ui.yaml` definition:** Then, edit the `alerts-ui.yaml` deployment file and add the following after the `LoadBalancer` line:
+
+```yaml
+  externalIPs:
+  - YOUR_VM_EXTERNAL_IP
+```
+
+```yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: alerts-ui
+      namespace: mec-accelerator
+    spec:
+      ports:
+      - port: 80
+        targetPort: 80
+      selector:
+        app: alerts-ui
+      type: LoadBalancer
+      externalIPs:
+      - 192.168.0.2
+```
+
+After deploying again, it should work with no problem:
+![image](https://user-images.githubusercontent.com/1712635/220792858-da92842e-a3b9-40ae-a75e-7e5533b35d63.png)
+
+![image](https://user-images.githubusercontent.com/1712635/220792877-89309598-0553-42c3-9513-78e4ac1e2e91.png)
+
+Further info:
+https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-deploy-app#3-verify-the-services
+
+Issue related:
+https://github.com/Azure/mec-app-solution-accelerator/issues/87
 
 ### Remove the application from Kubernetes 
 
