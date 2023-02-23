@@ -30,13 +30,13 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
         [HttpGet]
         public async Task<IEnumerable<AlertMinimized>> Get()
         {
-            return await this._alertsRepository.GetAlertsMinimized(0, 15);
+            return await this._alertsRepository.GetAlertsMinimized(0, 18);
         }
 
         [HttpGet("Minimized")]
         public async Task<IEnumerable<AlertMinimized>> GetMinimized()
         {
-            return await this._alertsRepository.GetAlertsMinimized(0, 15);
+            return await this._alertsRepository.GetAlertsMinimized(0, 18);
         }
 
         [HttpGet("{id}")]

@@ -190,7 +190,7 @@ text-left-align
 
 #data {
     width: 100%;
-    height: 100%;
+    height: auto;
 }
 
 #logo {
@@ -226,7 +226,7 @@ text-left-align
 
 #right {
     width: 48%;
-    height: 90%;
+    height: auto;
 }
 
 #info-content {
