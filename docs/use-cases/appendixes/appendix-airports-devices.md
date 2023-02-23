@@ -1,3 +1,5 @@
+# Get ahead in the world of 5G! <a href="https://aka.ms/unlock5G" target="none">Fill out our form</a> now for exclusive access to the latest technical documents, business case studies, learning resources, and our 5G starter kit. </a>.  
+
 ## Airports Appendix 1: Hardware, devices, and sensors
 
 Drones, devices, and hardware components are key to success, as they are the “eyes” of the smart airports use case.

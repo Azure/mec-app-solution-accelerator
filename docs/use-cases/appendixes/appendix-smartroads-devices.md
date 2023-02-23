@@ -1,3 +1,4 @@
+# Get ahead in the world of 5G! <a href="https://aka.ms/unlock5G" target="none">Fill out our form</a> now for exclusive access to the latest technical documents, business case studies, learning resources, and our 5G starter kit. </a>
 ## Smart Roads Appendix 1: Hardware, devices, and sensors
 
 Sensors, devices, and hardware components are key to success, as they are the “eyes” and “ears” of the smart roads use case. 
