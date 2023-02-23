@@ -22,22 +22,17 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
         }
 
         [HttpGet("{skip}/{take}")]
-        public async Task<IEnumerable<Alert>> GetPaged(int skip, int take)
+        public async Task<IEnumerable<AlertMinimized>> GetPaged(int skip, int take)
         {
-            return this._alertsRepository.List(skip, take);
+            return await this._alertsRepository.GetAlertsMinimized(skip, take);
         }
 
         [HttpGet]
         public async Task<IEnumerable<AlertMinimized>> Get()
         {
-            return await this._alertsRepository.GetAlertsMinimized(0, 18);
+            return await this._alertsRepository.GetAlertsMinimized(0, 15);
         }
 
-        [HttpGet("Minimized")]
-        public async Task<IEnumerable<AlertMinimized>> GetMinimized()
-        {
-            return await this._alertsRepository.GetAlertsMinimized(0, 18);
-        }
 
         [HttpGet("{id}")]
         public async Task<Alert> GetById(Guid id)
