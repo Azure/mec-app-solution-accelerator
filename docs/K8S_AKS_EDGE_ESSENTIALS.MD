@@ -178,7 +178,7 @@ In the Kubernetes dashboard you should be able to explore the application's pods
     
 Finally, you should be able to run the application's UI and check out the Alerts originated from the AI models.
 
-**IMPORTANT:** When using full K8s in AKS EE with a single node, on single machine clusters, if you deployed your Kubernetes cluster without specifying a -ServiceIPRangeSize, you will not have allocated IPs for your workload services and you won't have an external IP address. Hence, the alerts.ui service will be stuck on "pending state", like the following:
+**IMPORTANT ISSUE:** When using full K8s in AKS EE with a single node, on single machine clusters, if you deployed your Kubernetes cluster without specifying a -ServiceIPRangeSize, you will not have allocated IPs for your workload services and you won't have an external IP address. Hence, the alerts.ui service will be stuck on "pending state", like the following:
 
 ![image](https://user-images.githubusercontent.com/1712635/220791666-14a2238e-1826-4433-b55f-c57e7f53ec36.png)
 
