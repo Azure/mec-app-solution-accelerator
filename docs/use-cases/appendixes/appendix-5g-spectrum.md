@@ -1,3 +1,5 @@
+# Get ahead in the world of 5G! <a href="https://aka.ms/unlock5G" target="none">Fill out our form</a> now for exclusive access to the latest technical documents, business case studies, learning resources, and our 5G starter kit. </a>.  
+
 One of the critical components of 5G is the frequency spectrum used for communication. In this document, we will explore the 5G spectrum for private networks and the countries that have regulations that allow this type of use, including the CBRS in the USA.
 
 ## The 5G Spectrum for Private Networks
