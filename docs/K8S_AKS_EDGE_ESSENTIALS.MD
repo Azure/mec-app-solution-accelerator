@@ -180,13 +180,22 @@ Finally, you should be able to run the application's UI and check out the Alerts
 
 #### Important Issue:
 
-As mentioned in [AKS EE documentation verifying the services](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-deploy-app#3-verify-the-services), when using full K8s in AKS EE with a single node, on single machine clusters, if you deployed your Kubernetes cluster without specifying a -ServiceIPRangeSize, you will not have allocated IPs for your workload services and you won't have an external IP address. Hence, the alerts.ui service will be stuck on "pending state", like the following:
+As mentioned in [AKS EE documentation verifying the services](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-deploy-app#3-verify-the-services), when using full K8s in AKS EE with a single node, on single machine clusters, if you created your Kubernetes cluster without specifying a **-ServiceIPRangeSize** parameter in the JSON config, you will not have allocated IPs for your workload services and you won't have an external IP address. Hence, the alerts.ui service will be stuck on "pending state", like the following:
 
 ![image](https://user-images.githubusercontent.com/1712635/220791666-14a2238e-1826-4433-b55f-c57e7f53ec36.png)
 
 ![image](https://user-images.githubusercontent.com/1712635/220791688-a814e1fb-5b16-48bf-9d0e-5d270c41fb9f.png)
 
-**Solution:** You can add an `externalIPs` spec to your service YAML. You can use the IP associated with your node's primary interface. You can then access the service externally, using the external IP of the node.
+**Solutions:** 
+
+**SOLUTION A:** 
+
+The best solution is to re-create the AKS EE cluster and specify the **-ServiceIPRangeSize** parameter in the JSON config, like here.
+https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-single-node-deployment#example-deployment-options
+
+**SOLUTION B:** 
+
+This is more a workaround, but you can also add `externalIPs` spec to your service YAML. You can use the IP associated with your node's primary interface. You can then access the service externally, using the external IP of the node.
 
 **Find the external IP address:** You can find the IP address of your Linux VM with the PowerShell command `Get-AksEdgeNodeAddr`, like below:
 
