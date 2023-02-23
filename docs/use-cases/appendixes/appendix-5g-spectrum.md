@@ -8,8 +8,6 @@ The 5G spectrum for private networks is divided into three different frequency b
 *   Mid-band spectrum: This is the frequency range between 1 and 6 GHz, which offers a balance between coverage and data transfer rates. Mid-band spectrum is suitable for many private 5G use cases, including smart factories, smart warehouses, and industrial IoT applications.
 *   High-band spectrum: This is the frequency range above 24 GHz, which offers very high data transfer rates but limited coverage. High-band spectrum is suitable for high-speed applications like virtual reality and augmented reality.
 
----
-
 ## Countries that have Regulations for Private 5G Networks
 
 Several countries have regulations that allow the use of private 5G networks. These regulations vary by country, but they generally specify the frequency bands that can be used, the power limits, and the licensing requirements. Here are a few examples:
@@ -30,8 +28,6 @@ Several countries have regulations that allow the use of private 5G networks. Th
 
  **USA**: The USA regulator FCC made available 150 MHz of spectrum in the 3.5 GHz band (CBRS) for shared access, which can be used for private 5G networks. Spectrum is licensed on a three-tiered model, with priority access licenses (PALs) auctioned for 10 years, general authorized access (GAA) available for free, and incumbent access for existing users.
 
----
-
 ## Shared Access spectrum in the US (CBRS).
 
 The Citizens Broadband Radio Service (CBRS) is a wireless communication framework established by the Federal Communications Commission (FCC) in the United States. The CBRS aims to allow shared use of the 3.5 GHz frequency band between government and commercial users while protecting incumbent government users.
@@ -44,8 +40,6 @@ The CBRS framework includes the following components:
 4.  **Certified Professional Installer (CPI):** is an individual who has been certified by the Wireless Innovation Forum (WInnForum) to install and operate Citizens Broadband Radio Service (CBRS) devices in compliance with Federal Communications Commission (FCC) regulations.
 
 The CBRS framework provides a flexible and dynamic approach to spectrum sharing, allowing for efficient and effective use of the 3.5 GHz band while ensuring that incumbent users are protected. This shared spectrum approach can enable the deployment of private 5G networks, wireless broadband services, and other advanced wireless technologies that can drive innovation and economic growth.
-
----
 
 ## Three-Tiered Sharing Model
 
@@ -62,8 +56,6 @@ The Priority Access Tier is available to qualified commercial entities that have
  **General Authorized Access Tier (GAA)**
 
 The General Authorized Access Tier is available for shared use by any qualified user with an approved CBRS device. GAA users can access any available portion of the 3.5 GHz band that is not being used by IAT or PAT users. GAA users have the lowest priority and must vacate the spectrum if an incumbent access or PAT user needs it.
-
----
 
 ## Spectrum Access System (SAS)
 
@@ -85,8 +77,6 @@ The SAS ensures the security and privacy of CBRS users by authenticating and enc
 
 The list of current SAS administrators can be found on the WInnForum page [SAS Administrators (wirelessinnovation.org)](https://cbrs.wirelessinnovation.org/sas-administrators)
 
----
-
 ## CBRS Devices 
 
 A CBRS device is a wireless communication device that is designed to operate in the Citizens Broadband Radio Service (CBRS) band, which is a shared spectrum framework in the United States. CBRS devices must comply with technical requirements set by the Federal Communications Commission (FCC) and must be certified by the FCC to ensure that they operate safely and efficiently.
@@ -104,8 +94,6 @@ Here are some of the key features of a CBRS device:
  **Power and Antenna Requirements:** CBRS devices must comply with power and antenna requirements set by the FCC to ensure that they operate safely and efficiently.
 
 CBRS devices include smartphones, routers, access points, and other wireless communication devices. They are designed to operate in the shared spectrum framework provided by the CBRS, which enables the deployment of innovative wireless services, including private 5G networks, wireless broadband, and other advanced wireless technologies.
-
----
 
 ### Certified Professional Installer (CPI)
 
@@ -128,8 +116,6 @@ CPIs must be able to troubleshoot and resolve technical issues related to CBRS d
 CPIs must comply with all FCC regulations and WInnForum standards related to the installation and operation of CBRS devices. They must also maintain accurate records of all device installations, tests, and maintenance activities and report any issues or incidents to the appropriate authorities.
 
 In summary, CPIs play a critical role in the successful deployment of CBRS networks. By ensuring that CBRS devices are installed, configured, and maintained in compliance with regulatory standards, CPIs help to ensure the efficient and effective use of CBRS spectrum and the deployment of innovative wireless services.
-
----
 
 ## Additional resources
 
