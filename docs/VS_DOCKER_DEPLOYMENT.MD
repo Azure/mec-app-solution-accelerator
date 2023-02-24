@@ -33,7 +33,7 @@ Now that we have established the appropriate startup project, we will recompile 
 After a few seconds, depending on the capacity of the device, the alert dashboard should open in our browser with url https://localhost:50058/ or https://host.docker.internal:50058/ .
 ![plot](./imgs/startup/dashboard.png)
 
-You can also open the Alerts API swager at the following urls: http://localhost:50055/swagger/index.html http://host.docker.internal:50055/swagger/index.html
+You can also open the Alerts API swager at the following urls: http://localhost:50055/swagger/index.html http://host.docker.internal:50055/swagger/index.html , using this swagger you can query the alerts, and more importantly, you can delete the alerts collection, when too many are stored.
 
 ![plot](./imgs/startup/swagger.png)
 

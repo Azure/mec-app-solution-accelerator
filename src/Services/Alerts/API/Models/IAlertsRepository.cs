@@ -2,5 +2,6 @@
 {
     public interface IAlertsRepository : IBaseRepository<Alert, Guid>
     {
+        public Task DropData();
     }
 }
