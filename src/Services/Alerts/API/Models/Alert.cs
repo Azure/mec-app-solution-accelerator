@@ -11,6 +11,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Models
         public DateTime CaptureTime { get; set; }
         public DateTime AlertTime { get; set; }
         public double MsExecutionTime { get; set; }
+        public double MsExecutionTimeWithCommunications { get; set; }
         public string Type { get; set; }
         public float Accuracy { get; set; }
         public Source Source { get; set; }

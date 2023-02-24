@@ -48,6 +48,14 @@ td {
     table th {
         font-size: 22px !important;
     }
+
+    #alertsDetailsDiv {
+        min-height: 757px !important;
+    }
+}
+
+#alertsDetailsDiv{
+    min-height: 1078px;
 }
 
 text-left-align 
