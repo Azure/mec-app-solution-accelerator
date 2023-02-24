@@ -28,17 +28,18 @@ Docker compose project will now be the new default startup project of the soluti
 ## Start the solution
 Now that we have established the appropriate startup project, we will recompile the solution, and start it. 
 
-![plot](./imgs/startup/cleansolution.png)
+![cleansolution](https://user-images.githubusercontent.com/101176997/221211294-486a2592-4024-4809-aa92-357668e8c458.PNG)
 
 After a few seconds, depending on the capacity of the device, the alert dashboard should open in our browser with url https://localhost:50058/ or https://host.docker.internal:50058/ .
-![plot](./imgs/startup/dashboard.png)
+![dashboard](https://user-images.githubusercontent.com/101176997/221211358-6ca056f6-35aa-46d4-a02d-27de1e542f73.PNG)
+
 
 You can also open the Alerts API swager at the following urls: http://localhost:50055/swagger/index.html http://host.docker.internal:50055/swagger/index.html , using this swagger you can query the alerts, and more importantly, you can delete the alerts collection, when too many are stored.
 
-![plot](./imgs/startup/swagger.png)
+![swagger](https://user-images.githubusercontent.com/101176997/221211413-77ebffc5-b121-4202-8b8e-5e3796212c60.PNG)
 
 ## Ports configuration
 
 Remember than you can change the external ports configuration, or the rtsp source, in the docker.compose.override.yaml.
 
-![plot](./imgs/startup/override.png)
+![override](https://user-images.githubusercontent.com/101176997/221211464-a510717b-bf06-41ba-9a84-f3e6baf6c8d2.PNG)
