@@ -1,7 +1,6 @@
 # MEC Application Solution Accelerator (Example Reference Application for Edge/MEC)
 
-
-This repo provides a reference MEC (Multi-Access Edge Compute) application example (curent state is *Alpha*), based on an event-driven microservices architecture, using Docker containers running at the Edge. 
+Get started developing apps for 5G Private MEC (Multi-Access Edge Compute) & other Edge scenarios with this 'MEC Application Solution Accelerator' (example app) based on an event-driven microservices architecture, using Docker containers, Kubernetes, Dapr, and MQTT message broker with Publish/Subscription.
 
 ## What is a MEC Application?
 
