@@ -4,7 +4,8 @@
 To clean up the database locally there are two options:
 Remove the "database" folder contained in mongodb with the solution stopeed.
 
-![plot](./imgs/mongodb/folderdelete.PNG)
+![folderdelete](https://user-images.githubusercontent.com/101176997/221573975-4058ac7a-e5e5-4f31-8892-2c59dc705f93.PNG)
+
 
 Use the delete endpoint in swagger which deletes the alerts collection.
 
@@ -44,6 +45,7 @@ Use the delete endpoint in swagger which deletes the alerts collection.
 
 3. Create a tunnel with the alerts-api pod using kubectl command:
 
-        kubectl port-forward svc/alerts-api 8080:80 -n mec-accelerator
+        kubectl port-forward svc/alerts-api 8080:8080 -n mec-accelerator
 
 4. Clean the alerts collection using the delete endpoint.
+![image](https://user-images.githubusercontent.com/101176997/221573798-a8037d50-3e2c-49f9-8cce-e3b65c2321b1.png)
