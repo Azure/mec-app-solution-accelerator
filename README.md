@@ -4,8 +4,9 @@ Get started developing apps for 5G Private MEC (Multi-Access Edge Compute) & oth
 
 The main sections of this "readme" document are:
 
-[Introduction, context and architecture](#Introduction, context and architecture)
-[Getting Started (Deployment on Docker host or Kubernetes)](#Getting Started)
+[Introduction, context and architecture](#Introduction,-context-and-architecture)
+
+[Getting Started (Deployment on Docker host or Kubernetes)](#Getting-Started)
 
 # Introduction, context and architecture
 
