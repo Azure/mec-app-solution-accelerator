@@ -17,12 +17,13 @@
 
 - **Advanced Versioning of Microservices (semantic)**: Implement a more advanced versioning system based on aspnet-api-versioning or comparable system: https://github.com/Microsoft/aspnet-api-versioning
 - **Migrate K8s deployment YAML to HELM charts**: Related to Open Application Model [OAM](https://oam.dev/) which uses HELM.
-- **Refactor to comply with Open Application Model [OAM](https://oam.dev/)** to have the app definition decoupled from app deployment on multiple supported environments.
-  -   https://oam.dev/
-  -   https://github.com/oam-dev
-  -   https://cloudblogs.microsoft.com/opensource/2019/10/16/announcing-open-application-model/
-  -   https://learn.microsoft.com/en-us/shows/azure-friday/intro-to-rudr-a-kubernetes-implementation-of-the-open-application-model
-  -   https://github.com/kubevela/kubevela
+- **Refactor to comply with "Project Radius" and/or Open Application Model [OAM](https://oam.dev/)** to have the app definition decoupled from app deployment on multiple supported environments.
+  - OAM:
+      -   https://oam.dev/
+      -   https://github.com/oam-dev
+      -   https://cloudblogs.microsoft.com/opensource/2019/10/16/announcing-open-application-model/
+      -   https://learn.microsoft.com/en-us/shows/azure-friday/intro-to-rudr-a-kubernetes-implementation-of-the-open-application-model
+      -   https://github.com/kubevela/kubevela
 - **Implement a "Zipkin enable/diable" mechanism:** Need a simple flag to enable/disable Zipkin, since in "production" it can impact perf.
 - **High coverage of Unit Tests and Functional Tests**
 - **Local MEC error loging**
