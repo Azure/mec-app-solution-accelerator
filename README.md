@@ -34,6 +34,9 @@ Therefore, the main needs for this kind of applications are:
 
 The network related needs are usually provided by environments such as 5G Private MEC and 5G Public MEC, but Wi-Fi and cabled network are also complementary.
 
+Check out this blog post for additional explanations: https://aka.ms/buildwith5G
+
+
 ## Goals of this MEC app Solution Accelerator (Example application)
 
 As mentioned, the network needs are provided by the infrastructure such as a 5G network and EDGE compute.
