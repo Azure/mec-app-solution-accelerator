@@ -203,7 +203,11 @@ https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-single-node-de
 
 This is more a workaround, but you can also add `externalIPs` spec to your service YAML. You can use the IP associated with your node's primary interface. You can then access the service externally, using the external IP of the node.
 
-**Find the external IP address:** You can find the IP address of your Linux VM with the PowerShell command `Get-AksEdgeNodeAddr`, like below:
+**Find the external IP address:** You can find the IP address of your Linux VM by running **with Admin privileges (Run as Administrator)** the PowerShell command `Get-AksEdgeNodeAddr`, like below:
+
+```
+Get-AksEdgeNodeAddr -NodeType Linux
+```
 
 ![image](https://user-images.githubusercontent.com/1712635/220792476-aa6094a4-0593-413b-a0b0-cb7f4c063b6d.png)
 
