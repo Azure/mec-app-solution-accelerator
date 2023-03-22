@@ -6,7 +6,7 @@ metadata:
 spec:
   ports:
   - protocol: TCP
-    port: 80
+    port: 88
     targetPort: 80
   selector:
     app: alerts-ui
