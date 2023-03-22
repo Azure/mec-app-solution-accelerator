@@ -174,11 +174,15 @@ In the Kubernetes dashboard you should be able to explore the application's pods
     ```powershell
     kubectl get service --namespace mec-accelerator
     ```
-    Then, look at the EXTERNAL-IP used by the service 'alerts-ui' and finally type 'http://MY-IP-ADDRESS/' on your browser.
+    Then, look at the EXTERNAL-IP used by the service 'alerts-ui' and finally type 'http://MY-IP-ADDRESS:88/' on your browser.
     
-Finally, you should be able to run the application's UI and check out the Alerts originated from the AI models.
+    Finally, you should be able to run the application's UI and check out the Alerts originated from the AI models.
+    
+![image](https://user-images.githubusercontent.com/1712635/220792858-da92842e-a3b9-40ae-a75e-7e5533b35d63.png)
 
-#### Important Issue:
+![image](https://user-images.githubusercontent.com/1712635/220792877-89309598-0553-42c3-9513-78e4ac1e2e91.png)
+
+#### Important known issue:
 
 As mentioned in [AKS EE documentation verifying the services](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-deploy-app#3-verify-the-services), when using full K8s in AKS EE with a single node, on single machine clusters, if you created your Kubernetes cluster without specifying a **-ServiceIPRangeSize** parameter in the JSON config, you will not have allocated IPs for your workload services and you won't have an external IP address. Hence, the alerts.ui service will be stuck on "pending state", like the following:
 
@@ -225,10 +229,7 @@ This is more a workaround, but you can also add `externalIPs` spec to your servi
       - 192.168.0.2
 ```
 
-After deploying again, it should work with no problem:
-![image](https://user-images.githubusercontent.com/1712635/220792858-da92842e-a3b9-40ae-a75e-7e5533b35d63.png)
-
-![image](https://user-images.githubusercontent.com/1712635/220792877-89309598-0553-42c3-9513-78e4ac1e2e91.png)
+After deploying again, it should work with no problem.
 
 Further info:
 https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-deploy-app#3-verify-the-services
