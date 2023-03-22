@@ -178,9 +178,11 @@ In the Kubernetes dashboard you should be able to explore the application's pods
     
     Finally, you should be able to run the application's UI and check out the Alerts originated from the AI models.
     
-![image](https://user-images.githubusercontent.com/1712635/220792858-da92842e-a3b9-40ae-a75e-7e5533b35d63.png)
+    Note that the port used on the external IP might be **88**, depending on how the service port is configured in the **alerts-ui.yaml** file.
+    
+![image](https://user-images.githubusercontent.com/1712635/226770509-ce73881e-96ed-41c1-9965-dcf044683e02.png)
 
-![image](https://user-images.githubusercontent.com/1712635/220792877-89309598-0553-42c3-9513-78e4ac1e2e91.png)
+![image](https://user-images.githubusercontent.com/1712635/226770726-10fdfb87-44f1-497b-845f-fde0bfd12956.png)
 
 #### Important known issue:
 
