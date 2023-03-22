@@ -109,9 +109,9 @@ docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#inst
 
 8. To access the front-end, go to the Azure portal, find the AKS resource and navigate to the services sections. In there the alerts-ui service of type NodePort will have public IP assigned.
 
-    Note that the port used on the external IP might be **88**, depending on how the service port is configured in the alerts-ui.yaml file.
+Note that the port used on the external IP might be **88**, depending on how the service port is configured in the alerts-ui.yaml file.
 
-    ![image](https://user-images.githubusercontent.com/1712635/220746544-90e6e492-fd44-4f0b-8dc4-07661fc72558.png)
+![image](https://user-images.githubusercontent.com/1712635/220746544-90e6e492-fd44-4f0b-8dc4-07661fc72558.png)
 
 ### Remove the application from Kubernetes 
 
