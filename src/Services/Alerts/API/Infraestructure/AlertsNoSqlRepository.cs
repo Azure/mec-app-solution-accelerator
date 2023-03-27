@@ -55,6 +55,11 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Infraestructure
             return collection.AsQueryable().OrderByDescending(alert => alert.CaptureTime).Skip(skip).Take(take).ToList();
         }
 
+        public async Task DropData()
+        {
+            await _database.DropCollectionAsync(nameof(Alert));
+        }
+
         public async Task<IEnumerable<AlertMinimized>> GetAlertsMinimized(int skip, int take)
         {
             var collection = _database.GetCollection<Alert>(nameof(Alert));

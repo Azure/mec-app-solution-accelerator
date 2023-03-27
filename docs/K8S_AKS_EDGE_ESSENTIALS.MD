@@ -174,11 +174,17 @@ In the Kubernetes dashboard you should be able to explore the application's pods
     ```powershell
     kubectl get service --namespace mec-accelerator
     ```
-    Then, look at the EXTERNAL-IP used by the service 'alerts-ui' and finally type 'http://MY-IP-ADDRESS/' on your browser.
+    Then, look at the EXTERNAL-IP used by the service 'alerts-ui' and finally type 'http://MY-IP-ADDRESS:88/' on your browser.
     
-Finally, you should be able to run the application's UI and check out the Alerts originated from the AI models.
+    Finally, you should be able to run the application's UI and check out the Alerts originated from the AI models.
+    
+    Note that the port used on the external IP might be **88**, depending on how the service port is configured in the **alerts-ui.yaml** file.
+    
+![image](https://user-images.githubusercontent.com/1712635/226770509-ce73881e-96ed-41c1-9965-dcf044683e02.png)
 
-#### Important Issue:
+![image](https://user-images.githubusercontent.com/1712635/226770726-10fdfb87-44f1-497b-845f-fde0bfd12956.png)
+
+#### Important known issue:
 
 As mentioned in [AKS EE documentation verifying the services](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-deploy-app#3-verify-the-services), when using full K8s in AKS EE with a single node, on single machine clusters, if you created your Kubernetes cluster without specifying a **-ServiceIPRangeSize** parameter in the JSON config, you will not have allocated IPs for your workload services and you won't have an external IP address. Hence, the alerts.ui service will be stuck on "pending state", like the following:
 
@@ -197,7 +203,11 @@ https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-single-node-de
 
 This is more a workaround, but you can also add `externalIPs` spec to your service YAML. You can use the IP associated with your node's primary interface. You can then access the service externally, using the external IP of the node.
 
-**Find the external IP address:** You can find the IP address of your Linux VM with the PowerShell command `Get-AksEdgeNodeAddr`, like below:
+**Find the external IP address:** You can find the IP address of your Linux VM by running **with Admin privileges (Run as Administrator)** the PowerShell command `Get-AksEdgeNodeAddr`, like below:
+
+```
+Get-AksEdgeNodeAddr -NodeType Linux
+```
 
 ![image](https://user-images.githubusercontent.com/1712635/220792476-aa6094a4-0593-413b-a0b0-cb7f4c063b6d.png)
 
@@ -225,10 +235,7 @@ This is more a workaround, but you can also add `externalIPs` spec to your servi
       - 192.168.0.2
 ```
 
-After deploying again, it should work with no problem:
-![image](https://user-images.githubusercontent.com/1712635/220792858-da92842e-a3b9-40ae-a75e-7e5533b35d63.png)
-
-![image](https://user-images.githubusercontent.com/1712635/220792877-89309598-0553-42c3-9513-78e4ac1e2e91.png)
+After deploying again, it should work with no problem.
 
 Further info:
 https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-deploy-app#3-verify-the-services

@@ -1,5 +1,4 @@
-﻿using Dapr.Client;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Commands;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
@@ -45,6 +44,12 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Controllers
             });
 
             return alert;
+        }
+
+        [HttpDelete]
+        public async Task DropAlertsData()
+        {
+           await this._alertsRepository.DropData();
         }
     }
 }

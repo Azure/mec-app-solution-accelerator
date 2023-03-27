@@ -4,8 +4,8 @@ metadata:
   name: my-config
   namespace: mec-accelerator
 data:
-  # feeds: "[{'id':'1', 'url':'../Datasets/frames/brindadores.jpg'},{'id':'2', 'url':'../Datasets/frames/avion.jpg'}]"
-  feeds: "[{'id':'1', 'url':'rtsp://20.42.105.26:8554/mystream'},{'id':'2', 'url':'rtsp://20.42.105.26:8554/mystream'}]"
+  feeds: "[{'id':'1', 'url':'../Datasets/PerimeterDemo.mp4'}]"
+  # feeds: "[{'id':'1', 'url':'rtsp://20.42.105.26:8554/mystream'},{'id':'2', 'url':'rtsp://20.42.105.26:8554/mystream'}]"
 
 # - FEED=../Datasets/frames/avion.jpg
 # - FEED=../Datasets/frames/brindadores.jpg

@@ -2,7 +2,6 @@
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Commands;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.Models;
-using Newtonsoft.Json;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
 {
@@ -22,6 +21,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             DateTime captureDate = new DateTime(1970, 1, 1) + time;
             DateTime alertDate =  DateTime.UtcNow;
 
+            var durations = SetDurations(request.StepTrace);
             var entity = new Alert()
             {
                 Frame = request.Frame,
@@ -30,8 +30,9 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                 Id = id,
                 Type = request.Type,
                 Accuracy = request.Accuracy * 100,
-                StepTimeAsDate = SetDurations(request.StepTrace),
-                MsExecutionTime = (alertDate - captureDate).TotalMilliseconds,
+                StepTimeAsDate = durations,
+                MsExecutionTime = (double)durations.Sum(x => x.StepDuration),
+                MsExecutionTimeWithCommunications = (alertDate - captureDate).TotalMilliseconds,
                 AlertTime = alertDate,
                 Source = this.SetHardwareMockInformation(),
                 MatchesClasses = request.MatchingClasses,

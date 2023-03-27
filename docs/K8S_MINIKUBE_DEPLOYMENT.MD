@@ -106,7 +106,11 @@ Note that if you were able to run the application on plain Docker, you should ha
     /> minikube service alerts-ui -n mec-accelerator
     ```
 
-![image](https://user-images.githubusercontent.com/1712635/218885207-5d720a2d-f5a6-4e29-bfd1-bad384803805.png)
+Note that the port used on the external IP might be **88**, depending on how the **service port** is configured in the **alerts-ui.yaml file**.
+
+So URL can be http://localhost:88 
+
+![image](https://user-images.githubusercontent.com/1712635/226771707-7dfeeb13-239c-45cd-9385-89079064280f.png)
 
 ### Remove the application from Minikube 
 
