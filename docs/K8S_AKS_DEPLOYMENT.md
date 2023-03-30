@@ -10,7 +10,7 @@ This procedure, deploying into AKS in Azure applies to both cases since deployin
 
 For creating an AKS cluster in a regular Azure Region datacenter (cloud), follow the official documentation on how to [Deploy an Azure Kubernetes Service (AKS) cluster with the UI](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli#create-an-aks-cluster) or how to [Deploy an Azure Kubernetes Service (AKS) cluster with the CLI](https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster?tabs=azure-cli)
 
-### Create the AKS cluster in Azure Edge zone
+### (Optional) Create the AKS cluster in Azure Edge zone (Public MEC)
 
 Creating an AKS cluster in an Azure Edge zone is very similar, but you need to explicetely select the Azure Edge zone.
 
