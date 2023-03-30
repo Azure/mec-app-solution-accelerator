@@ -1,13 +1,34 @@
-# Deploy the application to AKS in Azure cloud
+# Deploy the application to AKS in Azure cloud or Azure Public MEC (Azure Edge Zone)
 
-This example application named *"MEC Application Solution Accelerator"* can also be deployed into the cloud in addition to local/on-premises servers in a Private MEC or in a Public MEC (Azure Edge zone).
+- Deploying into **Public MEC** datacenters (**Azure Edge Zones**) makes sese when the 5G network used with the devices is a public 5G network such as AT&T. These Public MEC datacenters (Azure Edge Zones) still provide very low latency if your devices are placed on the same area (i.e. city) where the Azure Edge Zone is based. Low latency is provided thanks to the fact that for instance, a 5G AT&T network accesses directly the related Azure Edge Zones without going through the Internet.  See [What is Azure public MEC?](https://learn.microsoft.com/en-us/azure/public-multi-access-edge-compute-mec/overview) for further details.
 
-Deploying into a regular **Azure Region datacenter** makes sense when very low latency is not critical and the application services can run in the cloud. This environment could also be used for a QoS environment or testing environment.
+- Deploying into a regular **Azure Region datacenter** makes sense when very low latency is not critical and the application services can run in the cloud. This environment could also be used for a QoS environment or testing environment.
+
+This procedure, deploying into AKS in Azure applies to both cases since deploying and using an AKS cluster is similar in a regular Azure Region or in an Azure Edge Zone (Public MEC). The only difference when creating the AKS cluster is that you need to specify an "Azure Edge Zone" such as Atlanta or Dallas.
 
 ## Create an AKS cluster in Azure
 
-Follow the official documentation on how to [Deploy an Azure Kubernetes Service (AKS) cluster with the UI](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli#create-an-aks-cluster) or how to [Deploy an Azure Kubernetes Service (AKS) cluster with the CLI](https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster?tabs=azure-cli)
+For creating an AKS cluster in a regular Azure Region datacenter (cloud), follow the official documentation on how to [Deploy an Azure Kubernetes Service (AKS) cluster with the UI](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli#create-an-aks-cluster) or how to [Deploy an Azure Kubernetes Service (AKS) cluster with the CLI](https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster?tabs=azure-cli)
 
+### Create the AKS cluster in Azure Edge zone
+
+Creating an AKS cluster in an Azure Edge zone is very similar, but you need to explicetely select the Azure Edge zone.
+
+Before you can deploy an AKS cluster in the Edge Zone, your subscription needs to have access to the Edge Zone location. The access to the Edge Zone is provided through the onboarding process. To onboard to the Edge Zone you can either create a support request through the Azure portal or Sign Up for preview at aka.ms/AzurepublicMEC 
+
+The only different steps are:
+
+- Select Deploy to an edge zone under the region locator for the AKS cluster. 
+
+![image](https://user-images.githubusercontent.com/1712635/228965879-8c8a4157-88cf-4c74-9f01-6834b50548e1.png)
+
+- Select the Edge Zone targeted for deployment, and leave the default value selected for Kubernetes version. 
+
+![image](https://user-images.githubusercontent.com/1712635/228966018-3bf38cad-013b-4fc3-a111-ebc0bff63bd4.png)
+
+You can see that Edge zones (aka Public MEC) are related to operators, such as in the above cases, with AT&T.
+
+Note that when you create an AKS cluster in an Edge zone, under the covers, the Kubernetes cluster is not the same as a regular AKS, but a more lightweigth AKS cluster, also less scalable, especially designed for the edge. However, when deploying and working with it, the experience is similar.
 
 ## Use Azure CLI to target your AKS cluster in your Azure subscription
 
