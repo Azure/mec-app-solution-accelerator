@@ -2,7 +2,7 @@
 
 This example application named *"MEC Application Solution Accelerator"* can also be deployed into the cloud and Public MEC datacenters (Azure Edge Zones) in addition to local/on-premises servers in a Private MEC.
 
-- Deploying into **Public MEC** datacenters (**Azure Edge Zones**) makes sese when the 5G network used with the devices is a public 5G network such as AT&T. These Public MEC datacenters (Azure Edge Zones) still provide very low latency if your devices are placed on the same area (i.e. city) where the Azure Edge Zone is based. Low latency is provided thanks to the fact that for instance, a 5G AT&T network access directly the related Azure Edge Zones without going through Internet.  See [What is Azure public MEC?](https://learn.microsoft.com/en-us/azure/public-multi-access-edge-compute-mec/overview) for further details.
+- Deploying into **Public MEC** datacenters (**Azure Edge Zones**) makes sese when the 5G network used with the devices is a public 5G network such as AT&T. These Public MEC datacenters (Azure Edge Zones) still provide very low latency if your devices are placed on the same area (i.e. city) where the Azure Edge Zone is based. Low latency is provided thanks to the fact that for instance, a 5G AT&T network accesses directly the related Azure Edge Zones without going through the Internet.  See [What is Azure public MEC?](https://learn.microsoft.com/en-us/azure/public-multi-access-edge-compute-mec/overview) for further details.
 
 - Deploying into a regular **Azure Region datacenter** makes sense when very low latency is not critical and the application services can run in the cloud. This environment could also be used for a QoS environment or testing environment.
 
