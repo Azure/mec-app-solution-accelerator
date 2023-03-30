@@ -12,6 +12,8 @@ For creating an AKS cluster in a regular Azure Region datacenter (cloud), follow
 
 ### (Optional) Create the AKS cluster in Azure Edge zone (Public MEC)
 
+Edge Zones are unique solution offering with small, localized footprints of Azure in a metropolitan area designed to provide low latency connectivity for applications that require the highest level of performance, providing low latency connectivity that is tailored to the needs of an enterprise. The benefits of this solution can be enjoyed by various industries and use cases such as live media streaming, real-time analytics, inferencing with AI/ML algorithms, smart cities, retail, automotive, and healthcare. One such solution offering, Azure public multi-access edge compute (MEC) solution are a type of Edge Zone that are placed in or near mobile operators' data centers in metro areas that are accessed from mobile devices connected to the mobility network. To learn more details on Azure public MEC, please refer to Azure public MEC documentation: [Azure public MEC Overview](https://msazure.visualstudio.com/NEC/_wiki/wikis/NEC.wiki?wikiVersion=GBwikiMaster&pagePath=/AKS%20for%20Azure%20Edge%20Zone%20and%20Azure%20public%20MEC/overview). With this solution, enterprises are able to enjoy the advantages of low latency at the edge
+
 Creating an AKS cluster in an Azure Edge zone is very similar, but you need to explicetely select the Azure Edge zone.
 
 Before you can deploy an AKS cluster in the Edge Zone, your subscription needs to have access to the Edge Zone location. The access to the Edge Zone is provided through the onboarding process. To onboard to the Edge Zone you can either create a support request through the Azure portal or Sign Up for preview at aka.ms/AzurepublicMEC 
