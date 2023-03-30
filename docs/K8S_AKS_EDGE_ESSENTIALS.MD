@@ -1,4 +1,4 @@
-# Deploy to AKS Edge Essentials
+# Deploy the application to AKS Edge Essentials
 
 Microsoft recently released [AKS Edge Essentials](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-overview) as GA (Generally Available) on February 21st 2023.
 
