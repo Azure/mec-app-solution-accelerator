@@ -1,4 +1,4 @@
-## Deploy the Application to AKS (Azure Kubernetes Service) in Azure cloud 
+## Deploy the application to AKS in Azure cloud 
 
 Check thhe official [Dapr doc guide](https://docs.dapr.io/operations/hosting/kubernetes/cluster/setup-aks/) and [Microsoft Docs guide](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli)
 
