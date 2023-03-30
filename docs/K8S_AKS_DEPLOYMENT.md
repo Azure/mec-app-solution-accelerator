@@ -1,6 +1,16 @@
-## Deploy the application to AKS in Azure cloud 
+# Deploy the application to AKS in Azure cloud 
 
-Check thhe official [Dapr doc guide](https://docs.dapr.io/operations/hosting/kubernetes/cluster/setup-aks/) and [Microsoft Docs guide](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli)
+This example application named *"MEC Application Solution Accelerator"* can also be deployed into the cloud and Public MEC datacenters (Azure Edge Zones) in addition to local/on-premises servers in a Private MEC.
+
+- Deploying into **Public MEC** datacenters (**Azure Edge Zones**) makes sese when the 5G network used with the devices is a public 5G network such as AT&T. These Public MEC datacenters (Azure Edge Zones) still provide very low latency if your devices are placed on the same area (i.e. city) where the Azure Edge Zone is based. Low latency is provided thanks to the fact that for instance, a 5G AT&T network access directly the related Azure Edge Zones without going through Internet.  See [What is Azure public MEC?](https://learn.microsoft.com/en-us/azure/public-multi-access-edge-compute-mec/overview) for further details.
+
+- Deploying into a regular **Azure Region datacenter** makes sense when very low latency is not critical and the application services can run in the cloud. This environment could also be used for a QoS environment or testing environment.
+
+This procedure, deploying into AKS in Azure applies to both cases since AKS is similar in a regular Azure Region or in an Azure Edge Zone (Public MEC).
+
+Check the official [Microsoft Docs guide](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli) and [Dapr doc guide](https://docs.dapr.io/operations/hosting/kubernetes/cluster/setup-aks/) for further information.
+
+## Use Azure CLI to target your AKS cluster in your Azure subscription
 
 1. Use Azure CLI to log in and set the apropiate subscription where the AKS cluster is located
 
@@ -32,7 +42,7 @@ Check thhe official [Dapr doc guide](https://docs.dapr.io/operations/hosting/kub
         kubectl config use-context DESIRED_CLUSTER
         ```
 
-### Install and Initialize DAPR
+## Install and Initialize DAPR
 
 The recommended approach for installing Dapr on AKS is to use the AKS Dapr extension. The extension offers support for all native Dapr configuration capabilities through command-line arguments via the Azure CLI and offers the option of opting into automatic minor version upgrades of the Dapr runtime.
 
@@ -86,7 +96,7 @@ docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#inst
     kubectl get pods -n dapr-system
     ```
 
-### Deploy the application's services to Kubernetes
+## Deploy the application's services to Kubernetes
 
 6. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
@@ -105,7 +115,7 @@ docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#inst
     ![image](https://user-images.githubusercontent.com/1712635/219480144-75f3998d-998c-464d-bc8a-7e9a1a265a0e.png)
 
 
-### Access the application's UI to see Alerts originated from AI model detections
+## Access the application's UI to see Alerts originated from AI model detections
 
 8. To access the front-end, go to the Azure portal, find the AKS resource and navigate to the services sections. In there the alerts-ui service of type NodePort will have public IP assigned.
 
@@ -113,7 +123,7 @@ Note that the port used on the external IP might be **88**, depending on how the
 
 ![image](https://user-images.githubusercontent.com/1712635/220746544-90e6e492-fd44-4f0b-8dc4-07661fc72558.png)
 
-### Remove the application from Kubernetes 
+## Remove the application from Kubernetes 
 
 When you are finsihed trying, you can always uninstall the application pods and all related resources from your Kuberentes by running this command.
 
