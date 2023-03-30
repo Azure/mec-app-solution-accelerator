@@ -51,9 +51,8 @@ Note that when you create an AKS cluster in an Edge zone, under the covers, the 
     az aks get-credentials --resource-group YOUR_RG_GROUP --name YOUR_AKS_NAME
     ```
 
-    ![kubectl minikube context](/docs/imgs/deploy/aks1.png)
-
-
+    <img width="940" alt="image" src="https://user-images.githubusercontent.com/1712635/228974631-223a9e2d-e877-4fc9-b654-a6e9ac4c6a53.png">
+    
     Alternatively, check and set your current contexts using kubectl config:
 
         ```powershell
