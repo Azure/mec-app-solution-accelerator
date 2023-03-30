@@ -1,4 +1,4 @@
-# Deploy the application to AKS in Azure cloud 
+# Deploy the application to AKS in Azure cloud or Azure Public MEC (Azure Edge Zone)
 
 This example application named *"MEC Application Solution Accelerator"* can also be deployed into the cloud and Public MEC datacenters (Azure Edge Zones) in addition to local/on-premises servers in a Private MEC.
 
