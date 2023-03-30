@@ -8,7 +8,12 @@ This example application named *"MEC Application Solution Accelerator"* can also
 
 This procedure, deploying into AKS in Azure applies to both cases since AKS is similar in a regular Azure Region or in an Azure Edge Zone (Public MEC).
 
-Check the official [Microsoft Docs guide](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli) and [Dapr doc guide](https://docs.dapr.io/operations/hosting/kubernetes/cluster/setup-aks/) for further information.
+
+
+## Create an AKS cluster in Azure
+
+Follow the official documentation on how to [Deploy an Azure Kubernetes Service (AKS) cluster with the UI](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli#create-an-aks-cluster) or how to [Deploy an Azure Kubernetes Service (AKS) cluster with the CLI](https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster?tabs=azure-cli)
+
 
 ## Use Azure CLI to target your AKS cluster in your Azure subscription
 
@@ -95,6 +100,8 @@ docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#inst
     ```powershell
     kubectl get pods -n dapr-system
     ```
+    
+   Check [Dapr doc guide](https://docs.dapr.io/operations/hosting/kubernetes/cluster/setup-aks/) for further information.
 
 ## Deploy the application's services to Kubernetes
 
