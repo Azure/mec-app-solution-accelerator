@@ -68,7 +68,7 @@ Note that when you create an AKS cluster in an Edge zone, under the covers, the 
 The recommended approach for installing Dapr on AKS is to use the AKS Dapr extension. The extension offers support for all native Dapr configuration capabilities through command-line arguments via the Azure CLI and offers the option of opting into automatic minor version upgrades of the Dapr runtime.
 
 This process is also described in the [Install Dapr using the AKS Dapr extension 
-docs](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#install-with-dapr-cli). 
+docs]([https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#install-with-dapr-cli](https://learn.microsoft.com/en-us/azure/aks/dapr#prerequisites)). 
 
 4. Extension prerequisites 
 
