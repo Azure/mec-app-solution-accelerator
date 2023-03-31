@@ -106,12 +106,14 @@ This process is also described in the [Install Dapr using the AKS Dapr extension
     az k8s-extension create --cluster-type managedClusters --cluster-name myAKSCluster --resource-group myResourceGroup --name myDaprExtension --extension-type Microsoft.Dapr
     ```
     
-    If DAPR is initialized, you should the list of Dapr pods running:
+    If DAPR is properly initialized, you should the list of Dapr pods running:
 
     ```powershell
     kubectl get pods -n dapr-system
     ```
     
+    ![image](https://user-images.githubusercontent.com/1712635/229188179-59c07888-b515-4406-b7c5-13db4eb60ec0.png)
+
    Check [Dapr doc guide](https://docs.dapr.io/operations/hosting/kubernetes/cluster/setup-aks/) for further information.
 
 ## Deploy the application's services to Kubernetes
