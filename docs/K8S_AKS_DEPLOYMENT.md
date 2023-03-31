@@ -108,7 +108,7 @@ This process is also described in the [Install Dapr using the AKS Dapr extension
     --resource-group myResourceGroup \
     --name myDaprExtension \
     --extension-type Microsoft.Dapr
-    ``
+    ```
     
     If DAPR is initialized, you should the list of Dapr pods running:
 
