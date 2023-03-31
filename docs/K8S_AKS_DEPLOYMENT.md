@@ -10,6 +10,15 @@ This procedure, deploying into AKS in Azure applies to both cases since deployin
 
 For creating an AKS cluster in a regular Azure Region datacenter (cloud), follow the official documentation on how to [Deploy an Azure Kubernetes Service (AKS) cluster with the UI](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli#create-an-aks-cluster) or how to [Deploy an Azure Kubernetes Service (AKS) cluster with the CLI](https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster?tabs=azure-cli)
 
+**Important:** When creating the AKS cluster, if it's just for testing, you can create a "Dev/Test" cluster configuration which by default starts using a single node/VM. However, for better performance with the AI model inference, we recommend to use a node size (VM type) such as **"Standard F8s V2"** (8 vcpus, 16 GiB memory), which is available in East US region, for instance.
+
+If you choose a different VM/node type, make sure it's not an ARM procesor based, since the Docker Images we use don't currently support ARM.
+
+See below an example of the AKS cluster creation:
+
+![image](https://user-images.githubusercontent.com/1712635/229197486-e2e326a9-d5e5-4156-93c9-30c6a5ebc5f1.png)
+
+
 ### (Optional) Create the AKS cluster in Azure Edge zone (Public MEC)
 
 Edge Zones are unique solution offering with small, localized footprints of Azure in a metropolitan area designed to provide low latency connectivity for applications that require the highest level of performance, providing low latency connectivity that is tailored to the needs of an enterprise. The benefits of this solution can be enjoyed by various industries and use cases such as live media streaming, real-time analytics, inferencing with AI/ML algorithms, smart cities, retail, automotive, and healthcare. One such solution offering, Azure public multi-access edge compute (MEC) solution are a type of Edge Zone that are placed in or near mobile operators' data centers in metro areas that are accessed from mobile devices connected to the mobility network. To learn more details on Azure public MEC, please refer to Azure public MEC documentation: [Azure public MEC Overview](https://msazure.visualstudio.com/NEC/_wiki/wikis/NEC.wiki?wikiVersion=GBwikiMaster&pagePath=/AKS%20for%20Azure%20Edge%20Zone%20and%20Azure%20public%20MEC/overview). With this solution, enterprises are able to enjoy the advantages of low latency at the edge
