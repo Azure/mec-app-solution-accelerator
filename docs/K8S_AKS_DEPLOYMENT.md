@@ -103,11 +103,7 @@ This process is also described in the [Install Dapr using the AKS Dapr extension
     After your subscription is registered to use Kubernetes extensions, install Dapr on your cluster by creating the Dapr extension. For example:
 
     ```powershell
-    az k8s-extension create --cluster-type managedClusters \
-    --cluster-name myAKSCluster \
-    --resource-group myResourceGroup \
-    --name myDaprExtension \
-    --extension-type Microsoft.Dapr
+    az k8s-extension create --cluster-type managedClusters --cluster-name myAKSCluster --resource-group myResourceGroup --name myDaprExtension --extension-type Microsoft.Dapr
     ```
     
     If DAPR is initialized, you should the list of Dapr pods running:
