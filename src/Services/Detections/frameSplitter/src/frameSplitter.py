@@ -90,10 +90,12 @@ def main():
         logging.info(f'Sending frame to inference')
         try:
             with DaprClient() as client:
-                # Using Dapr SDK to publish a topic
                 time_trace={"stepStart": timestamp_init, "stepEnd":int(time.time()*1000), "stepName": "frameSplitter"}
                 
                 req_data = {"source_id": 'video_'+str(feed_id), "timestamp":timestamp, "image": bytes_string.decode(), 'time_trace': time_trace}
+                
+                # Using Dapr SDK to invoke the AI Model inference service
+                # Request/Response online call. gRPC or Http depending on Dapr annotations configuration.
                 resp = client.invoke_method(
                     "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
                 )
