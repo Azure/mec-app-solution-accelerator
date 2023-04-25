@@ -109,7 +109,15 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
     
     ![image](https://user-images.githubusercontent.com/1712635/219480144-75f3998d-998c-464d-bc8a-7e9a1a265a0e.png)
 
-    When you are finished trying, you can always uninstall the application pods and all related resources from your Kuberentes by running this command:
+    
+    You can also check the pods running with this kubectl command:
+
+    ```powershell
+    kubectl get pods --namespace mec-accelerator
+    ```
+    
+    
+    When you are finished trying the application, you can always uninstall the application pods and all related resources from your Kuberentes by running this command:
 
     ```powershell
     kubectl delete -f ./
