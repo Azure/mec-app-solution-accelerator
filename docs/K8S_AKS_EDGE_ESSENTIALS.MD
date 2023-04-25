@@ -200,6 +200,20 @@ In the Kubernetes dashboard you should be able to explore the application's pods
 
 ![image](https://user-images.githubusercontent.com/1712635/226770726-10fdfb87-44f1-497b-845f-fde0bfd12956.png)
 
+
+### Use Dapr Dashboard to check services' status:
+
+Now it would be a good time to get familiar with the Dapr dashboard, Which is a convenient interface to check status, information and logs of applications running on Dapr. 
+ 
+The following command will make it available on  http://localhost:9999/.
+ 
+    ```powershell
+    dapr dashboard -k -p 9999
+    ```
+
+For further information read this doc on [Dapr dashboard CLI](https://docs.dapr.io/reference/cli/dapr-dashboard/)
+
+
 #### Important known issue:
 
 As mentioned in [AKS EE documentation verifying the services](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-deploy-app#3-verify-the-services), when using full K8s in AKS EE with a single node, on single machine clusters, if you created your Kubernetes cluster without specifying a **-ServiceIPRangeSize** parameter in the JSON config, you will not have allocated IPs for your workload services and you won't have an external IP address. Hence, the alerts.ui service will be stuck on "pending state", like the following:
