@@ -198,6 +198,8 @@ In the Kubernetes dashboard you should be able to explore the application's pods
     
 ![image](https://user-images.githubusercontent.com/1712635/226770509-ce73881e-96ed-41c1-9965-dcf044683e02.png)
 
+Note that the application dashboard might need a few minutes until you start getting alerts because the initial part of the video doesn't have any person to be detected, so it might take a few minutes untuil you start getting the alerts, like in the screenshot below:
+
 ![image](https://user-images.githubusercontent.com/1712635/226770726-10fdfb87-44f1-497b-845f-fde0bfd12956.png)
 
 
