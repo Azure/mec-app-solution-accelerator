@@ -41,8 +41,16 @@ If you previosly had already installed kubectl and it is pointing to some other 
 
 2. To set the context to point to AKS Edge Essentials:
 
+   **If using K8s:**
+   
     ```powershell
     kubectl config use-context kubernetes-admin@kubernetes
+    ```
+    
+    **If using K3s:**
+    
+    ```powershell
+    kubectl config use-context default
     ```
 
 ### Install and Initialize Dapr
