@@ -38,8 +38,7 @@ if (app.Environment.IsDevelopment())
 app.Services.UseScheduler(scheduler =>
 {
     scheduler.Schedule<CosmosDbCleanupJob>()
-    .Weekly()
-    .Weekday();
+    .Cron("0 */2 * * *");
 });
 
 app.UseCloudEvents();
