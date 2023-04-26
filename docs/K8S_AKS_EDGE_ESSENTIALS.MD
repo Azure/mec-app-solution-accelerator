@@ -1,4 +1,4 @@
-# Deploy to AKS Edge Essentials
+# Deploy the application to AKS Edge Essentials
 
 Microsoft recently released [AKS Edge Essentials](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-overview) as GA (Generally Available) on February 21st 2023.
 
@@ -14,7 +14,7 @@ Alternatively, you can install it on a more 'step by step' way for more manual c
 
 - [AKS Edge Essentials - Single machine deployment](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-single-node-deployment)
 
-**Important:** Note that with AKS EE you can install **[K3s](https://k3s.io/)** Kubernetes distribution (by default) or you can install the full Kubernetes distribution (**[K8s](https://kubernetes.io/)**), by using this parameter `-UseK8s` (if using the PowerShell Scripts). Both distributions should work propoerly for deplying this example application.
+**Important:** Note that with AKS EE you can install **[K3s](https://k3s.io/)** Kubernetes distribution (by default) or you can install the full Kubernetes distribution (**[K8s](https://kubernetes.io/)**), by using this parameter `-UseK8s` (if using the PowerShell Scripts). Both distributions should work properly for deploying this example application.
 
 The instructions, steps and screenshots shown in this document were performed on AKS Edge Essentials with "full Kubernetes" installed. But **[K3s](https://k3s.io/)** was also tested and is compatible, too.
 
@@ -41,8 +41,16 @@ If you previosly had already installed kubectl and it is pointing to some other 
 
 2. To set the context to point to AKS Edge Essentials:
 
+   **If using K8s:**
+   
     ```powershell
     kubectl config use-context kubernetes-admin@kubernetes
+    ```
+    
+    **If using K3s:**
+    
+    ```powershell
+    kubectl config use-context default
     ```
 
 ### Install and Initialize Dapr
@@ -101,7 +109,15 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
     
     ![image](https://user-images.githubusercontent.com/1712635/219480144-75f3998d-998c-464d-bc8a-7e9a1a265a0e.png)
 
-    When you are finished trying, you can always uninstall the application pods and all related resources from your Kuberentes by running this command:
+    
+    You can also check the pods running with this kubectl command:
+
+    ```powershell
+    kubectl get pods --namespace mec-accelerator
+    ```
+    
+    
+    When you are finished trying the application, you can always uninstall the application pods and all related resources from your Kuberentes by running this command:
 
     ```powershell
     kubectl delete -f ./
@@ -182,7 +198,23 @@ In the Kubernetes dashboard you should be able to explore the application's pods
     
 ![image](https://user-images.githubusercontent.com/1712635/226770509-ce73881e-96ed-41c1-9965-dcf044683e02.png)
 
+Note that the application dashboard might need a few minutes until you start getting alerts because the initial part of the video doesn't have any person to be detected, so it might take a few minutes untuil you start getting the alerts, like in the screenshot below:
+
 ![image](https://user-images.githubusercontent.com/1712635/226770726-10fdfb87-44f1-497b-845f-fde0bfd12956.png)
+
+
+### Use Dapr Dashboard to check services' status:
+
+Now it would be a good time to get familiar with the Dapr dashboard, Which is a convenient interface to check status, information and logs of applications running on Dapr. 
+ 
+The following command will make it available on  http://localhost:9999/.
+ 
+    ```powershell
+    dapr dashboard -k -p 9999
+    ```
+
+For further information read this doc on [Dapr dashboard CLI](https://docs.dapr.io/reference/cli/dapr-dashboard/)
+
 
 #### Important known issue:
 
