@@ -25,7 +25,7 @@ spec:
         image: mecsolutionaccelerator/alerts-api:0.1
         ports:
         - containerPort: 80
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
           - name: ASPNETCORE_ENVIRONMENT
             value: Development

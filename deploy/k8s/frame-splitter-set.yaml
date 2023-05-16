@@ -27,7 +27,7 @@ spec:
         image: mecsolutionaccelerator/framesplitter:0.1
         ports:
         - containerPort: 50052
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
           - name: MY_POD_NAME
             valueFrom:

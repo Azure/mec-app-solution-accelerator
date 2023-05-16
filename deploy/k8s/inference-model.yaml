@@ -28,4 +28,4 @@ spec:
         image: mecsolutionaccelerator/aiinferencer:0.1
         ports:
         - containerPort: 2060
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
