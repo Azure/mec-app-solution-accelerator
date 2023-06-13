@@ -285,6 +285,16 @@ https://github.com/Azure/mec-app-solution-accelerator/issues/87
     kubectl delete -f ./
     ```
 
+### Remove or update the Kubernetes dashboard 
+
+1. Open a new command-shell.
+
+1. Run the following command to delete all Kubernetes-Dashboard pods (assuming that Dashboard is deployed in kubernetes-dashboard namespace):.
+
+    ```powershell
+    kubectl delete -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc5/aio/deploy/recommended.yaml
+    ```
+If you want to update the Kubernetes-Dashboard, you also need to remove/uninstall it first, then reinstall the Kubernetes-Dashboard as explained in previous steps in this doc.
 
 
 
