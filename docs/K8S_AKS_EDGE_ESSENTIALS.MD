@@ -12,12 +12,12 @@ You can install AKS EE by using the quick start way:
 
 Alternatively, you can install it on a more 'step by step' way for more manual control of the installation:
 
+- [Download and install AKS Edge Essentials (K3s or K8s)](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-setup-machine)
 - [AKS Edge Essentials - Single machine deployment](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-single-node-deployment)
 
 **Important:** Note that with AKS EE you can install **[K3s](https://k3s.io/)** Kubernetes distribution (by default) or you can install the full Kubernetes distribution (**[K8s](https://kubernetes.io/)**), by using this parameter `-UseK8s` (if using the PowerShell Scripts). Both distributions should work properly for deploying this example application.
 
 The instructions, steps and screenshots shown in this document were performed on AKS Edge Essentials with "full Kubernetes" installed. But **[K3s](https://k3s.io/)** was also tested and is compatible, too.
-
 
 ## (Optional) Instructions for building your own Docker Images to deploy to Kubernetes
 
