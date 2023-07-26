@@ -61,6 +61,18 @@ services:
   alerts-ui-dapr:
     command: [ "./daprd", "-app-id", "alerts-ui", "-app-port", "80", "--dapr-http-max-request-size","50"]
 
+  files-management:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "50059:80"
+      - "50062:443"
+
+  files-management-dapr:
+    command: [ "./daprd", "-app-id", "alerts-api", "-app-port", "80", "-components-path", "/components", "--dapr-http-max-request-size", "50"]
+    volumes:
+    - "./dapr/components/:/components"
+
   mosquitto:
     ports:
       - '1883:1883'
