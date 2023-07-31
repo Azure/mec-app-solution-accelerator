@@ -40,7 +40,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "50055:80"
+      - "50064:80"
 
   alertsapi-dapr:
     command: [ "./daprd", "-app-id", "alerts-api", "-app-port", "80", "-components-path", "/components", "--dapr-http-max-request-size", "50"]
@@ -69,7 +69,7 @@ services:
       - "50062:443"
 
   files-management-dapr:
-    command: [ "./daprd", "-app-id", "alerts-api", "-app-port", "80", "-components-path", "/components", "--dapr-http-max-request-size", "50"]
+    command: [ "./daprd", "-app-id", "files-management", "-app-port", "80", "-components-path", "/components", "--dapr-http-max-request-size", "50"]
     volumes:
     - "./dapr/components/:/components"
 
