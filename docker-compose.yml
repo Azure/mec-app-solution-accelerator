@@ -37,6 +37,7 @@ services:
         dockerfile: Dockerfile
       depends_on:
         - aiinferencer-dapr
+        - files-management
 
   framesplitter-dapr:
     image: "daprio/daprd:latest"

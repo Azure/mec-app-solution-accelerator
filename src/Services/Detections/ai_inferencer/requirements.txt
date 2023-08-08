@@ -25,3 +25,4 @@ gitdb
 gitpython
 IPython
 ultralytics
+requests

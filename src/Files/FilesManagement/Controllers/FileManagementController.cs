@@ -2,6 +2,8 @@ using FilesManagement.CommandHandler;
 using FilesManagement.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text;
 
 namespace FilesManagement.Controllers
 {
@@ -16,10 +18,17 @@ namespace FilesManagement.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadImage(IFormFile file)
+        public async Task<IActionResult> UploadImage([FromBody] ImageUploadRequest request)
         {
             try
             {
+                var bytes = Convert.FromBase64String(request.Image);
+                var file = new FormFile(new MemoryStream(bytes), 0, bytes.Length, null, "image.jpg")
+                {
+                    Headers = new HeaderDictionary(),
+                    ContentType = "image/jpeg"
+                };
+
                 var fileId = await _mediator.Send(new UploadNewFileCommand() { FormFile = file, BucketName = "images" });
                 return Ok(new { Id = fileId });
             }
@@ -29,7 +38,12 @@ namespace FilesManagement.Controllers
             }
         }
 
-        [HttpGet("{fileId}")]
+      
+     
+
+
+
+                [HttpGet("{fileId}")]
         public async Task<IActionResult> DownloadImage(Guid fileId)
         {
             try
@@ -47,5 +61,12 @@ namespace FilesManagement.Controllers
             }
         }
 
+    }
+
+    public class ImageUploadRequest
+    {
+        public string SourceId { get; set; }
+        public long Timestamp { get; set; }
+        public string Image { get; set; } // Base64 encoded image data
     }
 }

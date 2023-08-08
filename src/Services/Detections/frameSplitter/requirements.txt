@@ -3,3 +3,4 @@ setuptools==58.2.0
 opencv-python-headless
 numpy
 typing_extensions
+requests

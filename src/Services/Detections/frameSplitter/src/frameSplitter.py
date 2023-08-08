@@ -7,6 +7,7 @@ import time
 import base64
 import os
 import logging
+import requests
 
 
 
@@ -74,37 +75,49 @@ def main():
     cap = VideoCapture(feed_URL)
     while True:
         # Capture frame-by-frame
-        ret,frame = cap.read()
-        timestamp_init=int(time.time()*1000)
-        
+        ret, frame = cap.read()
+        timestamp_init = int(time.time() * 1000)
+
         while not ret:
             logging.info(f'not possible to access feed')
             cap.release()
             cap = VideoCapture(feed_URL)
             ret, frame = cap.read()
-       
+
         img_encode = cv2.imencode(".jpg", frame)[1]
         resized_img_bytes = img_encode.tobytes()
-        bytes_string = base64.standard_b64encode(resized_img_bytes)
-        timestamp=int(time.time()*1000)
+        bytes_string = base64.standard_b64encode(resized_img_bytes).decode()
+        timestamp = int(time.time() * 1000)
         logging.info(f'Sending frame to inference')
         try:
             with DaprClient() as client:
-                time_trace={"stepStart": timestamp_init, "stepEnd":int(time.time()*1000), "stepName": "frameSplitter"}
-                
-                req_data = {"source_id": 'video_'+str(feed_id), "timestamp":timestamp, "image": bytes_string.decode(), 'time_trace': time_trace}
-                
-                # Using Dapr SDK to invoke the AI Model inference service
-                # Request/Response online call. gRPC or Http depending on Dapr annotations configuration.
+                req_upload_data = {
+                    "SourceId": 'video_' + str(feed_id),
+                    "Timestamp": timestamp,
+                    "Image": bytes_string
+                }
+                upload_resp = client.invoke_method(
+                    "files-management", "FileManagement", data=json.dumps(req_upload_data), http_verb="POST"
+                )
+                image_id = upload_resp.json().get('id')
+                logging.info(f'Image uploaded with ID: {image_id}')
+
+                # Create data to send to AI inference service
+                time_trace = {"stepStart": timestamp_init, "stepEnd": int(time.time() * 1000), "stepName": "frameSplitter"}
+                req_data = {"source_id": 'video_' + str(feed_id), "timestamp": timestamp, "image_id": image_id, 'time_trace': time_trace}
+
+                # Invoke the AI Model inference service
                 resp = client.invoke_method(
                     "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
                 )
-                
+
                 logging.info(f'Waiting for response')
-                response=resp.text()
+                response = resp.text()
                 logging.info(response)
-        except:
-            logging.info(f'Inference pod unreachable')
+        except Exception as e:
+            logging.error(f'Error encountered: {e}')
+
+
         
 
 if __name__ == '__main__':
