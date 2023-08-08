@@ -64,6 +64,10 @@ services:
   files-management:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - Minio:Username=minio
+      - Minio:Password=minio123
+      - Minio:ServiceUrl=http://minio:9000
+
     ports:
       - "50059:80"
       - "50062:443"

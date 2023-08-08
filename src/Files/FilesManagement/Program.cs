@@ -1,11 +1,18 @@
+using FilesManagement.CommandHandler;
+using FilesManagement.Configuration;
+using MediatR;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddMediatR(typeof(UploadNewFileCommandHandler).Assembly);
+builder.Services.AddMediatR(typeof(DownloadFileCommandHandler).Assembly);
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
+builder.Services.Configure<MinioConfiguration>(builder.Configuration.GetSection("Minio"));
 
 var app = builder.Build();
 
@@ -14,6 +21,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+else
+{
+    app.UseHttpsRedirection(); // Apply HTTPS redirection only in non-development environments
 }
 
 app.UseHttpsRedirection();

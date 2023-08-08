@@ -6,6 +6,7 @@ using Amazon.S3.Util;
 using FilesManagement.Commands;
 using FilesManagement.Configuration;
 using MediatR;
+using Microsoft.Extensions.Options;
 
 namespace FilesManagement.CommandHandler
 {
@@ -15,9 +16,9 @@ namespace FilesManagement.CommandHandler
         private static readonly RegionEndpoint bucketRegion = RegionEndpoint.USEast1;
         private static IAmazonS3 _s3Client;
 
-        public UploadNewFileCommandHandler(MinioConfiguration configuration)
+        public UploadNewFileCommandHandler(IOptions<MinioConfiguration> configuration)
         {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _configuration = configuration.Value ?? throw new ArgumentNullException(nameof(configuration));
             var config = new AmazonS3Config
             {
                 RegionEndpoint = bucketRegion,
@@ -38,7 +39,7 @@ namespace FilesManagement.CommandHandler
             {
                 await request.FormFile.CopyToAsync(stream);
                 stream.Position = 0;
-                await fileTransferUtility.UploadAsync(stream, request.BucketName, $"{fileId}.{extension}");
+                await fileTransferUtility.UploadAsync(stream, request.BucketName, $"{fileId}{extension}");
             }
 
             return fileId;
