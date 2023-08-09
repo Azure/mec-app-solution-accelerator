@@ -32,15 +32,28 @@ namespace FilesManagement.CommandHandler
         {
             var fileId = Guid.NewGuid();
 
+
             await EnsureBucketExistsAsync(request.BucketName);
             var fileTransferUtility = new TransferUtility(_s3Client);
             var extension = Path.GetExtension(request.FormFile.FileName);
-            using (var stream = new MemoryStream())
+            var keyName = $"{fileId}{extension}";
+            var metadata = new MetadataCollection();
+            metadata.Add("x-amz-meta-timestamp", request.Timestamp.ToString());
+            metadata.Add("x-amz-meta-file-id", fileId.ToString());
+            // Create request to upload file with metadata
+            var fileTransferUtilityRequest = new TransferUtilityUploadRequest
             {
-                await request.FormFile.CopyToAsync(stream);
-                stream.Position = 0;
-                await fileTransferUtility.UploadAsync(stream, request.BucketName, $"{fileId}{extension}");
-            }
+                BucketName = request.BucketName,
+                Key = keyName,
+                InputStream = new MemoryStream(),
+            };
+            fileTransferUtilityRequest.Metadata.Add("x-amz-meta-timestamp", request.Timestamp.ToString());
+            fileTransferUtilityRequest.Metadata.Add("x-amz-meta-source-id", request.SourceId.ToString());
+
+
+            await request.FormFile.CopyToAsync(fileTransferUtilityRequest.InputStream);
+            fileTransferUtilityRequest.InputStream.Position = 0;
+            await fileTransferUtility.UploadAsync(fileTransferUtilityRequest);
 
             return fileId;
         }

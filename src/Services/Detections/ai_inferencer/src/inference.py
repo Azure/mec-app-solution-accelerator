@@ -15,15 +15,31 @@ def PublishEvent(pubsub_name: str, topic_name: str, data: json):
         resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data, data_content_type='application/json')
         
 
+def download_image(image_id):
+    try:
+        with DaprClient() as client:
+            resp = client.invoke_method("files-management", f"FileManagement/{image_id}", http_verb="GET")
+            image_bytes = resp.data
 
-def main(source_id,timestamp,model,frame,detection_threshold,path,time_trace):
+            return image_bytes
+    except Exception as e:
+        logging.error(f'Error encountered while downloading image: {e}')
+        return None
+
+
+def main(source_id,timestamp,model,image_id,detection_threshold,path,time_trace):
     timestamp_init=int(time.time()*1000)
     logging.basicConfig(level=logging.DEBUG)
     logging.info(source_id)
 
-    backToBytes = base64.standard_b64decode(frame)
 
-    img = cv2.imdecode(np.frombuffer(backToBytes, np.uint8), cv2.IMREAD_COLOR)
+
+    image_stream = download_image(image_id)
+    if image_stream is not None:
+        img = cv2.imdecode(np.frombuffer(image_stream, np.uint8), cv2.IMREAD_COLOR)
+    else:
+        logging.error('Failed to download image')
+        return
     val_to_compare_resize,_,_=img.shape
     
     if val_to_compare_resize>576:

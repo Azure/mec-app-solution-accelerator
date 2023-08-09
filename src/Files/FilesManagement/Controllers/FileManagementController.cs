@@ -25,11 +25,14 @@ namespace FilesManagement.Controllers
                 var bytes = Convert.FromBase64String(request.Image);
                 var file = new FormFile(new MemoryStream(bytes), 0, bytes.Length, null, "image.jpg")
                 {
-                    Headers = new HeaderDictionary(),
+                    Headers = new HeaderDictionary
+                    {
+                        { "X-Timestamp", request.Timestamp.ToString() }
+                    },
                     ContentType = "image/jpeg"
                 };
-
-                var fileId = await _mediator.Send(new UploadNewFileCommand() { FormFile = file, BucketName = "images" });
+                
+                var fileId = await _mediator.Send(new UploadNewFileCommand() { FormFile = file, BucketName = "images", SourceId = request.SourceId, Timestamp = request.Timestamp });
                 return Ok(new { Id = fileId });
             }
             catch (Exception ex)

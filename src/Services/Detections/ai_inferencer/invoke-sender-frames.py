@@ -12,7 +12,7 @@ def framesreceiver(request: InvokeMethodRequest) -> InvokeMethodResponse:
     logging.info(f'frame received')
     
 
-    frame = json.loads(request.text())['image']
+    image_id = json.loads(request.text())['image_id']
     source_id = json.loads(request.text())['source_id']
     timestamp = json.loads(request.text())['timestamp']
     time_trace = json.loads(request.text())['time_trace']
@@ -21,7 +21,7 @@ def framesreceiver(request: InvokeMethodRequest) -> InvokeMethodResponse:
 
     path='events_schema/detections.avro'
 
-    main(source_id,timestamp,model,frame,detection_threshold,path,time_trace)
+    main(source_id,timestamp,model,image_id,detection_threshold,path,time_trace)
 
 
     return InvokeMethodResponse(b'Frame Analyzed', "text/plain; charset=UTF-8")
