@@ -37,9 +37,6 @@ namespace FilesManagement.CommandHandler
             var fileTransferUtility = new TransferUtility(_s3Client);
             var extension = Path.GetExtension(request.FormFile.FileName);
             var keyName = $"{fileId}{extension}";
-            var metadata = new MetadataCollection();
-            metadata.Add("x-amz-meta-timestamp", request.Timestamp.ToString());
-            metadata.Add("x-amz-meta-file-id", fileId.ToString());
             // Create request to upload file with metadata
             var fileTransferUtilityRequest = new TransferUtilityUploadRequest
             {
