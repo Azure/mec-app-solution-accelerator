@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using static System.Net.Mime.MediaTypeNames;
 using System.Text;
+using System.IO;
 
 namespace FilesManagement.Controllers
 {
@@ -31,7 +32,7 @@ namespace FilesManagement.Controllers
                     },
                     ContentType = "image/jpeg"
                 };
-                
+
                 var fileId = await _mediator.Send(new UploadNewFileCommand() { FormFile = file, BucketName = "images", SourceId = request.SourceId, Timestamp = request.Timestamp });
                 return Ok(new { Id = fileId });
             }
@@ -41,12 +42,8 @@ namespace FilesManagement.Controllers
             }
         }
 
-      
-     
 
-
-
-                [HttpGet("{fileId}")]
+        [HttpGet("{fileId}")]
         public async Task<IActionResult> DownloadImage(Guid fileId)
         {
             try
@@ -63,7 +60,6 @@ namespace FilesManagement.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-
     }
 
     public class ImageUploadRequest

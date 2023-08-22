@@ -53,7 +53,7 @@ def main(source_id,timestamp,model,image_id,detection_threshold,path,time_trace)
 
     data = { "SourceId":source_id,
     "UrlVideoEncoded": "1.0",
-    "ImageId": image_id,
+    "Frame": image_id,
     "EventName": "ObjectDetection",
     "OriginModule": "Ai inference detection",
     "Information": "Test message",
