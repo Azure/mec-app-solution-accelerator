@@ -1,6 +1,6 @@
-using FilesManagement.CommandHandler;
-using FilesManagement.Configuration;
 using MediatR;
+using Microsoft.MecSolutionAccelerator.Services.Files.CommandHandlers;
+using Microsoft.MecSolutionAccelerator.Services.Files.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 

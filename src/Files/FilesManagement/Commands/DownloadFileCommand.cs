@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace FilesManagement.Commands
+namespace Microsoft.MecSolutionAccelerator.Services.Files.Commands
 {
     public class DownloadFileCommand : IRequest<DownloadFileResponse>
     {

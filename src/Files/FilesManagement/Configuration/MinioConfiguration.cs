@@ -1,4 +1,4 @@
-﻿namespace FilesManagement.Configuration
+﻿namespace Microsoft.MecSolutionAccelerator.Services.Files.Configuration
 {
     public class MinioConfiguration
     {
@@ -8,5 +8,4 @@
 
         public string ServiceUrl { get; set; }
     }
-
 }

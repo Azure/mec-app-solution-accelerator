@@ -1,10 +1,6 @@
-using FilesManagement.CommandHandler;
-using FilesManagement.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using static System.Net.Mime.MediaTypeNames;
-using System.Text;
-using System.IO;
+using Microsoft.MecSolutionAccelerator.Services.Files.Commands;
 
 namespace FilesManagement.Controllers
 {

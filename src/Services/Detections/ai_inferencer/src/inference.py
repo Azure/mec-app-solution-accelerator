@@ -7,24 +7,40 @@ import numpy as np
 import avro.schema
 from avro_json_serializer import AvroJsonSerializer
 import logging
+import boto3
+from botocore.client import Config
 
 
 
 def PublishEvent(pubsub_name: str, topic_name: str, data: json):
     with DaprClient() as client:
         resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data, data_content_type='application/json')
-        
 
-def download_image(image_id):
+def download_stream_from_minio(bucket_name, object_name, endpoint_url, access_key, secret_key):
+    s3 = boto3.client('s3',
+                      endpoint_url=endpoint_url,
+                      aws_access_key_id=access_key,
+                      aws_secret_access_key=secret_key,
+                      config=Config(signature_version='s3v4'),
+                      region_name='us-east-1')
+    
     try:
-        with DaprClient() as client:
-            resp = client.invoke_method("files-management", f"FileManagement/{image_id}", http_verb="GET")
-            image_bytes = resp.data
+        response = s3.get_object(Bucket=bucket_name, Key=object_name)
+        streaming_body = response['Body']
+        
+        all_chunks = b''
+        while True:
+            chunk = streaming_body.read(1024)  # read only 1KB at a time
+            if not chunk:
+                break
+            all_chunks += chunk
 
-            return image_bytes
+        return all_chunks  # This will be the entire file in bytes.
+        
     except Exception as e:
-        logging.error(f'Error encountered while downloading image: {e}')
+        logging.error(f"An error occurred: {e}")
         return None
+
 
 
 def main(source_id,timestamp,model,image_id,detection_threshold,path,time_trace):
@@ -32,9 +48,12 @@ def main(source_id,timestamp,model,image_id,detection_threshold,path,time_trace)
     logging.basicConfig(level=logging.DEBUG)
     logging.info(source_id)
 
+    endpoint = 'http://minio:9000'  # ej. 'http://localhost:9000'
+    access_key = 'minio'
+    secret_key = 'minio123'
+    bucket = 'images'
 
-
-    image_stream = download_image(image_id)
+    image_stream = download_stream_from_minio(bucket, image_id + ".jpg", endpoint, access_key, secret_key)
     if image_stream is not None:
         img = cv2.imdecode(np.frombuffer(image_stream, np.uint8), cv2.IMREAD_COLOR)
     else:

@@ -8,8 +8,10 @@ import base64
 import os
 import logging
 import requests
-
-
+import boto3
+from botocore.exceptions import NoCredentialsError
+from botocore.client import Config
+import uuid
 
 class VideoCapture:
     def __init__(self, name):
@@ -47,7 +49,30 @@ class VideoCapture:
         self.t.join()
         self.cap.release()
 
+def upload_bytes_to_minio(bucket_name, object_name, data_bytes, endpoint_url, access_key, secret_key):
+    s3 = boto3.client(
+        's3',
+        endpoint_url=endpoint_url,
+        aws_access_key_id=access_key,
+        aws_secret_access_key=secret_key,
+        config=Config(signature_version='s3v4'),
+        region_name='us-east-1'
+    )
+
+    try:
+        s3.put_object(Body=data_bytes, Bucket=bucket_name, Key=object_name)
+        print(f"Data has been uploaded to {bucket_name} as {object_name}.")
+    except NoCredentialsError:
+        print("Credentials not available.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
 def main():
+    endpoint = 'http://minio:9000'  # ej. 'http://localhost:9000'
+    access_key = 'minio'
+    secret_key = 'minio123'
+    bucket = 'images'
+    
     logging.basicConfig(level=logging.DEBUG)
     
     timer=0
@@ -90,23 +115,16 @@ def main():
         timestamp = int(time.time() * 1000)
         logging.info(f'Sending frame to inference')
         try:
+            image_id = uuid.uuid4()
+            image_id_str = str(image_id)
+            logging.info(f'Image uploaded with ID: {image_id}')
+            upload_bytes_to_minio(bucket, image_id_str+'.jpg', resized_img_bytes, endpoint, access_key, secret_key)
             with DaprClient() as client:
-                req_upload_data = {
-                    "SourceId": 'video_' + str(feed_id),
-                    "Timestamp": timestamp,
-                    "Image": bytes_string
-                }
-                upload_resp = client.invoke_method(
-                    "files-management", "FileManagement", data=json.dumps(req_upload_data), http_verb="POST"
-                )
-                image_id = upload_resp.json().get('id')
-                logging.info(f'Image uploaded with ID: {image_id}')
-
-                # Create data to send to AI inference service
+            # Create data to send to AI inference service
                 time_trace = {"stepStart": timestamp_init, "stepEnd": int(time.time() * 1000), "stepName": "frameSplitter"}
-                req_data = {"source_id": 'video_' + str(feed_id), "timestamp": timestamp, "image_id": image_id, 'time_trace': time_trace}
+                req_data = {"source_id": 'video_' + str(feed_id), "timestamp": timestamp, "image_id": image_id_str, 'time_trace': time_trace}
 
-                # Invoke the AI Model inference service
+            # Invoke the AI Model inference service
                 resp = client.invoke_method(
                     "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
                 )

@@ -3,12 +3,12 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Amazon.S3.Util;
-using FilesManagement.Commands;
-using FilesManagement.Configuration;
 using MediatR;
 using Microsoft.Extensions.Options;
+using Microsoft.MecSolutionAccelerator.Services.Files.Commands;
+using Microsoft.MecSolutionAccelerator.Services.Files.Configuration;
 
-namespace FilesManagement.CommandHandler
+namespace Microsoft.MecSolutionAccelerator.Services.Files.CommandHandlers
 {
     public class UploadNewFileCommandHandler : IRequestHandler<UploadNewFileCommand, Guid>
     {

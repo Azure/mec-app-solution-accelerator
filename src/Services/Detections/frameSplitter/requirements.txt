@@ -4,3 +4,4 @@ opencv-python-headless
 numpy
 typing_extensions
 requests
+boto3
