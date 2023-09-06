@@ -9,9 +9,13 @@ This allows to have a single image published in a Docker container that will wor
 ```console
 docker run --rm -it mecsolutionaccelerator/dotnetapp
 ```
+The following is a screenshot from a Docker host on x64 machine (It's a Windows 11 machine with Docker for desktop):
 
 ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/d529ffe4-3751-4e19-82c1-219d06e1a3cd)
 
+Now, this is from a Docker host on ARM machine (It's an NVIDIA Orin with ARM processor) and using exaclty the same Docker image name and tag!:
+
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/268fdd75-c80a-4647-aa01-a4d97f57c299)
 
 ## Build the MULTI-ARCH .NET Docker image with "docker buildx"
 
@@ -38,8 +42,8 @@ I can now try pulling the image and running the container:
 ```console
 docker run --rm -it mecsolutionaccelerator/dotnetapp
 ```
+Again, this is from a Docker host on ARM machine (It's an NVIDIA Orin with ARM processor) and using a single Docker image name and tag!:
 
-From a Docker host on x64 machine (It's a Windows 11 machine with Docker for desktop):
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/268fdd75-c80a-4647-aa01-a4d97f57c299)
 
 
-From a Docker host on ARM machine (It's an NVIDIA Orin with ARM processor):
