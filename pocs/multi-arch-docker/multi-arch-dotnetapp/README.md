@@ -10,6 +10,9 @@ This allows to have a single image published in a Docker container that will wor
 docker run --rm -it mecsolutionaccelerator/dotnetapp
 ```
 
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/d529ffe4-3751-4e19-82c1-219d06e1a3cd)
+
+
 ## Build the MULTI-ARCH .NET Docker image with "docker buildx"
 
 [Buildx](https://www.docker.com/blog/how-to-rapidly-build-multi-architecture-images-with-buildx/) is a nice addition to Docker tools. I think of it as “full BuildKit”. For our purposes, it enables specifying multiple platforms to build at once and to package them all up as a multi-platform tag. It will even push them to your registry, all with a single command.
