@@ -84,3 +84,24 @@ Again, this is from a Docker host on ARM machine (It's an NVIDIA Orin with ARM p
 ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/268fdd75-c80a-4647-aa01-a4d97f57c299)
 
 
+In order to disable buildx from your Docker host, run this command:
+
+```console
+docker compose build
+```
+
+# Enabling buildx in "docker compose"
+
+To use buildx in docker-compose, you can set the environment variable *COMPOSE_DOCKER_CLI_BUILD=1* and *DOCKER_BUILDKIT=1*. 
+If buildx is not set as default, you should add DOCKER_DEFAULT_PLATFORM=linux/amd64
+
+Here’s an example of how to use buildx in docker-compose file:
+
+```console
+version: '2.4'
+services:
+  testbuild:
+    build: ../testbuild
+    image: testbuild
+    platform: linux/arm64/v8
+```
