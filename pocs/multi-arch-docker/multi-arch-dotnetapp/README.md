@@ -83,11 +83,12 @@ Again, this is from a Docker host on ARM machine (It's an NVIDIA Orin with ARM p
 
 ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/268fdd75-c80a-4647-aa01-a4d97f57c299)
 
+## Disabling buildx
 
 In order to disable buildx from your Docker host, run this command:
 
 ```console
-docker compose build
+docker buildx stop
 ```
 
 # Enabling buildx in "docker compose"
