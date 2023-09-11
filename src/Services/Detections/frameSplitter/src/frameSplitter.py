@@ -49,6 +49,17 @@ class VideoCapture:
         self.t.join()
         self.cap.release()
 
+def bucket_exists(s3, bucket_name):
+    try:
+        s3.head_bucket(Bucket=bucket_name)
+        return True
+    except:
+        return False
+
+def create_bucket(s3, bucket_name):
+    s3.create_bucket(Bucket=bucket_name)
+    print(f"Bucket {bucket_name} created.")
+
 def upload_bytes_to_minio(bucket_name, object_name, data_bytes, endpoint_url, access_key, secret_key):
     s3 = boto3.client(
         's3',
@@ -58,6 +69,9 @@ def upload_bytes_to_minio(bucket_name, object_name, data_bytes, endpoint_url, ac
         config=Config(signature_version='s3v4'),
         region_name='us-east-1'
     )
+    
+    if not bucket_exists(s3, bucket_name):
+        create_bucket(s3, bucket_name)
 
     try:
         s3.put_object(Body=data_bytes, Bucket=bucket_name, Key=object_name)

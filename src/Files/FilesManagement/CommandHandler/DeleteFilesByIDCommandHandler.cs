@@ -32,33 +32,41 @@ namespace Microsoft.MecSolutionAccelerator.Services.Files.CommandHandlers
         {
             try
             {
-                var multiObjectDeleteRequest = new DeleteObjectsRequest
+                // 1. Listar todos los archivos
+                var listObjectsRequest = new ListObjectsV2Request
                 {
                     BucketName = request.bucketName
                 };
+                var response = await _s3Client.ListObjectsV2Async(listObjectsRequest);
 
-                foreach (var fileId in request.Ids)
+                // Tomar la fecha y hora actual
+                var currentTime = DateTime.UtcNow;
+
+                foreach (var s3Object in response.S3Objects)
                 {
-                    // Suponiendo que cada ID corresponde directamente al nombre del archivo
-                    // o a una parte del nombre del archivo (por ejemplo, UUID.extension).
-                    // Si tu estructura de nombres de archivo es diferente, ajústala adecuadamente.
-                    multiObjectDeleteRequest.AddKey($"{fileId}.extension");  // Cambia "extension" por la extensión real si es constante, o ajusta según necesites.
+                    // 2. Filtrar aquellos archivos que tengan una fecha de creación mayor a 1 hora
+                    if (s3Object.LastModified < currentTime.AddHours(-1))
+                    {
+                        // 3. Borrar los archivos filtrados
+                        var deleteRequest = new DeleteObjectRequest
+                        {
+                            BucketName = request.bucketName,
+                            Key = s3Object.Key
+                        };
+                        await _s3Client.DeleteObjectAsync(deleteRequest);
+                    }
                 }
-
-                var response = await _s3Client.DeleteObjectsAsync(multiObjectDeleteRequest);
-
-                return Unit.Value;
-
-            }
-            catch (AmazonS3Exception e)
-            {
-                Console.WriteLine($"Error encountered on server. Message:'{e.Message}' when deleting objects");
                 return Unit.Value;
             }
-            catch (Exception e)
+            catch (AmazonS3Exception ex)
             {
-                Console.WriteLine($"Unknown encountered on server. Message:'{e.Message}' when deleting objects");
-                return Unit.Value;
+                Console.WriteLine($"Error encountered on server. Message:'{ex.Message}' when deleting old files");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unknown encountered on server. Message:'{ex.Message}' when deleting old files");
+                throw;
             }
         }
     }

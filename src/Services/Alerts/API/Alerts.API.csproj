@@ -13,7 +13,7 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Alerts.api' " />
   <ItemGroup>
     <PackageReference Include="AvroConvert" Version="3.3.4" />
-    <PackageReference Include="Coravel" Version="4.2.1" />
+    <PackageReference Include="Coravel" Version="5.0.2" />
     <PackageReference Include="Dapr.AspNetCore" Version="1.10.0" />
 	<PackageReference Include="MediatR" Version="11.0.0" />
 	<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />

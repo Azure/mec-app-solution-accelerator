@@ -51,6 +51,4 @@ namespace Microsoft.MecSolutionAccelerator.Services.Files.CommandHandlers
             }
         }
     }
-
-
 }
