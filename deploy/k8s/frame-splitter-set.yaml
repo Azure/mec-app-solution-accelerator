@@ -40,3 +40,5 @@ spec:
                 key: feeds
           - name: TIMEOUT
             value: "15"
+          - name : MINIOURL
+            value: "http://minio.mec-accelerator.svc.cluster.local:9000"

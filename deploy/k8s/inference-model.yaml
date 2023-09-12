@@ -29,3 +29,6 @@ spec:
         ports:
         - containerPort: 2060
         imagePullPolicy: IfNotPresent
+        env:
+          - name : MINIOURL
+            value: "http://minio.mec-accelerator.svc.cluster.local:9000"

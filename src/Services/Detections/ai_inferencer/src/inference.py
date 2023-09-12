@@ -9,6 +9,7 @@ from avro_json_serializer import AvroJsonSerializer
 import logging
 import boto3
 from botocore.client import Config
+import os
 
 
 
@@ -30,6 +31,8 @@ def download_stream_from_minio(bucket_name, object_name, endpoint_url, access_ke
         
         all_chunks = b''
         while True:
+
+
             chunk = streaming_body.read(1024)  # read only 1KB at a time
             if not chunk:
                 break
@@ -48,7 +51,8 @@ def main(source_id,timestamp,model,image_id,detection_threshold,path,time_trace)
     logging.basicConfig(level=logging.DEBUG)
     logging.info(source_id)
 
-    endpoint = 'http://minio:9000'  # ej. 'http://localhost:9000'
+    endpoint = os.getenv('MINIOURL')  # ej. 'http://localhost:9000'
+    logging.error('ERROR ERROR ERROR: ' + endpoint)
     access_key = 'minio'
     secret_key = 'minio123'
     bucket = 'images'

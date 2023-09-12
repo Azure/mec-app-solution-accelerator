@@ -3,3 +3,4 @@ docker push mecsolutionaccelerator/framesplitter:latest
 docker push mecsolutionaccelerator/aiinferencer:latest
 docker push mecsolutionaccelerator/alerts-api:latest
 docker push mecsolutionaccelerator/rulesengine:latest
+docker push mecsolutionaccelerator/files-management:latest

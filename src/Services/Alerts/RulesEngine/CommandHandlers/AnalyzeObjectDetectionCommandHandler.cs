@@ -47,8 +47,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
         {
             if (_alertsByDetectedClasses.TryGetValue(requestClass.EventType, out IEnumerable<AlertsConfig>? alertsConfig))
             {
-                Task[] tasks = new Task[alertsConfig.Count()];
-                var i = 0;
+
                 foreach (var alertConfig in alertsConfig)
                 {
                     var validationAlertCommand = new ValidateAlertCommand()
@@ -62,9 +61,8 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                         StepTrace = stepTrace,
                     };
                     
-                    tasks[i++]= this._mediator.Send(validationAlertCommand);
+                   await  this._mediator.Send(validationAlertCommand);
                 }
-                await Task.WhenAll(tasks);
             }
         }
     }

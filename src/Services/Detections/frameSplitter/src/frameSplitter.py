@@ -82,7 +82,7 @@ def upload_bytes_to_minio(bucket_name, object_name, data_bytes, endpoint_url, ac
         print(f"An error occurred: {e}")
 
 def main():
-    endpoint = 'http://minio:9000'  # ej. 'http://localhost:9000'
+    endpoint = os.getenv('MINIOURL')  # ej. 'http://localhost:9000'
     access_key = 'minio'
     secret_key = 'minio123'
     bucket = 'images'

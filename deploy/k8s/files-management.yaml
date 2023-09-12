@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: files-management
+  namespace: mec-accelerator
+  labels:
+    app: files-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: files-management
+  template:
+    metadata:
+      labels:
+        app: files-management
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "files-management"
+        dapr.io/app-port: "80"
+        dapr.io/config: "dapr-config"
+    spec:
+      containers:
+      - name: files-management # Corregido el nombre del contenedor
+        image: mecsolutionaccelerator/files-management:0.1
+        ports:
+        - containerPort: 80
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+          - name: MINIO__SERVICEURL
+            value: http://minio.mec-accelerator.svc.cluster.local:9000 # Corregido el URL
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: files-management
+  name: files-management
+  namespace: mec-accelerator
+spec:
+  type: ClusterIP
+  ports:
+  - name: "web"
+    port: 8080
+    targetPort: 80
+  selector:
+    app: files-management
