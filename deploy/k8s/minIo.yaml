@@ -3,6 +3,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: minio-pvc
+  namespace: mec-accelerator
 spec:
   accessModes:
     - ReadWriteOnce
@@ -14,7 +15,8 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: minio
+  name: minio-deployment
+  namespace: mec-accelerator
 spec:
   replicas: 1
   selector:
@@ -50,7 +52,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: minio-service
+  name: minio
+  namespace: mec-accelerator
 spec:
   selector:
     app: minio
