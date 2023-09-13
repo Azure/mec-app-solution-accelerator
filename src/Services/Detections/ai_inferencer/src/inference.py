@@ -52,7 +52,6 @@ def main(source_id,timestamp,model,image_id,detection_threshold,path,time_trace)
     logging.info(source_id)
 
     endpoint = os.getenv('MINIOURL')  # ej. 'http://localhost:9000'
-    logging.error('ERROR ERROR ERROR: ' + endpoint)
     access_key = 'minio'
     secret_key = 'minio123'
     bucket = 'images'

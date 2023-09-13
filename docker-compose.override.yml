@@ -16,6 +16,7 @@ services:
   rulesengine:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
     ports:
       - "80"
 
@@ -42,6 +43,7 @@ services:
   alerts-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
     ports:
       - "50064:80"
 
@@ -67,13 +69,13 @@ services:
   files-management:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
       - Minio:Username=minio
       - Minio:Password=minio123
       - Minio:ServiceUrl=http://minio:9000
 
     ports:
       - "50059:80"
-      - "50062:443"
 
   files-management-dapr:
     command: [ "./daprd", "-app-id", "files-management", "-app-port", "80", "-components-path", "/components", "--dapr-http-max-request-size", "50"]
