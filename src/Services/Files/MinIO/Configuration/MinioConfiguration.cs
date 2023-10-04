@@ -1,4 +1,4 @@
-﻿namespace Microsoft.MecSolutionAccelerator.Services.Files.Configuration
+﻿namespace Microsoft.MecSolutionAccelerator.Services.MinIOInfraestructure
 {
     public class MinioConfiguration
     {

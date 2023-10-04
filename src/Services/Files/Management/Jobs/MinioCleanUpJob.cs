@@ -8,6 +8,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.FilesManagement.Jobs
     {
         private readonly ILogger<MinioCleanUpJob> _logger;
         private readonly IMediator _mediator;
+        private readonly string CONTAINER_NAME = "images";
 
         public MinioCleanUpJob(ILogger<MinioCleanUpJob> logger, IMediator mediator)
         {
@@ -21,7 +22,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.FilesManagement.Jobs
 
             try
             {
-                await _mediator.Send(new DeleteFilesCommand() { bucketName = "images"});
+                await _mediator.Send(new DeleteFilesCommand() { containerName = CONTAINER_NAME });
             }
             catch (Exception ex)
             {

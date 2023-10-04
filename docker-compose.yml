@@ -3,10 +3,10 @@ version: '3.4'
 services:
 
   aiinferencer:
-      image: ${DOCKER_REGISTRY-}aiinferencer:0.1
+      image: ${DOCKER_REGISTRY-}aiinferencer:1.5
       build:
-        context: src/Services/Detections/ai_inferencer
-        dockerfile: Dockerfile
+        context: src/Services/Detections
+        dockerfile: ai_inferencer/Dockerfile 
       depends_on: 
         - alertsapi-dapr
         - files-management
@@ -20,7 +20,7 @@ services:
     network_mode: "service:aiinferencer"
 
   rulesengine: 
-    image: ${DOCKER_REGISTRY-}rulesengine:0.1
+    image: ${DOCKER_REGISTRY-}rulesengine:1.6
     build:
       context: .
       dockerfile: src/Services/Alerts/RulesEngine/Dockerfile
@@ -34,10 +34,10 @@ services:
     network_mode: "service:rulesengine"
 
   framesplitter:
-      image: ${DOCKER_REGISTRY-}framesplitter:0.1
+      image: ${DOCKER_REGISTRY-}framesplitter:1.5
       build:
-        context: src/Services/Detections/frameSplitter
-        dockerfile: Dockerfile
+        context: src/Services/Detections
+        dockerfile: frameSplitter/Dockerfile
       depends_on:
         - aiinferencer-dapr
         - files-management
@@ -49,7 +49,7 @@ services:
     network_mode: "service:framesplitter"
 
   alerts-api: 
-    image: ${DOCKER_REGISTRY-}alerts-api:0.1
+    image: ${DOCKER_REGISTRY-}alerts-api:1.6
     build:
       context: .
       dockerfile: src/Services/Alerts/api/Dockerfile
@@ -63,7 +63,7 @@ services:
     network_mode: "service:alerts-api"
   
   alerts-ui:
-    image: ${DOCKER_REGISTRY-}alerts-ui:0.1
+    image: ${DOCKER_REGISTRY-}alerts-ui:1.6
     build:
       context: .
       dockerfile: src/Web/alerts-ui/Dockerfile
@@ -77,10 +77,10 @@ services:
     network_mode: "service:alerts-ui"
 
   files-management:
-    image: ${DOCKER_REGISTRY-}files-manegement:0.1
+    image: ${DOCKER_REGISTRY-}files-manegement:1.6
     build:
       context: .
-      dockerfile: src/Files/FilesManagement/Dockerfile
+      dockerfile: src/Services/Files/Management/Dockerfile
     depends_on:
       - minio
 
