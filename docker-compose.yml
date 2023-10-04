@@ -52,7 +52,7 @@ services:
     image: ${DOCKER_REGISTRY-}alerts-api:1.6
     build:
       context: .
-      dockerfile: src/Services/Alerts/api/Dockerfile
+      dockerfile: src/Services/Alerts/API/Dockerfile
     depends_on:
     - mongodb
 
