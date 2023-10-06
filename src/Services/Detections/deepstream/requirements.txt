@@ -1,6 +1,0 @@
-dapr
-boto3
-numpy 
-opencv-python-headless
-avro-python3
-avro-json-serializer
