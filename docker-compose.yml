@@ -3,15 +3,15 @@ version: '3.4'
 services:
 
   aiinferencer:
-      image: ${DOCKER_REGISTRY-}aiinferencer:1.5
-      build:
-        context: src/Services/Detections
-        dockerfile: ai_inferencer/Dockerfile 
-      depends_on: 
-        - alertsapi-dapr
-        - files-management
-      environment:    
-        - DAPR_HTTP_PORT=3600
+    image: ${DOCKER_REGISTRY-}aiinferencer:1.5
+    build:
+      context: src/Services/Detections
+      dockerfile: ai_inferencer/Dockerfile
+    depends_on: 
+      - alertsapi-dapr
+      - files-management
+    environment:    
+      - DAPR_HTTP_PORT=3600
         
   aiinferencer-dapr:
     image: "daprio/daprd:latest"
@@ -34,13 +34,13 @@ services:
     network_mode: "service:rulesengine"
 
   framesplitter:
-      image: ${DOCKER_REGISTRY-}framesplitter:1.5
-      build:
-        context: src/Services/Detections
-        dockerfile: frameSplitter/Dockerfile
-      depends_on:
-        - aiinferencer-dapr
-        - files-management
+    image: ${DOCKER_REGISTRY-}framesplitter:1.5
+    build:
+      context: src/Services/Detections
+      dockerfile: frameSplitter/Dockerfile
+    depends_on:
+      - aiinferencer-dapr
+      - files-management
 
   framesplitter-dapr:
     image: "daprio/daprd:latest"

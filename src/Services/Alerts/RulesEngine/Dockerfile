@@ -1,8 +1,8 @@
-# Usar una plataforma específica para el proceso de construcción
+# Use a specific platform for building the image
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:7.0.400 AS build
 
-# Definir la arquitectura objetivo como un argumento con un valor por defecto de "amd64"
-ARG TARGETARCH=amd64
+# Define the target architecture as argument. By default it's amd64
+ARG TARGETARCH
 
 WORKDIR /src
 COPY ["src/Services/Alerts/RulesEngine/Alerts.RulesEngine.csproj", "src/Services/Alerts/RulesEngine/"]
