@@ -1,5 +1,4 @@
-﻿using Microsoft.MecSolutionAccelerator.Services.Alerts.Events;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.Models
 {

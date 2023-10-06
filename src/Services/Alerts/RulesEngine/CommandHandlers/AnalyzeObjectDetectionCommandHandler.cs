@@ -5,7 +5,9 @@ using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events;
 using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
+using MongoDB.Driver;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHandlers
 {
@@ -45,6 +47,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
         {
             if (_alertsByDetectedClasses.TryGetValue(requestClass.EventType, out IEnumerable<AlertsConfig>? alertsConfig))
             {
+
                 foreach (var alertConfig in alertsConfig)
                 {
                     var validationAlertCommand = new ValidateAlertCommand()
@@ -57,8 +60,8 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                         RequestClass = requestClass,
                         StepTrace = stepTrace,
                     };
-
-                    await this._mediator.Send(validationAlertCommand);
+                    
+                   await  this._mediator.Send(validationAlertCommand);
                 }
             }
         }

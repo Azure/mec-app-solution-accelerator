@@ -2,18 +2,35 @@ version: '3.4'
 
 services:
 
-  aiinferencer:
+
+  deepstream:
+    environment:
+    #- FEED=rtsp://20.42.105.26:8554/mystream
+    - FEED=/Dataset/sample_720p.mp4
+    - MINIOURL=http://minio:9000
     ports:
-    - "2060:2060"
-  
-  aiinferencer-dapr:
-    command: [ "./daprd", "-app-id", "invoke-sender-frames", "--app-protocol", "grpc", "--app-port", "2060","--dapr-http-port", "3600", "--components-path", "./components"]
+    - "57090"
+
+  deepstream-dapr:
+    command: [ "./daprd", "-app-id", "deepstream","--app-protocol", "grpc","--dapr-http-port", "3500", "-components-path", "/components" ]
     volumes:
     - "./dapr/components/:/components"
+
+  # aiinferencer:
+  #   ports:
+  #   - "2060:2060"
+  #   environment:
+  #   - MINIOURL=http://minio:9000
+  
+  # aiinferencer-dapr:
+  #   command: [ "./daprd", "-app-id", "invoke-sender-frames", "--app-protocol", "grpc", "--app-port", "2060","--dapr-http-port", "3600", "--components-path", "./components"]
+  #   volumes:
+  #   - "./dapr/components/:/components"
 
   rulesengine:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
     ports:
       - "80"
 
@@ -22,25 +39,27 @@ services:
     volumes:
     - "./dapr/components/:/components"
 
-  framesplitter:
-    environment:
-    - TIMEOUT=15
-    #- FEED=rtsp://20.42.105.26:8554/mystream
-    #- FEED=../Datasets/demo.mp4
-    - FEED=../Datasets/PerimeterDemo.mp4
-    ports:
-    - "57090"
+  # framesplitter:
+  #   environment:
+  #   - TIMEOUT=15
+  #   #- FEED=rtsp://20.42.105.26:8554/mystream
+  #   #- FEED=../Datasets/demo.mp4
+  #   - FEED=../Datasets/PerimeterDemo.mp4
+  #   - MINIOURL=http://minio:9000
+  #   ports:
+  #   - "57090"
 
-  framesplitter-dapr:
-    command: [ "./daprd", "-app-id", "Framesplitter","--app-protocol", "grpc","--dapr-http-port", "3500", "-components-path", "/components" ]
-    volumes:
-    - "./dapr/components/:/components"
+  # framesplitter-dapr:
+  #   command: [ "./daprd", "-app-id", "Framesplitter","--app-protocol", "grpc","--dapr-http-port", "3500", "-components-path", "/components" ]
+  #   volumes:
+  #   - "./dapr/components/:/components"
 
   alerts-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
     ports:
-      - "50055:80"
+      - "50064:80"
 
   alertsapi-dapr:
     command: [ "./daprd", "-app-id", "alerts-api", "-app-port", "80", "-components-path", "/components", "--dapr-http-max-request-size", "50"]
@@ -50,16 +69,31 @@ services:
   alerts-ui:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_URLS=http://+:80
     ports:
       - "50052:80"
-      - "50058:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
   alerts-ui-dapr:
     command: [ "./daprd", "-app-id", "alerts-ui", "-app-port", "80", "--dapr-http-max-request-size","50"]
+
+  files-management:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - Minio:Username=minio
+      - Minio:Password=minio123
+      - Minio:ServiceUrl=http://minio:9000
+
+    ports:
+      - "50059:80"
+
+  files-management-dapr:
+    command: [ "./daprd", "-app-id", "files-management", "-app-port", "80", "-components-path", "/components", "--dapr-http-max-request-size", "50"]
+    volumes:
+    - "./dapr/components/:/components"
 
   mosquitto:
     ports:

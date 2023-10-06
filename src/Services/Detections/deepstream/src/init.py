@@ -30,9 +30,9 @@ import time
 import sys
 import math
 import platform
-from common.is_aarch_64 import is_aarch64
-from common.bus_call import bus_call
-from common.FPS import PERF_DATA
+# from common.is_aarch_64 import is_aarch64
+# from common.bus_call import bus_call
+# from common.FPS import PERF_DATA
 import numpy as np
 import pyds
 import cv2
@@ -40,15 +40,19 @@ import os
 import os.path
 from os import path
 import json
-# import avro.schema
-# from avro_json_serializer import AvroJsonSerializer
-# from dapr.clients import DaprClient
-# import boto3
-# from botocore.exceptions import NoCredentialsError
-# from botocore.client import Config
+import avro.schema
+from avro_json_serializer import AvroJsonSerializer
+from dapr.clients import DaprClient
+# import shared.minio_utils as minio
 import uuid
 import base64
 import logging
+
+if not os.path.exists('deepstream'):
+    os.symlink('/opt/nvidia/deepstream/deepstream-6.3', 'deepstream')
+from deepstream.sources.apps.deepstream_python_apps.apps.common.is_aarch_64 import is_aarch64
+from deepstream.sources.apps.deepstream_python_apps.apps.common.bus_call import bus_call
+from deepstream.sources.apps.deepstream_python_apps.apps.common.FPS import PERF_DATA
 global no_display
 no_display = True
 
@@ -77,54 +81,25 @@ pgie_classes_str = ["Vehicle", "TwoWheeler", "Person", "RoadSign"]
 
 MIN_CONFIDENCE = 0.3
 MAX_CONFIDENCE = 0.4
-# def PublishEvent(pubsub_name: str, topic_name: str, data: json):
-#     with DaprClient() as client:
-#         resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data, data_content_type='application/json')
-# def bucket_exists(s3, bucket_name):
-#     try:
-#         s3.head_bucket(Bucket=bucket_name)
-#         return True
-#     except:
-#         return False
+def PublishEvent(pubsub_name: str, topic_name: str, data: json):
+    with DaprClient() as client:
+        resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data, data_content_type='application/json')
 
-# def create_bucket(s3, bucket_name):
-#     s3.create_bucket(Bucket=bucket_name)
-#     print(f"Bucket {bucket_name} created.")
-
-# def upload_bytes_to_minio(bucket_name, object_name, data_bytes, endpoint_url, access_key, secret_key):
-#     s3 = boto3.client(
-#         's3',
-#         endpoint_url=endpoint_url,
-#         aws_access_key_id=access_key,
-#         aws_secret_access_key=secret_key,
-#         config=Config(signature_version='s3v4'),
-#         region_name='us-east-1'
-#     )
-    
-#     if not bucket_exists(s3, bucket_name):
-#         create_bucket(s3, bucket_name)
-
-#     try:
-#         s3.put_object(Body=data_bytes, Bucket=bucket_name, Key=object_name)
-#         print(f"Data has been uploaded to {bucket_name} as {object_name}.")
-#     except NoCredentialsError:
-#         print("Credentials not available.")
-#     except Exception as e:
-#         print(f"An error occurred: {e}")
-# tiler_sink_pad_buffer_probe  will extract metadata received on tiler src pad
-# and update params for drawing rectangle, object information etc.
 def tiler_sink_pad_buffer_probe(pad, info, u_data):
-    endpoint = os.getenv('MINIOURL')  # ej. 'http://localhost:9000'
-    access_key = 'minio'
-    secret_key = 'minio123'
-    bucket = 'images'
+    if debug != 'local':
+        import shared.minio_utils as minio
+        endpoint = os.getenv('MINIOURL')
+        bucket = 'images'
+        minioClient = minio.MinIOClient(endpoint, 'minio', 'minio123')
+    
+    path='../events_schema/detections.avro'
     
     logging.basicConfig(level=logging.DEBUG)
     frame_number = 0
     num_rects = 0
     gst_buffer = info.get_buffer()
-    # schema = avro.schema.Parse(open(path, "rb").read())
-    # serializer = AvroJsonSerializer(schema)
+    schema = avro.schema.Parse(open(path, "rb").read())
+    serializer = AvroJsonSerializer(schema)
     if not gst_buffer:
         print("Unable to get GstBuffer ")
         return
@@ -197,11 +172,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             BoundingBoxes.append({"x": xmax, "y":ymax})
             data["Classes"].append({"EventType": obj_meta.class_id, "Confidence":obj_meta.confidence, "BoundingBoxes": BoundingBoxes})
             obj_counter[obj_meta.class_id] += 1
-            # Periodically check for objects with borderline confidence value that may be false positive detections.
-            # If such detections are found, annotate the frame with bboxes and confidence value.
-            # Save the annotated frame to file.
-            # if saved_count["stream_{}".format(frame_meta.pad_index)] % 1 == 0 and (
-            #         MIN_CONFIDENCE < obj_meta.confidence < MAX_CONFIDENCE):
+            
             if True:
                 if is_first_obj:
                     is_first_obj = False
@@ -218,7 +189,6 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
                     if is_aarch64(): # If Jetson, since the buffer is mapped to CPU for retrieval, it must also be unmapped 
                         pyds.unmap_nvds_buf_surface(hash(gst_buffer), frame_meta.batch_id) # The unmap call should be made after operations with the original array are complete.
                                                                                             #  The original array cannot be accessed after this call.
-                save_image = True
 
             try:
                 l_obj = l_obj.next
@@ -235,7 +205,8 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
         stream_index = "stream{0}".format(frame_meta.pad_index)
         global perf_data
         perf_data.update_fps(stream_index)
-        if save_image:
+        #UNCOMMENT for local testing purposes
+        if debug == 'local':
             img_path = "{}/stream_{}/frame_{}.jpg".format(folder_name, frame_meta.pad_index, frame_number)
             cv2.imwrite(img_path, frame_copy)
             json_path = "{}/stream_{}/detections_{}.json".format(folder_name, frame_meta.pad_index, frame_number)
@@ -248,48 +219,20 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
         image_id = uuid.uuid4()
         image_id_str = str(image_id)
         logging.info(f'Image uploaded with ID: {image_id}')
-        # upload_bytes_to_minio(bucket, image_id_str+'.jpg', resized_img_bytes, endpoint, access_key, secret_key)
+        if debug != 'local':
+            minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
+        
         try:
             l_frame = l_frame.next
         except StopIteration:
             break
-        # json_str = serializer.to_json(data)
+        json_str = serializer.to_json(data)
 
-
-        # PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
+        if debug != 'local':
+            PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
         logging.info(f'Event published')
 
     return Gst.PadProbeReturn.OK
-
-
-# def draw_bounding_boxes(image, obj_meta, confidence):
-#     confidence = '{0:.2f}'.format(confidence)
-#     rect_params = obj_meta.rect_params
-#     top = int(rect_params.top)
-#     left = int(rect_params.left)
-#     width = int(rect_params.width)
-#     height = int(rect_params.height)
-#     obj_name = pgie_classes_str[obj_meta.class_id]
-#     # image = cv2.rectangle(image, (left, top), (left + width, top + height), (0, 0, 255, 0), 2, cv2.LINE_4)
-#     color = (0, 0, 255, 0)
-#     w_percents = int(width * 0.05) if width > 100 else int(width * 0.1)
-#     h_percents = int(height * 0.05) if height > 100 else int(height * 0.1)
-#     linetop_c1 = (left + w_percents, top)
-#     linetop_c2 = (left + width - w_percents, top)
-#     image = cv2.line(image, linetop_c1, linetop_c2, color, 6)
-#     linebot_c1 = (left + w_percents, top + height)
-#     linebot_c2 = (left + width - w_percents, top + height)
-#     image = cv2.line(image, linebot_c1, linebot_c2, color, 6)
-#     lineleft_c1 = (left, top + h_percents)
-#     lineleft_c2 = (left, top + height - h_percents)
-#     image = cv2.line(image, lineleft_c1, lineleft_c2, color, 6)
-#     lineright_c1 = (left + width, top + h_percents)
-#     lineright_c2 = (left + width, top + height - h_percents)
-#     image = cv2.line(image, lineright_c1, lineright_c2, color, 6)
-#     # Note that on some systems cv2.putText erroneously draws horizontal lines across the image
-#     image = cv2.putText(image, obj_name + ',C=' + str(confidence), (left - 10, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-#                         (0, 0, 255, 0), 2)
-#     return image
 
 
 def cb_newpad(decodebin, decoder_src_pad, data):
@@ -368,28 +311,35 @@ def create_source_bin(index, uri):
 
 def main(args):
     # Check input arguments
+
+    # os.getenv("URLS")
     if len(args) < 2:
         sys.stderr.write("usage: %s <uri1> [uri2] ... [uriN] <folder to save frames>\n" % args[0])
         sys.exit(1)
 
     global perf_data
-    perf_data = PERF_DATA(len(args) - 2)
-    number_sources = len(args) - 2
+    perf_data = PERF_DATA(len(args) - 3)
+    number_sources = len(args) - 3
 
     global folder_name
     folder_name = args[-1]
+    global debug
+    debug = args[-2]
     # if path.exists(folder_name):
     #     sys.stderr.write("The output folder %s already exists. Please remove it first.\n" % folder_name)
     #     sys.exit(1)
 
-    if not os.path.exists(folder_name):
+    if not os.path.exists(folder_name) and debug == 'local':
         os.mkdir(folder_name)
+    elif debug != 'local':
+        print("No Local Debugging.")
     else:
         print("Folder already exists. Continuing...")
-    print("Detections will be saved in ", folder_name)
+        print("Detections will be saved in ", folder_name)
     # Standard GStreamer initialization
     Gst.init(None)
-
+    if debug != 'local':
+        args=args[0] + os.getenv("URLS").replace(',',' ') + args[-2] + args[-1]
     # Create gstreamer elements */
     # Create Pipeline element that will form a connection of other elements
     print("Creating Pipeline \n ")
@@ -416,6 +366,8 @@ def main(args):
         saved_count["stream_" + str(i)] = 0
         print("Creating source_bin ", i, " \n ")
         uri_name = args[i + 1]
+        if uri_name[0]=='/':
+            uri_name = 'file://'+uri_name
         if uri_name.find("rtsp://") == 0:
             is_live = True
         source_bin = create_source_bin(i, uri_name)
@@ -542,7 +494,7 @@ def main(args):
 
     # List the sources
     print("Now playing...")
-    for i, source in enumerate(args[:-1]):
+    for i, source in enumerate(args[:-2]):
         if i != 0:
             print(i, ": ", source)
 

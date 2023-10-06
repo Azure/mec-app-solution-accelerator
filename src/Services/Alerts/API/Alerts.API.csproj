@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>5e2c1e5b-5ef2-4ec4-beb3-352166c53771</UserSecretsId>
@@ -13,7 +13,7 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Alerts.api' " />
   <ItemGroup>
     <PackageReference Include="AvroConvert" Version="3.3.4" />
-    <PackageReference Include="Coravel" Version="4.2.1" />
+    <PackageReference Include="Coravel" Version="5.0.2" />
     <PackageReference Include="Dapr.AspNetCore" Version="1.10.0" />
 	<PackageReference Include="MediatR" Version="11.0.0" />
 	<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
