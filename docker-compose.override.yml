@@ -6,13 +6,13 @@ services:
   deepstream:
     environment:
     #- FEED=rtsp://20.42.105.26:8554/mystream
-    - FEED=/Dataset/sample_720p.mp4
+    - FEEDS=/Dataset/sample_720p.mp4 
     - MINIOURL=http://minio:9000
     ports:
-    - "57090"
+    - "2060:2060"
 
   deepstream-dapr:
-    command: [ "./daprd", "-app-id", "deepstream","--app-protocol", "grpc","--dapr-http-port", "3500", "-components-path", "/components" ]
+    command: [ "./daprd", "-app-id", "deepstream","--app-protocol", "grpc", "--app-port", "2060","--dapr-http-port", "3500", "-components-path", "/components" ]
     volumes:
     - "./dapr/components/:/components"
 
@@ -27,17 +27,6 @@ services:
   #   volumes:
   #   - "./dapr/components/:/components"
 
-  rulesengine:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
-    ports:
-      - "80"
-
-  rulesengine-dapr:
-    command: [ "./daprd", "-app-id", "rulesengine", "-app-port", "80", "-components-path", "/components"]
-    volumes:
-    - "./dapr/components/:/components"
 
   # framesplitter:
   #   environment:
@@ -53,6 +42,19 @@ services:
   #   command: [ "./daprd", "-app-id", "Framesplitter","--app-protocol", "grpc","--dapr-http-port", "3500", "-components-path", "/components" ]
   #   volumes:
   #   - "./dapr/components/:/components"
+
+  rulesengine:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "80"
+
+  rulesengine-dapr:
+    command: [ "./daprd", "-app-id", "rulesengine", "-app-port", "80", "-components-path", "/components"]
+    volumes:
+    - "./dapr/components/:/components"
+
 
   alerts-api:
     environment:

@@ -41,4 +41,7 @@ COPY deepstream/Dataset ./Dataset
 COPY deepstream/events_schema ./events_schema
 COPY deepstream/src ./src
 
-CMD cd src && python3 init.py None frames
+ENTRYPOINT ["sh", "-c", "cd /src && python3 init.py no /frames"]
+# ENTRYPOINT ["sh", "-c", "cd /src && python3 init.py file:///Dataset/sample_720p.mp4 local frames"]
+
+# CMD ["/bin/bash"]

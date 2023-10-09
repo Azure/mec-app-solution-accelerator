@@ -47,6 +47,7 @@ from dapr.clients import DaprClient
 import uuid
 import base64
 import logging
+import itertools
 
 if not os.path.exists('deepstream'):
     os.symlink('/opt/nvidia/deepstream/deepstream-6.3', 'deepstream')
@@ -86,6 +87,7 @@ def PublishEvent(pubsub_name: str, topic_name: str, data: json):
         resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data, data_content_type='application/json')
 
 def tiler_sink_pad_buffer_probe(pad, info, u_data):
+    timestamp_init=int(time.time()*1000)
     if debug != 'local':
         import shared.minio_utils as minio
         endpoint = os.getenv('MINIOURL')
@@ -145,6 +147,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
         "Classes": [],
         "time_trace":[]
         }
+
         BoundingBoxes=[]
 
         while l_obj is not None:
@@ -155,6 +158,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
                 break
             obj_dict = {
                 "class_id": obj_meta.class_id,
+                "class_label": obj_meta.obj_label,
                 "confidence": obj_meta.confidence,
                 "left": int(obj_meta.rect_params.left),
                 "top": int(obj_meta.rect_params.top),
@@ -170,7 +174,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             BoundingBoxes.append({"x": xmin, "y":ymax})
             BoundingBoxes.append({"x": xmax, "y":ymin})
             BoundingBoxes.append({"x": xmax, "y":ymax})
-            data["Classes"].append({"EventType": obj_meta.class_id, "Confidence":obj_meta.confidence, "BoundingBoxes": BoundingBoxes})
+            data["Classes"].append({"EventType": obj_meta.obj_label, "Confidence":obj_meta.confidence, "BoundingBoxes": BoundingBoxes})
             obj_counter[obj_meta.class_id] += 1
             
             if True:
@@ -226,10 +230,13 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             l_frame = l_frame.next
         except StopIteration:
             break
+        time_trace={"stepStart": timestamp_init, "stepEnd":int(time.time()*1000), "stepName": "deepstream"}
+        data['time_trace'].append(time_trace)
         json_str = serializer.to_json(data)
 
         if debug != 'local':
             PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
+
         logging.info(f'Event published')
 
     return Gst.PadProbeReturn.OK
@@ -311,15 +318,12 @@ def create_source_bin(index, uri):
 
 def main(args):
     # Check input arguments
-
+    logging.basicConfig(level=logging.DEBUG)
+    logging.info(int(time.time()*1000))
     # os.getenv("URLS")
     if len(args) < 2:
         sys.stderr.write("usage: %s <uri1> [uri2] ... [uriN] <folder to save frames>\n" % args[0])
         sys.exit(1)
-
-    global perf_data
-    perf_data = PERF_DATA(len(args) - 3)
-    number_sources = len(args) - 3
 
     global folder_name
     folder_name = args[-1]
@@ -329,17 +333,24 @@ def main(args):
     #     sys.stderr.write("The output folder %s already exists. Please remove it first.\n" % folder_name)
     #     sys.exit(1)
 
-    if not os.path.exists(folder_name) and debug == 'local':
-        os.mkdir(folder_name)
-    elif debug != 'local':
-        print("No Local Debugging.")
-    else:
-        print("Folder already exists. Continuing...")
-        print("Detections will be saved in ", folder_name)
     # Standard GStreamer initialization
     Gst.init(None)
     if debug != 'local':
-        args=args[0] + os.getenv("URLS").replace(',',' ') + args[-2] + args[-1]
+        logging.info(args)
+        feeds = os.getenv("FEEDS").split(',')
+        input_info=[]
+        input_info.append([args[0]])
+        input_info.append(feeds)
+        input_info.append([args[-2]])
+        input_info.append([args[-1]])
+        
+        flattened_input_info = list(itertools.chain.from_iterable(input_info))
+        logging.info(flattened_input_info)
+        args=flattened_input_info
+        logging.info(args)
+    global perf_data
+    perf_data = PERF_DATA(len(args) - 3)
+    number_sources = len(args) - 3
     # Create gstreamer elements */
     # Create Pipeline element that will form a connection of other elements
     print("Creating Pipeline \n ")
@@ -358,10 +369,13 @@ def main(args):
     pipeline.add(streammux)
     for i in range(number_sources):
         folder_path = folder_name + "/stream_" + str(i)
-        if not os.path.exists(folder_path):
+        if not os.path.exists(folder_path) and debug == 'local':
             os.mkdir(folder_path)
+        elif debug != 'local':
+            print("No Local Debugging.")
         else:
             print("Folder already exists. Continuing...")
+            print("Detections will be saved in ", folder_path)
         frame_count["stream_" + str(i)] = 0
         saved_count["stream_" + str(i)] = 0
         print("Creating source_bin ", i, " \n ")
@@ -511,4 +525,5 @@ def main(args):
 
 
 if __name__ == '__main__':
+    
     sys.exit(main(sys.argv))

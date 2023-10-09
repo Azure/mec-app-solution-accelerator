@@ -10,8 +10,14 @@ services:
       depends_on:
         - alertsapi-dapr
         - files-management
-      environment:    
-        - DAPR_HTTP_PORT=3500
+      deploy:
+        resources:
+          reservations:
+            devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
 
   deepstream-dapr:
     image: "daprio/daprd:latest"
@@ -35,20 +41,6 @@ services:
   #     - aiinferencer
   #   network_mode: "service:aiinferencer"
 
-  rulesengine: 
-    image: ${DOCKER_REGISTRY-}rulesengine:1.6
-    build:
-      context: .
-      dockerfile: src/Services/Alerts/RulesEngine/Dockerfile
-    depends_on:
-    - mongodb
-
-  rulesengine-dapr:
-    image: "daprio/daprd:latest"
-    depends_on:
-    - rulesengine
-    network_mode: "service:rulesengine"
-
   # framesplitter:
   #     image: ${DOCKER_REGISTRY-}framesplitter:1.5
   #     build:
@@ -63,6 +55,22 @@ services:
   #   depends_on:
   #     - framesplitter
   #   network_mode: "service:framesplitter"
+
+  rulesengine: 
+    image: ${DOCKER_REGISTRY-}rulesengine:1.6
+    build:
+      context: .
+      dockerfile: src/Services/Alerts/RulesEngine/Dockerfile
+    depends_on:
+    - mongodb
+
+  rulesengine-dapr:
+    image: "daprio/daprd:latest"
+    depends_on:
+    - rulesengine
+    network_mode: "service:rulesengine"
+
+
 
   alerts-api: 
     image: ${DOCKER_REGISTRY-}alerts-api:1.6
