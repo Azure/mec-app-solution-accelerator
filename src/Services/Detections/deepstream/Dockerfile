@@ -1,7 +1,15 @@
 ARG CUDA_VERSION
 
 
+
 FROM nvcr.io/nvidia/deepstream:6.3-triton-multiarch
+
+# BEGIN: get-arch
+
+ARG TARGETPLATFORM
+
+# END: get-arch
+ARG VERSION=1.1.8
 
 RUN apt-get update
 
@@ -16,7 +24,8 @@ RUN chmod +x /opt/user_additional_install_runtime.sh && /opt/user_additional_ins
 ADD deepstream/user_deepstream_python_apps_install.sh /opt
 
 # Execute local file
-RUN chmod +x /opt/user_deepstream_python_apps_install.sh && /opt/user_deepstream_python_apps_install.sh --version 1.1.8
+RUN chmod +x /opt/user_deepstream_python_apps_install.sh && /opt/user_deepstream_python_apps_install.sh --version ${VERSION} --arch ${TARGETPLATFORM}
+
 
 # WORKDIR /opt/nvidia/deepstream/deepstream
 # # COPY ./deepstream_python_apps ./deepstream_python_apps

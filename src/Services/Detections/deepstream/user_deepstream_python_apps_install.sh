@@ -41,6 +41,7 @@ function usage() {
 while [[ "$#" > 0 ]]; do
     case $1 in
         -v|--version) version="$2"; shift 2;;
+        -a|--arch) arch="$2"; shift 2;;
         -r|--remote-branch) remote_branch="$2"; shift 2;;
         -b|--build-bindings) build_bindings=1; shift 1;;
         -h|--help) usage; shift 1;;
@@ -102,7 +103,16 @@ then
     echo "Pulling PyDS version: $version"
     echo "##############################"
     cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps
+    
+    if [ "$arch" == "linux/amd64" ]; then
     URL="https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases/download/v$version/pyds-$version-py3-none-linux_x86_64.whl"
+    elif [ "$arch" == "linux/arm64" ]; then
+        URL="https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases/download/v$version/pyds-$version-py3-none-linux_aarch64.whl"
+    else
+        echo "Unsupported architecture: $arch"
+        exit 1
+    fi
+
     echo "url"
     echo $URL
     wget "$URL"
@@ -111,14 +121,24 @@ then
         echo "########################################################"
         echo "Downloaded wheel pyds-$version-py3-none-linux_x86_64.whl"
         echo "########################################################"
+        echo "#####################"
+        echo "Installing PyDS wheel"
+        echo "#####################"
+        pip3 install pyds-$version-py3-none-linux_x86_64.whl
+    elif [ -f "pyds-$version-py3-none-linux_aarch64.whl" ]
+    then
+        echo "########################################################"
+        echo "Downloaded wheel pyds-$version-py3-none-linux_aarch64.whl"
+        echo "########################################################"
+        echo "#####################"
+        echo "Installing PyDS wheel"
+        echo "#####################"
+        pip3 install pyds-$version-py3-none-linux_aarch64.whl
     else
         echo "#########################################"
         echo "PyDS wheel was not downloaded. Exiting..."
         echo "#########################################"
         exit 1
     fi
-    echo "#####################"
-    echo "Installing PyDS wheel"
-    echo "#####################"
-    pip3 install pyds-$version-py3-none-linux_x86_64.whl
+    
 fi
