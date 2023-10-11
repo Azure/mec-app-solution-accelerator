@@ -318,7 +318,7 @@ def create_source_bin(index, uri):
 
 def main(args):
     # Check input arguments
-    logging.basicConfig(level=logging.DEBUG)
+    logging.getLogger().setLevel(logging.INFO)
     logging.info(int(time.time()*1000))
     # os.getenv("URLS")
     if len(args) < 2:
@@ -370,7 +370,7 @@ def main(args):
     for i in range(number_sources):
         folder_path = folder_name + "/stream_" + str(i)
         if not os.path.exists(folder_path) and debug == 'local':
-            os.mkdir(folder_path)
+            os.makedirs(folder_path)
         elif debug != 'local':
             print("No Local Debugging.")
         else:

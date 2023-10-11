@@ -1,0 +1,110 @@
+version: '3.4'
+
+services:
+
+  deepstream:
+      image: ${DOCKER_REGISTRY-}deepstream:0.1
+      build:
+        context: src/Services/Detections
+        dockerfile: deepstream/Dockerfile
+      depends_on:
+        - alertsapi-dapr
+        - files-management
+      deploy:
+        resources:
+          reservations:
+            devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+
+  deepstream-dapr:
+    image: "daprio/daprd:latest"
+    depends_on:
+      - deepstream
+    network_mode: "service:deepstream"
+  
+
+  rulesengine: 
+    image: ${DOCKER_REGISTRY-}rulesengine:1.6
+    build:
+      context: .
+      dockerfile: src/Services/Alerts/RulesEngine/Dockerfile
+    depends_on:
+    - mongodb
+
+  rulesengine-dapr:
+    image: "daprio/daprd:latest"
+    depends_on:
+    - rulesengine
+    network_mode: "service:rulesengine"
+
+
+
+  alerts-api: 
+    image: ${DOCKER_REGISTRY-}alerts-api:1.6
+    build:
+      context: .
+      dockerfile: src/Services/Alerts/API/Dockerfile
+    depends_on:
+    - mongodb
+
+  alertsapi-dapr:
+    image: "daprio/daprd:latest"
+    depends_on:
+    - alerts-api
+    network_mode: "service:alerts-api"
+  
+  alerts-ui:
+    image: ${DOCKER_REGISTRY-}alerts-ui:1.6
+    build:
+      context: .
+      dockerfile: src/Web/alerts-ui/Dockerfile
+    depends_on:
+      - alertsapi-dapr
+
+  alerts-ui-dapr:
+    image: "daprio/daprd:latest"
+    depends_on:
+      - alerts-ui
+    network_mode: "service:alerts-ui"
+
+  files-management:
+    image: ${DOCKER_REGISTRY-}files-manegement:1.6
+    build:
+      context: .
+      dockerfile: src/Services/Files/Management/Dockerfile
+    depends_on:
+      - minio
+
+  files-management-dapr:
+    image: "daprio/daprd:latest"
+    depends_on:
+      - files-management
+    network_mode: "service:files-management"
+
+  mosquitto:
+    hostname: mosquitto
+    container_name: mosquitto_container
+    image: eclipse-mosquitto:1.6.10
+ 
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    hostname: mongo
+
+  minio:
+    image: minio/minio
+    restart: always
+    volumes:
+      - minio-data:/data
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    command: server /data
+    ports:
+      - "9000:9000"
+
+volumes:
+  minio-data:
