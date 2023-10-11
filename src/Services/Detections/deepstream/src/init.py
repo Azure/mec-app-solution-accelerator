@@ -21,7 +21,7 @@ import sys
 
 sys.path.append('../')
 import gi
-import configparser
+
 
 gi.require_version('Gst', '1.0')
 from gi.repository import GLib, Gst
@@ -29,10 +29,7 @@ from ctypes import *
 import time
 import sys
 import math
-import platform
-# from common.is_aarch_64 import is_aarch64
-# from common.bus_call import bus_call
-# from common.FPS import PERF_DATA
+
 import numpy as np
 import pyds
 import cv2
@@ -43,7 +40,7 @@ import json
 import avro.schema
 from avro_json_serializer import AvroJsonSerializer
 from dapr.clients import DaprClient
-# import shared.minio_utils as minio
+
 import uuid
 import base64
 import logging
@@ -96,7 +93,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
     
     path='../events_schema/detections.avro'
     
-    logging.basicConfig(level=logging.DEBUG)
+    
     frame_number = 0
     num_rects = 0
     gst_buffer = info.get_buffer()
@@ -318,7 +315,12 @@ def create_source_bin(index, uri):
 
 def main(args):
     # Check input arguments
-    logging.getLogger().setLevel(logging.INFO)
+    logging.basicConfig(level=logging.INFO)
+    logging.getLogger('is_aarch64').setLevel(logging.INFO)
+    logging.getLogger('bus_call').setLevel(logging.INFO)
+    logging.getLogger('PERF_DATA').setLevel(logging.INFO)
+    logging.getLogger('GST').setLevel(logging.INFO)
+    logging.getLogger('GLib').setLevel(logging.INFO)
     logging.info(int(time.time()*1000))
     # os.getenv("URLS")
     if len(args) < 2:

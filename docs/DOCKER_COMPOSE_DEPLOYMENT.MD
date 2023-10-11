@@ -25,6 +25,13 @@ Now, build the Docker images with `docker compose build`:
 ```powershell
 docker compose build
 ```
+
+for deepstream the command is
+
+```powershell
+docker compose -f docker-compose_deepstream_arm64.yml -f  docker-compose_deepstream_arm64.override.yml build
+```
+
 <img width="800" alt="image" src="https://user-images.githubusercontent.com/1712635/214674622-c404aa17-8b16-4df8-b958-ff8423995d67.png">
 
 You could directly have run `docker compose up` (the next step), so if the images were not built already they will be built in the first place, but this step using `docker compose build` is intentional so you learn how you can just create the Docker images for other deployments such as Kubernetes, without habing to run it first into a Docker host.
@@ -36,6 +43,11 @@ You start the containers and run the solution in yoour local docker host with th
 ```powershell
 docker compose up
 ```
+for deepstream the command is
+```powershell
+docker compose -f docker-compose_deepstream_arm64.yml -f  docker-compose_deepstream_arm64.override.yml up
+```
+
 You should see 'docker compose up' starting like in the following screenshot:
 <img width="800" alt="image" src="https://user-images.githubusercontent.com/1712635/212741292-4396cc66-3ce9-451b-8d2f-bb3e6ec8e8b2.png">
 
