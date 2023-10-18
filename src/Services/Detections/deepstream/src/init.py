@@ -21,7 +21,7 @@ import sys
 
 sys.path.append('../')
 import gi
-
+import configparser
 
 gi.require_version('Gst', '1.0')
 from gi.repository import GLib, Gst
@@ -29,7 +29,10 @@ from ctypes import *
 import time
 import sys
 import math
-
+import platform
+# from common.is_aarch_64 import is_aarch64
+# from common.bus_call import bus_call
+# from common.FPS import PERF_DATA
 import numpy as np
 import pyds
 import cv2
@@ -40,7 +43,7 @@ import json
 import avro.schema
 from avro_json_serializer import AvroJsonSerializer
 from dapr.clients import DaprClient
-
+# import shared.minio_utils as minio
 import uuid
 import base64
 import logging
@@ -93,7 +96,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
     
     path='../events_schema/detections.avro'
     
-    
+    logging.basicConfig(level=logging.DEBUG)
     frame_number = 0
     num_rects = 0
     gst_buffer = info.get_buffer()
@@ -124,7 +127,6 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
         l_obj = frame_meta.obj_meta_list
         num_rects = frame_meta.num_obj_meta
         is_first_obj = True
-        save_image = False
         obj_counter = {
             PGIE_CLASS_ID_VEHICLE: 0,
             PGIE_CLASS_ID_PERSON: 0,
@@ -146,7 +148,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
         }
 
         BoundingBoxes=[]
-
+        frame_copy=None
         while l_obj is not None:
             try:
                 # Casting l_obj.data to pyds.NvDsObjectMeta
@@ -196,47 +198,51 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             except StopIteration:
                 break
 
-        obj_json["frame_id"] = 'frame_'+str(frame_number)+'.jpg'
-        obj_json['Detections'] = obj_list
-        
+        if frame_copy is not None:
+            obj_json["frame_id"] = 'frame_'+str(frame_number)+'.jpg'
+            obj_json['Detections'] = obj_list
+            
 
-        print("Frame Number=", frame_number, "Number of Objects=", num_rects, "Vehicle_count=",
-              obj_counter[PGIE_CLASS_ID_VEHICLE], "Person_count=", obj_counter[PGIE_CLASS_ID_PERSON])
-        # update frame rate through this probe
-        stream_index = "stream{0}".format(frame_meta.pad_index)
-        global perf_data
-        perf_data.update_fps(stream_index)
-        #UNCOMMENT for local testing purposes
-        if debug == 'local':
-            img_path = "{}/stream_{}/frame_{}.jpg".format(folder_name, frame_meta.pad_index, frame_number)
-            cv2.imwrite(img_path, frame_copy)
-            json_path = "{}/stream_{}/detections_{}.json".format(folder_name, frame_meta.pad_index, frame_number)
-            with open(json_path, 'w') as f:
-                json.dump(data, f)
-        img_encode = cv2.imencode(".jpg", frame_copy)[1]
-        resized_img_bytes = img_encode.tobytes()
-        bytes_string = base64.standard_b64encode(resized_img_bytes).decode()
-        saved_count["stream_{}".format(frame_meta.pad_index)] += 1
-        image_id = uuid.uuid4()
-        image_id_str = str(image_id)
-        logging.info(f'Image uploaded with ID: {image_id}')
-        if debug != 'local':
-            minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
-        
-        try:
-            l_frame = l_frame.next
-        except StopIteration:
-            break
-        time_trace={"stepStart": timestamp_init, "stepEnd":int(time.time()*1000), "stepName": "deepstream"}
-        data['time_trace'].append(time_trace)
-        json_str = serializer.to_json(data)
+            print("Frame Number=", frame_number, "Number of Objects=", num_rects, "Vehicle_count=",
+                obj_counter[PGIE_CLASS_ID_VEHICLE], "Person_count=", obj_counter[PGIE_CLASS_ID_PERSON])
+            # update frame rate through this probe
+            stream_index = "stream{0}".format(frame_meta.pad_index)
+            global perf_data
+            perf_data.update_fps(stream_index)
+            #UNCOMMENT for local testing purposes
+            if debug == 'local':
+                img_path = "{}/stream_{}/frame_{}.jpg".format(folder_name, frame_meta.pad_index, frame_number)
+                cv2.imwrite(img_path, frame_copy)
+                json_path = "{}/stream_{}/detections_{}.json".format(folder_name, frame_meta.pad_index, frame_number)
+                with open(json_path, 'w') as f:
+                    json.dump(data, f)
+            img_encode = cv2.imencode(".jpg", frame_copy)[1]
+            resized_img_bytes = img_encode.tobytes()
+            bytes_string = base64.standard_b64encode(resized_img_bytes).decode()
+            saved_count["stream_{}".format(frame_meta.pad_index)] += 1
+            image_id = uuid.uuid4()
+            image_id_str = str(image_id)
+            logging.info(f'Image uploaded with ID: {image_id}')
+            if debug != 'local':
+                minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
+            
+            try:
+                l_frame = l_frame.next
+            except StopIteration:
+                break
+            time_trace={"stepStart": timestamp_init, "stepEnd":int(time.time()*1000), "stepName": "deepstream"}
+            data['time_trace'].append(time_trace)
+            json_str = serializer.to_json(data)
 
-        if debug != 'local':
-            PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
+            if debug != 'local':
+                PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
 
-        logging.info(f'Event published')
+            logging.info(f'Event published')
+        else:
+            print('No detections found')
+            logging.info('No detections found')
 
-    return Gst.PadProbeReturn.OK
+        return Gst.PadProbeReturn.OK
 
 
 def cb_newpad(decodebin, decoder_src_pad, data):
@@ -315,12 +321,7 @@ def create_source_bin(index, uri):
 
 def main(args):
     # Check input arguments
-    logging.basicConfig(level=logging.INFO)
-    logging.getLogger('is_aarch64').setLevel(logging.INFO)
-    logging.getLogger('bus_call').setLevel(logging.INFO)
-    logging.getLogger('PERF_DATA').setLevel(logging.INFO)
-    logging.getLogger('GST').setLevel(logging.INFO)
-    logging.getLogger('GLib').setLevel(logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
     logging.info(int(time.time()*1000))
     # os.getenv("URLS")
     if len(args) < 2:
@@ -372,7 +373,7 @@ def main(args):
     for i in range(number_sources):
         folder_path = folder_name + "/stream_" + str(i)
         if not os.path.exists(folder_path) and debug == 'local':
-            os.makedirs(folder_path)
+            os.mkdir(folder_path)
         elif debug != 'local':
             print("No Local Debugging.")
         else:
