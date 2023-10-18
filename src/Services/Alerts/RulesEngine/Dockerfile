@@ -1,21 +1,27 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# Use a specific platform for building the image
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:7.0.400 AS build
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
+# Define the target architecture as argument.
+ARG TARGETARCH
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["src/Services/Alerts/RulesEngine/Alerts.RulesEngine.csproj", "src/Services/Alerts/RulesEngine/"]
-RUN dotnet restore "src/Services/Alerts/RulesEngine/Alerts.RulesEngine.csproj"
+
+# Restore dependencies
+RUN dotnet restore "src/Services/Alerts/RulesEngine/Alerts.RulesEngine.csproj" -r linux-$TARGETARCH
+
 COPY . .
 WORKDIR "/src/src/Services/Alerts/RulesEngine"
-RUN dotnet build "Alerts.RulesEngine.csproj" -c Release -o /app/build
+
+# Compile dependencies
+RUN dotnet build "Alerts.RulesEngine.csproj" -c Release -r linux-$TARGETARCH -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "Alerts.RulesEngine.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+# Final image based on .NET runtime
+FROM mcr.microsoft.com/dotnet/aspnet:7.0.4 AS final
 WORKDIR /app
+EXPOSE 80
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Alerts.RulesEngine.dll"]

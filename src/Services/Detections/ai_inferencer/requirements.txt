@@ -25,3 +25,5 @@ gitdb
 gitpython
 IPython
 ultralytics
+requests
+boto3

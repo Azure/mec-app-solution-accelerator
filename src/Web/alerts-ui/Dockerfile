@@ -1,22 +1,28 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# Use a specific platform for building the image
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:7.0.400 AS build
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+# Define the target architecture as argument.
+ARG TARGETARCH
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["src/Web/alerts-ui/Alerts.UI.csproj", "src/Web/alerts-ui/"]
-RUN dotnet restore "src/Web/alerts-ui/Alerts.UI.csproj"
+
+# Restore dependencies
+RUN dotnet restore "src/Web/alerts-ui/Alerts.UI.csproj" -r linux-$TARGETARCH
+
 COPY . .
 WORKDIR "/src/src/Web/alerts-ui"
-RUN dotnet build "Alerts.UI.csproj" -c Release -o /app/build
+
+# Compile dependencies
+RUN dotnet build "Alerts.UI.csproj" -c Release -r linux-$TARGETARCH -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "Alerts.UI.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+# Final image based on .NET runtime
+FROM mcr.microsoft.com/dotnet/aspnet:7.0.4 AS final
 WORKDIR /app
+EXPOSE 80
+EXPOSE 443
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Alerts.UI.dll"]

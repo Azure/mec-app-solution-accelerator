@@ -25,7 +25,10 @@ spec:
     spec:
       containers:
       - name: inference-model
-        image: mecsolutionaccelerator/aiinferencer:0.1
+        image: mecsolutionaccelerator/aiinferencer:1.5
         ports:
         - containerPort: 2060
         imagePullPolicy: IfNotPresent
+        env:
+          - name : MINIOURL
+            value: "http://minio.mec-accelerator.svc.cluster.local:9000"

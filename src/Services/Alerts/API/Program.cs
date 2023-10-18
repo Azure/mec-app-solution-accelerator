@@ -38,7 +38,7 @@ if (app.Environment.IsDevelopment())
 app.Services.UseScheduler(scheduler =>
 {
     scheduler.Schedule<CosmosDbCleanupJob>()
-    .Cron("0 */2 * * *");
+    .EveryThirtyMinutes().RunOnceAtStart();
 });
 
 app.UseCloudEvents();

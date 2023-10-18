@@ -3,12 +3,15 @@ version: '3.4'
 services:
 
   aiinferencer:
-      image: ${DOCKER_REGISTRY-}aiinferencer:0.1
-      build:
-        context: src/Services/Detections/ai_inferencer
-        dockerfile: Dockerfile
-      depends_on: 
-        - alertsapi-dapr
+    image: ${DOCKER_REGISTRY-}aiinferencer:1.6
+    build:
+      context: src/Services/Detections
+      dockerfile: ai_inferencer/Dockerfile
+    depends_on: 
+      - alertsapi-dapr
+      - files-management
+    environment:    
+      - DAPR_HTTP_PORT=3600
         
   aiinferencer-dapr:
     image: "daprio/daprd:latest"
@@ -17,7 +20,7 @@ services:
     network_mode: "service:aiinferencer"
 
   rulesengine: 
-    image: ${DOCKER_REGISTRY-}rulesengine:0.1
+    image: ${DOCKER_REGISTRY-}rulesengine:1.6
     build:
       context: .
       dockerfile: src/Services/Alerts/RulesEngine/Dockerfile
@@ -31,12 +34,13 @@ services:
     network_mode: "service:rulesengine"
 
   framesplitter:
-      image: ${DOCKER_REGISTRY-}framesplitter:0.1
+      image: ${DOCKER_REGISTRY-}framesplitter:1.6
       build:
-        context: src/Services/Detections/frameSplitter
-        dockerfile: Dockerfile
+        context: src/Services/Detections
+        dockerfile: frameSplitter/Dockerfile
       depends_on:
         - aiinferencer-dapr
+        - files-management
 
   framesplitter-dapr:
     image: "daprio/daprd:latest"
@@ -45,7 +49,7 @@ services:
     network_mode: "service:framesplitter"
 
   alerts-api: 
-    image: ${DOCKER_REGISTRY-}alerts-api:0.1
+    image: ${DOCKER_REGISTRY-}alerts-api:1.6
     build:
       context: .
       dockerfile: src/Services/Alerts/API/Dockerfile
@@ -59,7 +63,7 @@ services:
     network_mode: "service:alerts-api"
   
   alerts-ui:
-    image: ${DOCKER_REGISTRY-}alerts-ui:0.1
+    image: ${DOCKER_REGISTRY-}alerts-ui:1.6
     build:
       context: .
       dockerfile: src/Web/alerts-ui/Dockerfile
@@ -72,6 +76,20 @@ services:
       - alerts-ui
     network_mode: "service:alerts-ui"
 
+  files-management:
+    image: ${DOCKER_REGISTRY-}files-manegement:1.6
+    build:
+      context: .
+      dockerfile: src/Services/Files/Management/Dockerfile
+    depends_on:
+      - minio
+
+  files-management-dapr:
+    image: "daprio/daprd:latest"
+    depends_on:
+      - files-management
+    network_mode: "service:files-management"
+
   mosquitto:
     hostname: mosquitto
     container_name: mosquitto_container
@@ -81,3 +99,18 @@ services:
     image: mongo
     container_name: mongodb
     hostname: mongo
+
+  minio:
+    image: minio/minio
+    restart: always
+    volumes:
+      - minio-data:/data
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    command: server /data
+    ports:
+      - "9000:9000"
+
+volumes:
+  minio-data:
