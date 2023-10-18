@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: frame-splitter
-        image: mecsolutionaccelerator/framesplitter:1.5
+        image: mecsolutionaccelerator/framesplitter:1.6
         ports:
         - containerPort: 50052
         imagePullPolicy: IfNotPresent
