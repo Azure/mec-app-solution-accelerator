@@ -5,7 +5,8 @@ services:
 
   deepstream:
     environment:
-    - FEEDS=/Dataset/sample_720p.mp4 
+    #- FEEDS=/Dataset/sample_720p.mp4 
+    - FEEDS=/Dataset/PerimeterDemo.mp4 
     - MINIOURL=http://minio:9000
     ports:
     - "2060:2060"

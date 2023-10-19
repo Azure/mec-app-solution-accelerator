@@ -59,23 +59,16 @@ no_display = True
 perf_data = None
 frame_count = {}
 saved_count = {}
-global PGIE_CLASS_ID_VEHICLE
-PGIE_CLASS_ID_VEHICLE = 2
-global PGIE_CLASS_ID_PERSON
-PGIE_CLASS_ID_PERSON = 0
 
 
-PGIE_CLASS_ID_VEHICLE = 2
-PGIE_CLASS_ID_BICYCLE = 1
-PGIE_CLASS_ID_PERSON = 0
-PGIE_CLASS_ID_ROADSIGN = 3
+
+
 
 TILED_OUTPUT_WIDTH = 1920
 TILED_OUTPUT_HEIGHT = 1080
 
 
-MIN_CONFIDENCE = 0.3
-MAX_CONFIDENCE = 0.4
+
 def PublishEvent(pubsub_name: str, topic_name: str, data: json):
     with DaprClient() as client:
         resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data, data_content_type='application/json')
@@ -126,17 +119,10 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
         num_rects = frame_meta.num_obj_meta
         is_first_obj = True
         
-        
-        obj_counter = {
-            PGIE_CLASS_ID_VEHICLE: 0,
-            PGIE_CLASS_ID_PERSON: 0,
-            PGIE_CLASS_ID_BICYCLE: 0,
-            PGIE_CLASS_ID_ROADSIGN: 0
-        }
         obj_list = []
         obj_json = {}
         timestamp=int(time.time()*1000)
-        data = { "SourceId":"source_id",
+        data = { "SourceId":"stream{0}".format(frame_meta.pad_index),
         "UrlVideoEncoded": "1.0",
         "Frame": 'frame_'+str(frame_number)+'.jpg',
         "EventName": "ObjectDetection",
@@ -212,25 +198,24 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             obj_json['Detections'] = obj_list
             
 
-            print("Frame Number=", frame_number, "Number of Objects=", num_rects, "Vehicle_count=",
-                obj_counter[PGIE_CLASS_ID_VEHICLE], "Person_count=", obj_counter[PGIE_CLASS_ID_PERSON])
+            
             # update frame rate through this probe
             stream_index = "stream{0}".format(frame_meta.pad_index)
             global perf_data
             perf_data.update_fps(stream_index)
-            #UNCOMMENT for local testing purposes
-            # if debug == 'local':
-            #     img_path = "{}/stream_{}/frame_{}.jpg".format(folder_name, frame_meta.pad_index, frame_number)
-            #     cv2.imwrite(img_path, frame_copy)
-            #     json_path = "{}/stream_{}/detections_{}.json".format(folder_name, frame_meta.pad_index, frame_number)
-            #     with open(json_path, 'w') as f:
-            #         json.dump(data, f)
-            # img_encode = cv2.imencode(".jpg", frame_copy)[1]
-            # resized_img_bytes = img_encode.tobytes()
-            # bytes_string = base64.standard_b64encode(resized_img_bytes).decode()
+            # UNCOMMENT for local testing purposes
+            if debug == 'local':
+                img_path = "{}/stream_{}/frame_{}.jpg".format(folder_name, frame_meta.pad_index, frame_number)
+                cv2.imwrite(img_path, frame_copy)
+                json_path = "{}/stream_{}/detections_{}.json".format(folder_name, frame_meta.pad_index, frame_number)
+                with open(json_path, 'w') as f:
+                    json.dump(data, f)
+            img_encode = cv2.imencode(".jpg", frame_copy)[1]
+            resized_img_bytes = img_encode.tobytes()
             saved_count["stream_{}".format(frame_meta.pad_index)] += 1
             image_id = uuid.uuid4()
             image_id_str = str(image_id)
+            data['Frame'] = image_id_str
             logging.info(f'Image uploaded with ID: {image_id}')
             if debug != 'local':
                 minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
@@ -332,6 +317,7 @@ def create_source_bin(index, uri):
 
 def main(args):
     # Check input arguments
+
     logging.basicConfig(level=logging.INFO)
     logging.getLogger('is_aarch64').setLevel(logging.INFO)
     logging.getLogger('bus_call').setLevel(logging.INFO)

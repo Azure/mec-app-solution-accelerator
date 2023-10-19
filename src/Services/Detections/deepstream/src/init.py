@@ -209,7 +209,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             stream_index = "stream{0}".format(frame_meta.pad_index)
             global perf_data
             perf_data.update_fps(stream_index)
-            #UNCOMMENT for local testing purposes
+            # UNCOMMENT for local testing purposes
             if debug == 'local':
                 img_path = "{}/stream_{}/frame_{}.jpg".format(folder_name, frame_meta.pad_index, frame_number)
                 cv2.imwrite(img_path, frame_copy)
@@ -218,10 +218,10 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
                     json.dump(data, f)
             img_encode = cv2.imencode(".jpg", frame_copy)[1]
             resized_img_bytes = img_encode.tobytes()
-            bytes_string = base64.standard_b64encode(resized_img_bytes).decode()
             saved_count["stream_{}".format(frame_meta.pad_index)] += 1
             image_id = uuid.uuid4()
             image_id_str = str(image_id)
+            data['Frame'] = image_id_str
             logging.info(f'Image uploaded with ID: {image_id}')
             if debug != 'local':
                 minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
@@ -243,7 +243,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             logging.info('No detections found')
 
         return Gst.PadProbeReturn.OK
-
+        
 
 def cb_newpad(decodebin, decoder_src_pad, data):
     print("In cb_newpad\n")
