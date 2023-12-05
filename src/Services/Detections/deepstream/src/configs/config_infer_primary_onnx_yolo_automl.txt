@@ -1,0 +1,77 @@
+################################################################################
+# Copyright (c) 2021 NVIDIA Corporation.  All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+# DEALINGS IN THE SOFTWARE.
+################################################################################
+
+infer_config {
+  unique_id: 1
+  gpu_ids: [0]
+  max_batch_size: 4
+  backend {
+    triton {
+      model_name: "YoloAutoML"
+      version: 1
+      model_repo {
+        
+        root: "/workspaces/mec-app-solution-accelerator/src/Services/Detections/deepstream/src/models/model_yolo_automl/triton"
+        log_level: 2
+        strict_model_config: true
+        # Triton runtime would reserve 64MB pinned memory
+        pinned_memory_pool_byte_size: 67108864
+        # Triton runtim would reserve 64MB CUDA device memory on GPU 0
+        cuda_device_memory { device: 0, memory_pool_byte_size: 67108864 }
+      }
+    }
+    output_mem_type: MEMORY_TYPE_DEFAULT
+  }
+
+  preprocess {
+    network_format: IMAGE_FORMAT_RGB
+    tensor_order: TENSOR_ORDER_LINEAR
+    maintain_aspect_ratio: 0
+    frame_scaling_hw: FRAME_SCALING_HW_DEFAULT
+    frame_scaling_filter: 1
+    normalize {
+      scale_factor: 0.0039215697906911373
+      #scale is 1/255 to follow Microsofty docs
+      channel_offsets: [0.0, 0.0, 0.0]
+    }
+  }
+
+  
+  postprocess {
+    other { }
+  }
+
+
+  extra {
+    copy_input_to_host_buffers: true
+    custom_process_funcion: "CreateInferServerCustomProcess"
+  }
+
+  custom_lib {
+    path: "../models/model_yolo_automl/libnvdsinfer_custom_impl_YoloAutoML.so"
+  }
+}
+input_control {
+  process_mode: PROCESS_MODE_FULL_FRAME
+  interval: 0
+}
+
