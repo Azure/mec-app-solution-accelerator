@@ -75,7 +75,16 @@ extern "C" bool ParserCustomAutoML (std::vector<NvDsInferLayerInfo> const& outpu
   }
 
 	
-
+  auto layerFinder = [&outputLayersInfo](const std::string &name)
+      -> const NvDsInferLayerInfo *{
+      for (auto &layer : outputLayersInfo) {
+          if (layer.dataType == FLOAT &&
+            (layer.layerName && name == layer.layerName)) {
+              return &layer;
+          }
+      }
+      return nullptr;
+  };
 
 
   if (!classMismatchWarn) {
@@ -92,9 +101,12 @@ extern "C" bool ParserCustomAutoML (std::vector<NvDsInferLayerInfo> const& outpu
 
 
 
-  float *data = (float*) outputLayersInfo[outputLayerIndex];
-
-  count = outputLayersInfo[outputLayerIndex].inferDims.numElements / 6;
+  // float *data = (float*) outputLayersInfo[outputLayerIndex];
+  const NvDsInferLayerInfo * outputlayer = layerFinder("output");
+  count = outputlayer->inferDims.numElements/6;
+  float *data = (float*) outputlayer->buffer;
+  std::cout << "OLI" << count << std::endl;
+  // outputLayersInfo[outputLayerIndex].inferDims.numElements / 6;
 
   // // Llenar el vector de detecciones a partir del buffer
   for (size_t i = 0; i < count; ++i) {

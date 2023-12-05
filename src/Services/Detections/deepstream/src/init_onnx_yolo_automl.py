@@ -171,14 +171,14 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             
             xmin = int(obj_meta.rect_params.left)
             ymin = int(obj_meta.rect_params.top)
-            xmax = int(obj_meta.rect_params.left + obj_meta.rect_params.width)
-            ymax = int(obj_meta.rect_params.top + obj_meta.rect_params.height)
+            xmax = int(obj_meta.rect_params.left) + int(obj_meta.rect_params.width)
+            ymax = int(obj_meta.rect_params.top) +int(obj_meta.rect_params.height)
             obj_list.append(obj_dict)
             BoundingBoxes.append({"x": xmin, "y":ymin})
             BoundingBoxes.append({"x": xmin, "y":ymax})
             BoundingBoxes.append({"x": xmax, "y":ymin})
             BoundingBoxes.append({"x": xmax, "y":ymax})
-            data["Classes"].append({"EventType": obj_meta.obj_label, "Confidence":obj_meta.confidence, "BoundingBoxes": BoundingBoxes})
+            data["Classes"].append({"EventType": labels[obj_meta.class_id-1], "Confidence":obj_meta.confidence, "BoundingBoxes": BoundingBoxes})
             # obj_counter[obj_meta.class_id] += 1
             
             if True:

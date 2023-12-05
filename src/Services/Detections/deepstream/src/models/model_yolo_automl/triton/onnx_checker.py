@@ -104,48 +104,38 @@ for result in result_final:
     rcnn_label["boxes"] = result[:, :4]
     rcnn_label["labels"] = result[:, 5:6]
     rcnn_label["scores"] = result[:, 4:5]
-# print(rcnn_label)
+print(rcnn_label)
 
 
 
-import matplotlib.image as mpimg
-import matplotlib.patches as patches
-import matplotlib.pyplot as plt
+import cv2
+import numpy as np
 
+img_np = cv2.imread('1.jpeg')  # replace with desired image index
+img_np=cv2.resize(img_np, (800, 800))
 
-img_np = mpimg.imread('output_image.jpg')  # replace with desired image index
-
-
-IMAGE_SIZE = (18, 12)
-plt.figure(figsize=IMAGE_SIZE)
 img = Image.fromarray(img_np.astype('uint8'), 'RGB')
 
 x, y = img.size
 print(img.size)
 
-fig,ax = plt.subplots(1)
-# Display the image
-ax.imshow(img_np)
+# Create a copy of the image to draw on
+output_img = img_np.copy()
 
-# Draw box and label for each detection 
-
+# Draw box and label for each detection
 label = rcnn_label["labels"]
 boxes = rcnn_label["boxes"]
 
-
-xmin, ymin, xmax, ymax =  boxes[0]/800
-xmin, ymin, xmax, ymax = xmin*x, ymin*y, xmax*x, ymax*y
+xmin, ymin, xmax, ymax = boxes[0] / 800
+xmin, ymin, xmax, ymax = xmin * x, ymin * y, xmax * x, ymax * y
 print(xmin, ymin, xmax, ymax)
-width, height =xmax - xmin, ymax - ymin
-rect = patches.Rectangle((xmin, ymin), width, height, 
-                            linewidth=1, edgecolor='green', facecolor='none')
+width, height = xmax - xmin, ymax - ymin
 
-ax.add_patch(rect)
-color = 'green'
+# Draw rectangle on the image
+cv2.rectangle(output_img, (int(xmin), int(ymin)), (int(xmax), int(ymax)), (0, 255, 0), 1)
 
-
-
-plt.savefig('output.jpg')
+# Save the output image
+cv2.imwrite('output.jpg', output_img)
 
 # def _get_box_dims(image_shape, box):
 #     box_keys = ['topX', 'topY', 'bottomX', 'bottomY']

@@ -325,20 +325,20 @@ def preprocess(image_url, img_size=800):
     )  # cv2.imread(image_url)  # BGR
     if img0 is None:
         return image_url, None, None
-
-    img, ratio, pad = letterbox(img0, new_shape=img_size, auto=False, scaleup=False)
+    
+    # Resize image
+    img0 = cv2.resize(img0, (800, 800))
+    
+    img, ratio, pad = letterbox(img0, new_shape=(img_size,img_size), auto=False, scaleup=False)
     # Save the image
     cv2.imwrite("output_image.jpg", img)
     # Convert
-    print(img.shape)
+    
     img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x640x640
-    print(img.shape)
+    
     img = np.ascontiguousarray(img)
     np_image = torch.from_numpy(img)
     np_image = np.expand_dims(np_image, axis=0)
     np_image = np_image.astype(np.float32) / 255.0
-    print(np_image)
-    
-    
     
     return np_image, pad

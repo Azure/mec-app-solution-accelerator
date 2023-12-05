@@ -45,7 +45,8 @@ infer_config {
   preprocess {
     network_format: IMAGE_FORMAT_RGB
     tensor_order: TENSOR_ORDER_LINEAR
-    maintain_aspect_ratio: 0
+    maintain_aspect_ratio: 1
+    symmetric_padding: 1
     frame_scaling_hw: FRAME_SCALING_HW_DEFAULT
     frame_scaling_filter: 1
     normalize {
