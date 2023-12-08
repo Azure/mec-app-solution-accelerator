@@ -53,7 +53,7 @@ Then the image frames are sent to the AI model microservice which is detecting t
 At this point, you should be able to run the "Alerts Dashboard" web app with the following URL in any browser:
 
 ```code
-https://localhost:50058
+http://localhost:50052
 ```
 <img width="800" alt="image" src="https://user-images.githubusercontent.com/1712635/214684282-2aa3739e-cd61-47b5-a7e9-2a01e9d040ae.png">
 
