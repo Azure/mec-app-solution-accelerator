@@ -30,7 +30,10 @@ Now that we have established the appropriate startup project, we will recompile 
 
 ![cleansolution](https://user-images.githubusercontent.com/101176997/221211294-486a2592-4024-4809-aa92-357668e8c458.PNG)
 
-After a few seconds, depending on the capacity of the device, the alert dashboard should open in our browser with url https://localhost:50058/ or https://host.docker.internal:50058/ .
+After a few seconds, depending on the capacity of the device, the alert dashboard should open in our browser with url:
+
+http://localhost:50052/
+
 ![dashboard](https://user-images.githubusercontent.com/101176997/221211358-6ca056f6-35aa-46d4-a02d-27de1e542f73.PNG)
 
 
