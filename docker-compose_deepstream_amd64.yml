@@ -27,7 +27,7 @@ services:
   
 
   rulesengine: 
-    image: ${DOCKER_REGISTRY-}rulesengine:1.6
+    #image: ${DOCKER_REGISTRY-}rulesengine:1.6
     build:
       context: .
       dockerfile: src/Services/Alerts/RulesEngine/Dockerfile

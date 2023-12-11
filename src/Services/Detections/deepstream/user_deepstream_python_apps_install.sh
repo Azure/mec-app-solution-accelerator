@@ -105,8 +105,10 @@ then
     cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps
     
     if [ "$arch" == "linux/amd64" ]; then
-    URL="https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases/download/v$version/pyds-$version-py3-none-linux_x86_64.whl"
+        echo "supported architecture: $arch"
+        URL="https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases/download/v$version/pyds-$version-py3-none-linux_x86_64.whl"
     elif [ "$arch" == "linux/arm64" ]; then
+        echo "supported architecture: $arch"
         URL="https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases/download/v$version/pyds-$version-py3-none-linux_aarch64.whl"
     else
         echo "Unsupported architecture: $arch"

@@ -454,14 +454,20 @@ NvInferServerCustomProcess::attachObjMetas(
 
         NvOSD_RectParams& rect_params = objMeta->rect_params;
         // NvOSD_TextParams& text_params = objMeta->text_params;
-        float width = obj.width * surfParamsList[batchIdx]->width / kInferWidth;
-        float height = obj.height * surfParamsList[batchIdx]->height / kInferHeight;
+        
+        float orig_width=static_cast<double>(surfParamsList[batchIdx]->width);
+        float orig_height=static_cast<double>(surfParamsList[batchIdx]->height);
+
+        
+        float width = obj.width * (orig_width/kInferWidth);
+        float height = obj.height * (orig_height/kInferHeight);
         /* Assign bounding box coordinates. */
         // strange output from triton automl onnx model
-        rect_params.left = (obj.left) * surfParamsList[batchIdx]->width/ kInferWidth - (width)/2;
-        rect_params.top = (obj.top) * surfParamsList[batchIdx]->height / kInferHeight - (height)/2;
+        rect_params.left = (obj.left -(obj.width/2)) * (orig_width/kInferWidth);
+        rect_params.top = (obj.top-(obj.height/2)) * (orig_height/kInferHeight);
         rect_params.width = width;
         rect_params.height = height;
+
 
 
         // /* Border of width 3. */

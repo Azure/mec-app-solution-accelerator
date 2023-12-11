@@ -196,8 +196,8 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
                     
 
                 
-                    
-                    cv2.rectangle(frame_copy, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
+                    if debug == 'local':
+                        cv2.rectangle(frame_copy, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
                     
                     # print("Frame Copy Size:", frame_copy.shape)
                     if is_aarch64(): # If Jetson, since the buffer is mapped to CPU for retrieval, it must also be unmapped 
@@ -233,6 +233,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             saved_count["stream_{}".format(frame_meta.pad_index)] += 1
             image_id = uuid.uuid4()
             image_id_str = str(image_id)
+            data['Frame'] = image_id_str
             logging.info(f'Image uploaded with ID: {image_id}')
             if debug != 'local':
                 minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)

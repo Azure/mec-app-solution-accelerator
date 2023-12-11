@@ -2,9 +2,9 @@
 gpu-id=0
 net-scale-factor=0.0039215697906911373
 model-color-format=0
-onnx-file=models/model_yolo/yolov5s.onnx
+onnx-file=../models/model_yolo/yolov5s.onnx
 model-engine-file=model_b1_gpu0_fp32.engine
-labelfile-path=models/model_yolo/labels.txt
+labelfile-path=../models/model_yolo/labels.txt
 batch-size=1
 network-mode=0
 num-detected-classes=80
@@ -18,7 +18,7 @@ symmetric-padding=1
 #workspace-size=2000
 
 parse-bbox-func-name=NvDsInferParseYolo
-custom-lib-path=models/model_yolo/nvdsinfer_custom_impl_Yolo/libnvdsinfer_custom_impl_Yolo.so
+custom-lib-path=../models/model_yolo/nvdsinfer_custom_impl_Yolo/libnvdsinfer_custom_impl_Yolo.so
 engine-create-func-name=NvDsInferYoloCudaEngineGet
 
 [class-attrs-all]

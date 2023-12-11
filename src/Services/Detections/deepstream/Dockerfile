@@ -29,33 +29,23 @@ RUN chmod +x /opt/user_deepstream_python_apps_install.sh && /opt/user_deepstream
 ARG CUDA_VERSION
 
 # Set the value of another variable based on the value of CUDA_VERSION
-ARG CUDA_VERSION=\
-    $(if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then \
-        echo "12.1"; \
-    elif ["${TARGETPLATFORM}" = "linux/arm64"] then \
-        echo "11.4"; \
-    fi)
+RUN echo $TARGETPLATFORM
+WORKDIR /
 
-# Create binaries to run yolo in deepstream
+# -------------- To set up for running YOLO natively with deepstream Yolo --------------------
+# RUN if [ ${TARGETPLATFORM} = linux/amd64 ]; then \
+#         git clone https://github.com/Javipercor/DeepStream-Yolo.git /Deepstream-Yolo && cd /Deepstream-Yolo &&  CUDA_VER=12.1 make -C nvdsinfer_custom_impl_Yolo  &&\
+#         mkdir -p /src/model/nvdsinfer_custom_impl_Yolo/layers && \
+#         mv nvdsinfer_custom_impl_Yolo/*.o /src/model/nvdsinfer_custom_impl_Yolo/ && \
+#         mv nvdsinfer_custom_impl_Yolo/*.so /src/model/nvdsinfer_custom_impl_Yolo/ && \
+#         mv nvdsinfer_custom_impl_Yolo/layers/*.o /src/model/nvdsinfer_custom_impl_Yolo/layers/; \
+#     elif [ ${TARGETPLATFORM} = linux/arm64 ]; then \
+#         git clone https://github.com/Javipercor/DeepStream-Yolo.git Deepstream-Yolo && cd Deepstream-Yolo && CUDA_VER=11.4 make -C nvdsinfer_custom_impl_Yolo; \
+#     fi 
 
-RUN git clone https://github.com/Javipercor/DeepStream-Yolo.git Deepstream-Yolo && cd Deepstream-Yolo && run CUDA_VER=${CUDA_VERSION} make -C nvdsinfer_custom_impl_Yolo
-#if not present
-#RUN mkdir /src/model/nvdsinfer_custom_impl_Yolo/layers
+# RUN rm -rf /Deepstream-Yolo
 
 
-COPY nvdsinfer_custom_impl_Yolo/*.o /src/model/nvdsinfer_custom_impl_Yolo/
-COPY nvdsinfer_custom_impl_Yolo/*.so /src/model/nvdsinfer_custom_impl_Yolo/
-COPY nvdsinfer_custom_impl_Yolo/layers/*.o /src/model/nvdsinfer_custom_impl_Yolo/layers/
-
-RUN rm -rf /Deepstream-Yolo
-
-# WORKDIR /opt/nvidia/deepstream/deepstream
-# # COPY ./deepstream_python_apps ./deepstream_python_apps
-# COPY --chmod=777 . .
-
-# WORKDIR /opt/nvidia/deepstream/deepstream-6.3
-# # COPY ./deepstream_python_apps ./deepstream_python_apps
-# COPY --chmod=777 . .
 
 
 
@@ -63,7 +53,7 @@ RUN rm -rf /Deepstream-Yolo
 ADD deepstream/requirements.txt . 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-WORKDIR /
+
 
 COPY shared /shared
 
@@ -72,11 +62,27 @@ COPY deepstream/Dataset ./Dataset
 COPY deepstream/events_schema ./events_schema
 COPY deepstream/src ./src
 
-# RUN cd src/models/model_yolo_automl/ && CUDA_VER=${CUDA_VERSION} make -C nvdsinfer_custom_impl_YoloAutoML
-# RUN cd /
 
+# -------------- To set up for running Automl yolo onxx ; partially reusable for other onnx models --------------------
+RUN if [ ${TARGETPLATFORM} = linux/amd64 ]; then \
+        cd src/models/model_yolo_automl/ && CUDA_VER=12.1 make -C nvdsinfer_custom_impl_YoloAutoML; \
+    elif [ ${TARGETPLATFORM} = linux/arm64 ]; then \
+        cd src/models/model_yolo_automl/ && CUDA_VER=11.4 make -C nvdsinfer_custom_impl_YoloAutoML; \
+    fi 
+RUN cd /
+
+
+# ----------------- TO run samples -----------------
 # ENTRYPOINT ["sh", "-c", "cd /src && python3 init_samples.py no /frames"]
-ENTRYPOINT ["sh", "-c", "cd /src && python3 init_native_yolo.py no /frames"]
+
+# ----------------- TO run  YOLO natively with deepstream Yolo-----------------
+# ENTRYPOINT ["sh", "-c", "cd /src && python3 init_native_yolo.py no /frames"]
+
+# ----------------- TO run  Automl yolo onxx-----------------
+ENTRYPOINT ["sh", "-c", "cd /src && python3 init_onnx_yolo_automl.py no /frames"]
+
+
+# ----------------- TO locally without docker compose nor kubernetes -----------------
 # ENTRYPOINT ["sh", "-c", "cd /src && python3 init_samples.py file:///Dataset/sample_720p.mp4 local frames"]
 
 # CMD ["/bin/bash"]
