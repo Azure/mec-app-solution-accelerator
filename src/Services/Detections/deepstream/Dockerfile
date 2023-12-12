@@ -34,13 +34,13 @@ WORKDIR /
 
 # -------------- To set up for running YOLO natively with deepstream Yolo --------------------
 # RUN if [ ${TARGETPLATFORM} = linux/amd64 ]; then \
-#         git clone https://github.com/Javipercor/DeepStream-Yolo.git /Deepstream-Yolo && cd /Deepstream-Yolo &&  CUDA_VER=12.1 make -C nvdsinfer_custom_impl_Yolo  &&\
+#         git clone https://github.com/Javipercor/DeepStream-Yolo.git /Deepstream-Yolo && cd /Deepstream-Yolo &&  CUDA_VER=12.1 make --always-make -C nvdsinfer_custom_impl_Yolo  &&\
 #         mkdir -p /src/model/nvdsinfer_custom_impl_Yolo/layers && \
 #         mv nvdsinfer_custom_impl_Yolo/*.o /src/model/nvdsinfer_custom_impl_Yolo/ && \
 #         mv nvdsinfer_custom_impl_Yolo/*.so /src/model/nvdsinfer_custom_impl_Yolo/ && \
 #         mv nvdsinfer_custom_impl_Yolo/layers/*.o /src/model/nvdsinfer_custom_impl_Yolo/layers/; \
 #     elif [ ${TARGETPLATFORM} = linux/arm64 ]; then \
-#         git clone https://github.com/Javipercor/DeepStream-Yolo.git Deepstream-Yolo && cd Deepstream-Yolo && CUDA_VER=11.4 make -C nvdsinfer_custom_impl_Yolo; \
+#         git clone https://github.com/Javipercor/DeepStream-Yolo.git Deepstream-Yolo && cd Deepstream-Yolo && CUDA_VER=11.4 make --always-make -C nvdsinfer_custom_impl_Yolo; \
 #     fi 
 
 # RUN rm -rf /Deepstream-Yolo
@@ -65,9 +65,9 @@ COPY deepstream/src ./src
 
 # -------------- To set up for running Automl yolo onxx ; partially reusable for other onnx models --------------------
 RUN if [ ${TARGETPLATFORM} = linux/amd64 ]; then \
-        cd src/models/model_yolo_automl/ && CUDA_VER=12.1 make -C nvdsinfer_custom_impl_YoloAutoML; \
+        cd src/models/model_yolo_automl/ && CUDA_VER=12.1 make --always-make -C nvdsinfer_custom_impl_YoloAutoML; \
     elif [ ${TARGETPLATFORM} = linux/arm64 ]; then \
-        cd src/models/model_yolo_automl/ && CUDA_VER=11.4 make -C nvdsinfer_custom_impl_YoloAutoML; \
+        cd src/models/model_yolo_automl/ && CUDA_VER=11.4 make --always-make -C nvdsinfer_custom_impl_YoloAutoML; \
     fi 
 RUN cd /
 
