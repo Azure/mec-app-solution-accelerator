@@ -26,7 +26,13 @@ Now, build the Docker images with `docker compose build`:
 docker compose build
 ```
 
-for deepstream the command is
+for deepstream on amd64  the command is
+
+```powershell
+docker compose -f docker-compose_deepstream_amd64.yml -f  docker-compose_deepstream_amd64.override.yml build
+```
+
+for deepstream on ard64  the command is
 
 ```powershell
 docker compose -f docker-compose_deepstream_arm64.yml -f  docker-compose_deepstream_arm64.override.yml build
@@ -45,7 +51,7 @@ docker compose up
 ```
 for deepstream the command is
 ```powershell
-docker-compose -f docker-compose_deepstream_amd64.yml -f  docker-compose_deepstream_amd64.override.yml up
+docker compose -f docker-compose_deepstream_amd64.yml -f  docker-compose_deepstream_amd64.override.yml up
 docker compose -f docker-compose_deepstream_arm64.yml -f  docker-compose_deepstream_arm64.override.yml up
 ```
 
