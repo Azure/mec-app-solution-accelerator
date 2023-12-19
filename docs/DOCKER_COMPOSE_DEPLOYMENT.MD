@@ -32,7 +32,7 @@ for deepstream on amd64  the command is
 docker compose -f docker-compose_deepstream_amd64.yml -f  docker-compose_deepstream_amd64.override.yml build
 ```
 
-for deepstream on ard64  the command is
+for deepstream on arm64  the command is
 
 ```powershell
 docker compose -f docker-compose_deepstream_arm64.yml -f  docker-compose_deepstream_arm64.override.yml build
@@ -49,10 +49,14 @@ You start the containers and run the solution in yoour local docker host with th
 ```powershell
 docker compose up
 ```
-for deepstream the command is
+for deepstream amd64 the command is
 ```powershell
 docker compose -f docker-compose_deepstream_amd64.yml -f  docker-compose_deepstream_amd64.override.yml up
-docker compose -f docker-compose_deepstream_arm64.yml -f  docker-compose_deepstream_arm64.override.yml up
+```
+
+for deepstream arm64 the command is
+```powershell
+docker compose -f docker-compose_deepstream_amd64.yml -f  docker-compose_deepstream_amd64.override.yml up
 ```
 
 You should see 'docker compose up' starting like in the following screenshot:
