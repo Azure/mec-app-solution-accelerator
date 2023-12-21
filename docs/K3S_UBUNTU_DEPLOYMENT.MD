@@ -31,9 +31,9 @@ This commnad should output the NVIDA GPU brand model like this:
     sudo apt-get install linux-headers-$(uname -r)
     ```
 
-3. NVIDIA Driver.
+3. Install NVIDIA Driver.
 
-    NVIDIA repository installation for Ubuntu.
+    NVIDIA repository installation for Ubuntu **22.04**. If you are using a different Ubuntu release check [Network Repo Installation for Ubuntu](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#network-repo-installation-for-ubuntu) and replace ``ubuntu2204/x86_64`` by the corresponding ``$distro/$arch`` in the URL below.
 
     ```bash
     wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
