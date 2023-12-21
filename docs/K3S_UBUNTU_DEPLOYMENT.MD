@@ -48,10 +48,27 @@ This commnad should output the NVIDA GPU brand model like this:
 
     Install CUDA SDK.
 
-     ```bash
+    ```bash
     sudo apt-get install cuda-toolkit
     ```
-    CUDA SDK also includes the NVIDIA drivers.
+
+    To include all GDS packages:
+
+    ```bash
+    sudo apt-get install nvidia-gds
+    ```
+
+    Install the driver
+
+    ```bash
+    sudo apt-get install cuda-drivers
+    ```
+
+    Reboot the system
+
+    ```bash
+    sudo reboot
+    ```
 
 4. NVIDIA driver validation
 
@@ -67,9 +84,9 @@ This commnad should output the NVIDA GPU brand model like this:
 
     ```bash
     curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
-    && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb nvidia-container-toolkit.list | \
-    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
-    sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+      && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+        sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+        sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
     ```
     (Optional) Install the experimental NVIDIA Container Toolkit repository.
 
@@ -148,6 +165,18 @@ This commnad should output the NVIDA GPU brand model like this:
     kubectl config use-context default
     ```
 
+### Install NVIDIA device plugin for Kubernetes
+
+The NVIDIA device plugin for Kubernetes is a Daemonset that allows you to automatically:
+
+* Expose the number of GPUs on each nodes of your cluster
+* Keep track of the health of your GPUs
+* Run GPU enabled containers in your Kubernetes cluster.
+
+    ```bash
+    kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.14.3/nvidia-device-plugin.yml
+    ```
+
 ### Install and Initialize Dapr
 
 This example application is based on **[Dapr](https://dapr.io/)** framework which is an OSS Microsoft framework specialized on microservices architecture, so you need to install it and enable in the Kubernetes cluster, first.
@@ -160,7 +189,7 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
 
     ```bash
     sudo cp /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
-    sudo chwon $USER.$USER $HOME/.kube/config
+    sudo chown $USER.$USER $HOME/.kube/config
     ```
 
 11. Initialize DAPR in the Kubernetes cluster by running this command:
