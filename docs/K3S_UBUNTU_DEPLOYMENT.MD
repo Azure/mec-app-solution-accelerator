@@ -252,9 +252,6 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
     kubectl get pods --namespace mec-accelerator
     ```
 
-    **Note:** The DeepStream docker image size is more than 10GB, kubelet could faild pulling big images if it is not configured for this purpose.
-
-
     When you are finished trying the application, you can always uninstall the application pods and all related resources from your Kuberentes by running this command:
 
     ```bash
