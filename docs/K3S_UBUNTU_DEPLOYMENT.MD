@@ -115,10 +115,11 @@ This commnad should output the NVIDA GPU brand model like this:
     sudo sh ./get-docker.sh
     ```
 
-    Add your user to the docker group.
+    Add your user to the docker group and then log out and log back in so that your group membership is re-evaluated.
 
     ```bash
     sudo usermod -aG docker $USER
+    logout
     ```
 
     When running ``kubernetes`` with ``docker``, edit the config file which is usually present at ``/etc/docker/daemon.json`` to set up nvidia-container-runtime as the default low-level runtime:
@@ -230,7 +231,15 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
     ```bash
     kubectl apply -f ./cpu/
     ```
+
     GPU support (NVIDIA Deepstream implementation)
+
+    **Note:** The DeepStream docker image size is more than **10GB**, ``kubelet`` could fail pulling big images if it is not configured for this purpose. Instead of change the ``kubelet`` default configuration you can pull the DeepStream images with ``Docker CLI`` and then execute the gpu deployment.
+
+    ```bash
+    docker pull mecsolutionaccelerator/deepstream:0.2_amd64
+    ```
+
     ```bash
     kubectl apply -f ./gpu/
     ```
@@ -243,14 +252,17 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
     kubectl get pods --namespace mec-accelerator
     ```
 
+    **Note:** The DeepStream docker image size is more than 10GB, kubelet could faild pulling big images if it is not configured for this purpose.
+
+
     When you are finished trying the application, you can always uninstall the application pods and all related resources from your Kuberentes by running this command:
 
     ```bash
-    kubectl delete -f ./cpu/ | kubectl delete -f ./common/
+    kubectl delete -f ./cpu/ && kubectl delete -f ./common/
     ```
 
     Or
 
     ```bash
-    kubectl delete -f ./gpu/ | kubectl delete -f ./common/
+    kubectl delete -f ./gpu/ && kubectl delete -f ./common/
     ```
