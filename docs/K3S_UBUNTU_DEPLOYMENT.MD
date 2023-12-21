@@ -19,7 +19,7 @@ This commnad should output the NVIDA GPU brand model like this:
 
 2. Install OS requirements.
 
-    Build toolchain that include gcc and build dependencies.
+    Build toolchain that includes gcc and build dependencies.
 
     ```bash
     sudo apt install build-essential
