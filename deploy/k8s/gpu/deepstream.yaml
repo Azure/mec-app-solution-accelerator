@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: deepstream
-        image: mecsolutionaccelerator/deepstream:0.1
+        image: mecsolutionaccelerator/deepstream:0.2_amd64
         imagePullPolicy: IfNotPresent
         env:
           - name: MINIOURL
