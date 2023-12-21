@@ -7,7 +7,7 @@ If your PC has attached a NVIDIA GPU card supported by DeepStream toolkit you ca
 
 ## Install NVIDA drivers.
 
-1. Check if you have an NVIDA device.
+1. Check if you have an NVIDIA device.
 
     ```bash
     lspci | grep -i nvidia
