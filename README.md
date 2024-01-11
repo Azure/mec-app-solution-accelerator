@@ -133,8 +133,8 @@ Refer to the following procedure information pages to learn how to deploy this e
 | <img width="250" alt="image" src="https://user-images.githubusercontent.com/1712635/220757242-ee4bc4dc-2e70-4718-bcd6-12a800f84669.png"> | **Deploy application services to [local AKS Edge Essentials](/docs/K8S_AKS_EDGE_ESSENTIALS.MD)** |
 | <img width="270" alt="image" src="https://user-images.githubusercontent.com/1712635/220753221-9bcbaf08-8de8-4064-a1ca-3b78e2dceff4.png"> | **Deploy application services to [local Kubernetes in 'Docker Desktop'](/docs/K8S_IN_DOCKER_DESKTOP_DEPLOYMENT.MD)** |
 | <img width="200" alt="image" src="https://user-images.githubusercontent.com/1712635/220753664-79e9c307-54b8-40d3-8702-9b1d64349284.png"> | **Deploy application services to [local MiniKube](/docs/K8S_MINIKUBE_DEPLOYMENT.MD)** |
-| <img width="190" alt="image" src="docs/imgs/k3s_ubuntu.png"> | **Deploy application services to [local K3s in Ubuntu PC ](/docs/K3S_UBUNTU_DEPLOYMENT.md)** |
-| <img width="190" alt="image" src="docs/imgs/k3s_jetson.png"> | **Deploy application services to [local K3s in NVIDIA Jetson AGX Orin](/docs/K3S_JETSON_AGX_ORIN.md)** |
+| <img width="190" alt="image" src="docs/imgs/k3s_ubuntu.png"> | **Deploy application services to [local K3s in Ubuntu PC ](/docs/K3S_UBUNTU_DEPLOYMENT.MD)** |
+| <img width="190" alt="image" src="docs/imgs/k3s_jetson.png"> | **Deploy application services to [local K3s in NVIDIA Jetson AGX Orin](/docs/K3S_JETSON_AGX_ORIN.MD)** |
 | <img width="190" alt="image" src="https://user-images.githubusercontent.com/1712635/220753942-2d66681c-8560-43bb-9ffc-85a787356549.png"> | **Deploy application services to [Azure Kubernetes Services](/docs/K8S_AKS_DEPLOYMENT.md)** in Azure cloud (Testing in the cloud) |
 | | |
 
