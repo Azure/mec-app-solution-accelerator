@@ -35,6 +35,6 @@
     "url-loader": "^4.1.1"
   },
   "engines": {
-    "node": "20.x"
+    "node": "18.x"
   }
 }
