@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import Papa, { ParseResult } from 'papaparse';
-import { SIM } from './types';
+import { SIM } from '@/models/sim';
 
 interface CSVRow {
   [key: string]: string;

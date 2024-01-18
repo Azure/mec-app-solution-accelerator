@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Modal from "../components/modal/Modal";
-import { Camera, CameraType } from './types';
 import TextInput from '../components/form/TextInput';
 import Close from '../components/icons/Close';
 import Plus from '../components/icons/Plus';
 import ComboBox from '../components/form/ComboBox';
-import { SIM } from '../sims/types';
+import { Camera, CameraType } from '@/models/camera';
+import { SIM } from '@/models/sim';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/stores/store';
+import { addCamera } from '@/stores/cameraSlice';
+import { listSims } from '@/stores/simSlice';
 
 const RTSP_URL_TEMPLATE = "rtsp://{ip}:{port}/{query}";
 const RTSP_MODEL_PORT: { [key: string]: string } = {
@@ -26,6 +30,8 @@ export const AddCameraModal = ({
   show,
   onClose
 }: AddCameraModalProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const sims = useSelector((state: RootState) => state.sims.data);
   const [camera, setCamera] = useState<Partial<Camera>>({});
   const [rtspManual, setRtspManual] = useState(false);
   const showSIMOption = camera.type === CameraType.FiveG ||
@@ -36,6 +42,10 @@ export const AddCameraModal = ({
     setCamera({});
     setRtspManual(false);
   }
+
+  useEffect(() => {
+    dispatch(listSims());
+  }, []);
 
   // Update rtsp uri from previous data
   // We wait until we have at least an IP
@@ -59,6 +69,13 @@ export const AddCameraModal = ({
     onClose={onClose}>
     <form className='mt-9'>
       <div className='mt-4 grid gap-4 items-center grid-cols-[auto_1fr]'>
+        <TextInput label='Id' value={camera.id ?? ''} onChange={(val) => {
+          setCamera({
+            ...camera,
+            id: val,
+          });
+        }} />
+
         <ComboBox label='Type'
           selected={camera.type ?? ''}
           options={Object.values(CameraType)}
@@ -74,11 +91,11 @@ export const AddCameraModal = ({
         {showSIMOption &&
           <ComboBox label='SIM'
             selected={camera.sim?.name ?? ''}
-            options={['SIM 1', 'SIM 2']}
+            options={sims.map(s => s.name)}
             onSelect={(val) => setCamera({
               ...camera,
-              ip: '10.0.0.1',
-              sim: { name: val, ip: '10.0.0.1' } as SIM
+              ip: sims.find(s => s.name == val)?.ip,
+              sim: sims.find(s => s.name == val)
             })} />
         }
 
@@ -115,11 +132,10 @@ export const AddCameraModal = ({
           });
         }} />
 
-        <TextInput label='HLS Uri' value={camera.rtsp ?? ''} onChange={(val) => {
-          setRtspManual(true);
+        <TextInput label='HLS Uri' value={camera.hls ?? ''} onChange={(val) => {
           setCamera({
             ...camera,
-            rtsp: val
+            hls: val
           });
         }} />
       </div>
@@ -137,7 +153,7 @@ export const AddCameraModal = ({
           className='py-2 px-6 border rounded-full flex items-center gap-5 flex-grow justify-center bg-gradient-brand border-none text-black'
           onClick={() => {
             //TODO: validation
-            //TODO: Trigger SIM creation
+            dispatch(addCamera(camera as Camera));
             reset();
             onClose();
           }}>

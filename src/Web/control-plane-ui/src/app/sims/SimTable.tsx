@@ -1,43 +1,35 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from '../components/table/Table';
-import { SIM } from './types';
 import Trash from '../components/icons/Trash';
 import DropdownButton from '../components/dropdown-button/DropdownButton';
-import Modal from '../components/modal/Modal';
 import AddSimModal from './AddSimModal';
+import { SIM } from '@/models/sim';
+import simService from '@/services/simService';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/stores/store';
+import { deleteSim, listSims } from '@/stores/simSlice';
 
 export const SimTable = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const sims = useSelector((state: RootState) => state.sims.data);
   const [showNewSim, setShowNewSim] = useState(false);
   const header = [
     'Name',
     'ICCID',
     'IMSI',
-    'KI',
     'OPC',
     'Options'
   ];
 
-  const sims: SIM[] = [
-    {
-      name: 'SIM Name 1',
-      ICCID: '123456',
-      IMSI: 'OP 1',
-      opc: 'OPC 123',
-      group: 'group1',
-      policy: 'policy1',
-      ki: 'ki',
-    }, {
-      name: 'SIM Name 2',
-      ICCID: '123456',
-      IMSI: 'OP 1',
-      opc: 'OPC 1234',
-      group: 'group1',
-      policy: 'policy1',
-      ki: 'ki',
-    }
-  ];
+  useEffect(() => {
+    dispatch(listSims());
+  }, []);
+
+  const handleDeleteSim = async (sim: SIM) => {
+    dispatch(deleteSim(sim));
+  };
 
   return <div className="bg-gray-500 mt-12 overflow-x-auto relative shadow-md border border-gray-300">
     <div className="pt-6 pb-6 px-16 flex justify-end items-center">
@@ -57,9 +49,10 @@ export const SimTable = () => {
             item.name,
             item.ICCID,
             item.IMSI,
-            item.ki,
             item.opc,
-            <span><Trash className="w-8 h-8" /></span>
+            <span onClick={() => handleDeleteSim(item)}>
+              <Trash className="w-8 h-8 cursor-pointer" />
+            </span>
           ]
         }}
       />

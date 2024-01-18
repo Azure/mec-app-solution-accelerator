@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import Modal from "../components/modal/Modal";
-import { SIM } from './types';
 import TextInput from '../components/form/TextInput';
 import Close from '../components/icons/Close';
 import Plus from '../components/icons/Plus';
 import ComboBox from '../components/form/ComboBox';
 import SimCSVLoader from './SimCSVLoader';
+import { SIM } from '@/models/sim';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/stores/store';
+import { addSim } from '@/stores/simSlice';
 
 export type AddSimModalProps = {
   show: boolean;
@@ -16,6 +19,7 @@ export const AddSimModal = ({
   show,
   onClose
 }: AddSimModalProps) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [sim, setSim] = useState<Partial<SIM>>({});
 
   return (<Modal title='Add new SIM'
@@ -42,6 +46,10 @@ export const AddSimModal = ({
         <TextInput label='ICCID' value={sim.ICCID ?? ''} onChange={(val) => setSim({
           ...sim,
           ICCID: val
+        })} />
+        <TextInput label='IP' value={sim.ip ?? ''} onChange={(val) => setSim({
+          ...sim,
+          ip: val
         })} />
         <TextInput label='Ki' value={sim.ki ?? ''} onChange={(val) => setSim({
           ...sim,
@@ -73,7 +81,7 @@ export const AddSimModal = ({
           className='py-2 px-6 border rounded-full flex items-center gap-5 flex-grow justify-center bg-gradient-brand border-none text-black'
           onClick={() => {
             //TODO: validation
-            //TODO: Trigger SIM creation
+            dispatch(addSim(sim as SIM));
             setSim({});
             onClose();
           }}>

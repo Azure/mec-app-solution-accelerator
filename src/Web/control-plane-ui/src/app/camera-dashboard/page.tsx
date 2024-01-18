@@ -1,19 +1,25 @@
 'use client'
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import PageTitle from '@/app/components/PageTitle'
 import Camera from './Camera';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/stores/store';
+import { listCameras } from '@/stores/cameraSlice';
 
 export default function Home() {
+  const dispatch = useDispatch<AppDispatch>();
+  const cameras = useSelector((state: RootState) => state.cameras.data);
+  useEffect(() => {
+    dispatch(listCameras());
+  }, []);
 
   return (
     <>
       <PageTitle title='Camera Dashboard' />
 
       <div className='mt-12 grid lg:grid-cols-2 gap-4'>
-        <Camera src="http://127.0.0.1:3001/stream.m3u8" />
-        <Camera src="http://127.0.0.1:3001/stream.m3u8" />
-        <Camera src="http://127.0.0.1:3001/stream.m3u8" />
+        {cameras.map(c => <Camera key={c.id} src={c.hls ?? ''} />)}
       </div>
     </>
   )

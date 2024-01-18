@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Sidebar from './components/Sidebar'
+import { Providers } from '@/stores/providers'
+import { Provider } from 'react-redux'
+import { store } from '@/stores/store'
 
 export const metadata: Metadata = {
   title: 'Manager',
@@ -12,16 +15,19 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
-    <html lang="en">
-      <body>
-        <div className="flex min-h-screen h-full overflow-x-auto bg-gray-700">
-          <Sidebar />
-          <div className="flex-grow px-[6rem]">
-            {children}
+    <Providers>
+      <html lang="en">
+        <body>
+          <div className="flex min-h-screen h-full overflow-x-auto bg-gray-700">
+            <Sidebar />
+            <div className="flex-grow px-[6rem]">
+              {children}
+            </div>
           </div>
-        </div>
-      </body>
-    </html>
-  )
+        </body>
+      </html>
+    </Providers>
+  );
 }

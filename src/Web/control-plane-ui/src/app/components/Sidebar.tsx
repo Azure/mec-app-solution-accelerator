@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import React from 'react';
 import { Camera, CameraDash, Dashboard, Sim } from '@/app/components/icons';
+import Link from 'next/link';
 
 export type MenuItemProps = {
   name: string;
@@ -19,7 +20,7 @@ const MenuItem = ({
   const isActive = pathname === path;
 
   return (
-    <a key={path} href={path} className={[
+    <Link key={path} href={path} className={[
       'pl-20',
       'py-4',
       'flex',
@@ -32,7 +33,7 @@ const MenuItem = ({
     ].join(' ')}>
       {icon}
       <span>{name}</span>
-    </a>
+    </Link>
   );
 }
 

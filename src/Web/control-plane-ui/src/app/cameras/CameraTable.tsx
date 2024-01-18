@@ -1,13 +1,17 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from '../components/table/Table';
-import { Camera, CameraType } from './types';
 import Trash from '../components/icons/Trash';
 import AddCameraModal from './AddCameraModal';
 import Plus from '../components/icons/Plus';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/stores/store';
+import { deleteCamera, listCameras } from '@/stores/cameraSlice';
 
 export const CameraTable = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const cameras = useSelector((state: RootState) => state.cameras.data);
   const [showNewCamera, setShowNewCamera] = useState(false);
   const header = [
     'ID',
@@ -19,21 +23,14 @@ export const CameraTable = () => {
     'Options'
   ];
 
-  const sims: Camera[] = [
-    {
-      id: 'Id 1',
-      model: 'Model 1',
-      type: CameraType.FiveG,
-      ip: '10.0.0.1',
-      port: '1234',
-    }, {
-      id: 'Id 2',
-      model: 'Model 2',
-      type: CameraType.FiveG,
-      ip: '10.0.0.1',
-      port: '1234',
-    }
-  ];
+  useEffect(() => {
+    dispatch(listCameras());
+  }, []);
+
+  const handleDeleteCamera = async (cameraId: string) => {
+    dispatch(deleteCamera(cameraId));
+  };
+
 
   return <div className="bg-gray-500 mt-12 overflow-x-auto relative shadow-md border border-gray-300 sm:rounded-lg">
     <div className="pt-6 pb-6 px-16 flex justify-end items-center">
@@ -50,7 +47,7 @@ export const CameraTable = () => {
     <div className='box-border px-16 pb-16'>
       <Table
         headers={header}
-        items={sims}
+        items={cameras}
         itemToRow={(item) => {
           return [
             item.id,
@@ -59,7 +56,9 @@ export const CameraTable = () => {
             item.type.toString(),
             item.ip,
             item.port,
-            <span><Trash className="w-8 h-8" /></span>
+            <span onClick={() => handleDeleteCamera(item.id)}>
+              <Trash className="w-8 h-8 cursor-pointer" />
+            </span>
           ]
         }}
       />
