@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  control-plane-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - MobileNetwork__SubscriptionId=${MOBILENETWORK__SUBSCRIPTION_ID}
+      - MobileNetwork__ResourceGroup=${MOBILENETWORK__RESOURCE_GROUP}
+      - MobileNetwork__Name=${MOBILENETWORK__NAME}
+      - MobileNetwork__DataNetwork=${MOBILENETWORK__DATANETWORK}
+      - MobileNetwork__Slice=${MOBILENETWORK__SLICE}
+      - ClientCredentials__TenantId=${CLIENTCREDENTIALS__TENANT_ID}
+      - ClientCredentials__ClientId=${CLIENTCREDENTIALS__CLIENT_ID}
+      - ClientCredentials__ClientSecret=${CLIENTCREDENTIALS__CLIENT_SECRET}
+      - MongoDB__ConnectionString=mongodb://mongodb:27017
+      - MongoDB__DatabaseName=control_plane_db
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
