@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: control-plane-ui-deployment
+  namespace: mec-accelerator
+spec:
+  selector:
+    matchLabels:
+      app: control-plane-ui
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: control-plane-ui
+    spec:
+      containers:
+      - name: control-plane-ui
+        image: control-plane-ui:v1
+        ports:
+        - containerPort: 3000
+        env:
+          - name: API_URL
+            # This needs to be the the public API endpoint
+            value: "http://localhost:89"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: control-plane-ui-service
+  namespace: mec-accelerator
+spec:
+  selector:
+    app: control-plane-ui
+  ports:
+  - protocol: TCP
+    port: 90
+    targetPort: 3000
+  type: LoadBalancer

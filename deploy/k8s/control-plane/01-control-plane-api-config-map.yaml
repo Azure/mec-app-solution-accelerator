@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: control-plane-api-config
+  namespace: mec-accelerator
+data:
+  MobileNetwork__SubscriptionId: "your_subscription_id"
+  MobileNetwork__ResourceGroup: "your_resource_group"
+  MobileNetwork__Name: "your_network_name"
+  MobileNetwork__DataNetwork: "your_datanetwork"
+  MobileNetwork__Slice: "your_slice"
+  ClientCredentials__TenantId: "your_tenant_id"
+  ClientCredentials__ClientId: "your_client_id"
+  ClientCredentials__ClientSecret: "your_client_secret"
+
