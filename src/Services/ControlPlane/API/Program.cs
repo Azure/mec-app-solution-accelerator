@@ -35,7 +35,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-builder.Services.AddSingleton(sp =>
+builder.Services.AddScoped(sp =>
 {
     var settings = sp.GetRequiredService<IOptions<ClientCredentialsSettings>>().Value;
     return new ClientApplicationHttpClientHandler(ConfidentialClientApplicationBuilder

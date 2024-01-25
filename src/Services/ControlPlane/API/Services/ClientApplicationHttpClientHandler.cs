@@ -6,9 +6,10 @@ public class ClientApplicationHttpClientHandler : HttpClientHandler
 {
     private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
     private static int MINUTES_BEFORE_REFRESH = 5;
+    private static AuthenticationResult _cachedTokenResult;
+
     private readonly IConfidentialClientApplication _clientApp;
     private readonly string[] _scopes;
-    private AuthenticationResult _cachedTokenResult;
 
     public ClientApplicationHttpClientHandler(IConfidentialClientApplication clientApp, string[] scopes)
     {
