@@ -1,42 +1,62 @@
-import { SIM } from '@/models/sim';
+import { SIM, SimGroup } from '@/models/sim';
 
 class SimService {
-    private sims: SIM[] = [
-        {
-            name: 'SIM1',
-            ICCID: '8912345678901234566',
-            IMSI: '001019990010001',
-            opc: '63bfa50ee6523365ff14c1f45f88737d',
-            group: 'group1',
-            policy: 'policy1',
-            ki: 'ki',
-            ip: '10.0.0.1'
-        }, {
-            name: 'SIM2',
-            ICCID: '8922345678901234567',
-            IMSI: '001019990010002',
-            opc: '63bfa50ee6523365ff14c1f45f88738d',
-            group: 'group1',
-            policy: 'policy1',
-            ki: 'ki',
-            ip: '10.0.0.2'
+    private _apiUrl: string = "";
+
+    async getApiUrl() {
+        if (!this._apiUrl) {
+            const response = await fetch('/api/config');
+            const data = await response.json();
+            this._apiUrl = data.API_URL as string;
         }
-    ];
+        return this._apiUrl;
+    }
 
     public async listSims(): Promise<SIM[]> {
-        return this.sims;
+        const apiUrl = await this.getApiUrl();
+        const response = await fetch(`${apiUrl}/api/v1/sims`);
+        const sims = await response.json() as SIM[];
+        console.log(sims);
+        return sims;
+    }
+
+    public async listSimGroups(): Promise<SimGroup[]> {
+        const apiUrl = await this.getApiUrl();
+        const response = await fetch(`${apiUrl}/api/v1/simGroups`);
+        const groups = await response.json() as SimGroup[];
+        return groups;
+    }
+
+    public async listSimPolicies(): Promise<SimGroup[]> {
+        const apiUrl = await this.getApiUrl();
+        const response = await fetch(`${apiUrl}/api/v1/simPolicies`);
+        const groups = await response.json() as SimGroup[];
+        return groups;
     }
 
     public async createSim(sim: SIM): Promise<SIM> {
-        this.sims = [...this.sims, sim];
+        const apiUrl = await this.getApiUrl();
+        const response = await fetch(`${apiUrl}/api/v1/sims`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(sim)
+        });
         return sim;
     }
 
     public async deleteSim(sim: SIM): Promise<boolean> {
-        const indexToDelete = this.sims.findIndex(c => c.ICCID === sim.ICCID);
-        if (indexToDelete === -1) return false;
-        this.sims = [...this.sims.filter((_, index) => indexToDelete !== index)];
-        return true;
+        const apiUrl = await this.getApiUrl();
+        const queryParams = new URLSearchParams({
+            group: sim.groupId
+        });
+
+        const response = await fetch(`${apiUrl}/api/v1/sims/${sim.name}?${queryParams}`, {
+            method: 'DELETE'
+        });
+
+        return response.ok;
     }
 }
 

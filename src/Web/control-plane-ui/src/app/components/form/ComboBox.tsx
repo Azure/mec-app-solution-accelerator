@@ -4,9 +4,14 @@ import ChevronUp from '../icons/ChevronUp';
 
 interface ComboBoxProps {
   label: string;
-  options: string[];
+  options: ComboBoxOption[];
   selected: string | null;
-  onSelect: (option: string) => void;
+  onSelect: (option: ComboBoxOption) => void;
+}
+
+export type ComboBoxOption = {
+  id: string;
+  name: string;
 }
 
 export const ComboBox = ({
@@ -23,7 +28,7 @@ export const ComboBox = ({
     setIsOpen(!isOpen);
   };
 
-  const handleSelect = (option: string) => {
+  const handleSelect = (option: ComboBoxOption) => {
     onSelect(option);
     setIsOpen(false);
   };
@@ -42,14 +47,14 @@ export const ComboBox = ({
 
   return (
     <>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-300">{label}</label>
+      <label htmlFor={id} className="block text-m font-medium text-gray-100">{label}</label>
       <div id={id} className="relative block w-full shadow-sm sm:text-sm rounded-md bg-gray-700 text-white focus:border-transparent focus:ring-0 focus:outline-none" ref={wrapperRef}>
         <button
           type="button"
           className="flex justify-between items-center text-white font-semibold w-full text-left pl-4"
           onClick={handleToggle}
         >
-          <span>{selected}</span>
+          <span>{options.find(option => option.id === selected)?.name ?? ''}</span>
           <span className='py-3 px-4 bg-gray-900'>
             {isOpen ? <ChevronUp className='w-6 h-6' /> : <ChevronDown className='w-6 h-6' />}
           </span>
@@ -62,7 +67,7 @@ export const ComboBox = ({
                 className="cursor-pointer p-2 text-gray-900"
                 onClick={() => handleSelect(option)}
               >
-                {option}
+                {option.name}
               </li>
             ))}
           </ul>

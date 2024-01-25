@@ -12,7 +12,7 @@ export type TableProps<TData extends object> = {
     itemToRow?: (item: TData) => TableRow;
 };
 
-const defaultItemToRow = <TData extends object,>(item: TData) : TableRow => {
+const defaultItemToRow = <TData extends object,>(item: TData): TableRow => {
     return Object.values(item) as JSX.Element[];
 }
 
@@ -22,12 +22,13 @@ export const Table = <TData extends object,>({
     itemToRow
 }: TableProps<TData>) => {
     const renderRow = (item: TData, id: number): JSX.Element => {
-        const row = itemToRow? itemToRow(item) : defaultItemToRow(item);
+        const row = itemToRow ? itemToRow(item) : defaultItemToRow(item);
         return (<tr key={id} className="group hover:bg-gradient-to-r from-[#0DC5B8] to-[#28D890]">
             {row.map((value, index) => {
                 return (<td key={`${id}-${index}`} className="py-4 px-6 border-gray-400 border first:border-l-0 last:border-r-0 group-hover:border-x-0">
                     {value}
-                </td>)})}
+                </td>)
+            })}
         </tr>);
     }
 
@@ -35,16 +36,16 @@ export const Table = <TData extends object,>({
         <table className="w-full text-sm text-left text-white">
             <thead className="">
                 <tr className=''>
-                {headers.map((headerCell, index) => 
-                    <th key={index} scope="col" className="py-3 px-6 border-gray-400 border first:border-l-0 last:border-r-0">
-                        {headerCell}
-                    </th>)}
+                    {headers.map((headerCell, index) =>
+                        <th key={index} scope="col" className="py-3 px-6 font-bold text-lg text-nowrap border-gray-400 border first:border-l-0 last:border-r-0">
+                            {headerCell}
+                        </th>)}
                 </tr>
             </thead>
-        <tbody>  
-            {/* TODO: Pagination */}
-            {items.map((item, index) => renderRow(item, index))}
-        </tbody>
+            <tbody>
+                {/* TODO: Pagination */}
+                {items.map((item, index) => renderRow(item, index))}
+            </tbody>
         </table>
         {/* Pagination or other controls */}
     </>)

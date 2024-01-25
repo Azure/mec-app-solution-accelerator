@@ -1,38 +1,50 @@
 import { Camera, CameraType } from '@/models/camera';
 
 class CameraService {
-    private cameras: Camera[] = [
-        {
-            id: 'Id 1',
-            model: 'Model 1',
-            type: CameraType.FiveG,
-            ip: '10.0.0.1',
-            port: '1234',
-            hls: 'http://127.0.0.1:3001/stream.m3u8',
-        }, {
-            id: 'Id 2',
-            model: 'Model 2',
-            type: CameraType.FiveG,
-            ip: '10.0.0.1',
-            port: '1234',
-            hls: 'http://127.0.0.1:3001/stream.m3u8',
-        }
-    ];
+    private _apiUrl: string = "";
 
+    async getApiUrl() {
+        if (!this._apiUrl) {
+            const response = await fetch('api/config');
+            console.log(response);
+            const data = await response.json();
+            console.log(data);
+            this._apiUrl = data.API_URL as string;
+        }
+        return this._apiUrl;
+    }
     public async listCameras(): Promise<Camera[]> {
-        return this.cameras;
+        const apiUrl = await this.getApiUrl();
+        const response = await fetch(`${apiUrl}/api/v1/cameras`);
+        const cameras = await response.json() as Camera[];
+        console.log(cameras);
+        return cameras;
     }
 
     public async createCamera(camera: Camera): Promise<Camera> {
-        this.cameras = [...this.cameras, camera];
-        return camera;
+        const apiUrl = await this.getApiUrl();
+        const response = await fetch(`${apiUrl}/api/v1/cameras`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(camera),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to create camera');
+        }
+
+        return await response.json() as Camera;
     }
 
     public async deleteCamera(cameraId: string): Promise<boolean> {
-        const indexToDelete = this.cameras.findIndex(c => c.id === cameraId);
-        if (indexToDelete === -1) return false;
-        this.cameras = [...this.cameras.filter((_, index) => indexToDelete !== index)];
-        return true;
+        const apiUrl = await this.getApiUrl();
+        const response = await fetch(`${apiUrl}/api/v1/cameras/${cameraId}`, {
+            method: 'DELETE',
+        });
+
+        return response.ok;
     }
 }
 

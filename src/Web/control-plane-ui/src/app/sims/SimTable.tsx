@@ -6,7 +6,6 @@ import Trash from '../components/icons/Trash';
 import DropdownButton from '../components/dropdown-button/DropdownButton';
 import AddSimModal from './AddSimModal';
 import { SIM } from '@/models/sim';
-import simService from '@/services/simService';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/stores/store';
 import { deleteSim, listSims } from '@/stores/simSlice';
@@ -17,9 +16,8 @@ export const SimTable = () => {
   const [showNewSim, setShowNewSim] = useState(false);
   const header = [
     'Name',
-    'ICCID',
     'IMSI',
-    'OPC',
+    'IP',
     'Options'
   ];
 
@@ -47,9 +45,8 @@ export const SimTable = () => {
         itemToRow={(item) => {
           return [
             item.name,
-            item.ICCID,
-            item.IMSI,
-            item.opc,
+            item.imsi,
+            item.ip ?? '',
             <span onClick={() => handleDeleteSim(item)}>
               <Trash className="w-8 h-8 cursor-pointer" />
             </span>

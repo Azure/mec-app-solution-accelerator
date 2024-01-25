@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from "../components/modal/Modal";
 import TextInput from '../components/form/TextInput';
 import Close from '../components/icons/Close';
@@ -6,9 +6,9 @@ import Plus from '../components/icons/Plus';
 import ComboBox from '../components/form/ComboBox';
 import SimCSVLoader from './SimCSVLoader';
 import { SIM } from '@/models/sim';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/stores/store';
-import { addSim } from '@/stores/simSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/stores/store';
+import { addSim, listSimGroups, listSimPolicies } from '@/stores/simSlice';
 
 export type AddSimModalProps = {
   show: boolean;
@@ -21,6 +21,13 @@ export const AddSimModal = ({
 }: AddSimModalProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [sim, setSim] = useState<Partial<SIM>>({});
+  const simGroups = useSelector((state: RootState) => state.sims.simGroups);
+  const simPolicies = useSelector((state: RootState) => state.sims.simPolicies);
+
+  useEffect(() => {
+    dispatch(listSimGroups());
+    dispatch(listSimPolicies());
+  }, []);
 
   return (<Modal title='Add new SIM'
     isOpen={show}
@@ -39,13 +46,13 @@ export const AddSimModal = ({
           ...sim,
           name: val
         })} />
-        <TextInput label='IMSI' value={sim.IMSI ?? ''} onChange={(val) => setSim({
+        <TextInput label='IMSI' value={sim.imsi ?? ''} onChange={(val) => setSim({
           ...sim,
-          IMSI: val
+          imsi: val
         })} />
-        <TextInput label='ICCID' value={sim.ICCID ?? ''} onChange={(val) => setSim({
+        <TextInput label='ICCID' value={sim.iccid ?? ''} onChange={(val) => setSim({
           ...sim,
-          ICCID: val
+          iccid: val
         })} />
         <TextInput label='IP' value={sim.ip ?? ''} onChange={(val) => setSim({
           ...sim,
@@ -60,11 +67,18 @@ export const AddSimModal = ({
           opc: val
         })} />
         <ComboBox label='Group'
-          selected={sim.group ?? ''}
-          options={['Option 1', 'Option 2']}
+          selected={sim.groupId ?? ''}
+          options={simGroups.map(x => ({ id: x.id, name: x.name }))}
           onSelect={(val) => setSim({
             ...sim,
-            group: val
+            groupId: val.id
+          })} />
+        <ComboBox label='Policy'
+          selected={sim.policyId ?? ''}
+          options={simPolicies.map(x => ({ id: x.id, name: x.name }))}
+          onSelect={(val) => setSim({
+            ...sim,
+            policyId: val.id
           })} />
       </div>
       <div className='flex flex-row gap-10 mt-9 '>

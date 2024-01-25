@@ -27,8 +27,8 @@ const SimCSVLoader = ({
         if (result.data.length >= 1) {
           onSimLoaded({
             name: result.data[0]['name'],
-            IMSI: result.data[0]['imsi'],
-            ICCID: result.data[0]['iccid'],
+            imsi: result.data[0]['imsi'],
+            iccid: result.data[0]['iccid'],
             ki: result.data[0]['ki'],
             opc: result.data[0]['opc'],
           });

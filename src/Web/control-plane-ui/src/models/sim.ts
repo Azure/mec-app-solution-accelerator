@@ -1,10 +1,20 @@
 export type SIM = {
     name: string;
-    IMSI: string;
-    ICCID: string;
+    imsi: string;
+    iccid: string;
     ki: string;
     opc: string;
     ip?: string;
-    policy: string;
-    group: string;
+    policyId?: string;
+    groupId: string;
+}
+
+export type SimGroup = {
+    id: string;
+    name: string;
+}
+
+export type SimPolicy = {
+    id: string;
+    name: string;
 }

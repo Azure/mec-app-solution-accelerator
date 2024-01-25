@@ -14,7 +14,7 @@ export type Camera = {
     type: CameraType;
     ip: string;
     port: string;
-    sim?: SIM;
+    simId?: string;
     rtsp?: string;
     hls?: string;
 }

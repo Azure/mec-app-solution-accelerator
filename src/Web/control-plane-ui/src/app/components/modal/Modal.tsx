@@ -26,7 +26,7 @@ const Modal = ({
           <Close className='w-6 h-6' />
         </div>
         <div className="m-16 text-left">
-          {title && <h3 className="text-lg leading-6 font-medium text-white">{title}</h3>}
+          {title && <h3 className="text-2xl leading-6 font-medium text-white">{title}</h3>}
           {children}
         </div>
       </div>

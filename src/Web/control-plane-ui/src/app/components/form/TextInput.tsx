@@ -14,7 +14,7 @@ export const TextInput = ({
   const id = useId();
 
   return (<>
-    <label htmlFor={id} className="block text-sm font-medium text-gray-300">{label}</label>
+    <label htmlFor={id} className="block text-m font-medium text-gray-100">{label}</label>
     <input
       type="text"
       name={id}

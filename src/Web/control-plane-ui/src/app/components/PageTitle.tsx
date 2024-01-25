@@ -9,7 +9,7 @@ const PageTitle = ({
 }: PageTitleProps) => {
   return (
     <header className="mt-[6rem] flex justify-between items-center">
-      <h1 className="font-oxygen text-xl text-white">{title}</h1>
+      <h1 className="font-oxygen text-2xl text-white">{title}</h1>
     </header>
   );
 };

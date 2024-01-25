@@ -5,7 +5,6 @@ import Close from '../components/icons/Close';
 import Plus from '../components/icons/Plus';
 import ComboBox from '../components/form/ComboBox';
 import { Camera, CameraType } from '@/models/camera';
-import { SIM } from '@/models/sim';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/stores/store';
 import { addCamera } from '@/stores/cameraSlice';
@@ -13,12 +12,12 @@ import { listSims } from '@/stores/simSlice';
 
 const RTSP_URL_TEMPLATE = "rtsp://{ip}:{port}/{query}";
 const RTSP_MODEL_PORT: { [key: string]: string } = {
-  'Model1': '8554',
-  'Model2': '8554'
+  'Xingtera XTEE5021': '554',
+  'RTSP Stream Container': '8554'
 };
 const RTSP_MODEL_QUERY: { [key: string]: string } = {
-  'Model1': 'model1',
-  'Model2': 'model2'
+  'Xingtera XTEE5021': 'main',
+  'RTSP Stream Container': 'video'
 };
 
 export type AddCameraModalProps = {
@@ -78,24 +77,24 @@ export const AddCameraModal = ({
 
         <ComboBox label='Type'
           selected={camera.type ?? ''}
-          options={Object.values(CameraType)}
+          options={Object.values(CameraType).map(x => ({ id: x, name: x }))}
           onSelect={(val) => {
-            if ((Object.values(CameraType) as string[]).includes(val)) {
+            if ((Object.values(CameraType) as string[]).includes(val.id)) {
               setCamera({
                 ...camera,
-                type: val as CameraType
+                type: val.id as CameraType
               });
             }
           }} />
 
         {showSIMOption &&
           <ComboBox label='SIM'
-            selected={camera.sim?.name ?? ''}
-            options={sims.map(s => s.name)}
+            selected={camera.simId ?? ''}
+            options={sims.map(s => ({ id: s.name, name: s.name }))}
             onSelect={(val) => setCamera({
               ...camera,
-              ip: sims.find(s => s.name == val)?.ip,
-              sim: sims.find(s => s.name == val)
+              ip: sims.find(s => s.name == val.name)?.ip,
+              simId: val.id
             })} />
         }
 
@@ -108,21 +107,17 @@ export const AddCameraModal = ({
 
         <ComboBox label='Model'
           selected={camera.model ?? ''}
-          options={['Model1', 'Model2']}
+          options={[
+            { id: 'Xingtera XTEE5021', name: 'Xingtera XTEE5021' },
+            { id: 'RTSP Stream Container', name: 'RTSP Stream Container' },
+          ]}
           onSelect={(val) => {
             setCamera({
               ...camera,
-              model: val,
-              port: RTSP_MODEL_PORT[val] ?? camera.port
+              model: val.id,
+              port: RTSP_MODEL_PORT[val.id] ?? camera.port
             })
           }} />
-
-        <TextInput label='Port' value={camera.port ?? ''} onChange={(val) => {
-          setCamera({
-            ...camera,
-            port: val,
-          });
-        }} />
 
         <TextInput label='RTSP Uri' value={camera.rtsp ?? ''} onChange={(val) => {
           setRtspManual(true);

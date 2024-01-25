@@ -8,9 +8,11 @@ import Plus from '../components/icons/Plus';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/stores/store';
 import { deleteCamera, listCameras } from '@/stores/cameraSlice';
+import { listSims } from '@/stores/simSlice';
 
 export const CameraTable = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const sims = useSelector((state: RootState) => state.sims.data);
   const cameras = useSelector((state: RootState) => state.cameras.data);
   const [showNewCamera, setShowNewCamera] = useState(false);
   const header = [
@@ -24,6 +26,7 @@ export const CameraTable = () => {
   ];
 
   useEffect(() => {
+    dispatch(listSims());
     dispatch(listCameras());
   }, []);
 
@@ -52,7 +55,7 @@ export const CameraTable = () => {
           return [
             item.id,
             item.model,
-            item.sim?.name ?? '',
+            item.simId ?? '',
             item.type.toString(),
             item.ip,
             item.port,
