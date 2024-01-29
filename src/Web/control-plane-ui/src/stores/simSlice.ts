@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, RootState } from './store';
 import { SIM, SimGroup, SimPolicy } from '@/models/sim';
-import simService from '@/services/simService';
+import { ServiceFactory } from '@/services/ServiceFactory';
 
 interface SimState {
     data: SIM[];
@@ -21,7 +21,8 @@ const initialState: SimState = {
 
 export const addSim = createAsyncThunk<SIM, SIM, { dispatch: AppDispatch, state: RootState }>(
     'sims/addSim',
-    async (sim: SIM, { dispatch }): Promise<SIM> => {
+    async (sim: SIM, { dispatch, getState }): Promise<SIM> => {
+        const simService = ServiceFactory.getSimService(getState().settings);
         const response = await simService.createSim(sim);
         dispatch(listSims());
         return response;
@@ -30,16 +31,17 @@ export const addSim = createAsyncThunk<SIM, SIM, { dispatch: AppDispatch, state:
 
 export const listSims = createAsyncThunk<SIM[], void, { state: RootState }>(
     'sims/listSims',
-    async (): Promise<SIM[]> => {
+    async (_, { getState }): Promise<SIM[]> => {
+        const simService = ServiceFactory.getSimService(getState().settings);
         const response = await simService.listSims();
-
         return response;
     }
 );
 
 export const listSimGroups = createAsyncThunk<SimGroup[], void, { state: RootState }>(
     'sims/listSimGroups',
-    async (): Promise<SimGroup[]> => {
+    async (_, { getState }): Promise<SimGroup[]> => {
+        const simService = ServiceFactory.getSimService(getState().settings);
         const response = await simService.listSimGroups();
         return response;
     }
@@ -47,7 +49,8 @@ export const listSimGroups = createAsyncThunk<SimGroup[], void, { state: RootSta
 
 export const listSimPolicies = createAsyncThunk<SimPolicy[], void, { state: RootState }>(
     'sims/listSimPolicies',
-    async (): Promise<SimPolicy[]> => {
+    async (_, { getState }): Promise<SimPolicy[]> => {
+        const simService = ServiceFactory.getSimService(getState().settings);
         const response = await simService.listSimPolicies();
         return response;
     }
@@ -59,8 +62,9 @@ export const deleteSim = createAsyncThunk<
     { dispatch: AppDispatch, state: RootState }
 >(
     'sims/deleteSim',
-    async (sim: SIM, { rejectWithValue }) => {
+    async (sim: SIM, { getState, rejectWithValue }) => {
         try {
+            const simService = ServiceFactory.getSimService(getState().settings);
             const response = await simService.deleteSim(sim);
             if (response) {
                 return sim;

@@ -2,8 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Sidebar from './components/Sidebar'
 import { Providers } from '@/stores/providers'
-import { Provider } from 'react-redux'
-import { store } from '@/stores/store'
+import SettingsControl from './components/settings/SettingsControl'
 
 export const metadata: Metadata = {
   title: 'Manager',
@@ -22,6 +21,7 @@ export default function RootLayout({
         <body>
           <div className="flex min-h-screen h-full overflow-x-auto bg-gray-700">
             <Sidebar />
+            <SettingsControl />
             <div className="flex-grow px-[6rem]">
               {children}
             </div>

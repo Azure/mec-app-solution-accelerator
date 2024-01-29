@@ -1,3 +1,5 @@
+'use client'
+
 import Icon from '@/assets/icons/CameraDash.svg';
 import { IconProps } from './type';
 

@@ -1,9 +1,10 @@
-import { SIM } from '@/models/sim';
+import { SIM, SimGroup, SimPolicy } from '@/models/sim';
+import ISimService from './SimService';
 
-class SimService {
+class SimInMemoryService implements ISimService {
     private sims: SIM[] = [
         {
-            name: 'SIM1',
+            name: 'SIM-001',
             iccid: '8912345678901234566',
             imsi: '001019990010001',
             opc: '63bfa50ee6523365ff14c1f45f88737d',
@@ -12,7 +13,7 @@ class SimService {
             ki: 'ki',
             ip: '10.0.0.1'
         }, {
-            name: 'SIM2',
+            name: 'SIM-002',
             iccid: '8922345678901234567',
             imsi: '001019990010002',
             opc: '63bfa50ee6523365ff14c1f45f88738d',
@@ -38,6 +39,19 @@ class SimService {
         this.sims = [...this.sims.filter((_, index) => indexToDelete !== index)];
         return true;
     }
+
+    public async listSimGroups(): Promise<SimGroup[]> {
+        return ['DefaultSimGroup', 'CameraSimGroup'].map(x => ({
+            id: x,
+            name: x
+        }));
+    }
+    public async listSimPolicies(): Promise<SimPolicy[]> {
+        return ['DefaultPolicy', 'CameraPolicy'].map(x => ({
+            id: x,
+            name: x
+        }));
+    }
 }
 
-export default new SimService();
+export default SimInMemoryService;

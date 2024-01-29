@@ -1,6 +1,7 @@
 import { Camera, CameraType } from '@/models/camera';
+import { ICameraService } from './CameraService';
 
-class CameraService {
+class CameraInMemoryService implements ICameraService {
     private cameras: Camera[] = [
         {
             id: 'Id 1',
@@ -36,5 +37,4 @@ class CameraService {
     }
 }
 
-const cameraService = new CameraService();
-export default cameraService;
+export default CameraInMemoryService;

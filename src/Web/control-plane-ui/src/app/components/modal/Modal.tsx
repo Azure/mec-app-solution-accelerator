@@ -19,7 +19,7 @@ const Modal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full" id="my-modal">
+    <div className="z-50 fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full" id="my-modal">
       <div className="relative top-36 mx-auto w-full max-w-[44rem] shadow-lg rounded-md  bg-gray-500 text-white border border-gray-300">
         <div className='absolute right-4 top-4'
           onClick={() => onClose()}>

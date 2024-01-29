@@ -1,12 +1,12 @@
 'use client'
 
-import Icon from '@/assets/icons/ChevronDown.svg';
+import Icon from '@/assets/icons/Settings.svg';
 import { IconProps } from './type';
 
-export const ChevronDown = ({
+export const Settings = ({
   className
 }: IconProps) => {
   return <Icon className={className} />
 }
 
-export default ChevronDown;
+export default Settings;

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Camera } from '@/models/camera';
 import { AppDispatch, RootState } from './store';
-import cameraService from '@/services/CameraService';
+import { ServiceFactory } from '@/services/ServiceFactory';
 
 // Define a type for the slice state
 interface CameraState {
@@ -19,7 +19,8 @@ const initialState: CameraState = {
 
 export const addCamera = createAsyncThunk<Camera, Camera, { dispatch: AppDispatch, state: RootState }>(
     'cameras/addCamera',
-    async (camera: Camera, { dispatch }): Promise<Camera> => {
+    async (camera: Camera, { getState, dispatch }): Promise<Camera> => {
+        const cameraService = ServiceFactory.getCameraService(getState().settings);
         const response = await cameraService.createCamera(camera);
         dispatch(listCameras());
         return response;
@@ -28,7 +29,8 @@ export const addCamera = createAsyncThunk<Camera, Camera, { dispatch: AppDispatc
 
 export const listCameras = createAsyncThunk<Camera[], void, { state: RootState }>(
     'cameras/listCameras',
-    async (): Promise<Camera[]> => {
+    async (_, { getState }): Promise<Camera[]> => {
+        const cameraService = ServiceFactory.getCameraService(getState().settings);
         const response = await cameraService.listCameras();
 
         return response;
@@ -41,8 +43,9 @@ export const deleteCamera = createAsyncThunk<
     { dispatch: AppDispatch, state: RootState }
 >(
     'cameras/deleteCamera',
-    async (cameraId: string, { dispatch, rejectWithValue }) => {
+    async (cameraId: string, { getState, dispatch, rejectWithValue }) => {
         try {
+            const cameraService = ServiceFactory.getCameraService(getState().settings);
             const response = await cameraService.deleteCamera(cameraId);
             if (response) {
                 dispatch(listCameras());
