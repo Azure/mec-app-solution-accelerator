@@ -34,9 +34,9 @@ Once you have installed Docker Desktop, enable Kubernetes by following these ins
 
 ## (Optional) Instructions for building your own Docker Images to deploy to Kubernetes
 
-You can directly deploy to Kubernetes and test the images we have already uploaded into Docker Hub, so creating your own Docker images and uploading to Docker Hub is optional, initially.
+This step is optional because you can directly deploy the application Docker images we already have available at the Docker registry (Docker Hub: https://hub.docker.com/).
 
-However, if you make changes in the code or you want to use your own Docker Images for any reason, you'd need to create your own Docker images and upload the images first to Docker Hub before deploying to Kubernetes. 
+However, if you make changes in the source code or you want to use your own Docker Images for any reason, you'd need to create your own Docker images and upload the images first to Docker Hub before deploying to Kubernetes. 
 
 Use these instructions to [Buil your own Docker Images to upload to Docker Registry and deploy to Kubernetes](./BUILD_AND_PUSH_IMAGES_TO_DOCKER_HUB.MD)
 
