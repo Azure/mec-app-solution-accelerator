@@ -91,7 +91,7 @@ This commnad should output the NVIDA GPU brand model like this:
     (Optional) Install the experimental NVIDIA Container Toolkit repository.
 
     ```bash
-    sed -i -e '/experimental/ s/^#//g' /etc/apt/sources.list.d nvidia-container-toolkit.list
+    sed -i -e '/experimental/ s/^#//g' /etc/apt/sources.list.d/nvidia-container-toolkit.list
     ```
 
     Update the Apt repository cache:
@@ -234,7 +234,7 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
 
     GPU support (NVIDIA Deepstream implementation)
 
-    **Note:** The DeepStream docker image size is more than **10GB**, ``kubelet`` could fail pulling big images if it is not configured for this purpose. Instead of change the ``kubelet`` default configuration you can pull the DeepStream image with ``Docker CLI`` and then execute the gpu deployment.
+    > **Note:** The DeepStream docker image size is more than **10GB**, ``kubelet`` could fail pulling big images if it is not configured for this purpose. Instead of change the ``kubelet`` default configuration you can pull the DeepStream image with ``Docker CLI`` and then execute the gpu deployment.
 
     ```bash
     docker pull mecsolutionaccelerator/deepstream:0.2_amd64
