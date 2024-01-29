@@ -1,24 +1,3 @@
-/*
- * Copyright (c) 2018-2019, NVIDIA CORPORATION. All rights reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- */
 #ifndef __PARSER_YOLOAUTOML_H__
 #define __PARSER_YOLOAUTOML_H__
 
@@ -27,28 +6,17 @@
 #include <iostream>
 #include "nvdsinfer_custom_impl.h"
 #include "nvdsmeta.h"
-
-// #include "nvdssample_fasterRCNN_common.h"
+#include <vector>
+#include <algorithm>
+#include <omp.h>
 
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 #define CLIP(a,min,max) (MAX(MIN(a, max), min))
 
-/* This is a sample bounding box parsing function for the sample FasterRCNN
- * detector model provided with the TensorRT samples. */
-#include <vector>
-#include <algorithm>
-
-/* C-linkage to prevent name-mangling */
-
-
-
-
-
 extern "C" bool ParserCustomAutoML (std::vector<NvDsInferLayerInfo> const& outputLayersInfo, NvDsInferNetworkInfo const& networkInfo,
     NvDsInferParseDetectionParams const& detectionParams, std::vector<NvDsInferObjectDetectionInfo>& objectList)
 {
-
   static int outputLayerIndex = -1;
   static const int NUM_CLASSES = 1;
   static bool classMismatchWarn = false;
@@ -56,11 +24,8 @@ extern "C" bool ParserCustomAutoML (std::vector<NvDsInferLayerInfo> const& outpu
   size_t count;
   objectList.clear();
   std::vector<NvDsInferObjectDetectionInfo> detections;
-  
 
-  for (unsigned int i = 0; i < outputLayersInfo.size(); i++) {
-    
-  }
+  // Find output layer index only once
   if (outputLayerIndex == -1) {
     for (unsigned int i = 0; i < outputLayersInfo.size(); i++) {
       if (strcmp(outputLayersInfo[i].layerName, "output") == 0) {
@@ -69,73 +34,57 @@ extern "C" bool ParserCustomAutoML (std::vector<NvDsInferLayerInfo> const& outpu
       }
     }
     if (outputLayerIndex == -1) {
-    std::cerr << "Could not find output layer buffer while parsing" << std::endl;
-    return false;
+      std::cerr << "Could not find output layer buffer while parsing" << std::endl;
+      return false;
     }
   }
 
-	
-  auto layerFinder = [&outputLayersInfo](const std::string &name)
-      -> const NvDsInferLayerInfo *{
-      for (auto &layer : outputLayersInfo) {
-          if (layer.dataType == FLOAT &&
-            (layer.layerName && name == layer.layerName)) {
-              return &layer;
-          }
-      }
-      return nullptr;
-  };
+  const NvDsInferLayerInfo *outputLayer = &outputLayersInfo[outputLayerIndex];
+  count = outputLayer->inferDims.numElements / 6;
+  float *data = static_cast<float*>(outputLayer->buffer);
 
-
-  if (!classMismatchWarn) {
-    if (NUM_CLASSES !=
-        detectionParams.numClassesConfigured) {
-      std::cerr << "WARNING: Num classes mismatch. Configured:" <<
-        detectionParams.numClassesConfigured << ", detected by network: " <<
-        NUM_CLASSES << std::endl;
-    }
+  if (!classMismatchWarn && NUM_CLASSES != detectionParams.numClassesConfigured) {
+    std::cerr << "WARNING: Num classes mismatch. Configured:" <<
+      detectionParams.numClassesConfigured << ", detected by network: " <<
+      NUM_CLASSES << std::endl;
     classMismatchWarn = true;
   }
 
+  // detections.reserve(count); // Reserve space for detections
 
-
-
-
-  // float *data = (float*) outputLayersInfo[outputLayerIndex];
-  const NvDsInferLayerInfo * outputlayer = layerFinder("output");
-  count = outputlayer->inferDims.numElements/6;
-  float *data = (float*) outputlayer->buffer;
-  std::cout << "OLI" << count << std::endl;
-  // outputLayersInfo[outputLayerIndex].inferDims.numElements / 6;
-
-  // // Llenar el vector de detecciones a partir del buffer
+  // Parse detections
+  #pragma omp parallel for
   for (size_t i = 0; i < count; ++i) {
-    float* detectionPtr = data + i * 6; // Asumiendo 6 valores por detección
-    if (detectionPtr[4]>scoreThreshold && round(detectionPtr[5])!=0){
-      detections.push_back({round(detectionPtr[5]), detectionPtr[0], 
-                              detectionPtr[1], detectionPtr[2], detectionPtr[3], detectionPtr[4]});
-      
-
-      }
+    float* detectionPtr = data + i * 6;
+    float roundedClassId = round(detectionPtr[5]);
+    if (detectionPtr[4] > scoreThreshold && roundedClassId != 0) {
+      detections.push_back({roundedClassId, detectionPtr[0], detectionPtr[1], 
+                              detectionPtr[2], detectionPtr[3], detectionPtr[4]});
     }
-  
-  for (int k = 0; k < detections.size(); k++){
-    NvDsInferObjectDetectionInfo object;
-    object.left = CLIP(detections[k].left, 0, networkInfo.width - 1);
-    object.top = CLIP(detections[k].top, 0, networkInfo.height - 1);
-    object.width = CLIP((detections[k].width), 0, networkInfo.width - 1);
-    object.height = CLIP((detections[k].height), 0, networkInfo.height - 1);
-    object.detectionConfidence = detections[k].detectionConfidence;
-    object.classId = (detections[k].classId);
-    if (object.width && object.height)
-		{
+  }
+  // detections.erase(std::remove_if(detections.begin(), detections.end(),
+  //   [](const NvDsInferObjectDetectionInfo& detection) {
+  //       return detection.classId == 0; // Assuming classId is 0 for uninitialized elements
+  //   }), detections.end());
 
-    objectList.push_back(object); }
+  // Populate objectList
+  for (const auto& detection : detections) {
+    if (detection.width && detection.height) {
+      NvDsInferObjectDetectionInfo object;
+      object.left = CLIP(detection.left, 0, networkInfo.width - 1);
+      object.top = CLIP(detection.top, 0, networkInfo.height - 1);
+      object.width = CLIP(detection.width, 0, networkInfo.width - 1);
+      object.height = CLIP(detection.height, 0, networkInfo.height - 1);
+      object.detectionConfidence = detection.detectionConfidence;
+      object.classId = detection.classId;
+
+      objectList.push_back(object);
+    }
   }
 
-  return true;
-  
-  
-}
-#endif
+  detections.clear(); // Free up reserved space
 
+  return true;
+}
+
+#endif

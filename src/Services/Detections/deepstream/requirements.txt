@@ -4,3 +4,4 @@ numpy
 opencv-python-headless
 avro-python3
 avro-json-serializer
+asyncio

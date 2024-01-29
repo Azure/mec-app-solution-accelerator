@@ -92,10 +92,9 @@ extern "C" bool NvDsInferParseCustomAutoML (std::vector<NvDsInferLayerInfo> cons
 
 
   float *data = (float*) outputLayersInfo[outputLayerIndex].buffer;
-  std::cout << "OLI" << outputLayerIndex << std::endl;
+  
   count = outputLayersInfo[outputLayerIndex].inferDims.numElements / 6;
-  std::cout << "count" << std::endl;
-  std::cout << count << std::endl;
+
   // // Llenar el vector de detecciones a partir del buffer
   for (size_t i = 0; i < count; ++i) {
     float* detectionPtr = data + i * 6; // Asumiendo 6 valores por detección
@@ -117,10 +116,9 @@ extern "C" bool NvDsInferParseCustomAutoML (std::vector<NvDsInferLayerInfo> cons
     object.classId = (detections[k].classId);
     if (object.width && object.height)
 		{
-    std::cout << "detection" << std::endl;
     objectList.push_back(object); }
   }
-  std::cout << "out" << std::endl;
+  
   return true;
   
   

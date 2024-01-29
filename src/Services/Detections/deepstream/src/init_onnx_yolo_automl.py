@@ -40,11 +40,13 @@ import json
 import avro.schema
 from avro_json_serializer import AvroJsonSerializer
 from dapr.clients import DaprClient
+import threading
 
 import uuid
 import base64
 import logging
 import itertools
+import asyncio
 
 if not os.path.exists('deepstream'):
     os.symlink('/opt/nvidia/deepstream/deepstream-6.3', 'deepstream')
@@ -70,9 +72,21 @@ TILED_OUTPUT_HEIGHT = 1080
 def PublishEvent(pubsub_name: str, topic_name: str, data: json):
     with DaprClient() as client:
         resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data, data_content_type='application/json')
+    return
+    
+
+def upload_frame(minioClient,bucket, image_id_str, n_frame):
+    frame_copy = np.array(n_frame, copy=True, order='C')
+    frame_copy = cv2.cvtColor(frame_copy, cv2.COLOR_RGBA2BGRA)
+    img_encode = cv2.imencode(".jpg", frame_copy)[1]
+    resized_img_bytes = img_encode.tobytes()
+    minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
+    return
+# def parallel(pad, info, u_data):
+    
 
 def tiler_sink_pad_buffer_probe(pad, info, u_data):
-    timestamp_init=int(time.time()*1000)
+    
     
     if debug != 'local':
         import shared.minio_utils as minio
@@ -82,7 +96,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
     
     path='../events_schema/detections.avro'
     
-    
+    timestamp_init=int(time.time()*1000)
     frame_number = 0
     num_rects = 0
     gst_buffer = info.get_buffer()
@@ -98,9 +112,9 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
     batch_meta = pyds.gst_buffer_get_nvds_batch_meta(hash(gst_buffer))
     
     l_frame = batch_meta.frame_meta_list
-
+    print("Starting loop")
     while l_frame is not None:
-        
+        print("l_frame")
         try:
             # Note that l_frame.data needs a cast to pyds.NvDsFrameMeta
             # The casting is done by pyds.NvDsFrameMeta.cast()
@@ -116,6 +130,8 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
         frame_number = frame_meta.frame_num
         l_obj = frame_meta.obj_meta_list
         num_rects = frame_meta.num_obj_meta
+        source_id = str(frame_meta.source_id)
+        print("source_id")
         is_first_obj = True
         
         
@@ -123,12 +139,12 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
         obj_list = []
         obj_json = {}
         timestamp=int(time.time()*1000)
-        data = { "SourceId":"source_id",
+        data = { "SourceId":source_id,
         "UrlVideoEncoded": "1.0",
         "Frame": 'frame_'+str(frame_number)+'.jpg',
         "EventName": "ObjectDetection",
         "OriginModule": "Ai inference detection",
-        "Information": "Test message",
+        "Information": "Frame Analysed",
         "EveryTime": int(timestamp),
         "Classes": [],
         "time_trace":[]
@@ -144,8 +160,10 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
         # save output json
         
         # convert python array into numpy array format in the copy mode.
-        frame_copy = np.array(n_frame, copy=True, order='C')
-        frame_copy = cv2.cvtColor(frame_copy, cv2.COLOR_RGBA2BGRA)
+        if debug == 'local':
+            frame_copy = np.array(n_frame, copy=True, order='C')
+            frame_copy = cv2.cvtColor(frame_copy, cv2.COLOR_RGBA2BGRA)
+        
         while l_obj is not None:
             try:
                 # Casting l_obj.data to pyds.NvDsObjectMeta
@@ -208,8 +226,9 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
                 l_obj = l_obj.next
             except StopIteration:
                 break
-        if frame_copy is not None:
-            print(obj_list)
+        
+        if n_frame is not None:
+            #print(obj_list)
             obj_json["frame_id"] = 'frame_'+str(frame_number)+'.jpg'
             obj_json['Detections'] = obj_list
             
@@ -218,6 +237,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             stream_index = "stream{0}".format(frame_meta.pad_index)
             global perf_data
             perf_data.update_fps(stream_index)
+            
             #UNCOMMENT for local testing purposes
             if debug == 'local':
                 img_path = "{}/stream_{}/frame_{}.jpg".format(folder_name, frame_meta.pad_index, frame_number)
@@ -226,17 +246,21 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
                 json_path = "{}/stream_{}/detections_{}.json".format(folder_name, frame_meta.pad_index, frame_number)
                 with open(json_path, 'w') as f:
                     json.dump(data, f)
-
-            img_encode = cv2.imencode(".jpg", frame_copy)[1]
-            resized_img_bytes = img_encode.tobytes()
-            bytes_string = base64.standard_b64encode(resized_img_bytes).decode()
+            
+                        
             saved_count["stream_{}".format(frame_meta.pad_index)] += 1
             image_id = uuid.uuid4()
             image_id_str = str(image_id)
             data['Frame'] = image_id_str
             logging.info(f'Image uploaded with ID: {image_id}')
+            
             if debug != 'local':
-                minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
+                #minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
+                # asyncio.run(upload_frame(minioClient,bucket, image_id_str, resized_img_bytes))
+                upload_thread = threading.Thread(target=upload_frame, args=(minioClient, bucket, image_id_str, n_frame))
+                upload_thread.start()
+            
+                
             
             try:
                 l_frame = l_frame.next
@@ -245,14 +269,19 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             time_trace={"stepStart": timestamp_init, "stepEnd":int(time.time()*1000), "stepName": "deepstream"}
             data['time_trace'].append(time_trace)
             json_str = serializer.to_json(data)
-
+            
             if debug != 'local':
-                PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
-
+                # asyncio.run(PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str))
+                upload_thread = threading.Thread(target=PublishEvent, args=("pubsub","newDetection", json_str))
+                upload_thread.start()
+            
+            
             logging.info(f'Event published')
         else:
             print('No detections found')
             logging.info('No detections found')
+        
+        print("time per frame: ", int(time.time()*1000)-timestamp_init)
 
         return Gst.PadProbeReturn.OK
         
@@ -335,6 +364,8 @@ def create_source_bin(index, uri):
 
 def main(args):
     # Check input arguments
+    # global timestamp_init
+    # timestamp_init=int(time.time()*1000)
     logging.basicConfig(level=logging.INFO)
     logging.getLogger('is_aarch64').setLevel(logging.INFO)
     logging.getLogger('bus_call').setLevel(logging.INFO)

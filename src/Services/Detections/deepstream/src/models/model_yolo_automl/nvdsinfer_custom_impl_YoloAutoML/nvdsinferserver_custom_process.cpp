@@ -35,6 +35,7 @@
 #include "nvbufsurface.h"
 #include "nvdsmeta.h"
 #include "parser_YoloAutoML.h"
+#include <chrono>
 
 
 
@@ -225,12 +226,12 @@ public:
 
         INFER_ASSERT(batchSize >= 1);
         // INFER_ASSERT(extraInputs[0]->getTotalBytes() >= (uint32_t)batchSize * sizeof(float));
-        std::vector<uint64_t> streamIds;
-        if (options) {
-            INFER_ASSERT(
-                options->getValueArray(OPTION_NVDS_SREAM_IDS, streamIds) == NVDSINFER_SUCCESS);
-            INFER_ASSERT(streamIds.size() == (uint32_t)batchSize);
-        }
+        // std::vector<uint64_t> streamIds;
+        // if (options) {
+        //     INFER_ASSERT(
+        //         options->getValueArray(OPTION_NVDS_SREAM_IDS, streamIds) == NVDSINFER_SUCCESS);
+        //     INFER_ASSERT(streamIds.size() == (uint32_t)batchSize);
+        // }
         
 
         // float* input1 = (float*)extraInputs[0]->getBufPtr(0);
@@ -269,6 +270,7 @@ public:
     NvDsInferStatus inferenceDone(
         const dsis::IBatchArray* outputs, const dsis::IOptions* inOptions) override
     {
+        
         if (requireInferLoop()) {
             feedbackStreamInput(outputs, inOptions);
         }
@@ -279,9 +281,11 @@ public:
         uint32_t batchSize = streamIds.size();
         
         for (uint32_t iBatch = 0; iBatch < batchSize; ++iBatch) {
+
             std::vector<NvDsInferObjectDetectionInfo> parsedBboxes;
             INFER_ASSERT(parseObjBbox(outputs, parsedBboxes, iBatch) == NVDSINFER_SUCCESS);
             INFER_ASSERT(attachObjMetas(inOptions, parsedBboxes, iBatch) == NVDSINFER_SUCCESS);
+
         }
 
         return NVDSINFER_SUCCESS;
@@ -357,6 +361,8 @@ NvInferServerCustomProcess::parseObjBbox(
         // NvDsInferLayerInfo CAPI requires CHW rather than NCHW
         capiLayer.inferDims.numDims = outDesc.dims.numDims - 1;
         uint32_t batchSize = outDesc.dims.d[0];
+        // std::cout << "batchSize: " << batchSize << std::endl;
+        // std::cout << "batchIdx: " << batchIdx << std::endl;
         INFER_ASSERT(batchIdx < batchSize);
         std::copy(outDesc.dims.d + 1, outDesc.dims.d + outDesc.dims.numDims, capiLayer.inferDims.d);
         uint32_t perBatchSize = std::accumulate(
