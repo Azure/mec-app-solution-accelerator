@@ -167,7 +167,7 @@ In the Kubernetes dashboard you should be able to explore the application's pods
 
 Either way, you should be able to run the application's UI and check out the Alerts originated from the AI models:
 
-![image](https://user-images.githubusercontent.com/1712635/218885207-5d720a2d-f5a6-4e29-bfd1-bad384803805.png)
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/5e8f5085-804d-4b66-b76a-ec075443ccf0)
 
 ### Remove the application from Kubernetes 
 
