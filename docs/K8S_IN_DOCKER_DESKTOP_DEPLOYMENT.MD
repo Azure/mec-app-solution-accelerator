@@ -163,7 +163,7 @@ In the Kubernetes dashboard you should be able to explore the application's pods
 
 12. To access the front-end, go to 'http://localhost/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the UI service row.
 
-![image](https://user-images.githubusercontent.com/1712635/218883329-5641f19c-f3d9-402f-a75e-2fe44aa6c9eb.png)
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/a06141e2-3e83-4208-928c-84bcaefc96d2)
 
 Either way, you should be able to run the application's UI and check out the Alerts originated from the AI models:
 
