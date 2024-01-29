@@ -14,7 +14,7 @@ git clone git@github.com:Azure/mec-app-solution-accelerator.git
 
 Before creating the Docker images it's important to setup the DOCKER_REGISTRY environment variable in your dev system (Windows / Linux) so the images will be created with the right prefix (i.e. Docker hub user). This is important if you later want to use the same Docker images to upload them into Docker Hub or any other Docker Registry from where you will deploy the images to Kuberentes.
 
-Here you have additional information on why and [How to setup the DOCKER_REGISTRY environment variable](./docs/SET_DOCKER_REGISTRY_VARIABLE.MD).
+Here you have additional information on why and [How to setup the DOCKER_REGISTRY environment variable](./SET_DOCKER_REGISTRY_VARIABLE.MD).
 
 But if you just want to try the solution with `docker compose up` or Visual Studio, this step is optional, as it should work locally, anyways.
 
