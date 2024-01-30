@@ -29,10 +29,11 @@ export const AddSimModal = ({
     dispatch(listSimPolicies());
   }, []);
 
-  return (<Modal title='Add new SIM'
+  return (<Modal
     isOpen={show}
     onClose={onClose}>
-    <form className='mt-9'>
+    <div className='flex flex-row justify-between items-center'>
+      <h3 className="text-2xl leading-6 font-medium text-white">Add New SIM</h3>
       <div className='flex flex-row-reverse'>
         <SimCSVLoader onSimLoaded={(partialSim) => {
           setSim({
@@ -41,12 +42,14 @@ export const AddSimModal = ({
           });
         }} />
       </div>
+    </div>
+    <form className='mt-9'>
       <div className='mt-4 grid gap-4 items-center grid-cols-[auto_1fr]'>
-        <TextInput label='Name' value={sim.name ?? ''} onChange={(val) => setSim({
+        <TextInput label='Name*' value={sim.name ?? ''} onChange={(val) => setSim({
           ...sim,
           name: val
         })} />
-        <TextInput label='IMSI' value={sim.imsi ?? ''} onChange={(val) => setSim({
+        <TextInput label='IMSI*' value={sim.imsi ?? ''} onChange={(val) => setSim({
           ...sim,
           imsi: val
         })} />
@@ -58,15 +61,15 @@ export const AddSimModal = ({
           ...sim,
           ip: val
         })} />
-        <TextInput label='Ki' value={sim.ki ?? ''} onChange={(val) => setSim({
+        <TextInput label='Ki*' value={sim.ki ?? ''} onChange={(val) => setSim({
           ...sim,
           ki: val
         })} />
-        <TextInput label='Opc' value={sim.opc ?? ''} onChange={(val) => setSim({
+        <TextInput label='Opc*' value={sim.opc ?? ''} onChange={(val) => setSim({
           ...sim,
           opc: val
         })} />
-        <ComboBox label='Group'
+        <ComboBox label='Group*'
           selected={sim.groupId ?? ''}
           options={simGroups.map(x => ({ id: x.id, name: x.name }))}
           onSelect={(val) => setSim({
