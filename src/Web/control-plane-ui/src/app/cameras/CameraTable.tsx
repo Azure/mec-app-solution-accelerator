@@ -11,7 +11,6 @@ import { deleteCamera, listCameras } from '@/stores/cameraSlice';
 import { listSims } from '@/stores/simSlice';
 import DeleteConfirmationModal from '../components/modal/DeleteConfirmationModal';
 import { Camera } from '@/models/camera';
-import Loading from '../components/icons/Loading';
 
 export const CameraTable = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -35,9 +34,6 @@ export const CameraTable = () => {
     },
     {
       header: 'IP',
-    },
-    {
-      header: 'Port',
     },
     { header: '', width: 'auto', padding: 'py-4 px-2' },
   ];
@@ -76,7 +72,6 @@ export const CameraTable = () => {
               item.simId ?? '',
               item.type.toString(),
               item.ip,
-              item.port,
               <span onClick={() => setEntityToDelete(item)}>
                 <Trash className="w-8 h-8 cursor-pointer" />
               </span>

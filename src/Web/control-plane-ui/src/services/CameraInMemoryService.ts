@@ -21,12 +21,12 @@ class CameraInMemoryService implements ICameraService {
     ];
 
     public async listCameras(): Promise<Camera[]> {
-        await this.delay(5000);
+        await this.delay();
         return this.cameras;
     }
 
     public async createCamera(camera: Camera): Promise<Camera> {
-        await this.delay(5000);
+        await this.delay();
         this.cameras = [...this.cameras, camera];
         return camera;
     }
@@ -38,8 +38,9 @@ class CameraInMemoryService implements ICameraService {
         return true;
     }
 
-    private delay(ms: number): Promise<void> {
-        return new Promise(resolve => setTimeout(resolve, ms));
+    // Delay to simulate API call
+    private delay(): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, 250));
     }
 }
 

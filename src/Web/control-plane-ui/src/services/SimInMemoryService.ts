@@ -25,10 +25,12 @@ class SimInMemoryService implements ISimService {
     ];
 
     public async listSims(): Promise<SIM[]> {
+        this.delay();
         return this.sims;
     }
 
     public async createSim(sim: SIM): Promise<SIM> {
+        this.delay();
         this.sims = [...this.sims, sim];
         return sim;
     }
@@ -51,6 +53,11 @@ class SimInMemoryService implements ISimService {
             id: x,
             name: x
         }));
+    }
+
+    // Delay to simulate API call
+    private delay(): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, 1000));
     }
 }
 

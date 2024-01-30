@@ -13,7 +13,9 @@ export type Camera = {
     model: string;
     type: CameraType;
     ip: string;
-    port: string;
+    username?: string;
+    password?: string;
+    port?: string;
     simId?: string;
     rtsp?: string;
     hls?: string;

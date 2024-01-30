@@ -11,15 +11,11 @@ import { addCamera } from '@/stores/cameraSlice';
 import { listSims } from '@/stores/simSlice';
 import Loading from '../components/icons/Loading';
 
-const RTSP_URL_TEMPLATE = "rtsp://{ip}:{port}/{query}";
-const RTSP_MODEL_PORT: { [key: string]: string } = {
-  'Xingtera XTEE5021': '554',
-  'RTSP Stream Container': '8554'
-};
-const RTSP_MODEL_QUERY: { [key: string]: string } = {
-  'Xingtera XTEE5021': 'main',
-  'RTSP Stream Container': 'video'
-};
+const RTSP_MODEL_TEMPLATE: { [key: string]: string, default: string } = {
+  default: 'rtsp://{ip}:8554',
+  'Xingtera XTEE5021': 'rtsp://{username}:{password}@{ip}:554/main',
+  'RTSP Stream Container': 'rtsp://{username}:{password}@{ip}:8554/video'
+}
 
 export type AddCameraModalProps = {
   show: boolean;
@@ -44,11 +40,38 @@ export const AddCameraModal = ({
   const reset = () => {
     setCamera({});
     setRtspManual(false);
+    setErrors({
+      id: false,
+      type: false,
+      ip: false,
+      rtsp: false
+    })
   }
 
+  const validateFields = () => {
+    const newErrors = {
+      id: !camera.id,
+      type: !camera.type,
+      ip: !camera.ip,
+      rtsp: !camera.rtsp || camera.rtsp === ''
+    };
+
+    setErrors(newErrors);
+    return !Object.values(newErrors).some(isError => isError);
+  };
+
+  const [errors, setErrors] = useState({
+    id: false,
+    type: false,
+    ip: false,
+    rtsp: false
+  });
+
   const handleSubmit = () => {
-    dispatch(addCamera(camera as Camera));
-    hasSubmittedRef.current = true;
+    if (validateFields()) {
+      dispatch(addCamera(camera as Camera));
+      hasSubmittedRef.current = true;
+    }
   }
 
   //Track if added is completed
@@ -69,10 +92,12 @@ export const AddCameraModal = ({
   // We wait until we have at least an IP
   useEffect(() => {
     if (!rtspManual && camera.ip) {
-      const newRtsp = RTSP_URL_TEMPLATE
+      const rtspTemplate = RTSP_MODEL_TEMPLATE[camera.model ?? ''] ?? RTSP_MODEL_TEMPLATE.default;
+      const newRtsp = rtspTemplate
         .replace('{ip}', camera.ip)
-        .replace(':{port}', camera.port ? `:${camera.port}` : '')
-        .replace('{query}', RTSP_MODEL_QUERY[camera.model ?? ''] ?? '');
+        .replace('{username}', camera.username ?? '')
+        .replace('{password}', camera.password ?? '');
+
       if (newRtsp !== camera.rtsp) {
         setCamera({
           ...camera,
@@ -87,18 +112,30 @@ export const AddCameraModal = ({
     onClose={onClose}>
     <form className='mt-9'>
       <div className='mt-4 grid gap-4 items-center grid-cols-[auto_1fr]'>
-        <TextInput label='Id' value={camera.id ?? ''} onChange={(val) => {
-          setCamera({
-            ...camera,
-            id: val,
-          });
-        }} />
+        <TextInput label='Id*'
+          hasError={errors.id}
+          value={camera.id ?? ''}
+          onChange={(val) => {
+            setErrors({
+              ...errors,
+              id: false
+            });
+            setCamera({
+              ...camera,
+              id: val,
+            });
+          }} />
 
-        <ComboBox label='Type'
+        <ComboBox label='Type*'
+          hasError={errors.type}
           selected={camera.type ?? ''}
           options={Object.values(CameraType).map(x => ({ id: x, name: x }))}
           onSelect={(val) => {
             if ((Object.values(CameraType) as string[]).includes(val.id)) {
+              setErrors({
+                ...errors,
+                type: false
+              });
               setCamera({
                 ...camera,
                 type: val.id as CameraType
@@ -117,12 +154,19 @@ export const AddCameraModal = ({
             })} />
         }
 
-        <TextInput label='Ip' value={camera.ip ?? ''} onChange={(val) => {
-          setCamera({
-            ...camera,
-            ip: val,
-          });
-        }} />
+        <TextInput label='Ip*'
+          hasError={errors.ip}
+          value={camera.ip ?? ''}
+          onChange={(val) => {
+            setErrors({
+              ...errors,
+              ip: false
+            });
+            setCamera({
+              ...camera,
+              ip: val,
+            });
+          }} />
 
         <ComboBox label='Model'
           selected={camera.model ?? ''}
@@ -133,18 +177,41 @@ export const AddCameraModal = ({
           onSelect={(val) => {
             setCamera({
               ...camera,
-              model: val.id,
-              port: RTSP_MODEL_PORT[val.id] ?? camera.port
+              model: val.id
             })
           }} />
+        <TextInput label='Username'
+          value={camera.username ?? ''}
+          onChange={(val) => {
+            setCamera({
+              ...camera,
+              username: val,
+            });
+          }} />
 
-        <TextInput label='RTSP Uri' value={camera.rtsp ?? ''} onChange={(val) => {
-          setRtspManual(true);
-          setCamera({
-            ...camera,
-            rtsp: val
-          });
-        }} />
+        <TextInput label='Password'
+          value={camera.password ?? ''}
+          onChange={(val) => {
+            setCamera({
+              ...camera,
+              password: val,
+            });
+          }} />
+
+        <TextInput label='RTSP Uri*'
+          hasError={errors.rtsp}
+          value={camera.rtsp ?? ''}
+          onChange={(val) => {
+            setErrors({
+              ...errors,
+              rtsp: false
+            });
+            setRtspManual(true);
+            setCamera({
+              ...camera,
+              rtsp: val
+            });
+          }} />
 
         <TextInput label='HLS Uri' value={camera.hls ?? ''} onChange={(val) => {
           setCamera({

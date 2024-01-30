@@ -27,10 +27,44 @@ export const AddSimModal = ({
   const loading = useSelector((state: RootState) => state.sims.createLoading);
   const error = useSelector((state: RootState) => state.sims.createError);
   const hasSubmittedRef = useRef(false);
+  const [errors, setErrors] = useState({
+    name: false,
+    imsi: false,
+    ki: false,
+    opc: false,
+    group: false
+  });
+  const reset = () => {
+    setSim({});
+    setErrors({
+      name: false,
+      imsi: false,
+      ki: false,
+      opc: false,
+      group: false
+    });
+  }
+
+  const validateFields = () => {
+    const newErrors = {
+      name: !sim.name,
+      imsi: !sim.imsi,
+      ki: !sim.ki,
+      opc: !sim.opc,
+      group: !sim.groupId
+    };
+
+    setErrors(newErrors);
+
+    // Return false if any required field has an error
+    return !Object.values(newErrors).some(isError => isError);
+  };
 
   const handleSubmit = () => {
-    dispatch(addSim(sim as SIM));
-    hasSubmittedRef.current = true;
+    if (validateFields()) {
+      dispatch(addSim(sim as SIM));
+      hasSubmittedRef.current = true;
+    }
   }
 
   useEffect(() => {
@@ -42,7 +76,7 @@ export const AddSimModal = ({
   useEffect(() => {
     if (hasSubmittedRef.current) {
       if (!loading && !error) {
-        setSim({});
+        reset();
         onClose();
       }
     }
@@ -64,37 +98,83 @@ export const AddSimModal = ({
     </div>
     <form className='mt-9'>
       <div className='mt-4 grid gap-4 items-center grid-cols-[auto_1fr]'>
-        <TextInput label='Name*' value={sim.name ?? ''} onChange={(val) => setSim({
-          ...sim,
-          name: val
-        })} />
-        <TextInput label='IMSI*' value={sim.imsi ?? ''} onChange={(val) => setSim({
-          ...sim,
-          imsi: val
-        })} />
-        <TextInput label='ICCID' value={sim.iccid ?? ''} onChange={(val) => setSim({
-          ...sim,
-          iccid: val
-        })} />
+        <TextInput
+          label='Name*'
+          hasError={errors.name}
+          value={sim.name ?? ''}
+          onChange={(val) => {
+            setErrors({
+              ...errors,
+              name: false
+            });
+            setSim({
+              ...sim,
+              name: val
+            });
+          }} />
+        <TextInput label='IMSI*'
+          hasError={errors.imsi}
+          value={sim.imsi ?? ''}
+          onChange={(val) => {
+            setErrors({
+              ...errors,
+              imsi: false
+            });
+            setSim({
+              ...sim,
+              imsi: val
+            })
+          }} />
+        <TextInput label='Ki*'
+          hasError={errors.ki}
+          value={sim.ki ?? ''}
+          onChange={(val) => {
+            setErrors({
+              ...errors,
+              ki: false
+            });
+            setSim({
+              ...sim,
+              ki: val
+            })
+          }} />
+        <TextInput label='Opc*'
+          hasError={errors.opc}
+          value={sim.opc ?? ''}
+          onChange={(val) => {
+            setErrors({
+              ...errors,
+              opc: false
+            });
+            setSim({
+              ...sim,
+              opc: val
+            })
+          }} />
+        <ComboBox label='Group*'
+          hasError={errors.group}
+          selected={sim.groupId ?? ''}
+          options={simGroups.map(x => ({ id: x.id, name: x.name }))}
+          onSelect={(val) => {
+            setErrors({
+              ...errors,
+              group: false
+            });
+            setSim({
+              ...sim,
+              groupId: val.id
+            })
+          }} />
+        <TextInput label='ICCID'
+          value={sim.iccid ?? ''}
+          onChange={(val) => setSim({
+            ...sim,
+            iccid: val
+          })} />
         <TextInput label='IP' value={sim.ip ?? ''} onChange={(val) => setSim({
           ...sim,
           ip: val
         })} />
-        <TextInput label='Ki*' value={sim.ki ?? ''} onChange={(val) => setSim({
-          ...sim,
-          ki: val
-        })} />
-        <TextInput label='Opc*' value={sim.opc ?? ''} onChange={(val) => setSim({
-          ...sim,
-          opc: val
-        })} />
-        <ComboBox label='Group*'
-          selected={sim.groupId ?? ''}
-          options={simGroups.map(x => ({ id: x.id, name: x.name }))}
-          onSelect={(val) => setSim({
-            ...sim,
-            groupId: val.id
-          })} />
         <ComboBox label='Policy'
           selected={sim.policyId ?? ''}
           options={simPolicies.map(x => ({ id: x.id, name: x.name }))}
@@ -107,7 +187,7 @@ export const AddSimModal = ({
         <button type='button'
           className='py-2 px-6 flex items-center gap-5 flex-grow justify-center border-2 rounded-full border-[#0DC5B8]'
           onClick={() => {
-            setSim({});
+            reset();
             onClose();
           }}>
           Cancel

@@ -4,6 +4,7 @@ import ChevronUp from '../icons/ChevronUp';
 
 interface ComboBoxProps {
   label: string;
+  hasError?: boolean;
   options: ComboBoxOption[];
   selected: string | null;
   onSelect: (option: ComboBoxOption) => void;
@@ -18,6 +19,7 @@ export const ComboBox = ({
   label,
   options,
   selected,
+  hasError,
   onSelect
 }: ComboBoxProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,7 +50,12 @@ export const ComboBox = ({
   return (
     <>
       <label htmlFor={id} className="block text-m font-medium text-gray-100">{label}</label>
-      <div id={id} className="relative block w-full shadow-sm sm:text-sm rounded-md bg-gray-700 text-white focus:border-transparent focus:ring-0 focus:outline-none" ref={wrapperRef}>
+      <div id={id}
+        className={[
+          "relative block w-full shadow-sm sm:text-sm rounded-md bg-gray-700 text-white focus:border-transparent focus:ring-0 focus:outline-none",
+          hasError ? "border-red-500 border" : ""
+        ].join(" ")}
+        ref={wrapperRef}>
         <button
           type="button"
           className="flex justify-between items-center text-white font-semibold w-full text-left pl-4"
