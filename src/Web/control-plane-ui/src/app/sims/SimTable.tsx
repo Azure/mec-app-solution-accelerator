@@ -9,11 +9,14 @@ import { SIM } from '@/models/sim';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/stores/store';
 import { deleteSim, listSims } from '@/stores/simSlice';
+import DeleteConfirmationModal from '../components/modal/DeleteConfirmationModal';
 
 export const SimTable = () => {
   const dispatch = useDispatch<AppDispatch>();
   const sims = useSelector((state: RootState) => state.sims.data);
   const [showNewSim, setShowNewSim] = useState(false);
+  const [entityToDelete, setEntityToDelete] = useState<SIM | null>(null);
+
   const header = [
     'Name',
     'IMSI',
@@ -29,7 +32,7 @@ export const SimTable = () => {
     dispatch(deleteSim(sim));
   };
 
-  return <div className="bg-gray-500 mt-12 overflow-x-auto relative shadow-md border border-gray-300">
+  return <><div className="bg-gray-500 mt-12 overflow-x-auto relative shadow-md border border-gray-300">
     <div className="pt-6 pb-6 px-16 flex justify-end items-center">
       <DropdownButton title={'Add SIM'}
         actions={[
@@ -47,7 +50,7 @@ export const SimTable = () => {
             item.name,
             item.imsi,
             item.ip ?? '',
-            <span onClick={() => handleDeleteSim(item)}>
+            <span onClick={() => setEntityToDelete(item)}>
               <Trash className="w-8 h-8 cursor-pointer" />
             </span>
           ]
@@ -57,7 +60,17 @@ export const SimTable = () => {
     <AddSimModal
       show={showNewSim}
       onClose={() => setShowNewSim(false)} />
-  </div>;
+  </div>
+    <DeleteConfirmationModal entity={entityToDelete ? `SIM ${entityToDelete.name}` : ''}
+      isOpen={entityToDelete !== null}
+      onClose={() => setEntityToDelete(null)}
+      onDelete={() => {
+        if (entityToDelete) {
+          handleDeleteSim(entityToDelete)
+          setEntityToDelete(null);
+        }
+      }} />
+  </>;
 }
 
 export default SimTable;

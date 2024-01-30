@@ -62,9 +62,9 @@ const Sidebar = () => {
 
   return (
     <div className="min-h-screen h-full bg-gray-500 text-white min-w-[20rem] w-[20rem] left-0 border-r border-gray-300">
-      <a href="/" className="flex items-center space-x-2">
+      <Link href="/" className="flex items-center space-x-2">
         <img src="/logo.svg" alt="Company Logo" className="h-14 w-[13rem] ml-9 mt-9" />
-      </a>
+      </Link>
       <nav className='mt-16 flex flex-col gap-8'>
         {menuItems}
       </nav>
