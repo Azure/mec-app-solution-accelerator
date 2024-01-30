@@ -7,6 +7,8 @@ import { ServiceFactory } from '@/services/ServiceFactory';
 interface CameraState {
     data: Camera[];
     loading: boolean;
+    createLoading: boolean;
+    createError: string | null;
     error: string | null;
 }
 
@@ -14,16 +16,22 @@ interface CameraState {
 const initialState: CameraState = {
     data: [],
     loading: false,
+    createLoading: false,
+    createError: null,
     error: null
 };
 
 export const addCamera = createAsyncThunk<Camera, Camera, { dispatch: AppDispatch, state: RootState }>(
     'cameras/addCamera',
-    async (camera: Camera, { getState, dispatch }): Promise<Camera> => {
-        const cameraService = ServiceFactory.getCameraService(getState().settings);
-        const response = await cameraService.createCamera(camera);
-        dispatch(listCameras());
-        return response;
+    async (camera: Camera, { getState, dispatch, rejectWithValue }) => {
+        try {
+            const cameraService = ServiceFactory.getCameraService(getState().settings);
+            const response = await cameraService.createCamera(camera);
+            dispatch(listCameras());
+            return response;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
     }
 );
 
@@ -54,7 +62,7 @@ export const deleteCamera = createAsyncThunk<
                 return rejectWithValue('Not removed')
             }
         } catch (error) {
-            return rejectWithValue('Error deleting camera');
+            return rejectWithValue(error);
         }
     }
 );
@@ -84,6 +92,17 @@ const cameraSlice = createSlice({
             })
             .addCase(deleteCamera.rejected, (state, action) => {
                 state.error = action.error.message || null;
+            })
+            .addCase(addCamera.pending, (state) => {
+                state.createLoading = true;
+                state.createError = null;
+            })
+            .addCase(addCamera.rejected, (state, action) => {
+                state.createLoading = false;
+                state.createError = action?.error?.message || null;
+            })
+            .addCase(addCamera.fulfilled, (state) => {
+                state.createLoading = false;
             });
     },
 });

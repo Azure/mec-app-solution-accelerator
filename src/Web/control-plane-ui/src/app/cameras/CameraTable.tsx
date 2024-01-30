@@ -11,21 +11,35 @@ import { deleteCamera, listCameras } from '@/stores/cameraSlice';
 import { listSims } from '@/stores/simSlice';
 import DeleteConfirmationModal from '../components/modal/DeleteConfirmationModal';
 import { Camera } from '@/models/camera';
+import Loading from '../components/icons/Loading';
 
 export const CameraTable = () => {
   const dispatch = useDispatch<AppDispatch>();
   const sims = useSelector((state: RootState) => state.sims.data);
   const cameras = useSelector((state: RootState) => state.cameras.data);
+  const isLoading = useSelector((state: RootState) => state.cameras.loading);
   const [showNewCamera, setShowNewCamera] = useState(false);
   const [entityToDelete, setEntityToDelete] = useState<Camera | null>(null);
-  const header = [
-    'ID',
-    'Model',
-    'SIM (5G)',
-    'Type',
-    'IP',
-    'Port',
-    'Options'
+  const columnOptions = [
+    {
+      header: 'ID'
+    },
+    {
+      header: 'Model',
+    },
+    {
+      header: 'SIM (5G)',
+    },
+    {
+      header: 'Type',
+    },
+    {
+      header: 'IP',
+    },
+    {
+      header: 'Port',
+    },
+    { header: '', width: 'auto', padding: 'py-4 px-2' },
   ];
 
   useEffect(() => {
@@ -52,8 +66,9 @@ export const CameraTable = () => {
       </div>
       <div className='box-border px-16 pb-16'>
         <Table
-          headers={header}
+          columnOptions={columnOptions}
           items={cameras}
+          isLoading={isLoading}
           itemToRow={(item) => {
             return [
               item.id,

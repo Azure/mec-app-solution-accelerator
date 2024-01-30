@@ -21,10 +21,12 @@ class CameraInMemoryService implements ICameraService {
     ];
 
     public async listCameras(): Promise<Camera[]> {
+        await this.delay(5000);
         return this.cameras;
     }
 
     public async createCamera(camera: Camera): Promise<Camera> {
+        await this.delay(5000);
         this.cameras = [...this.cameras, camera];
         return camera;
     }
@@ -34,6 +36,10 @@ class CameraInMemoryService implements ICameraService {
         if (indexToDelete === -1) return false;
         this.cameras = [...this.cameras.filter((_, index) => indexToDelete !== index)];
         return true;
+    }
+
+    private delay(ms: number): Promise<void> {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
 

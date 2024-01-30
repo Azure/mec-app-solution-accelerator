@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Modal from "../components/modal/Modal";
 import TextInput from '../components/form/TextInput';
 import Close from '../components/icons/Close';
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/stores/store';
 import { addCamera } from '@/stores/cameraSlice';
 import { listSims } from '@/stores/simSlice';
+import Loading from '../components/icons/Loading';
 
 const RTSP_URL_TEMPLATE = "rtsp://{ip}:{port}/{query}";
 const RTSP_MODEL_PORT: { [key: string]: string } = {
@@ -31,8 +32,11 @@ export const AddCameraModal = ({
 }: AddCameraModalProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const sims = useSelector((state: RootState) => state.sims.data);
+  const loading = useSelector((state: RootState) => state.cameras.createLoading);
+  const error = useSelector((state: RootState) => state.cameras.createError);
   const [camera, setCamera] = useState<Partial<Camera>>({});
   const [rtspManual, setRtspManual] = useState(false);
+  const hasSubmittedRef = useRef(false);
   const showSIMOption = camera.type === CameraType.FiveG ||
     camera.type === CameraType.FourG ||
     camera.type === CameraType.LTE;
@@ -41,6 +45,21 @@ export const AddCameraModal = ({
     setCamera({});
     setRtspManual(false);
   }
+
+  const handleSubmit = () => {
+    dispatch(addCamera(camera as Camera));
+    hasSubmittedRef.current = true;
+  }
+
+  //Track if added is completed
+  useEffect(() => {
+    if (hasSubmittedRef.current) {
+      if (!loading && !error) {
+        reset();
+        onClose();
+      }
+    }
+  }, [loading, error]);
 
   useEffect(() => {
     dispatch(listSims());
@@ -146,14 +165,8 @@ export const AddCameraModal = ({
         </button>
         <button type='button'
           className='py-2 px-6 border rounded-full flex items-center gap-5 flex-grow justify-center bg-gradient-brand border-none text-black'
-          onClick={() => {
-            //TODO: validation
-            dispatch(addCamera(camera as Camera));
-            reset();
-            onClose();
-          }}>
-          Add new
-          <Plus className='w-6 h-6' />
+          onClick={() => { handleSubmit() }}>
+          {loading ? <Loading className='w-8 h-8' /> : <>Add new <Plus className='w-6 h-6' /></>}
         </button>
       </div>
     </form>

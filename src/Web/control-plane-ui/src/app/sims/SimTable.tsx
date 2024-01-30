@@ -14,14 +14,15 @@ import DeleteConfirmationModal from '../components/modal/DeleteConfirmationModal
 export const SimTable = () => {
   const dispatch = useDispatch<AppDispatch>();
   const sims = useSelector((state: RootState) => state.sims.data);
+  const isLoading = useSelector((state: RootState) => state.sims.loading);
   const [showNewSim, setShowNewSim] = useState(false);
   const [entityToDelete, setEntityToDelete] = useState<SIM | null>(null);
 
-  const header = [
-    'Name',
-    'IMSI',
-    'IP',
-    'Options'
+  const columnOptions = [
+    { header: 'Name' },
+    { header: 'IMSI' },
+    { header: 'IP' },
+    { header: '' },
   ];
 
   useEffect(() => {
@@ -43,8 +44,9 @@ export const SimTable = () => {
     </div>
     <div className='box-border pb-6 px-16'>
       <Table
-        headers={header}
+        columnOptions={columnOptions}
         items={sims}
+        isLoading={isLoading}
         itemToRow={(item) => {
           return [
             item.name,

@@ -11,7 +11,7 @@ interface SettingsState {
 
 // Initial state
 const initialState: SettingsState = {
-    useInMemory: false,
+    useInMemory: true,
     apiKey: null
 };
 

@@ -9,6 +9,8 @@ interface SimState {
     simPolicies: SimPolicy[];
     loading: boolean;
     error: string | null;
+    createLoading: boolean;
+    createError: string | null;
 }
 
 const initialState: SimState = {
@@ -16,7 +18,9 @@ const initialState: SimState = {
     simPolicies: [],
     simGroups: [],
     loading: false,
-    error: null
+    error: null,
+    createLoading: false,
+    createError: null,
 };
 
 export const addSim = createAsyncThunk<SIM, SIM, { dispatch: AppDispatch, state: RootState }>(
@@ -108,6 +112,17 @@ const simSlice = createSlice({
             })
             .addCase(listSimPolicies.fulfilled, (state, action) => {
                 state.simPolicies = action.payload
+            })
+            .addCase(addSim.pending, (state) => {
+                state.createLoading = true;
+                state.createError = null;
+            })
+            .addCase(addSim.rejected, (state, action) => {
+                state.createLoading = false;
+                state.createError = action?.error?.message || null;
+            })
+            .addCase(addSim.fulfilled, (state) => {
+                state.createLoading = false;
             });
     },
 });
