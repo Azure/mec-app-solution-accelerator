@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rtsp-video-streamer
+  namespace: mec-accelerator
+spec:
+  selector:
+    matchLabels:
+      app: rtsp-video-streamer
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rtsp-video-streamer
+    spec:
+      containers:
+      - name: rtsp-video-streamer
+        image: mecsolutionaccelerator/rtsp-video-streamer:1.8
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8554
+        env:
+          - name: RTSP_HOST
+            value: 0.0.0.0
+          - name: RTSP_PORT
+            value: "8554"
+          - name: RTSP_URI
+            value: video
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rtsp-video-streamer
+  namespace: mec-accelerator
+spec:
+  selector:
+    app: rtsp-video-streamer
+  ports:
+  - protocol: TCP
+    port: 8554
+    targetPort: 8554
+  type: LoadBalancer

@@ -1,0 +1,25 @@
+FROM python:3.10
+
+WORKDIR /app
+
+# Install GStreamer and the RTSP server library
+RUN apt-get update && \
+    apt-get install -y gstreamer1.0-tools gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
+    libgstrtspserver-1.0-0 python3-gst-1.0 libgirepository1.0-dev \
+    gir1.2-gst-rtsp-server-1.0
+
+# Copy requirements
+COPY src/requirements.txt /app/requirements.txt
+
+# Install the python modules
+RUN pip install -r requirements.txt
+
+# Copy the video file and the main.py script
+COPY src/video.mp4 /app/video.mp4
+COPY src/main.py /app/main.py
+COPY src/requirements.txt /app/requirements.txt
+
+WORKDIR /app
+
+# Start the GStreamer application
+CMD ["python", "main.py"]
