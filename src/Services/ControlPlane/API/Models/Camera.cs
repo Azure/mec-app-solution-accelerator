@@ -5,9 +5,11 @@ namespace ControlPlane.API.Models
         string Model,
         CameraType Type,
         string Ip,
-        string Port,
-        string? simId,
+        string? Port,
+        string? SimId,
         string? Rtsp,
-        string? Hls
+        string? Hls,
+        string? Username,
+        string? Password
     );
 }

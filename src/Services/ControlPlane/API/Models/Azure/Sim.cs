@@ -7,7 +7,7 @@ namespace ControlPlane.API.Models.Azure
     );
 
     public record CreateSimProperties(
-        string IntegratedCircuitCardIdentifier,
+        string? IntegratedCircuitCardIdentifier,
         string InternationalMobileSubscriberIdentity,
         string AuthenticationKey,
         string OperatorKeyCode,

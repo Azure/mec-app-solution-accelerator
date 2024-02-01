@@ -50,12 +50,12 @@ public class SimService
         var ip = String.IsNullOrEmpty(sim.Ip) ? null :
             new List<ControlPlane.API.Models.Azure.StaticIpConfiguration>() {
                 new ControlPlane.API.Models.Azure.StaticIpConfiguration(
-                    new ControlPlane.API.Models.Azure.ResourceReference(mobileNetworkSettings.DataNetwork),
+                    new ControlPlane.API.Models.Azure.ResourceReference(mobileNetworkSettings.AttachedDataNetwork),
                     new ControlPlane.API.Models.Azure.ResourceReference(mobileNetworkSettings.Slice),
                     new ControlPlane.API.Models.Azure.StaticIp(sim.Ip))};
         var requestBody = new ControlPlane.API.Models.Azure.CreateSimRequest(
             new ControlPlane.API.Models.Azure.CreateSimProperties(
-                sim.Iccid,
+                string.IsNullOrEmpty(sim.Iccid) ? null : sim.Iccid,
                 sim.Imsi,
                 sim.Ki,
                 sim.Opc,
