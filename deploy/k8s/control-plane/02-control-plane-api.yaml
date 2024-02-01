@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: control-plane-api
-        image: control-plane-api:v1
+        image: mecsolutionaccelerator/control-plane-api:1.8
         ports:
         - containerPort: 8080
         envFrom:

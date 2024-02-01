@@ -15,13 +15,12 @@ spec:
     spec:
       containers:
       - name: control-plane-ui
-        image: control-plane-ui:v1
+        image: mecsolutionaccelerator/control-plane-ui:1.8
         ports:
         - containerPort: 3000
         env:
           - name: API_URL
-            # This needs to be the the public API endpoint
-            value: "http://localhost:89"
+            value: "http://control-plane-api-service:89"
 
 ---
 
