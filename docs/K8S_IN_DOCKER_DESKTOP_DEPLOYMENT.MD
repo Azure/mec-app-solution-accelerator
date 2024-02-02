@@ -104,7 +104,7 @@ Note that if you were able to run the application on plain Docker, you should ha
 7. If you don't have installed/enabled the Kuberentes Dashboard, do so by running this command:
 
     ```powershell
-    kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.6.1/aio/deploy/recommended.yaml
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
     ```
 
 8. Run `kubectl proxy` so you can access the dahboard:
