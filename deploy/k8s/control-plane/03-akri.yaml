@@ -1,0 +1,897 @@
+---
+# Source: akri/templates/rbac.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: akri-controller-sa
+  namespace: mec-accelerator
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: akri-controller
+    app.kubernetes.io/component: controller
+---
+# Source: akri/templates/rbac.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: akri-agent-sa
+  namespace: mec-accelerator
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: akri-agent
+    app.kubernetes.io/component: agent
+---
+# Source: akri/templates/rbac.yaml
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: "akri-controller-role"
+  namespace: mec-accelerator
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: akri-controller
+    app.kubernetes.io/component: controller
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["batch"]
+  resources: ["jobs"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "deletecollection"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["akri.sh"]
+  resources: ["instances"]
+  verbs: ["get", "list", "watch", "update", "patch"]
+- apiGroups: ["akri.sh"]
+  resources: ["configurations"]
+  verbs: ["get", "list", "watch"]
+---
+# Source: akri/templates/rbac.yaml
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: "akri-agent-role"
+  namespace: mec-accelerator
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: akri-agent
+    app.kubernetes.io/component: agent
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["akri.sh"]
+  resources: ["instances"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["akri.sh"]
+  resources: ["configurations"]
+  verbs: ["get", "list", "watch"]
+---
+# Source: akri/templates/rbac.yaml
+apiVersion: 'rbac.authorization.k8s.io/v1'
+kind: 'ClusterRoleBinding'
+metadata:
+  name: 'akri-controller-binding'
+  namespace: mec-accelerator
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: akri-controller
+    app.kubernetes.io/component: controller
+roleRef:
+  apiGroup: ''
+  kind: 'ClusterRole'
+  name: 'akri-controller-role'
+subjects:
+  - kind: 'ServiceAccount'
+    name: 'akri-controller-sa'
+    namespace: mec-accelerator
+---
+# Source: akri/templates/rbac.yaml
+apiVersion: 'rbac.authorization.k8s.io/v1'
+kind: 'ClusterRoleBinding'
+metadata:
+  name: 'akri-agent-binding'
+  namespace: mec-accelerator
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: akri-agent
+    app.kubernetes.io/component: agent
+roleRef:
+  apiGroup: ''
+  kind: 'ClusterRole'
+  name: 'akri-agent-role'
+subjects:
+  - kind: 'ServiceAccount'
+    name: 'akri-agent-sa'
+    namespace: mec-accelerator
+---
+# Source: akri/templates/agent.yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: akri-agent-daemonset
+  namespace: mec-accelerator
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: akri-agent
+    app.kubernetes.io/component: agent
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/part-of: akri
+      app.kubernetes.io/instance: akri
+      app.kubernetes.io/name: akri-agent
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: akri-0.12.9
+        app.kubernetes.io/part-of: akri
+        app.kubernetes.io/instance: akri
+        app.kubernetes.io/version: "0.12.9"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: akri-agent
+        app.kubernetes.io/component: agent
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      serviceAccountName: 'akri-agent-sa'
+      containers:
+      - name: akri-agent
+        image: "ghcr.io/project-akri/akri/agent:v0.12.9"
+        resources:
+          requests:
+            memory: 11Mi
+            cpu: 10m
+          limits:
+            memory: 79Mi
+            cpu: 26m
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        env:
+          - name: HOST_CRICTL_PATH
+            value: /usr/local/bin/crictl
+          - name: HOST_RUNTIME_ENDPOINT
+            value: unix:///host/run/containerd/containerd.sock
+          - name: HOST_IMAGE_ENDPOINT
+            value: unix:///host/run/containerd/containerd.sock
+          - name: AGENT_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: DISCOVERY_HANDLERS_DIRECTORY
+            value: /var/lib/akri
+        volumeMounts:
+          - name: discovery-handlers
+            mountPath: /var/lib/akri
+          - name: device-plugin
+            mountPath: /var/lib/kubelet/device-plugins
+          - name: var-run-dockershim
+            mountPath: /host/run/containerd/containerd.sock
+      volumes:
+      - name: discovery-handlers
+        hostPath:
+          path: /var/lib/akri
+      - name: device-plugin
+        hostPath:
+          path: "/var/lib/kubelet/device-plugins"
+      - name: var-run-dockershim
+        hostPath:
+          # Please set container runtime socket by either selecting the appropriate K8s distro `kubernetesDistro=<k8s|k3s|microk8s>` 
+          # or setting `agent.host.containerRuntimeSocket=/container/runtime.sock`. 
+          # See https://docs.akri.sh/user-guide/cluster-setup for more information.
+          # Using K8s default "/run/containerd/containerd.sock" for now.
+          path: "/run/containerd/containerd.sock"
+---
+# Source: akri/templates/custom-discovery-handler.yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: akri-camera-discovery-daemonset
+  namespace: mec-accelerator
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: akri-camera-discovery
+    app.kubernetes.io/component: discovery-handler
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/part-of: akri
+      app.kubernetes.io/instance: akri
+      app.kubernetes.io/name: akri-camera-discovery
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: akri-0.12.9
+        app.kubernetes.io/part-of: akri
+        app.kubernetes.io/instance: akri
+        app.kubernetes.io/version: "0.12.9"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: akri-camera-discovery
+        app.kubernetes.io/component: discovery-handler
+    spec:
+      containers:
+      - name: akri-camera-discovery
+        image: "mecsolutionaccelerator/akri-camera-discovery-handler:1.8"
+        resources:
+          requests:
+            memory: 11Mi
+            cpu: 10m
+          limits:
+            memory: 24Mi
+            cpu: 24m
+        env:
+        - name: DISCOVERY_HANDLERS_DIRECTORY
+          value: /var/lib/akri
+        volumeMounts:
+        - name: discovery-handlers
+          mountPath: /var/lib/akri
+      nodeSelector:
+        "kubernetes.io/os": linux
+      volumes:
+      - name: discovery-handlers
+        hostPath:
+          path: /var/lib/akri
+---
+# Source: akri/templates/controller.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: akri-controller-deployment
+  namespace: mec-accelerator
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: akri-controller
+    app.kubernetes.io/component: controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/part-of: akri
+      app.kubernetes.io/instance: akri
+      app.kubernetes.io/name: akri-controller
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: akri-0.12.9
+        app.kubernetes.io/part-of: akri
+        app.kubernetes.io/instance: akri
+        app.kubernetes.io/version: "0.12.9"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: akri-controller
+        app.kubernetes.io/component: controller
+    spec:
+      serviceAccountName: 'akri-controller-sa'
+      containers:
+      - name: akri-controller
+        image: "ghcr.io/project-akri/akri/controller:v0.12.9"
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: 11Mi
+            cpu: 10m
+          limits:
+            memory: 100Mi
+            cpu: 26m
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+      nodeSelector:
+        "kubernetes.io/os": linux
+---
+# Source: akri/templates/custom-configuration.yaml
+apiVersion: akri.sh/v0
+kind: Configuration
+metadata:
+  name: akri-camera
+  namespace: mec-accelerator
+spec:
+  discoveryHandler: 
+    name: camera
+    discoveryDetails: "map[collection:Cameras connectionString:mongodb://control-plane-mongodb.mec-accelerator:27017 database:ControlPlane]"
+  brokerSpec:
+    brokerPodSpec:
+      metadata:
+        labels:
+          app: frame-splitter
+        annotations:
+          dapr.io/enabled: "true"
+          dapr.io/app-id: "frame-splitter"
+          dapr.io/app-protocol: "grpc"
+          # dapr.io/app-port: "50052"
+          dapr.io/log-level: "debug"
+          dapr.io/enable-api-logging: "true"
+          dapr.io/config: "dapr-config"
+      containers:
+      - name: akri-camera-broker
+        image: "mecsolutionaccelerator/framesplitter:1.8"
+        resources:
+          requests:
+            "{{PLACEHOLDER}}" : "1"
+            memory: 250Mi
+            cpu: 500m
+          limits:
+            "{{PLACEHOLDER}}" : "1"
+            memory: 1Gi
+            cpu: 1000m
+      - name: daprd
+        image: docker.io/daprio/daprd:latest
+        ports:
+        - containerPort: 3500
+        - containerPort: 50001
+        - containerPort: 50002
+        - containerPort: 9090
+        env:
+        - name: DAPR_HTTP_PORT
+          value: "3500"
+        - name: DAPR_GRPC_PORT
+          value: "50001"
+        - name: DAPR_APP_ID
+          value: "frame-splitter-rtsp"
+        - name: DAPR_APP_PORT
+          value: "50052"
+        - name: DAPR_APP_PROTOCOL
+          value: "grpc"
+        - name: DAPR_CONFIG
+          value: "configuration.dapr.io/dapr-config"
+        - name: DAPR_API_LOGGING
+          value: "true"
+        - name: DAPR_LOG_LEVEL
+          value: "debug"
+        - name: NAMESPACE
+          value: "mec-accelerator"
+        - name: DAPR_TRUST_ANCHORS
+          valueFrom:
+            secretKeyRef:
+              name: dapr-trust-bundle
+              key: ca.crt
+              optional: false
+        - name: DAPR_CERT_CHAIN
+          valueFrom:
+            secretKeyRef:
+              name: dapr-trust-bundle
+              key: issuer.crt
+              optional: false
+        - name: DAPR_CERT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: dapr-trust-bundle
+              key: issuer.key
+              optional: false
+        - name: SENTRY_LOCAL_IDENTITY
+          value: "mec-accelerator:default"
+        args:
+        - /daprd
+        - --mode
+        - kubernetes
+        - --dapr-http-port
+        - "3500"
+        - --dapr-grpc-port
+        - "50001"
+        - --dapr-internal-grpc-port
+        - "50002"
+        - --dapr-public-port
+        - "3501"
+        - --app-id
+        - frame-splitter-rtsp
+        - --control-plane-address
+        - dapr-api.dapr-system.svc.cluster.local:80
+        - --app-protocol
+        - grpc
+        - --placement-host-address
+        - dapr-placement-server.dapr-system.svc.cluster.local:50005
+        - --config
+        - dapr-config
+        - --log-level
+        - debug
+        - --app-max-concurrency
+        - "-1"
+        - --sentry-address
+        - dapr-sentry.dapr-system.svc.cluster.local:80
+        - --enable-metrics=true
+        - --metrics-port
+        - "9090"
+        - --dapr-http-max-request-size
+        - "-1"
+        - --dapr-http-read-buffer-size
+        - "-1"
+        - --dapr-graceful-shutdown-seconds
+        - "-1"
+        - --disable-builtin-k8s-secret-store=false
+        - --enable-api-logging=true
+        - --enable-mtls
+        volumeMounts:
+        - name: dapr-identity-token
+          mountPath: /var/run/secrets/dapr.io/sentrytoken
+          readOnly: true
+        - name: kube-api-access-dgztm
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+          readOnly: true
+      volumes:
+      - name: kube-api-access-dgztm
+        projected:
+          sources:
+          - serviceAccountToken:
+              expirationSeconds: 3607
+              path: token
+          - configMap:
+              items:
+              - key: ca.crt
+                path: ca.crt
+              name: kube-root-ca.crt
+              optional: false
+          - downwardAPI:
+              items:
+              - fieldRef:
+                  fieldPath: metadata.namespace
+                path: namespace
+      - name: dapr-identity-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              expirationSeconds: 7200
+              path: token
+              audience: dapr.io/sentry
+  instanceServiceSpec:
+    type: ClusterIP
+    ports:
+    - name: akri-custom-instance-service
+      port: 6052
+      protocol: TCP
+      targetPort: 6052
+  configurationServiceSpec:
+    type: ClusterIP
+    ports:
+    - name: akri-custom-configuration-service
+      port: 6052
+      protocol: TCP
+      targetPort: 6052
+  brokerProperties:
+    MINIOURL: "http://minio.mec-accelerator.svc.cluster.local:9000"
+    TIMEOUT: "15"
+  capacity: 1
+---
+# Source: akri/templates/webhook-configuration.yaml
+apiVersion: v1
+kind: List
+metadata:
+  name: akri-webhook-configuration
+  namespace: mec-accelerator
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+items:
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: akri-webhook-configuration
+      namespace: mec-accelerator
+      labels:
+        helm.sh/chart: akri-0.12.9
+        app.kubernetes.io/part-of: akri
+        app.kubernetes.io/instance: akri
+        app.kubernetes.io/version: "0.12.9"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: akri-webhook-configuration
+        app.kubernetes.io/component: admission-webhook
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      name: akri-webhook-configuration
+      namespace: mec-accelerator
+      labels:
+        helm.sh/chart: akri-0.12.9
+        app.kubernetes.io/part-of: akri
+        app.kubernetes.io/instance: akri
+        app.kubernetes.io/version: "0.12.9"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: akri-webhook-configuration
+        app.kubernetes.io/component: admission-webhook
+    rules:
+    - apiGroups: [""]
+      resources: ["pods"]
+      verbs: ["get"]
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: RoleBinding
+    metadata:
+      name: akri-webhook-configuration
+      namespace: mec-accelerator
+      labels:
+        helm.sh/chart: akri-0.12.9
+        app.kubernetes.io/part-of: akri
+        app.kubernetes.io/instance: akri
+        app.kubernetes.io/version: "0.12.9"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: akri-webhook-configuration
+        app.kubernetes.io/component: admission-webhook
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: Role
+      name: akri-webhook-configuration
+    subjects:
+    - kind: ServiceAccount
+      name: akri-webhook-configuration
+      namespace: mec-accelerator
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: akri-webhook-configuration
+      namespace: mec-accelerator
+      labels:
+        helm.sh/chart: akri-0.12.9
+        app.kubernetes.io/part-of: akri
+        app.kubernetes.io/instance: akri
+        app.kubernetes.io/version: "0.12.9"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: akri-webhook-configuration
+        app.kubernetes.io/component: admission-webhook
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app.kubernetes.io/part-of: akri
+          app.kubernetes.io/instance: akri
+          app.kubernetes.io/name: akri-webhook-configuration
+      template:
+        metadata:
+          labels:
+            helm.sh/chart: akri-0.12.9
+            app.kubernetes.io/part-of: akri
+            app.kubernetes.io/instance: akri
+            app.kubernetes.io/version: "0.12.9"
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: akri-webhook-configuration
+            app.kubernetes.io/component: admission-webhook
+        spec:
+          serviceAccountName: akri-webhook-configuration
+          containers:
+          - name: webhook
+            image: "ghcr.io/project-akri/akri/webhook-configuration:v0.12.9"
+            imagePullPolicy: Always
+            resources:
+              requests:
+                memory: 100Mi
+                cpu: 15m
+              limits:
+                memory: 100Mi
+                cpu: 26m
+            command:
+            - /server
+            args:
+            - --tls-crt-file=/secrets/tls.crt
+            - --tls-key-file=/secrets/tls.key
+            - --port=8443
+            volumeMounts:
+            - name: secrets
+              mountPath: /secrets
+              readOnly: true
+          volumes:
+            - name: secrets
+              secret:
+                secretName: akri-webhook-configuration
+          tolerations:
+            - key: node-role.kubernetes.io/master
+              effect: NoSchedule
+          nodeSelector:
+            "kubernetes.io/os": linux
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: akri-webhook-configuration
+      namespace: mec-accelerator
+      labels:
+        helm.sh/chart: akri-0.12.9
+        app.kubernetes.io/part-of: akri
+        app.kubernetes.io/instance: akri
+        app.kubernetes.io/version: "0.12.9"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: akri-webhook-configuration
+        app.kubernetes.io/component: admission-webhook
+    spec:
+      selector:
+        app.kubernetes.io/part-of: akri
+        app.kubernetes.io/instance: akri
+        app.kubernetes.io/name: akri-webhook-configuration
+      ports:
+        - name: http
+          port: 443
+          targetPort: 8443
+  - apiVersion: admissionregistration.k8s.io/v1
+    kind: ValidatingWebhookConfiguration
+    metadata:
+      name: akri-webhook-configuration
+      namespace: mec-accelerator
+      labels:
+        helm.sh/chart: akri-0.12.9
+        app.kubernetes.io/part-of: akri
+        app.kubernetes.io/instance: akri
+        app.kubernetes.io/version: "0.12.9"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: akri-webhook-configuration
+        app.kubernetes.io/component: admission-webhook
+    webhooks:
+      - name: akri-webhook-configuration.mec-accelerator.svc
+        clientConfig:
+          service:
+            name: akri-webhook-configuration
+            namespace: mec-accelerator
+            port: 443
+            path: "/validate"
+        rules:
+          - operations:
+              - "CREATE"
+              - "UPDATE"
+            apiGroups:
+              - akri.sh
+            apiVersions:
+              - v0
+            resources:
+              - "configurations"
+            scope: "*"
+        admissionReviewVersions:
+          - v1
+          - v1beta1
+        sideEffects: None
+---
+# Source: akri/templates/webhook-cert-autogen.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: akri-webhook-configuration-patch
+  namespace: mec-accelerator
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+---
+# Source: akri/templates/webhook-cert-autogen.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: akri-webhook-configuration-patch
+  namespace: mec-accelerator
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+rules:
+  - apiGroups:
+      - admissionregistration.k8s.io
+    resources:
+      - validatingwebhookconfigurations
+    verbs:
+      - get
+      - update
+---
+# Source: akri/templates/webhook-cert-autogen.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: akri-webhook-configuration-patch
+  namespace: mec-accelerator
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: akri-webhook-configuration-patch
+subjects:
+  - kind: ServiceAccount
+    name: akri-webhook-configuration-patch
+    namespace: "mec-accelerator"
+---
+# Source: akri/templates/webhook-cert-autogen.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: akri-webhook-configuration-patch
+  namespace: mec-accelerator
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - create
+---
+# Source: akri/templates/webhook-cert-autogen.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: akri-webhook-configuration-patch
+  namespace: mec-accelerator
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: akri-webhook-configuration-patch
+subjects:
+  - kind: ServiceAccount
+    name: akri-webhook-configuration-patch
+    namespace: "mec-accelerator"
+---
+# Source: akri/templates/webhook-cert-autogen.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: akri-webhook-configuration-create
+  namespace: mec-accelerator
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+spec:
+  ttlSecondsAfterFinished: 0
+  template:
+    metadata:
+      name: akri-webhook-configuration-create
+      namespace: mec-accelerator
+      labels:
+        helm.sh/chart: akri-0.12.9
+        app.kubernetes.io/part-of: akri
+        app.kubernetes.io/instance: akri
+        app.kubernetes.io/version: "0.12.9"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: admission-webhook
+    spec:
+      containers:
+        - name: create
+          image: "registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.1.1"
+          imagePullPolicy: IfNotPresent
+          args:
+            - create
+            - --host=akri-webhook-configuration,akri-webhook-configuration.mec-accelerator.svc
+            - --namespace=mec-accelerator
+            - --secret-name=akri-webhook-configuration
+            - --cert-name=tls.crt
+            - --key-name=tls.key
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+      restartPolicy: OnFailure
+      serviceAccountName: akri-webhook-configuration-patch
+---
+# Source: akri/templates/webhook-cert-autogen.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: akri-webhook-configuration-patch
+  namespace: mec-accelerator
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  labels:
+    helm.sh/chart: akri-0.12.9
+    app.kubernetes.io/part-of: akri
+    app.kubernetes.io/instance: akri
+    app.kubernetes.io/version: "0.12.9"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: admission-webhook
+spec:
+  ttlSecondsAfterFinished: 0
+  template:
+    metadata:
+      name: akri-webhook-configuration-patch
+      namespace: mec-accelerator
+      labels:
+        helm.sh/chart: akri-0.12.9
+        app.kubernetes.io/part-of: akri
+        app.kubernetes.io/instance: akri
+        app.kubernetes.io/version: "0.12.9"
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: admission-webhook
+    spec:
+      containers:
+        - name: patch
+          image: "registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.1.1"
+          imagePullPolicy: IfNotPresent
+          args:
+            - patch
+            - --webhook-name=akri-webhook-configuration
+            - --namespace=mec-accelerator
+            - --patch-mutating=false
+            - --secret-name=akri-webhook-configuration
+            - --patch-failure-policy=Fail
+          env:
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+      restartPolicy: OnFailure
+      serviceAccountName: akri-webhook-configuration-patch

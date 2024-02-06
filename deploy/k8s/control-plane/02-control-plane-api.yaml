@@ -16,6 +16,7 @@ spec:
       containers:
       - name: control-plane-api
         image: mecsolutionaccelerator/control-plane-api:1.8
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         envFrom:
@@ -24,6 +25,8 @@ spec:
         env:
           - name: MongoDB__ConnectionString
             value: "mongodb://control-plane-mongodb:27017"
+          - name: MongoDB__DatabaseName
+            value: "ControlPlane"
 
 ---
 
