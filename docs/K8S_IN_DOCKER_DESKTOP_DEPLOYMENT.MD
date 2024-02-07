@@ -74,16 +74,35 @@ Note that if you were able to run the application on plain Docker, you should ha
     
     ![image](https://user-images.githubusercontent.com/1712635/218880976-94b42767-40e3-4d9c-a640-2dfa029cb510.png)
 
-    
+
+### Update control plane configuration
+
+6. Update the config map that contains essential information for connecting to our Azure Mobile Network. You'll find the configuration in the file `deploy/k8s/13-control-plane-api-config-map.yaml`.
+
+Replace the following values in the file:
+
+```
+  MobileNetwork__SubscriptionId: "your_subscription_id"
+  MobileNetwork__ResourceGroup: "your_resource_group"
+  MobileNetwork__Name: "your_network_name"
+  MobileNetwork__DataNetwork: "your_datanetwork"
+  MobileNetwork__Slice: "your_slice"
+  ClientCredentials__TenantId: "your_tenant_id"
+  ClientCredentials__ClientId: "your_client_id"
+  ClientCredentials__ClientSecret: "your_client_secret"
+```
+
+*Note: This step is required if we want to configure Azure SIMs. For alerts and camera management only, we can skip this part.
+
 ### Deploy the application's services to Kubernetes
 
-5. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
+7. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
     ```powershell
     cd <your_path>/deploy/k8s
     ```
 
-6. Deploy the application in Kuberentes by running this command:
+8. Deploy the application in Kuberentes by running this command:
 
     ```powershell
     kubectl apply -f ./
@@ -99,15 +118,23 @@ Note that if you were able to run the application on plain Docker, you should ha
     kubectl delete -f ./
     ```
 
+## Deploy AKRI configuration
+
+9. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
+
+```
+./deploy-akri-secrets.sh
+```
+
 ### Check the application status with Kubernetes Dashboard
 
-7. If you don't have installed/enabled the Kuberentes Dashboard, do so by running this command:
+10. If you don't have installed/enabled the Kuberentes Dashboard, do so by running this command:
 
     ```powershell
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.6.1/aio/deploy/recommended.yaml
     ```
 
-8. Run `kubectl proxy` so you can access the dahboard:
+11. Run `kubectl proxy` so you can access the dahboard:
 
     ```powershell
     kubectl proxy
@@ -125,7 +152,7 @@ Let's do that in the following steps.
 
 ### Configure Bearer Tokens from Kuberentes to access the Dashboard
 
-9. You need to do this step **only one time**: Change the current folder to the `deploy/k8s/dashboard_auth` folder of this repo and run the instructions in commands.txt to configure the tokens. Basically, the following commands need to be run just once from that folder:
+12. You need to do this step **only one time**: Change the current folder to the `deploy/k8s/dashboard_auth` folder of this repo and run the instructions in commands.txt to configure the tokens. Basically, the following commands need to be run just once from that folder:
 
     ```powershell
     kubectl apply -f dashboard-adminuser.yaml 
@@ -138,7 +165,7 @@ Let's do that in the following steps.
 
 ### Generate and copy the token to provide to Kubernetes Dashboard
 
-10. Whenever you need a token, run this command:
+13. Whenever you need a token, run this command:
 
     ```powershell
     kubectl -n kubernetes-dashboard create token admin-user --duration=48h --output yaml
@@ -150,7 +177,7 @@ Let's do that in the following steps.
 
 ### Provide the token to Kubernetes dashboard
 
-11. Open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login in your browser and paste the token you copied previously.
+14. Open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login in your browser and paste the token you copied previously.
 
 ![image](https://user-images.githubusercontent.com/1712635/218882193-938f14f0-06ca-4bba-979f-da9266706f8e.png)
 
@@ -161,7 +188,7 @@ In the Kubernetes dashboard you should be able to explore the application's pods
 
 ### Access the application's UI to see Alerts originated from AI model detections
 
-12. To access the front-end, go to 'http://localhost/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the UI service row.
+15. To access the front-end, go to 'http://localhost/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the UI service row.
 
 ![image](https://user-images.githubusercontent.com/1712635/218883329-5641f19c-f3d9-402f-a75e-2fe44aa6c9eb.png)
 
@@ -169,11 +196,16 @@ Either way, you should be able to run the application's UI and check out the Ale
 
 ![image](https://user-images.githubusercontent.com/1712635/218885207-5d720a2d-f5a6-4e29-bfd1-bad384803805.png)
 
+### Access control plane application's UI to configure and create Cameras
+
+16. To access the front-end, go to 'http://localhost:90/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the control-plane-ui-service row.
+
+
 ### Remove the application from Kubernetes 
 
 1. Open a new command-shell and change the current folder to the `deploy/k8s` folder of this repo.
 
-1. Run the following command to remove all related kubernetes resources for this application, since there is no stop action on kubectl.
+2. Run the following command to remove all related kubernetes resources for this application, since there is no stop action on kubectl.
 
     ```powershell
     kubectl delete -f ./
