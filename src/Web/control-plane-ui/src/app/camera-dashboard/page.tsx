@@ -19,7 +19,10 @@ export default function Home() {
       <PageTitle title='Camera Dashboard' />
 
       <div className='mt-12 grid lg:grid-cols-2 gap-4'>
-        {cameras.map(c => <Camera key={c.id} src={c.hls ?? ''} />)}
+        {cameras.map(c => {
+          const url = c.hls && c.hls !== '' ? c.hls : '/hls/' + c.id + '/stream.m3u8';
+          return <Camera key={c.id} src={url} />
+        })}
       </div>
     </>
   )

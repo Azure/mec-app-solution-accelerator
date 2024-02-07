@@ -22,6 +22,8 @@ spec:
         env:
           - name: API_URL
             value: "http://control-plane-api-service:89"
+          - name: STREAMER_URL
+            value: "http://rtsp-converter-service:91"
 
 ---
 
