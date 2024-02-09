@@ -1,226 +1,9 @@
 ---
-# Source: akri/templates/rbac.yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: akri-controller-sa
-  namespace: mec-accelerator
-  labels:
-    helm.sh/chart: akri-0.12.9
-    app.kubernetes.io/part-of: akri
-    app.kubernetes.io/instance: akri
-    app.kubernetes.io/version: "0.12.9"
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: akri-controller
-    app.kubernetes.io/component: controller
----
-# Source: akri/templates/rbac.yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: akri-agent-sa
-  namespace: mec-accelerator
-  labels:
-    helm.sh/chart: akri-0.12.9
-    app.kubernetes.io/part-of: akri
-    app.kubernetes.io/instance: akri
-    app.kubernetes.io/version: "0.12.9"
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: akri-agent
-    app.kubernetes.io/component: agent
----
-# Source: akri/templates/rbac.yaml
-kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: "akri-controller-role"
-  namespace: mec-accelerator
-  labels:
-    helm.sh/chart: akri-0.12.9
-    app.kubernetes.io/part-of: akri
-    app.kubernetes.io/instance: akri
-    app.kubernetes.io/version: "0.12.9"
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: akri-controller
-    app.kubernetes.io/component: controller
-rules:
-- apiGroups: [""]
-  resources: ["pods", "services"]
-  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
-- apiGroups: ["batch"]
-  resources: ["jobs"]
-  verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "deletecollection"]
-- apiGroups: [""]
-  resources: ["nodes"]
-  verbs: ["get", "list", "watch"]
-- apiGroups: ["akri.sh"]
-  resources: ["instances"]
-  verbs: ["get", "list", "watch", "update", "patch"]
-- apiGroups: ["akri.sh"]
-  resources: ["configurations"]
-  verbs: ["get", "list", "watch"]
----
-# Source: akri/templates/rbac.yaml
-kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: "akri-agent-role"
-  namespace: mec-accelerator
-  labels:
-    helm.sh/chart: akri-0.12.9
-    app.kubernetes.io/part-of: akri
-    app.kubernetes.io/instance: akri
-    app.kubernetes.io/version: "0.12.9"
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: akri-agent
-    app.kubernetes.io/component: agent
-rules:
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["get", "list", "watch"]
-- apiGroups: ["akri.sh"]
-  resources: ["instances"]
-  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
-- apiGroups: ["akri.sh"]
-  resources: ["configurations"]
-  verbs: ["get", "list", "watch"]
----
-# Source: akri/templates/rbac.yaml
-apiVersion: 'rbac.authorization.k8s.io/v1'
-kind: 'ClusterRoleBinding'
-metadata:
-  name: 'akri-controller-binding'
-  namespace: mec-accelerator
-  labels:
-    helm.sh/chart: akri-0.12.9
-    app.kubernetes.io/part-of: akri
-    app.kubernetes.io/instance: akri
-    app.kubernetes.io/version: "0.12.9"
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: akri-controller
-    app.kubernetes.io/component: controller
-roleRef:
-  apiGroup: ''
-  kind: 'ClusterRole'
-  name: 'akri-controller-role'
-subjects:
-  - kind: 'ServiceAccount'
-    name: 'akri-controller-sa'
-    namespace: mec-accelerator
----
-# Source: akri/templates/rbac.yaml
-apiVersion: 'rbac.authorization.k8s.io/v1'
-kind: 'ClusterRoleBinding'
-metadata:
-  name: 'akri-agent-binding'
-  namespace: mec-accelerator
-  labels:
-    helm.sh/chart: akri-0.12.9
-    app.kubernetes.io/part-of: akri
-    app.kubernetes.io/instance: akri
-    app.kubernetes.io/version: "0.12.9"
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: akri-agent
-    app.kubernetes.io/component: agent
-roleRef:
-  apiGroup: ''
-  kind: 'ClusterRole'
-  name: 'akri-agent-role'
-subjects:
-  - kind: 'ServiceAccount'
-    name: 'akri-agent-sa'
-    namespace: mec-accelerator
----
-# Source: akri/templates/agent.yaml
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: akri-agent-daemonset
-  namespace: mec-accelerator
-  labels:
-    helm.sh/chart: akri-0.12.9
-    app.kubernetes.io/part-of: akri
-    app.kubernetes.io/instance: akri
-    app.kubernetes.io/version: "0.12.9"
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: akri-agent
-    app.kubernetes.io/component: agent
-spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/part-of: akri
-      app.kubernetes.io/instance: akri
-      app.kubernetes.io/name: akri-agent
-  template:
-    metadata:
-      labels:
-        helm.sh/chart: akri-0.12.9
-        app.kubernetes.io/part-of: akri
-        app.kubernetes.io/instance: akri
-        app.kubernetes.io/version: "0.12.9"
-        app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/name: akri-agent
-        app.kubernetes.io/component: agent
-    spec:
-      nodeSelector:
-        "kubernetes.io/os": linux
-      serviceAccountName: 'akri-agent-sa'
-      containers:
-      - name: akri-agent
-        image: "ghcr.io/project-akri/akri/agent:v0.12.9"
-        resources:
-          requests:
-            memory: 11Mi
-            cpu: 10m
-          limits:
-            memory: 79Mi
-            cpu: 26m
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-        env:
-          - name: HOST_CRICTL_PATH
-            value: /usr/local/bin/crictl
-          - name: HOST_RUNTIME_ENDPOINT
-            value: unix:///host/run/containerd/containerd.sock
-          - name: HOST_IMAGE_ENDPOINT
-            value: unix:///host/run/containerd/containerd.sock
-          - name: AGENT_NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
-          - name: DISCOVERY_HANDLERS_DIRECTORY
-            value: /var/lib/akri
-        volumeMounts:
-          - name: discovery-handlers
-            mountPath: /var/lib/akri
-          - name: device-plugin
-            mountPath: /var/lib/kubelet/device-plugins
-          - name: var-run-dockershim
-            mountPath: /host/run/containerd/containerd.sock
-      volumes:
-      - name: discovery-handlers
-        hostPath:
-          path: /var/lib/akri
-      - name: device-plugin
-        hostPath:
-          path: "/var/lib/kubelet/device-plugins"
-      - name: var-run-dockershim
-        hostPath:
-          # Please set container runtime socket by either selecting the appropriate K8s distro `kubernetesDistro=<k8s|k3s|microk8s>` 
-          # or setting `agent.host.containerRuntimeSocket=/container/runtime.sock`. 
-          # See https://docs.akri.sh/user-guide/cluster-setup for more information.
-          # Using K8s default "/run/containerd/containerd.sock" for now.
-          path: "/run/containerd/containerd.sock"
----
 # Source: akri/templates/custom-discovery-handler.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: akri-camera-discovery-daemonset
-  namespace: mec-accelerator
   labels:
     helm.sh/chart: akri-0.12.9
     app.kubernetes.io/part-of: akri
@@ -274,7 +57,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: akri-controller-deployment
-  namespace: mec-accelerator
   labels:
     helm.sh/chart: akri-0.12.9
     app.kubernetes.io/part-of: akri
@@ -331,17 +113,6 @@ spec:
     discoveryDetails: "map[collection:Cameras connectionString:mongodb://control-plane-mongodb.mec-accelerator:27017 database:ControlPlane]"
   brokerSpec:
     brokerPodSpec:
-      metadata:
-        labels:
-          app: frame-splitter
-        annotations:
-          dapr.io/enabled: "true"
-          dapr.io/app-id: "frame-splitter"
-          dapr.io/app-protocol: "grpc"
-          # dapr.io/app-port: "50052"
-          dapr.io/log-level: "debug"
-          dapr.io/enable-api-logging: "true"
-          dapr.io/config: "dapr-config"
       containers:
       - name: akri-camera-broker
         image: "mecsolutionaccelerator/framesplitter:1.8"
@@ -496,7 +267,6 @@ apiVersion: v1
 kind: List
 metadata:
   name: akri-webhook-configuration
-  namespace: mec-accelerator
   labels:
     helm.sh/chart: akri-0.12.9
     app.kubernetes.io/part-of: akri
@@ -559,7 +329,6 @@ items:
     kind: Deployment
     metadata:
       name: akri-webhook-configuration
-      namespace: mec-accelerator
       labels:
         helm.sh/chart: akri-0.12.9
         app.kubernetes.io/part-of: akri
@@ -621,7 +390,6 @@ items:
     kind: Service
     metadata:
       name: akri-webhook-configuration
-      namespace: mec-accelerator
       labels:
         helm.sh/chart: akri-0.12.9
         app.kubernetes.io/part-of: akri
@@ -643,7 +411,6 @@ items:
     kind: ValidatingWebhookConfiguration
     metadata:
       name: akri-webhook-configuration
-      namespace: mec-accelerator
       labels:
         helm.sh/chart: akri-0.12.9
         app.kubernetes.io/part-of: akri
@@ -699,7 +466,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: akri-webhook-configuration-patch
-  namespace: mec-accelerator
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
     "helm.sh/hook-weight": "-5"
@@ -725,7 +491,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: akri-webhook-configuration-patch
-  namespace: mec-accelerator
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
     "helm.sh/hook-weight": "-5"
@@ -819,7 +584,6 @@ spec:
   template:
     metadata:
       name: akri-webhook-configuration-create
-      namespace: mec-accelerator
       labels:
         helm.sh/chart: akri-0.12.9
         app.kubernetes.io/part-of: akri
@@ -868,7 +632,6 @@ spec:
   template:
     metadata:
       name: akri-webhook-configuration-patch
-      namespace: mec-accelerator
       labels:
         helm.sh/chart: akri-0.12.9
         app.kubernetes.io/part-of: akri
