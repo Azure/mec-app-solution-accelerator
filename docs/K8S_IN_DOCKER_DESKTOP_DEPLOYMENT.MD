@@ -114,27 +114,27 @@ Make sure you have install [helm](https://helm.sh/) in your system. Full install
 
 First, we need to install akri repository.
 
-```
+```powershell
 helm repo add akri-helm-charts https://project-akri.github.io/akri/
 ```
 
 Installing akri:
 
-``
- helm install akri akri-helm-charts/akri \
- -n mec-accelerator \
- --set kubernetesDistro=k8s \
- --set custom.discovery.enabled=true \
- --set custom.discovery.image.repository=mecsolutionaccelerator/akri-camera-discovery-handler \
- --set custom.discovery.image.tag=1.8 \
- --set custom.discovery.name=akri-camera-discovery \
- --set custom.configuration.enabled=true \
- --set custom.configuration.name=akri-camera \
- --set custom.configuration.discoveryHandlerName=camera \
- --set custom.configuration.discoveryDetails.connectionString="mongodb://control-plane-mongodb.mec-accelerator:27017" \
- --set custom.configuration.discoveryDetails.database="ControlPlane" \
- --set custom.configuration.discoveryDetails.collection="Cameras" \
- --set custom.configuration.brokerPod.image.repository=mecsolutionaccelerator/framesplitter \
+```powershell
+ helm install akri akri-helm-charts/akri `
+ -n mec-accelerator `
+ --set kubernetesDistro=k8s `
+ --set custom.discovery.enabled=true `
+ --set custom.discovery.image.repository=mecsolutionaccelerator/akri-camera-discovery-handler `
+ --set custom.discovery.image.tag=1.8 `
+ --set custom.discovery.name=akri-camera-discovery `
+ --set custom.configuration.enabled=true `
+ --set custom.configuration.name=akri-camera `
+ --set custom.configuration.discoveryHandlerName=camera `
+ --set custom.configuration.discoveryDetails.connectionString="mongodb://control-plane-mongodb.mec-accelerator:27017" `
+ --set custom.configuration.discoveryDetails.database="ControlPlane" `
+ --set custom.configuration.discoveryDetails.collection="Cameras" `
+ --set custom.configuration.brokerPod.image.repository=mecsolutionaccelerator/framesplitter `
  --set custom.configuration.brokerPod.image.tag=1.8
 ```
 
@@ -166,8 +166,8 @@ Installing akri:
 
 9. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
-```
-./deploy-akri-secrets.sh
+```powershell
+./deploy-akri-secrets.ps1
 ```
 
 ### Check the application status with Kubernetes Dashboard
