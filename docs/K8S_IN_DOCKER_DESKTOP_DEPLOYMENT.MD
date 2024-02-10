@@ -154,6 +154,10 @@ This is the whole command to run, but make sure of the `kubernetesDistro` parame
  --set custom.configuration.brokerPod.image.tag=1.8
 ```
 
+Here's an example execution when targeting k3s:
+
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/2ed6995f-e8d3-477e-857b-08d3ba8fca64)
+
 ### Deploy the application's services to Kubernetes
 
 6. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
