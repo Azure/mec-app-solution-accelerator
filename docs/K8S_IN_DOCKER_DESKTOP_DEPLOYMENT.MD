@@ -251,7 +251,7 @@ Let's do that in the following steps.
 
 In the Kubernetes dashboard you should be able to explore the application's pods, services, etc.
 
-![image](https://user-images.githubusercontent.com/1712635/219480986-86a6e67b-7fb8-41ea-8ca3-5948c1e5d358.png)
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/63af4277-e4f7-413a-b0c5-abc0080ac955)
 
 
 ### Access the application's UI to see Alerts originated from AI model detections
