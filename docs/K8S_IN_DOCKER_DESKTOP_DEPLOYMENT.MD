@@ -118,13 +118,23 @@ Full installation instructions of Helm can be found [here](https://helm.sh/docs/
 
 5. Install AKRI
 
-First, we need to install akri repository.
+Install akri repository.
 
 ```powershell
 helm repo add akri-helm-charts https://project-akri.github.io/akri/
 ```
 
-Installing akri:
+Install AKRI Helm chart and configuration:
+
+**IMPORTANT:** If you are installing agains a K3s or K8s, you need to specify that distro in the `kubernetesDistro` parameter below as:
+
+`--set kubernetesDistro=k8s`
+
+or 
+
+`--set kubernetesDistro=k3s`
+
+This is the whole command to run, but make sure of the `kubernetesDistro` parameter first depending on your target cluster:
 
 ```powershell
  helm install akri akri-helm-charts/akri `
