@@ -89,7 +89,7 @@ Note that if you were able to run the application on plain Docker, you should ha
 
 ### Update control plane configuration
 
-6. Update the config map that contains essential information for connecting to our Azure Mobile Network. You'll find the configuration in the file `deploy/k8s/13-control-plane-api-config-map.yaml`.
+3. Update the config map that contains essential information for connecting to our Azure Mobile Network. You'll find the configuration in the file `deploy/k8s/13-control-plane-api-config-map.yaml`.
 
 Replace the following values in the file:
 
@@ -109,9 +109,14 @@ For just getting alerts and camera management/provisioning (i.e. Wi-Fi or Ethern
 
 ### Install AKRI
 
-6. Install AKRI
+4. Install HELM in your system
 
-Make sure you have install [helm](https://helm.sh/) in your system. Full installation instructions can be found [here](https://helm.sh/docs/intro/install/).
+Make sure you have install [helm](https://helm.sh/) in the machine you are using with KUBECTL accessing the Kubernetes cluster.
+By default, that machine can be a Windows machine with KUBECTL installed and pointing to the right Kubernetes cluster context. 
+
+Full installation instructions of Helm can be found [here](https://helm.sh/docs/intro/install/).
+
+5. Install AKRI
 
 First, we need to install akri repository.
 
@@ -141,13 +146,13 @@ Installing akri:
 
 ### Deploy the application's services to Kubernetes
 
-7. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
+6. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
     ```powershell
     cd <your_path>/deploy/k8s
     ```
 
-8. Deploy the application in Kuberentes by running this command:
+7. Deploy the application in Kuberentes by running this command:
 
     ```powershell
     kubectl apply -f ./
@@ -165,7 +170,7 @@ Installing akri:
 
 ## Deploy AKRI configuration
 
-9. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
+8. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
 ```powershell
 ./deploy-akri-secrets.ps1
@@ -173,13 +178,13 @@ Installing akri:
 
 ### Check the application status with Kubernetes Dashboard
 
-10. If you don't have installed/enabled the Kuberentes Dashboard, do so by running this command:
+9. If you don't have installed/enabled the Kuberentes Dashboard, do so by running this command:
 
     ```powershell
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.6.1/aio/deploy/recommended.yaml
     ```
 
-11. Run `kubectl proxy` so you can access the dahboard:
+10. Run `kubectl proxy` so you can access the dahboard:
 
     ```powershell
     kubectl proxy
@@ -197,7 +202,7 @@ Let's do that in the following steps.
 
 ### Configure Bearer Tokens from Kuberentes to access the Dashboard
 
-12. You need to do this step **only one time**: Change the current folder to the `deploy/k8s/dashboard_auth` folder of this repo and run the instructions in commands.txt to configure the tokens. Basically, the following commands need to be run just once from that folder:
+11. You need to do this step **only one time**: Change the current folder to the `deploy/k8s/dashboard_auth` folder of this repo and run the instructions in commands.txt to configure the tokens. Basically, the following commands need to be run just once from that folder:
 
     ```powershell
     kubectl apply -f dashboard-adminuser.yaml 
@@ -210,7 +215,7 @@ Let's do that in the following steps.
 
 ### Generate and copy the token to provide to Kubernetes Dashboard
 
-13. Whenever you need a token, run this command:
+12. Whenever you need a token, run this command:
 
     ```powershell
     kubectl -n kubernetes-dashboard create token admin-user --duration=48h --output yaml
@@ -222,7 +227,7 @@ Let's do that in the following steps.
 
 ### Provide the token to Kubernetes dashboard
 
-14. Open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login in your browser and paste the token you copied previously.
+13. Open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login in your browser and paste the token you copied previously.
 
 ![image](https://user-images.githubusercontent.com/1712635/218882193-938f14f0-06ca-4bba-979f-da9266706f8e.png)
 
@@ -233,7 +238,7 @@ In the Kubernetes dashboard you should be able to explore the application's pods
 
 ### Access the application's UI to see Alerts originated from AI model detections
 
-15. To access the front-end, go to 'http://localhost/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the UI service row.
+14. To access the front-end, go to 'http://localhost/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the UI service row.
 
 ![image](https://user-images.githubusercontent.com/1712635/218883329-5641f19c-f3d9-402f-a75e-2fe44aa6c9eb.png)
 
@@ -243,7 +248,7 @@ Either way, you should be able to run the application's UI and check out the Ale
 
 ### Access control plane application's UI to configure and create Cameras
 
-16. To access the front-end, go to 'http://localhost:90/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the control-plane-ui-service row.
+15. To access the front-end, go to 'http://localhost:90/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the control-plane-ui-service row.
 
 
 ### Remove the application from Kubernetes 
