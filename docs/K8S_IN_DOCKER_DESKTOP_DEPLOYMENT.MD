@@ -104,7 +104,8 @@ Replace the following values in the file:
   ClientCredentials__ClientSecret: "your_client_secret"
 ```
 
-*Note: This step is required if we want to configure Azure SIMs. For alerts and camera management only, we can skip this part.
+*Note: This step is required if you want to manage SIMs provisioning from this app against AP5GC (Azure Private 5G Core) in Azure. 
+For just getting alerts and camera management/provisioning (i.e. Wi-Fi or Ethernet cameras provisioning), you can skip this part if you don't have an AP5GC Mobile Network and packet core deployed into an ASE, RAN, 5G UEs, etc.
 
 ### Install AKRI
 
