@@ -192,6 +192,8 @@ Here's an example execution when targeting k3s:
 ./deploy-akri-secrets.ps1
 ```
 
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/26175770-b114-4c9a-9c1b-01e87ffb4d3d)
+
 ### Check the application status with Kubernetes Dashboard
 
 9. If you don't have installed/enabled the Kuberentes Dashboard, do so by running this command:
