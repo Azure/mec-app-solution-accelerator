@@ -256,6 +256,12 @@ In the Kubernetes dashboard you should be able to explore the application's pods
 ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/63af4277-e4f7-413a-b0c5-abc0080ac955)
 
 
+### Access the 'Control Plan app' to provision cameras (and 5G network SIMs if using 5G cameras in a Private 5G network)
+
+TBD-TBD-TBB
+
+
+
 ### Access the application's UI to see Alerts originated from AI model detections
 
 14. To access the front-end, go to 'http://localhost/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the UI service row.
