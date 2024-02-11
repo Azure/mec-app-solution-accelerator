@@ -81,13 +81,13 @@ Note that if you were able to run the application on plain Docker, you should ha
     cd <your_path>/deploy/k8s
     ```
 
-![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/2407d56b-0b3e-4467-bdc3-59dce3527398)
-
 2. Deploy the mec-accelerator namespace in Kuberentes by running this command:
 
     ```powershell
     kubectl apply -f ./00-namespace.yaml
     ```
+
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/2407d56b-0b3e-4467-bdc3-59dce3527398)
 
 ### Update control plane configuration
 
