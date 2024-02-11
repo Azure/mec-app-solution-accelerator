@@ -256,15 +256,19 @@ In the Kubernetes dashboard you should be able to explore the application's pods
 ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/63af4277-e4f7-413a-b0c5-abc0080ac955)
 
 
-### Access the 'Control Plan app' to provision cameras (and 5G network SIMs if using 5G cameras in a Private 5G network)
+### Access the 'Control Plain app' to provision cameras (and 5G network SIMs if using 5G cameras in a Private 5G network)
 
-TBD-TBD-TBB
+14. In order to know the URL for the 'Control Plain web app', using a browser go to the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed ("mec-accelerator"), go to the "Services" menu in the left tab and click on the url to the right on the **"control-plane-ui-service" service** row.
 
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/1df800f5-f5e8-4d40-8d2f-911197a7678b)
 
+You can also directly access the URL for the Control Plane App, but if not using LOCALHOST, the service IP will vary:
 
-### Access the application's UI to see Alerts originated from AI model detections
+`http://<your-IP>:90/`
 
-14. To access the front-end, go to 'http://localhost/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the UI service row.
+### Access the Alerts dashboard UI with Alerts from AI model detections
+
+XX. To access the front-end, go to 'http://localhost/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the UI service row.
 
 ![image](https://user-images.githubusercontent.com/1712635/218883329-5641f19c-f3d9-402f-a75e-2fe44aa6c9eb.png)
 
@@ -274,14 +278,14 @@ Either way, you should be able to run the application's UI and check out the Ale
 
 ### Access control plane application's UI to configure and create Cameras
 
-15. To access the front-end, go to 'http://localhost:90/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the control-plane-ui-service row.
+XX. To access the front-end, go to 'http://localhost:90/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the control-plane-ui-service row.
 
 
 ### Remove the application from Kubernetes 
 
-1. Open a new command-shell and change the current folder to the `deploy/k8s` folder of this repo.
+XX. Open a new command-shell and change the current folder to the `deploy/k8s` folder of this repo.
 
-2. Run the following command to remove all related kubernetes resources for this application, since there is no stop action on kubectl.
+XX. Run the following command to remove all related kubernetes resources for this application, since there is no stop action on kubectl.
 
     ```powershell
     kubectl delete -f ./
