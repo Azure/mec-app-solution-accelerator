@@ -266,6 +266,9 @@ You can also directly access the URL for the Control Plane App, but if not using
 
 `http://<your-IP>:90/`
 
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/f3957480-d9f4-4155-a5ff-fda03da1c0a2)
+
+
 ### Access the Alerts dashboard UI with Alerts from AI model detections
 
 XX. To access the front-end, go to 'http://localhost/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the UI service row.
