@@ -31,7 +31,8 @@ public class SimService
                 simGroup,
                 x.Properties.AuthenticationKey ?? "",
                 x.Properties.StaticIpConfiguration?.FirstOrDefault()?.StaticIp?.Ipv4Address,
-                x.Properties.SimPolicy?.Id
+                x.Properties.SimPolicy?.Id,
+                x.Properties.SimState
             )) ?? new List<Sim>();
         }
         else

@@ -2,7 +2,7 @@ namespace ControlPlane.API.Models
 {
     public record Camera(
         string Id,
-        string Model,
+        string? Model,
         CameraType Type,
         string Ip,
         string? Port,

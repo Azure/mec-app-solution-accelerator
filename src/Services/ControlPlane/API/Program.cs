@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using ControlPlane.API.Extensions;
 using ControlPlane.API.Services;
 using ControlPlane.API.Settings;
 using Microsoft.AspNetCore.Mvc;
@@ -56,19 +57,10 @@ builder.Services.AddScoped(sp =>
         ["https://management.azure.com/.default"]);
 });
 
-builder.Services.AddHttpClient<SimGroupService>(c =>
-{
-    c.BaseAddress = new Uri($"https://management.azure.com/");
-}).ConfigurePrimaryHttpMessageHandler(sp => sp.GetRequiredService<ClientApplicationHttpClientHandler>());
-builder.Services.AddHttpClient<SimService>(c =>
-{
-    c.BaseAddress = new Uri($"https://management.azure.com/");
-}).ConfigurePrimaryHttpMessageHandler(sp => sp.GetRequiredService<ClientApplicationHttpClientHandler>());
-builder.Services.AddHttpClient<SimPolicyService>(c =>
-{
-    c.BaseAddress = new Uri($"https://management.azure.com/");
-}).ConfigurePrimaryHttpMessageHandler(sp => sp.GetRequiredService<ClientApplicationHttpClientHandler>());
-
+builder.Services.AddAzureHttpClient<SimGroupService>();
+builder.Services.AddAzureHttpClient<SimService>();
+builder.Services.AddAzureHttpClient<SimPolicyService>();
+builder.Services.AddAzureHttpClient<AttachedDataNetworkService>();
 
 // Add CORS
 builder.Services.AddCors(options =>

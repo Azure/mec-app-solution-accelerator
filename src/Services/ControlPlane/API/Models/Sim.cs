@@ -8,5 +8,6 @@ namespace ControlPlane.API.Models
     string GroupId,
     string Ki,
     string? Ip,
-    string? PolicyId);
+    string? PolicyId,
+    string? status);
 }
