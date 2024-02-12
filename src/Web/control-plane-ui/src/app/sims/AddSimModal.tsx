@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/stores/store';
 import { addSim, listSimGroups, listSimPolicies } from '@/stores/simSlice';
 import Loading from '../components/icons/Loading';
+import IpInput from '../components/form/IpInput';
+import useAttachedDataNetwork from '../hooks/useAttachedDataNetwork';
 
 export type AddSimModalProps = {
   show: boolean;
@@ -22,10 +24,13 @@ export const AddSimModal = ({
 }: AddSimModalProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [sim, setSim] = useState<Partial<SIM>>({});
+  const ipsInUse = useSelector((state: RootState) => state.sims.data)?.map(sim => sim.ip ?? '') ?? [];
   const simGroups = useSelector((state: RootState) => state.sims.simGroups);
   const simPolicies = useSelector((state: RootState) => state.sims.simPolicies);
   const loading = useSelector((state: RootState) => state.sims.createLoading);
   const error = useSelector((state: RootState) => state.sims.createError);
+  const attachedDataNetwork = useAttachedDataNetwork();
+
   const hasSubmittedRef = useRef(false);
   const [errors, setErrors] = useState({
     name: false,
@@ -171,10 +176,14 @@ export const AddSimModal = ({
             ...sim,
             iccid: val
           })} />
-        <TextInput label='IP' value={sim.ip ?? ''} onChange={(val) => setSim({
-          ...sim,
-          ip: val
-        })} />
+        <IpInput label='IP'
+          ipSubnet={attachedDataNetwork.data?.staticIpPool ?? ''}
+          ipsInUse={ipsInUse}
+          value={sim.ip ?? ''}
+          onChange={(val) => setSim({
+            ...sim,
+            ip: val
+          })} />
         <ComboBox label='Policy'
           selected={sim.policyId ?? ''}
           options={simPolicies.map(x => ({ id: x.id, name: x.name }))}

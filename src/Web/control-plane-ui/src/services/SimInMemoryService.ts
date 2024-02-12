@@ -11,7 +11,8 @@ class SimInMemoryService implements ISimService {
             groupId: 'group1',
             policyId: 'policy1',
             ki: 'ki',
-            ip: '10.0.0.1'
+            ip: '10.0.0.1',
+            status: 'Enabled',
         }, {
             name: 'SIM-002',
             iccid: '8922345678901234567',
@@ -20,7 +21,8 @@ class SimInMemoryService implements ISimService {
             groupId: 'group1',
             policyId: 'policy1',
             ki: 'ki',
-            ip: '10.0.0.2'
+            ip: '10.0.0.2',
+            status: 'Enabled',
         }
     ];
 

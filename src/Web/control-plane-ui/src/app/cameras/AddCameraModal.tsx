@@ -191,6 +191,7 @@ export const AddCameraModal = ({
 
         <TextInput label='Password'
           value={camera.password ?? ''}
+          type='password'
           onChange={(val) => {
             setCamera({
               ...camera,

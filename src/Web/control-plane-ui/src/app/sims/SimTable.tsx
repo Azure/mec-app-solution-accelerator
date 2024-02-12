@@ -21,6 +21,7 @@ export const SimTable = () => {
   const columnOptions = [
     { header: 'Name' },
     { header: 'IMSI' },
+    { header: 'Status' },
     { header: 'IP' },
     { header: '' },
   ];
@@ -51,6 +52,7 @@ export const SimTable = () => {
           return [
             item.name,
             item.imsi,
+            item.status ?? '',
             item.ip ?? '',
             <span onClick={() => setEntityToDelete(item)}>
               <Trash className="w-8 h-8 cursor-pointer" />

@@ -7,6 +7,7 @@ export type SIM = {
     ip?: string;
     policyId?: string;
     groupId: string;
+    status?: string;
 }
 
 export type SimGroup = {
