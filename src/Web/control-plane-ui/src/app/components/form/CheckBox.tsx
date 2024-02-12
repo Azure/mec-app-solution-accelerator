@@ -13,7 +13,7 @@ export const CheckBox = ({ label, checked, onChange }: CheckBoxProps) => {
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        autocomplete="off"
+        autoComplete="off"
         className="form-checkbox h-6 w-6 text-blue-600 transition duration-150 ease-in-out rounded-md bg-gray-700 border-transparent focus:border-transparent focus:ring-0"
       />
       <span className="text-m font-medium text-gray-100">{label}</span>
