@@ -41,7 +41,7 @@ namespace RtspConverter.Services
                         continue;
                     }
 
-                    if (cameraInfo.Process == null)
+                    if (cameraInfo.Process == null && string.IsNullOrEmpty(cameraInfo.HlsUri))
                     {
                         cameraInfo.Process = new RtspToHlsEncoderProcess(new RtspToHlsEncoderOptions()
                         {

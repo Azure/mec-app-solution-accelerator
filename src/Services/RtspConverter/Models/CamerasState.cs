@@ -11,9 +11,10 @@ namespace RtspConverter.Models
     public class CameraInfo
     {
         public string Id { get; set; }
-        public string RtspUri { get; set; }
+        public string? RtspUri { get; set; }
+        public string? HlsUri { get; set; }
         public bool ToDelete { get; set; }
-        public RtspToHlsEncoderProcess Process { get; set; }
+        public RtspToHlsEncoderProcess? Process { get; set; }
 
     }
 }

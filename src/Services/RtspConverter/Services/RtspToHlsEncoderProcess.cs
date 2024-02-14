@@ -45,7 +45,24 @@ namespace RtspConverter.Services
                     StartInfo = new ProcessStartInfo
                     {
                         FileName = "ffmpeg",
-                        Arguments = $"-i {options.RtspUri} -c:v libx264 -c:a aac -hls_time 10 -hls_list_size 60 -hls_flags delete_segments -start_number 1 {options.OutputFolder}/stream.m3u8",
+                        Arguments = string.Join(" ", [
+                            "-fflags nobuffer",
+                            "-loglevel debug",
+                            "-rtsp_transport tcp",
+                            $"-i {options.RtspUri}",
+                            "-vsync 0",
+                            "-copyts",
+                            "-vcodec copy",
+                            "-movflags frag_keyframe+empty_moov",
+                            "-an",
+                            "-hls_flags delete_segments+append_list",
+                            "-f hls",
+                            "-hls_time 1",
+                            "-hls_list_size 3",
+                            "-hls_segment_type mpegts",
+                            $"-hls_segment_filename {options.OutputFolder}/%d.ts",
+                            $"{options.OutputFolder}/stream.m3u8"
+                        ]),
                         UseShellExecute = false,
                         CreateNoWindow = true,
                         RedirectStandardOutput = true,
@@ -67,6 +84,7 @@ namespace RtspConverter.Services
             if (!endProcess)
             {
                 logger.LogWarning($"Process for camera {options.CameraId} exited unexpectedly.");
+                logger.LogError(process?.StandardError?.ReadToEnd());
                 Start();
             }
         }

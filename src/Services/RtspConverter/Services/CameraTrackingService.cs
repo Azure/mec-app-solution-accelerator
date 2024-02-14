@@ -28,7 +28,6 @@ namespace RtspConverter.Services
             {
                 try
                 {
-                    logger.LogInformation("Querying database for cameras update");
                     var camerasInDb = await cameraCollection.Find(_ => true).ToListAsync(stoppingToken);
 
                     MarkToDeleteRemovedCameras(camerasInDb.Select(c => c["_id"].AsString).ToHashSet());
@@ -63,14 +62,17 @@ namespace RtspConverter.Services
             foreach (var camera in cameraInfoList)
             {
                 var cameraId = camera["_id"].AsString;
-                var rtspUrl = camera["Rtsp"].AsString;
+                var rtspUri = camera.Contains("Rtsp") && camera["Rtsp"] != BsonNull.Value ? camera["Rtsp"].AsString : null;
+                var hlsUri = camera.Contains("Hls") && camera["Hls"] != BsonNull.Value ? camera["Hls"].AsString : null;
+
 
                 if (!sharedCameraState.Cameras.ContainsKey(cameraId))
                 {
                     sharedCameraState.Cameras.TryAdd(cameraId, new CameraInfo()
                     {
                         Id = cameraId,
-                        RtspUri = rtspUrl,
+                        RtspUri = rtspUri,
+                        HlsUri = hlsUri
                     });
                     logger.LogInformation($"Added camera {cameraId} for processing.");
                 }
