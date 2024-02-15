@@ -3,6 +3,7 @@ import './globals.css'
 import Sidebar from './components/Sidebar'
 import { Providers } from '@/stores/providers'
 import SettingsControl from './components/settings/SettingsControl'
+import { PublicEnvScript } from 'next-runtime-env'
 
 export const metadata: Metadata = {
   title: 'Manager',
@@ -18,6 +19,9 @@ export default function RootLayout({
   return (
     <Providers>
       <html lang="en">
+        <head>
+          <PublicEnvScript />
+        </head>
         <body>
           <div className="flex min-h-screen h-full overflow-x-auto bg-gray-700">
             <Sidebar />

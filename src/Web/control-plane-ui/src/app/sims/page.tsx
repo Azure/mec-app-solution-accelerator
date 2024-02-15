@@ -4,7 +4,7 @@ import SimTable from './SimTable'
 export default function Home() {
   return (
     <>
-      <PageTitle title='SIM Management' /> 
+      <PageTitle title='SIMs Provisioning' />
       <SimTable />
     </>
   )

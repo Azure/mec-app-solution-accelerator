@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/stores/store';
 import CheckBox from '../form/CheckBox';
 import { updateSettings } from '@/stores/settingsSlice';
+import ComboBox, { ComboBoxOption } from '../form/ComboBox';
 
 export type SettingsModalProps = {
     show: boolean;
@@ -35,13 +36,28 @@ export const SettingsModal = ({
                     });
                 }} />
 
+                <ComboBox label='Logo'
+                    options={[{
+                        id: 'microsoft',
+                        name: 'Microsoft'
+                    }, {
+                        id: 'leavesbank',
+                        name: 'Leavesbank'
+                    }]}
+                    selected={tempSettings.logo}
+                    onSelect={function (option: ComboBoxOption): void {
+                        setTempSettings({
+                            ...tempSettings,
+                            logo: option.id
+                        })
+                    }} />
+
                 <CheckBox label='Use In Memory'
                     checked={tempSettings.useInMemory}
                     onChange={(val) => setTempSettings({
                         ...tempSettings,
                         useInMemory: val
                     })} />
-
             </div>
             <div className='flex flex-row gap-10 mt-9 '>
                 <button type='button'

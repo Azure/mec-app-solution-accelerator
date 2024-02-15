@@ -22,9 +22,9 @@ export default function Home() {
 
         {cameras.map(c => {
           const url = c.hls && c.hls !== '' ? c.hls : '/hls/' + c.id + '/stream.m3u8';
-          return <div>
+          return <div key={c.id}>
             <h2 className='text-white'>{c.id}</h2>
-            <Camera key={c.id} src={url} />
+            <Camera src={url} />
           </div>
         })}
       </div>

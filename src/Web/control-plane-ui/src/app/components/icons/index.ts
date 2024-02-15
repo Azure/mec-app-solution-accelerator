@@ -1,5 +1,5 @@
-export * from './Camara';
-export * from './CamaraDash';
-export * from './Dashboard';
-export * from './Sim';
-export * from './Settings';
+export { Camera } from './Camara';
+export { CameraDash } from './CamaraDash';
+export { Dashboard } from './Dashboard';
+export { Sim } from './Sim';
+export { Settings } from './Settings';

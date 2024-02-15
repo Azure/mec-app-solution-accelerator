@@ -19,10 +19,12 @@ export const SimTable = () => {
   const [entityToDelete, setEntityToDelete] = useState<SIM | null>(null);
 
   const columnOptions = [
-    { header: 'Name' },
+    { header: 'SIM Name' },
     { header: 'IMSI' },
-    { header: 'Status' },
     { header: 'IP' },
+    { header: 'SIM Policy' },
+    { header: 'SIM Group' },
+    { header: 'SIM State' },
     { header: '' },
   ];
 
@@ -43,7 +45,7 @@ export const SimTable = () => {
         ]}
       />
     </div>
-    <div className='box-border pb-6 px-16'>
+    <div className='box-border pb-6 px-8'>
       <Table
         columnOptions={columnOptions}
         items={sims}
@@ -52,8 +54,10 @@ export const SimTable = () => {
           return [
             item.name,
             item.imsi,
-            item.status ?? '',
             item.ip ?? '',
+            item.policyId?.split("/")?.pop() ?? "",
+            item.groupId,
+            item.status ?? '',
             <span onClick={() => setEntityToDelete(item)}>
               <Trash className="w-8 h-8 cursor-pointer" />
             </span>
