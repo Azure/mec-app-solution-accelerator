@@ -1,4 +1,4 @@
-# Deployment to Kubernetes in 'Docker Desktop'
+# MEC-Accelerator with Control-Plane-App (v1.8) - Deployment to Kubernetes in 'Docker Desktop'
 
 Docker Desktop includes a [standalone Kubernetes](https://docs.docker.com/desktop/kubernetes/) server and client, as well as Docker CLI integration that runs on your machine.
 
