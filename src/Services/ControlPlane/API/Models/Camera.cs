@@ -3,8 +3,8 @@ namespace ControlPlane.API.Models
     public record Camera(
         string Id,
         string? Model,
-        CameraType Type,
-        string Ip,
+        string? Type,
+        string? Ip,
         string? Port,
         string? SimId,
         string? Rtsp,

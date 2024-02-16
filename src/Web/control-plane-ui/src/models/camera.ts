@@ -3,16 +3,17 @@ import { SIM } from "./sim";
 export enum CameraType {
     FiveG = "5G",
     FourG = "4G",
-    Wifi = "Wifi",
+    Wifi = "Wi-fi",
+    Ethernet = "Ethernet",
     LTE = "LTE",
-    Process = "Process"
+    Container = "Container"
 }
 
 export type Camera = {
     id: string;
     model: string;
     type: CameraType;
-    ip: string;
+    ip?: string;
     username?: string;
     password?: string;
     port?: string;

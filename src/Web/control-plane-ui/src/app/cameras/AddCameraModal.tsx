@@ -12,9 +12,9 @@ import { listSims } from '@/stores/simSlice';
 import Loading from '../components/icons/Loading';
 
 const RTSP_MODEL_TEMPLATE: { [key: string]: string, default: string } = {
-  default: 'rtsp://{ip}:8554',
-  'Xingtera XTEE5021': 'rtsp://{username}:{password}@{ip}:554/main',
-  'RTSP Stream Container': 'rtsp://{username}:{password}@{ip}:8554/video'
+  default: 'rtsp://{authentication}{ip}:8554',
+  'Xingtera XTEE5021': 'rtsp://{authentication}{ip}:554/main',
+  'RTSP Stream Container': 'rtsp://{authentication}{ip}:8554/video'
 }
 
 export type AddCameraModalProps = {
@@ -93,10 +93,13 @@ export const AddCameraModal = ({
   useEffect(() => {
     if (!rtspManual && camera.ip) {
       const rtspTemplate = RTSP_MODEL_TEMPLATE[camera.model ?? ''] ?? RTSP_MODEL_TEMPLATE.default;
+      const username = camera.username ?? '';
+      const password = camera.password ?? '';
+      const authPart = username || password ? `${username}${password ? ':' : ''}${password}@` : '';
+
       const newRtsp = rtspTemplate
         .replace('{ip}', camera.ip)
-        .replace('{username}', camera.username ?? '')
-        .replace('{password}', camera.password ?? '');
+        .replace('{authentication}', authPart);
 
       if (newRtsp !== camera.rtsp) {
         setCamera({

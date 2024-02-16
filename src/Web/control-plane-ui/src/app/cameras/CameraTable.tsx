@@ -11,12 +11,15 @@ import { deleteCamera, listCameras } from '@/stores/cameraSlice';
 import { listSims } from '@/stores/simSlice';
 import DeleteConfirmationModal from '../components/modal/DeleteConfirmationModal';
 import { Camera } from '@/models/camera';
+import { View } from '../components/icons';
+import CameraDetailsModal from './CameraDetailsModal';
 
 export const CameraTable = () => {
   const dispatch = useDispatch<AppDispatch>();
   const sims = useSelector((state: RootState) => state.sims.data);
   const cameras = useSelector((state: RootState) => state.cameras.data);
   const isLoading = useSelector((state: RootState) => state.cameras.loading);
+  const [cameraDetails, setCameraDetails] = useState<Camera | null>(null);
   const [showNewCamera, setShowNewCamera] = useState(false);
   const [entityToDelete, setEntityToDelete] = useState<Camera | null>(null);
   const columnOptions = [
@@ -68,13 +71,18 @@ export const CameraTable = () => {
           itemToRow={(item) => {
             return [
               item.id,
-              item.model,
+              item.model ?? '',
               item.simId ?? '',
-              item.type.toString(),
-              item.ip,
-              <span onClick={() => setEntityToDelete(item)}>
-                <Trash className="w-8 h-8 cursor-pointer" />
-              </span>
+              item.type?.toString() ?? '',
+              item.ip ?? '',
+              <div className='flex gap-2'>
+                <span onClick={() => setCameraDetails(item)}>
+                  <View className="w-6 h-6 cursor-pointer" />
+                </span>
+                <span onClick={() => setEntityToDelete(item)}>
+                  <Trash className="w-8 h-8 cursor-pointer" />
+                </span>
+              </div>
             ]
           }}
         />
@@ -82,6 +90,11 @@ export const CameraTable = () => {
       <AddCameraModal
         show={showNewCamera}
         onClose={() => setShowNewCamera(false)} />
+      {cameraDetails && <CameraDetailsModal
+        camera={cameraDetails}
+        show={true}
+        onClose={() => setCameraDetails(null)} />
+      }
     </div>
     <DeleteConfirmationModal entity={entityToDelete ? `camera ${entityToDelete.id}` : ''}
       isOpen={entityToDelete !== null}
