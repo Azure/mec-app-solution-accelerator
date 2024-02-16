@@ -24,6 +24,10 @@ spec:
             value: "http://control-plane-api-service:89"
           - name: STREAMER_URL
             value: "http://rtsp-converter-service:91"
+          - name: NEXT_PUBLIC_LOGO
+            value: microsoft
+          - name: NEXT_PUBLIC_ALERTS_UI_URI
+            value: http://localhost:88
 
 ---
 
