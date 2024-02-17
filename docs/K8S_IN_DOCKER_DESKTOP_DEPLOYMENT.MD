@@ -58,7 +58,7 @@ Note that if you were able to run the application on plain Docker, you should ha
     
     ![image](https://user-images.githubusercontent.com/1712635/218881163-9ba81fa3-f72c-4c12-bbf6-8ec25f2dba55.png)
 
-    **IMPORTANT:** This DAPR installation is okay for a dev machine, but when installing DAPR on a "production" AKS cluster, for example in an ASE (Azure Stack Edge) server, you need to install DAPR via AKS extension following the Doc: (https://learn.microsoft.com/en-us/azure/aks/dapr) which is how DAPR should be installed in AKS and it doesn’t require cluster admin access.
+    **IMPORTANT:** This DAPR installation is okay for a dev machine with Kubernetes in Docker Desktop or a single node k3s, but when installing DAPR on a "production" AKS cluster, for example in an ASE (Azure Stack Edge) server on in Azure AKS cluster, you need to install DAPR via AKS extension following the Doc: (https://learn.microsoft.com/en-us/azure/aks/dapr) which is how DAPR should be installed in AKS and it doesn’t require cluster admin access.
     
     You can test DAPR status with:
     ```powershell
