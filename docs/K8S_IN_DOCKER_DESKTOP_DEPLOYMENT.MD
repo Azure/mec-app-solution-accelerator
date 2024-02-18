@@ -128,7 +128,7 @@ helm repo add akri-helm-charts https://project-akri.github.io/akri/
 
 Install AKRI Helm chart and configuration:
 
-**IMPORTANT:** If you are installing agains a K3s or K8s, you need to specify that distro in the `kubernetesDistro` parameter below as:
+**IMPORTANT:** If you are installing agains a K3s or K8s (Kubernetes on Docker Desktop should be "k8s"), you need to specify that distro in the `kubernetesDistro` parameter below as:
 
 `--set kubernetesDistro=k8s`
 
