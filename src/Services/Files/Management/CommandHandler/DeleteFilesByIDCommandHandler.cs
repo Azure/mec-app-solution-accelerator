@@ -8,7 +8,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Files.CommandHandlers
     {
         private readonly IFileStorage _filesService;
         private readonly ILogger<DeleteFilesByIDCommandHandler> _logger;
-        private const int MAX_FILE_TIME_ALIVE = 1;
+        private const int MAX_FILE_TIME_ALIVE = 15;
 
         public DeleteFilesByIDCommandHandler(IFileStorage filesService, ILogger<DeleteFilesByIDCommandHandler> logger)
         {
@@ -19,7 +19,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Files.CommandHandlers
         public async Task<Unit> Handle(DeleteFilesCommand request, CancellationToken cancellationToken)
         {
             await this._filesService.DeleteOlderThanFiles(request.containerName, MAX_FILE_TIME_ALIVE, cancellationToken);
-            _logger.LogInformation($"Correctly, deleted files olders than {MAX_FILE_TIME_ALIVE} hours");
+            _logger.LogInformation($"Correctly, deleted files olders than {MAX_FILE_TIME_ALIVE} minutes");
 
             return Unit.Value;
         }

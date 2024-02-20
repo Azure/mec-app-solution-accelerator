@@ -33,7 +33,7 @@ else
 app.Services.UseScheduler(scheduler =>
 {
     scheduler.Schedule<MinioCleanUpJob>()
-    .EveryThirtyMinutes().RunOnceAtStart();
+    .EveryFifteenMinutes().RunOnceAtStart();
 });
 app.UseHttpsRedirection();
 
