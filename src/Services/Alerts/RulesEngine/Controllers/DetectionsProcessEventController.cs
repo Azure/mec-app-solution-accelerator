@@ -25,13 +25,13 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventCont
         [HttpPost("newDetection")]
         public async Task<IActionResult> DetectionEventHandler(object detectionRaw)
         {
-            try 
+            try
             {
                 var stepTime = new StepTime { StepName = "RulesEngine", StepStart = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds };
                 var detectionStr = detectionRaw.ToString();
                 var detectionBytes = AvroConvert.Json2Avro(detectionStr);
                 var detection = AvroConvert.Deserialize<ObjectDetected>(detectionBytes);
-                _logger.LogInformation($"Received detection at {detection.EveryTime}");
+                _logger.LogInformation($"Received detection at {detection.EveryTime} from {detection.SourceId}");
                 detection.time_trace.Add(stepTime);
                 var command = new AnalyzeObjectDetectionCommand()
                 {
@@ -43,18 +43,19 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.EventCont
                     UrlVideoEncoded = detection.UrlVideoEncoded,
                     Classes = detection.Classes,
                     TimeTrace = detection.time_trace,
+                    SourceId = detection.SourceId
                 };
 
                 await _mediator.Send(command);
 
                 return Ok();
             }
-            catch(ArgumentException ex)
+            catch (ArgumentException ex)
             {
                 _logger.LogError(ex, "An error occurred while processing the detection event");
                 return BadRequest("Invalid detection event: " + ex.Message);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while processing the detection event");
                 return StatusCode(500, "An error occurred while processing the detection event");

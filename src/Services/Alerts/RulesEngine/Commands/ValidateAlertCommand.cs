@@ -14,5 +14,6 @@ namespace Alerts.RulesEngine.Commands
         public string Frame { get; set; }
         public List<StepTime> StepTrace { get; set; }
         public AlertsConfig AlertConfig { get; set; }
+        public string SourceId { get; set; }
     }
 }

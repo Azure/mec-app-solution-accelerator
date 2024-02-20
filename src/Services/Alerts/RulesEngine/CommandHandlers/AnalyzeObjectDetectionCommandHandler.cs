@@ -35,15 +35,15 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
             var i = 0;
             foreach (var @class in command.Classes)
             {
-                tasks[i++] = ValidateAlertsPerDetection(@class, command.Classes, command.EveryTime, command.UrlVideoEncoded,  command.Frame, command.TimeTrace);
+                tasks[i++] = ValidateAlertsPerDetection(@class, command.Classes, command.EveryTime, command.UrlVideoEncoded, command.Frame, command.TimeTrace, command.SourceId);
 
             }
             await Task.WhenAll(tasks);
 
             return Unit.Value;
-         }
+        }
 
-        private async Task ValidateAlertsPerDetection(DetectionClass requestClass, List<DetectionClass> foundClasses, long everyTime, string urlEncoded, string frame, List<StepTime> stepTrace)
+        private async Task ValidateAlertsPerDetection(DetectionClass requestClass, List<DetectionClass> foundClasses, long everyTime, string urlEncoded, string frame, List<StepTime> stepTrace, string sourceId)
         {
             if (_alertsByDetectedClasses.TryGetValue(requestClass.EventType, out IEnumerable<AlertsConfig>? alertsConfig))
             {
@@ -59,9 +59,10 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                         Frame = frame,
                         RequestClass = requestClass,
                         StepTrace = stepTrace,
+                        SourceId = sourceId,
                     };
-                    
-                   await  this._mediator.Send(validationAlertCommand);
+
+                    await this._mediator.Send(validationAlertCommand);
                 }
             }
         }

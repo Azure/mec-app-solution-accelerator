@@ -23,7 +23,7 @@ namespace Alerts.RulesEngine.CommandHandlers
 
         public async Task<Unit> Handle(ValidateAlertCommand request, CancellationToken cancellationToken)
         {
-        var matchingClasses = new List<DetectionClass>();
+            var matchingClasses = new List<DetectionClass>();
             if (await ValidateAllRulesPerAlert(request.AlertConfig, request.RequestClass, request.FoundClasses, matchingClasses))
             {
                 var alert = new DetectedObjectAlert()
@@ -37,6 +37,7 @@ namespace Alerts.RulesEngine.CommandHandlers
                     Information = $"Generate alert {request.AlertConfig.AlertName} detecting objects {string.Join(" ,", request.FoundClasses.Select(x => x.EventType).ToArray())}",
                     Accuracy = request.RequestClass.Confidence,
                     TimeTrace = request.StepTrace,
+                    SourceId = request.SourceId
                 };
 
                 var serialized = AvroConvert.Serialize(alert);

@@ -36,6 +36,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.EventControllers
                 Accuracy = detection.Accuracy,
                 StepTrace = detection.TimeTrace,
                 MatchingClasses = detection.MatchingClasses,
+                Source = detection.SourceId
             });
 
             _logger.LogInformation("Stored generic alert");
