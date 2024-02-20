@@ -60,8 +60,8 @@ namespace RtspConverter.Services
                             "-hls_time 1",
                             "-hls_list_size 3",
                             "-hls_segment_type mpegts",
-                            $"-hls_segment_filename {options.OutputFolder}/%d.ts",
-                            $"{options.OutputFolder}/stream.m3u8"
+                            $"-hls_segment_filename \"{options.OutputFolder}/%d.ts\"",
+                            $" \"{options.OutputFolder}/stream.m3u8\""
                         ]),
                         UseShellExecute = false,
                         CreateNoWindow = true,
