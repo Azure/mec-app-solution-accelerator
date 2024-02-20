@@ -174,9 +174,25 @@ export const AddCameraModal = ({
         <ComboBox label='Model'
           selected={camera.model ?? ''}
           options={[
-            { id: 'Xingtera XTEE5021', name: 'Xingtera XTEE5021' },
-            { id: 'RTSP Stream Container', name: 'RTSP Stream Container' },
-          ]}
+            {
+              id: 'Xingtera XTEE5021',
+              name: 'Xingtera XTEE5021',
+              type: [
+                CameraType.FiveG,
+                CameraType.FourG,
+                CameraType.LTE,
+              ]
+            },
+            {
+              id: 'RTSP Stream Container',
+              name: 'RTSP Stream Container',
+              type: [
+                CameraType.Container
+              ]
+            }]
+            .filter(x => x.type.includes(camera.type as CameraType))
+            .map(x => ({ id: x.id, name: x.name }))
+          }
           onSelect={(val) => {
             setCamera({
               ...camera,
