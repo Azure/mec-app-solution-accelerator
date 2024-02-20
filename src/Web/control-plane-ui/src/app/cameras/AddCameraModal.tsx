@@ -14,7 +14,9 @@ import Loading from '../components/icons/Loading';
 const RTSP_MODEL_TEMPLATE: { [key: string]: string, default: string } = {
   default: 'rtsp://{authentication}{ip}:8554',
   'Xingtera XTEE5021': 'rtsp://{authentication}{ip}:554/main',
-  'RTSP Stream Container': 'rtsp://{authentication}{ip}:8554/video'
+  'RTSP Stream Container': 'rtsp://{authentication}{ip}:8554/video',
+  'Amcrest 4MP ProHD Indoor WiFi/Ethernet': 'rtsp://{authentication}{ip}:554/cam/realmonitor?channel=1&subtype=0',
+  'Amcrest 5MP Turret IP Ethernet Camera': 'rtsp://{authentication}{ip}:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif'
 }
 
 export type AddCameraModalProps = {
@@ -188,6 +190,21 @@ export const AddCameraModal = ({
               name: 'RTSP Stream Container',
               type: [
                 CameraType.Container
+              ]
+            },
+            {
+              id: 'Amcrest 4MP ProHD Indoor WiFi/Ethernet',
+              name: 'Amcrest 4MP ProHD Indoor WiFi/Ethernet',
+              type: [
+                CameraType.Wifi,
+                CameraType.Ethernet,
+              ]
+            },
+            {
+              id: 'Amcrest 5MP Turret IP Ethernet Camera',
+              name: 'Amcrest 5MP Turret IP Ethernet Camera',
+              type: [
+                CameraType.Ethernet,
               ]
             }]
             .filter(x => x.type.includes(camera.type as CameraType))
