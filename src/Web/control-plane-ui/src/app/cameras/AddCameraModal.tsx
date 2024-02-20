@@ -250,7 +250,7 @@ export const AddCameraModal = ({
             });
           }} />
 
-        <TextInput label='HLS Uri' value={camera.hls ?? ''} onChange={(val) => {
+        <TextInput label='HTTP Uri' value={camera.hls ?? ''} onChange={(val) => {
           setCamera({
             ...camera,
             hls: val
