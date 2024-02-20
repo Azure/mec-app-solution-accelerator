@@ -109,16 +109,26 @@ Replace the following values in the file:
 *Note:* This step is required if you want to manage SIMs provisioning from this app against AP5GC (Azure Private 5G Core) in Azure. 
 For just getting alerts and camera management/provisioning (i.e. Wi-Fi or Ethernet cameras provisioning), you can skip this part if you don't have an AP5GC Mobile Network and packet core deployed into an ASE, RAN, 5G UEs, etc.
 
+
+4. Update the alerts link for deployment in a non-localhost environment, replace localhost with your cluster's IP address in the NEXT_PUBLIC_ALERTS_UI_URI variable within the `14-control-plane-api.yaml` file. Edit as follows:
+
+```
+- name: NEXT_PUBLIC_ALERTS_UI_URI
+  value: http://<Cluster-IP>:88
+```
+
+Ensure to replace <Cluster-IP> with the actual IP address of your cluster.
+
 ### Install AKRI
 
-4. Install HELM in your system
+5. Install HELM in your system
 
 Make sure you have install [helm](https://helm.sh/) in the machine you are using with KUBECTL accessing the Kubernetes cluster.
 By default, that machine can be a Windows machine with KUBECTL installed and pointing to the right Kubernetes cluster context. 
 
 Full installation instructions of Helm can be found [here](https://helm.sh/docs/intro/install/).
 
-5. Install AKRI
+6. Install AKRI
 
 Install akri repository.
 
@@ -162,13 +172,13 @@ Here's an example execution when targeting k3s:
 
 ### Deploy the application's services to Kubernetes
 
-6. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
+7. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
     ```powershell
     cd <your_path>/deploy/k8s
     ```
 
-7. Deploy the application in Kuberentes by running this command:
+8. Deploy the application in Kuberentes by running this command:
 
     ```powershell
     kubectl apply -f ./
@@ -188,7 +198,7 @@ Here's an example execution when targeting k3s:
 
 ## Deploy AKRI configuration
 
-8. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
+9. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
 ```powershell
 ./deploy-akri-secrets.ps1
@@ -198,13 +208,13 @@ Here's an example execution when targeting k3s:
 
 ### Check the application status with Kubernetes Dashboard
 
-9. If you don't have installed/enabled the Kuberentes Dashboard, do so by running this command:
+10. If you don't have installed/enabled the Kuberentes Dashboard, do so by running this command:
 
     ```powershell
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
     ```
 
-10. Run `kubectl proxy` so you can access the dahboard:
+11. Run `kubectl proxy` so you can access the dahboard:
 
     ```powershell
     kubectl proxy
@@ -222,7 +232,7 @@ Let's do that in the following steps.
 
 ### Configure Bearer Tokens from Kuberentes to access the Dashboard
 
-11. You need to do this step **only one time**: Change the current folder to the `deploy/k8s/dashboard_auth` folder of this repo and run the instructions in commands.txt to configure the tokens. Basically, the following commands need to be run just once from that folder:
+12. You need to do this step **only one time**: Change the current folder to the `deploy/k8s/dashboard_auth` folder of this repo and run the instructions in commands.txt to configure the tokens. Basically, the following commands need to be run just once from that folder:
 
     ```powershell
     kubectl apply -f dashboard-adminuser.yaml 
@@ -235,7 +245,7 @@ Let's do that in the following steps.
 
 ### Generate and copy the token to provide to Kubernetes Dashboard
 
-12. Whenever you need a token, run this command:
+13. Whenever you need a token, run this command:
 
     ```powershell
     kubectl -n kubernetes-dashboard create token admin-user --duration=48h --output yaml
@@ -247,7 +257,7 @@ Let's do that in the following steps.
 
 ### Provide the token to Kubernetes dashboard
 
-13. Open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login in your browser and paste the token you copied previously.
+14. Open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login in your browser and paste the token you copied previously.
 
 ![image](https://user-images.githubusercontent.com/1712635/218882193-938f14f0-06ca-4bba-979f-da9266706f8e.png)
 
@@ -258,7 +268,7 @@ In the Kubernetes dashboard you should be able to explore the application's pods
 
 ### Access the 'Control Plain app' to provision cameras (and 5G network SIMs if using 5G cameras in a Private 5G network)
 
-14. In order to know the URL for the 'Control Plain web app', using a browser go to the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed ("mec-accelerator"), go to the "Services" menu in the left tab and click on the url to the right on the **"control-plane-ui-service" service** row.
+15. In order to know the URL for the 'Control Plain web app', using a browser go to the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed ("mec-accelerator"), go to the "Services" menu in the left tab and click on the url to the right on the **"control-plane-ui-service" service** row.
 
 ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/1df800f5-f5e8-4d40-8d2f-911197a7678b)
 
