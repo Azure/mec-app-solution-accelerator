@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using ControlPlane.API.Extensions;
+using ControlPlane.API.Middlewares;
 using ControlPlane.API.Services;
 using ControlPlane.API.Settings;
 using Microsoft.AspNetCore.Mvc;
@@ -87,6 +88,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseMiddleware<ApiKeyMiddleware>();
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseCors("CORS");
 
 // app.UseHttpsRedirection();
