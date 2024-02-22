@@ -12,6 +12,7 @@ import { addSim, listSimGroups, listSimPolicies } from '@/stores/simSlice';
 import Loading from '../components/icons/Loading';
 import IpInput from '../components/form/IpInput';
 import useAttachedDataNetwork from '../hooks/useAttachedDataNetwork';
+import DisplayErrorMessage from '../components/errors/DisplayErrorMessage';
 
 export type AddSimModalProps = {
   show: boolean;
@@ -29,6 +30,7 @@ export const AddSimModal = ({
   const simPolicies = useSelector((state: RootState) => state.sims.simPolicies);
   const loading = useSelector((state: RootState) => state.sims.createLoading);
   const error = useSelector((state: RootState) => state.sims.createError);
+  const createErrorMessage = useSelector((state: RootState) => state.sims.createErrorMessage);
   const attachedDataNetwork = useAttachedDataNetwork();
 
   const hasSubmittedRef = useRef(false);
@@ -102,6 +104,7 @@ export const AddSimModal = ({
       </div>
     </div>
     <form className='mt-9'>
+      {createErrorMessage && <DisplayErrorMessage errorMessage={createErrorMessage} />}
       <div className='mt-4 grid gap-4 items-center grid-cols-[auto_1fr]'>
         <TextInput
           label='Name*'

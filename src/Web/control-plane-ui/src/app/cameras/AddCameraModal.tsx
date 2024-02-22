@@ -10,11 +10,13 @@ import { AppDispatch, RootState } from '@/stores/store';
 import { addCamera } from '@/stores/cameraSlice';
 import { listSims } from '@/stores/simSlice';
 import Loading from '../components/icons/Loading';
+import DisplayErrorMessage from '../components/errors/DisplayErrorMessage';
 
 const RTSP_MODEL_TEMPLATE: { [key: string]: string, default: string } = {
   default: 'rtsp://{authentication}{ip}:8554',
   'Xingtera XTEE5021': 'rtsp://{authentication}{ip}:554/main',
   'RTSP Stream Container': 'rtsp://{authentication}{ip}:8554/video',
+  'Default RTSP Stream Container': 'rtsp://{authentication}{ip}:8554/video',
   'Amcrest 4MP ProHD Indoor WiFi/Ethernet': 'rtsp://{authentication}{ip}:554/cam/realmonitor?channel=1&subtype=0',
   'Amcrest 5MP Turret IP Ethernet Camera': 'rtsp://{authentication}{ip}:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif'
 }
@@ -116,6 +118,7 @@ export const AddCameraModal = ({
     isOpen={show}
     onClose={onClose}>
     <form className='mt-9'>
+      {error && <DisplayErrorMessage errorMessage={error} />}
       <div className='mt-4 grid gap-4 items-center grid-cols-[auto_1fr]'>
         <TextInput label='Id*'
           hasError={errors.id}
@@ -193,6 +196,13 @@ export const AddCameraModal = ({
               ]
             },
             {
+              id: 'Default RTSP Stream Container',
+              name: 'Default RTSP Stream Container',
+              type: [
+                CameraType.Container
+              ]
+            },
+            {
               id: 'Amcrest 4MP ProHD Indoor WiFi/Ethernet',
               name: 'Amcrest 4MP ProHD Indoor WiFi/Ethernet',
               type: [
@@ -213,7 +223,8 @@ export const AddCameraModal = ({
           onSelect={(val) => {
             setCamera({
               ...camera,
-              model: val.id
+              model: val.id,
+              ip: val.id === 'Default RTSP Stream Container' ? 'rtsp-video-streamer' : camera.ip,
             })
           }} />
         <TextInput label='Username'
@@ -250,12 +261,12 @@ export const AddCameraModal = ({
             });
           }} />
 
-        <TextInput label='HTTP Uri' value={camera.hls ?? ''} onChange={(val) => {
+        {/* <TextInput label='HTTP Uri' value={camera.hls ?? ''} onChange={(val) => {
           setCamera({
             ...camera,
             hls: val
           });
-        }} />
+        }} /> */}
       </div>
       <div className='flex flex-row gap-10 mt-9 '>
         <button type='button'

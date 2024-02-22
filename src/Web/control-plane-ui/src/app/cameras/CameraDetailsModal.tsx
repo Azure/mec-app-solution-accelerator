@@ -26,7 +26,7 @@ export const CameraDetailsModal = ({
         <Field label='IP' value={camera.ip ?? ''} />
         <Field label='Model' value={camera.model ?? ''} />
         <Field label='RTSP Uri' value={camera.rtsp ?? ''} />
-        <Field label='HTTP Uri' value={camera.hls ?? ''} />
+        {/* <Field label='HTTP Uri' value={camera.hls ?? ''} /> */}
       </div>
     </div>
 

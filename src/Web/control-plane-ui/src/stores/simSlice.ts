@@ -10,7 +10,8 @@ interface SimState {
     loading: boolean;
     error: string | null;
     createLoading: boolean;
-    createError: string | null;
+    createError: boolean;
+    createErrorMessage: string | null;
 }
 
 const initialState: SimState = {
@@ -20,16 +21,25 @@ const initialState: SimState = {
     loading: false,
     error: null,
     createLoading: false,
-    createError: null,
+    createError: false,
+    createErrorMessage: null,
 };
 
 export const addSim = createAsyncThunk<SIM, SIM, { dispatch: AppDispatch, state: RootState }>(
     'sims/addSim',
-    async (sim: SIM, { dispatch, getState }): Promise<SIM> => {
-        const simService = ServiceFactory.getSimService(getState().settings);
-        const response = await simService.createSim(sim);
-        dispatch(listSims());
-        return response;
+    async (sim: SIM, { dispatch, getState, rejectWithValue }) => {
+        try {
+            const simService = ServiceFactory.getSimService(getState().settings);
+            const response = await simService.createSim(sim);
+            dispatch(listSims());
+            return response;
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return rejectWithValue(error?.message ?? '');
+            } else {
+                return rejectWithValue('An unknown error occurred');
+            }
+        }
     }
 );
 
@@ -115,14 +125,18 @@ const simSlice = createSlice({
             })
             .addCase(addSim.pending, (state) => {
                 state.createLoading = true;
-                state.createError = null;
+                state.createError = false;
+                state.createErrorMessage = null;
             })
             .addCase(addSim.rejected, (state, action) => {
                 state.createLoading = false;
-                state.createError = action?.error?.message || null;
+                state.createError = true;
+                state.createErrorMessage = action.payload as string;
             })
             .addCase(addSim.fulfilled, (state) => {
                 state.createLoading = false;
+                state.createError = false;
+                state.createErrorMessage = null;
             });
     },
 });

@@ -1,23 +1,26 @@
 'use client'
 
 import { usePathname } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Camera, CameraDash, Dashboard, Sim } from '@/app/components/icons';
 import Link from 'next/link';
 import { RootState } from '@/stores/store';
 import { useSelector } from 'react-redux';
 import { env } from 'next-runtime-env';
+import useAlertsDashboardUri from '../hooks/useAlertsDashboardUri';
 
 export type MenuItemProps = {
   name: string;
   icon: JSX.Element;
   path: string;
+  external: boolean;
 }
 
 const MenuItem = ({
   name,
   icon,
   path,
+  external,
 }: MenuItemProps) => {
   const pathname = usePathname();
   const isActive = pathname === path;
@@ -33,7 +36,8 @@ const MenuItem = ({
       'transition-colors',
       'duration-200',
       isActive ? 'text-brand' : '',
-    ].join(' ')}>
+    ].join(' ')}
+      target={external ? '_blank' : undefined}>
       {icon}
       <span>{name}</span>
     </Link>
@@ -41,7 +45,7 @@ const MenuItem = ({
 }
 
 const Sidebar = () => {
-  const alertsUiUri = env('NEXT_PUBLIC_ALERTS_UI_URI') ?? '';
+  const alertsUiUri = useAlertsDashboardUri();
   const logoSettings = useSelector((state: RootState) => state.settings.logo);
   const logoSvg = logoSettings === 'leavesbank' ? 'leavesbank-logo.svg' :
     'microsoft-logo.svg';
@@ -50,26 +54,32 @@ const Sidebar = () => {
     name: 'Global',
     icon: <Dashboard className='h-8 w-8' />,
     path: '/',
+    external: false,
   }, {
     name: 'SIMs Provisioning',
     icon: <Sim className='h-8 w-8' />,
     path: '/sims',
+    external: false,
   }, {
     name: 'Cameras Provisioning',
     icon: <Camera className="h-8 w-8" />,
     path: '/cameras',
+    external: false,
   }, {
     name: 'Cameras Dashboard',
     icon: <CameraDash className='h-8 w-8' />,
     path: '/camera-dashboard',
+    external: false,
   }, {
     name: 'Alerts Dashboard',
     icon: <CameraDash className='h-8 w-8' />,
     path: alertsUiUri,
+    external: true,
   }].map(x => MenuItem({
     name: x.name,
     icon: x.icon,
     path: x.path,
+    external: x.external,
   }));
 
   return (

@@ -43,6 +43,12 @@ class SimApiService {
             },
             body: JSON.stringify(sim)
         });
+
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(error);
+        }
+
         return sim;
     }
 

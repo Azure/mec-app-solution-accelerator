@@ -1,10 +1,13 @@
+'use client'
+
 import Link from 'next/link'
 import PageTitle from './components/PageTitle'
 import { Camera, CameraDash, Sim } from './components/icons'
-import { env } from 'next-runtime-env';
+import useAlertsDashboardUri from './hooks/useAlertsDashboardUri';
 
 export default function Home() {
-  const alertsUiUri = env('NEXT_PUBLIC_ALERTS_UI_URI') ?? '';
+  const alertsUiUri = useAlertsDashboardUri();
+
   const menuItems = [{
     name: 'Cameras Dashboard',
     icon: <CameraDash className='h-16 w-16' />,
@@ -39,7 +42,7 @@ export default function Home() {
               <span className='mt-4'>{item.name}</span>
             </>;
 
-            return item.external ? <a key={item.name} href={item.path} className={linkStyle}>{linkContent}</a> :
+            return item.external ? <a key={item.name} href={item.path} className={linkStyle} target="_blank">{linkContent}</a> :
               <Link key={item.name} href={item.path} className={linkStyle}>{linkContent}</Link>;
           })}
         </div>
