@@ -16,6 +16,7 @@ RUN pip install -r requirements.txt
 
 # Copy the video file and the main.py script
 COPY src/video.mp4 /app/video.mp4
+COPY src/video2.mp4 /app/video2.mp4
 COPY src/main.py /app/main.py
 COPY src/requirements.txt /app/requirements.txt
 

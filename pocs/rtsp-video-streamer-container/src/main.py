@@ -129,7 +129,7 @@ server.attach(None)
 # This will create a CustomRTSPMediaFactory() instance that can handle any video file 
 # by dynamically creating a GStreamer pipeline based on the video format.
 
-video_file = "video.mp4"
+video_file = "video2.mp4"
 pipeline_description = f"filesrc location={video_file} ! decodebin3 ! videoconvert ! video/x-raw,format=I420 ! x264enc ! rtph264pay pt=96 config-interval=1 name=pay0".format(video_file)
 
 # ORIGINALS - ONLY WORK FOR SPECIFIC FILE FORMATS
