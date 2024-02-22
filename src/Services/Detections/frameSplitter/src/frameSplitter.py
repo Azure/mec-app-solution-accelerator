@@ -59,7 +59,7 @@ def main():
     timer=int(os.getenv('TIMEOUT'))
     feed_URL = settings_provider.get_rtsp_uri()
     feed_id = settings_provider.get_camera_id()
-    logging.info(f'Camera Id: {feed_URL}')
+    logging.info(f'Camera Id: {feed_id}')
     logging.info(f'feed url: {feed_URL}')
         
     time.sleep(timer)
