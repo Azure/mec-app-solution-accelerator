@@ -110,15 +110,6 @@ Replace the following values in the file:
 For just getting alerts and camera management/provisioning (i.e. Wi-Fi or Ethernet cameras provisioning), you can skip this part if you don't have an AP5GC Mobile Network and packet core deployed into an ASE, RAN, 5G UEs, etc.
 
 
-4. Update the alerts link for deployment in a non-localhost environment, replace localhost with your cluster's IP address in the NEXT_PUBLIC_ALERTS_UI_URI variable within the `14-control-plane-api.yaml` file. Edit as follows:
-
-```
-- name: NEXT_PUBLIC_ALERTS_UI_URI
-  value: http://<Cluster-IP>:88
-```
-
-Ensure to replace <Cluster-IP> with the actual IP address of your cluster.
-
 ### Install AKRI
 
 5. Install HELM in your system
