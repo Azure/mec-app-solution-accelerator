@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
       - name: control-plane-ui
-        image: mecsolutionaccelerator/control-plane-ui:1.8
-        imagePullPolicy: Always
+        image: mecsolutionaccelerator/control-plane-ui:1.8.1
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
         env:
@@ -26,8 +26,6 @@ spec:
             value: "http://rtsp-converter-service:91"
           - name: NEXT_PUBLIC_LOGO
             value: microsoft
-          - name: NEXT_PUBLIC_ALERTS_UI_URI
-            value: http://localhost:88
 
 ---
 

@@ -87,7 +87,7 @@ spec:
       containers:
       - name: akri-controller
         image: "ghcr.io/project-akri/akri/controller:v0.12.9"
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         resources:
           requests:
             memory: 11Mi
@@ -359,7 +359,7 @@ items:
           containers:
           - name: webhook
             image: "ghcr.io/project-akri/akri/webhook-configuration:v0.12.9"
-            imagePullPolicy: Always
+            imagePullPolicy: IfNotPresent
             resources:
               requests:
                 memory: 100Mi
