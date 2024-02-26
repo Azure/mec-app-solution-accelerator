@@ -23,41 +23,56 @@ namespace RtspConverter.Services
             this.serviceProvider = serviceProvider;
         }
 
+        public async Task ProcessCamera(CameraInfo cameraInfo)
+        {
+            try
+            {
+                // If marked for deletion, stop the process.
+                if (cameraInfo.ToDelete)
+                {
+                    cameraInfo.Process?.Kill();
+                    return;
+                }
+
+                if (cameraInfo.Process == null && string.IsNullOrEmpty(cameraInfo.HlsUri))
+                {
+                    cameraInfo.Process = new RtspToHlsEncoderProcess(new RtspToHlsEncoderOptions()
+                    {
+                        CameraId = cameraInfo.Id,
+                        OutputFolder = $"{VIDEO_OUTPUT_PATH}/{cameraInfo.Id}",
+                        RtspUri = cameraInfo.RtspUri
+                    }, serviceProvider.GetService<ILogger<RtspToHlsEncoderProcess>>());
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError($"Error processing camera ${cameraInfo.Id}", e);
+            }
+        }
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var cameraIdsToRemove = new List<string>();
-
                 foreach (var camera in sharedState.Cameras)
                 {
                     var cameraInfo = camera.Value;
-
-                    // If marked for deletion, stop the process and mark for removal from the dictionary
-                    if (cameraInfo.ToDelete)
-                    {
-                        cameraInfo.Process?.Kill();
-                        cameraIdsToRemove.Add(camera.Key);
-                        continue;
-                    }
-
-                    if (cameraInfo.Process == null && string.IsNullOrEmpty(cameraInfo.HlsUri))
-                    {
-                        cameraInfo.Process = new RtspToHlsEncoderProcess(new RtspToHlsEncoderOptions()
-                        {
-                            CameraId = cameraInfo.Id,
-                            OutputFolder = $"{VIDEO_OUTPUT_PATH}/{cameraInfo.Id}",
-                            RtspUri = cameraInfo.RtspUri
-                        }, serviceProvider.GetService<ILogger<RtspToHlsEncoderProcess>>());
-                    }
+                    await ProcessCamera(cameraInfo);
                 }
 
                 // Remove cameras marked for deletion
-                foreach (var cameraId in cameraIdsToRemove)
-                {
-                    sharedState.Cameras.TryRemove(cameraId, out var _);
-                    logger.LogInformation($"Camera {cameraId} removed from monitoring.");
-                }
+                sharedState.Cameras
+                    .Where(x => x.Value.ToDelete)
+                    .Select(x => x.Value.Id)
+                    .ToList()
+                    .ForEach(cameraId =>
+                    {
+                        if (!string.IsNullOrEmpty(cameraId))
+                        {
+                            sharedState.Cameras.TryRemove(cameraId, out var _);
+                            logger.LogInformation($"Camera {cameraId} removed from monitoring.");
+                        }
+                    });
 
                 await Task.Delay(TASK_DELAY_IN_MS, stoppingToken);
             }

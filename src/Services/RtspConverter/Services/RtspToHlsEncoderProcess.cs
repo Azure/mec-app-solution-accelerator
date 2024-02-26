@@ -9,6 +9,7 @@ namespace RtspConverter.Services
         private readonly RtspToHlsEncoderOptions options;
         private Process? process;
         private bool endProcess = false;
+        private List<string> errorMessages = new List<string>();
 
         public RtspToHlsEncoderProcess(RtspToHlsEncoderOptions options,
             ILogger<RtspToHlsEncoderProcess> logger)
@@ -66,12 +67,31 @@ namespace RtspConverter.Services
                         UseShellExecute = false,
                         CreateNoWindow = true,
                         RedirectStandardOutput = true,
-                        RedirectStandardError = true
+                        RedirectStandardError = true,
                     },
                     EnableRaisingEvents = true
                 };
                 process.Exited += OnProcessExited;
+                process.OutputDataReceived += (sender, args) =>
+                {
+                    //Ignoring output data to avoid unnecesary logging.
+                };
+                process.ErrorDataReceived += (sender, args) =>
+                {
+                    //ffmpeg is printing debug information into error, keeping only last 10 error messages
+                    if (!string.IsNullOrEmpty(args.Data))
+                    {
+                        errorMessages.Add(args.Data);
+                        if (errorMessages.Count > 10)
+                        {
+                            errorMessages = errorMessages.TakeLast(10).ToList();
+                        }
+                    }
+                };
+
                 process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
             }
             catch (Exception e)
             {
@@ -84,7 +104,7 @@ namespace RtspConverter.Services
             if (!endProcess)
             {
                 logger.LogWarning($"Process for camera {options.CameraId} exited unexpectedly.");
-                logger.LogError(process?.StandardError?.ReadToEnd());
+                logger.LogError(string.Join("\n", errorMessages));
                 Start();
             }
         }
