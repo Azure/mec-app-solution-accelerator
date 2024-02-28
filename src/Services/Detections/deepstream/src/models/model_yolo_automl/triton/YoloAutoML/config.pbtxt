@@ -1,7 +1,7 @@
 name: "YoloAutoML"
 platform: "onnxruntime_onnx",
 
-max_batch_size: 2
+max_batch_size: 4
 input [
   {
     name: "input"
@@ -40,10 +40,16 @@ dynamic_batching {
 }
 instance_group [
     {
-      count: 2
+      count: 1
       kind: KIND_GPU
     }
 ]
+optimization { 
+  execution_accelerators {
+  gpu_execution_accelerator : [ {
+    name : "tensorrt"
+    }]
+}}
 
 
 

@@ -112,9 +112,9 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
     batch_meta = pyds.gst_buffer_get_nvds_batch_meta(hash(gst_buffer))
     
     l_frame = batch_meta.frame_meta_list
-    print("Starting loop")
+    
     while l_frame is not None:
-        print("l_frame")
+        
         try:
             # Note that l_frame.data needs a cast to pyds.NvDsFrameMeta
             # The casting is done by pyds.NvDsFrameMeta.cast()
@@ -131,7 +131,8 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
         l_obj = frame_meta.obj_meta_list
         num_rects = frame_meta.num_obj_meta
         source_id = str(frame_meta.source_id)
-        print("source_id")
+        print("source_id "+ source_id)
+        print(time.time()*1000)
         is_first_obj = True
         
         
@@ -262,10 +263,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             
                 
             
-            try:
-                l_frame = l_frame.next
-            except StopIteration:
-                break
+            
             time_trace={"stepStart": timestamp_init, "stepEnd":int(time.time()*1000), "stepName": "deepstream"}
             data['time_trace'].append(time_trace)
             json_str = serializer.to_json(data)
@@ -274,6 +272,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
                 # asyncio.run(PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str))
                 upload_thread = threading.Thread(target=PublishEvent, args=("pubsub","newDetection", json_str))
                 upload_thread.start()
+        
             
             
             logging.info(f'Event published')
@@ -282,8 +281,13 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             logging.info('No detections found')
         
         print("time per frame: ", int(time.time()*1000)-timestamp_init)
+        try:
+            l_frame = l_frame.next
+        except StopIteration:
+            break
+    return Gst.PadProbeReturn.OK
 
-        return Gst.PadProbeReturn.OK
+        
         
 
 
@@ -528,23 +532,36 @@ def main(args):
         nvvidconv1.set_property("nvbuf-memory-type", mem_type)
         tiler.set_property("nvbuf-memory-type", mem_type)
 
+    
+    queue1 = Gst.ElementFactory.make("queue", "queue1")
+    queue2 = Gst.ElementFactory.make("queue", "queue2")
+    queue3 = Gst.ElementFactory.make("queue", "queue3")
+    nvdslogger = Gst.ElementFactory.make("nvdslogger", "nvdslogger")
     print("Adding elements to Pipeline \n")
     pipeline.add(pgie)
     pipeline.add(tiler)
     pipeline.add(nvvidconv)
+    pipeline.add(nvdslogger)
     pipeline.add(filter1)
     pipeline.add(nvvidconv1)
     pipeline.add(nvosd)
     pipeline.add(sink)
+    pipeline.add(queue1)
+    pipeline.add(queue2)
+    pipeline.add(queue3)
 
     print("Linking elements in the Pipeline \n")
-    streammux.link(pgie)
-    pgie.link(nvvidconv1)
-    nvvidconv1.link(filter1)
+    streammux.link(queue1)
+    queue1.link(pgie)
+    pgie.link(queue2)
+    queue2.link(nvvidconv1)
+    nvvidconv1.link(nvdslogger)
+    nvdslogger.link(filter1)
     filter1.link(tiler)
     tiler.link(nvvidconv)
     nvvidconv.link(nvosd)
-    nvosd.link(sink)
+    nvosd.link(queue3)
+    queue3.link(sink)
 
     # create an event loop and feed gstreamer bus mesages to it
     loop = GLib.MainLoop()
