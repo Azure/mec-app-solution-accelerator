@@ -1,0 +1,56 @@
+name: "YoloAutoML"
+platform: "onnxruntime_onnx",
+
+max_batch_size: 10
+input [
+  {
+    name: "input"
+    data_type: TYPE_FP32
+    dims: [3,800,800]
+    
+  }
+]
+output [
+  {
+    name: "output"
+    data_type: TYPE_FP32
+    dims: [ 39375, 6 ]
+    
+  },
+  {
+    name: "onnx::Sigmoid_1397"
+    data_type: TYPE_FP32
+    dims: [ 3, 100, 100, 6 ]
+    
+  },
+  {
+    name: "onnx::Sigmoid_1669"
+    data_type: TYPE_FP32
+    dims: [  3, 50, 50, 6 ]
+    
+  },
+  {
+    name: "onnx::Sigmoid_1941"
+    data_type: TYPE_FP32
+    dims: [ 3, 25, 25, 6 ]
+    
+  }
+]
+dynamic_batching {
+}
+instance_group [
+    {
+      count: 1
+      kind: KIND_GPU
+    }
+]
+optimization { 
+  execution_accelerators {
+  gpu_execution_accelerator : [ {
+    name : "tensorrt"
+    }]
+}}
+
+
+
+

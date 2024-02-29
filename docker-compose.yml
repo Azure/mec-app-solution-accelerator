@@ -2,59 +2,59 @@ version: '3.4'
 
 services:
 
-  deepstream:
-      image: ${DOCKER_REGISTRY-}deepstream:0.1
-      build:
-        context: src/Services/Detections
-        dockerfile: deepstream/Dockerfile
-      depends_on:
-        - alertsapi-dapr
-        - files-management
-      deploy:
-        resources:
-          reservations:
-            devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
-
-
-  deepstream-dapr:
-    image: "daprio/daprd:latest"
-    depends_on:
-      - deepstream
-    network_mode: "service:deepstream"
-  # aiinferencer:
-  #     image: ${DOCKER_REGISTRY-}aiinferencer:1.5
+  # deepstream:
+  #     image: ${DOCKER_REGISTRY-}deepstream:0.1
   #     build:
   #       context: src/Services/Detections
-  #       dockerfile: ai_inferencer/Dockerfile 
-  #     depends_on: 
+  #       dockerfile: deepstream/Dockerfile
+  #     depends_on:
   #       - alertsapi-dapr
   #       - files-management
-  #     environment:    
-  #       - DAPR_HTTP_PORT=3600
+  #     deploy:
+  #       resources:
+  #         reservations:
+  #           devices:
+  #           - driver: nvidia
+  #             count: 1
+  #             capabilities: [gpu]
+
+
+  # deepstream-dapr:
+  #   image: "daprio/daprd:latest"
+  #   depends_on:
+  #     - deepstream
+  #   network_mode: "service:deepstream"
+  aiinferencer:
+      image: ${DOCKER_REGISTRY-}aiinferencer:1.5
+      build:
+        context: src/Services/Detections
+        dockerfile: ai_inferencer/Dockerfile 
+      depends_on: 
+        - alertsapi-dapr
+        - files-management
+      environment:    
+        - DAPR_HTTP_PORT=3700
         
-  # aiinferencer-dapr:
-  #   image: "daprio/daprd:latest"
-  #   depends_on:
-  #     - aiinferencer
-  #   network_mode: "service:aiinferencer"
+  aiinferencer-dapr:
+    image: "daprio/daprd:latest"
+    depends_on:
+      - aiinferencer
+    network_mode: "service:aiinferencer"
 
-  # framesplitter:
-  #     image: ${DOCKER_REGISTRY-}framesplitter:1.5
-  #     build:
-  #       context: src/Services/Detections
-  #       dockerfile: frameSplitter/Dockerfile
-  #     depends_on:
-  #       - aiinferencer-dapr
-  #       - files-management
+  framesplitter:
+      image: ${DOCKER_REGISTRY-}framesplitter:1.5
+      build:
+        context: src/Services/Detections
+        dockerfile: frameSplitter/Dockerfile
+      depends_on:
+        - aiinferencer-dapr
+        - files-management
 
-  # framesplitter-dapr:
-  #   image: "daprio/daprd:latest"
-  #   depends_on:
-  #     - framesplitter
-  #   network_mode: "service:framesplitter"
+  framesplitter-dapr:
+    image: "daprio/daprd:latest"
+    depends_on:
+      - framesplitter
+    network_mode: "service:framesplitter"
 
   rulesengine: 
     image: ${DOCKER_REGISTRY-}rulesengine:1.6

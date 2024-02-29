@@ -9,6 +9,11 @@ from avro_json_serializer import AvroJsonSerializer
 import logging
 import os
 import shared.minio_utils as minio
+import onnxruntime
+import torch
+import glob
+from src.yolo_onnx_preprocessing_utils import preprocess,non_max_suppression, _convert_to_rcnn_output
+from src.onnx_checker import get_predictions_from_ONNX
 
 
 def PublishEvent(pubsub_name: str, topic_name: str, data: json):
@@ -30,19 +35,45 @@ def main(source_id,timestamp,model,image_id,detection_threshold,path,time_trace)
     else:
         logging.error('Failed to download image')
         return
-    val_to_compare_resize,_,_=img.shape
-    # dim = (720, 576)
 
-    if val_to_compare_resize>576:
-        logging.info(f'Resizing to print')
-        dim = (720,576)
-        img= cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        frame_resized = cv2.imencode(".jpg", img)[1]
-        frame_to_bytes=frame_resized.tobytes()
-        frame = base64.standard_b64encode(frame_to_bytes)
-        frame = frame.decode()
-        image_id_str = str(image_id)
-        minioClient.upload_bytes(bucket, image_id_str+'.jpg', frame_to_bytes)
+    img_processed_list = []
+    pad_list = []
+    batch_size=1
+    
+    img_processed, pad = preprocess(img)
+    img_processed_list.append(img_processed)
+    pad_list.append(pad)
+        
+    if len(img_processed_list) > 1:
+        img_data = np.concatenate(img_processed_list)
+    elif len(img_processed_list) == 1:
+        img_data = img_processed_list[0]
+    else:
+        img_data = None
+
+    assert batch_size == img_data.shape[0]
+
+    result = get_predictions_from_ONNX(model, img_data)
+    # for val in result[0]:
+    # print(val)
+    
+    result_final = non_max_suppression(
+        torch.from_numpy(result),
+        conf_thres=0.3,
+        iou_thres=0.3)
+    # val_to_compare_resize,_,_=img.shape
+    # # dim = (720, 576)
+
+    # if val_to_compare_resize>576:
+    #     logging.info(f'Resizing to print')
+    #     dim = (720,576)
+    #     img= cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+    #     frame_resized = cv2.imencode(".jpg", img)[1]
+    #     frame_to_bytes=frame_resized.tobytes()
+    #     frame = base64.standard_b64encode(frame_to_bytes)
+    #     frame = frame.decode()
+    #     image_id_str = str(image_id)
+    #     minioClient.upload_bytes(bucket, image_id_str+'.jpg', frame_to_bytes)
 
     data = { "SourceId":source_id,
     "UrlVideoEncoded": "1.0",
@@ -55,40 +86,41 @@ def main(source_id,timestamp,model,image_id,detection_threshold,path,time_trace)
     "time_trace":[]
     }
     data['time_trace'].append(time_trace)
-    results = model(img)
+    # results = model(img)
     schema = avro.schema.Parse(open(path, "rb").read())
     serializer = AvroJsonSerializer(schema)
 
-    detections = json.loads(results.pandas().xyxy[0].to_json())
+    # detections = json.loads(results.pandas().xyxy[0].to_json())
     
-    if detections["name"]!={}:
+    if result_final!=[]:
         logging.info(f'Objects Detected')
         
-        for idx,detection in enumerate(detections["name"].values()):
-            
+        for idx,result in enumerate(result_final):
+            result=result.numpy()
             BoundingBoxes=[]
             
-            if list(detections["confidence"].values())[idx] > detection_threshold:
+            if result[:, 4:5].item() > detection_threshold:
                 
-                xmin = list(detections["xmin"].values())[idx]
-                xmax = list(detections["xmax"].values())[idx]
-                ymin = list(detections["ymin"].values())[idx]
-                ymax = list(detections["ymax"].values())[idx]
+                xmin = result[:, 0:1].item()
+                xmax = result[:, 2:3].item()
+                ymin = result[:, 1:2].item()
+                ymax = result[:, 3:4].item()
                 BoundingBoxes.append({"x": xmin, "y":ymin})
                 BoundingBoxes.append({"x": xmin, "y":ymax})
                 BoundingBoxes.append({"x": xmax, "y":ymin})
                 BoundingBoxes.append({"x": xmax, "y":ymax})
 
-                data["Classes"].append({"EventType": detection, "Confidence":list(detections["confidence"].values())[idx], "BoundingBoxes": BoundingBoxes})
+                data["Classes"].append({"EventType": "smoke", "Confidence":result[:, 4:5].item(), "BoundingBoxes": BoundingBoxes})
 
         data['time_trace'].append({"stepStart": timestamp_init, "stepEnd":int(time.time()*1000), "stepName": "ai_inferencer"})
-        
+        stepEnd=int(time.time()*1000)
 
         json_str = serializer.to_json(data)
 
         
 
         PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
+        logging.info("Time per frame: "+str(stepEnd-timestamp)+" s")
         logging.info(f'Event published')
 
 

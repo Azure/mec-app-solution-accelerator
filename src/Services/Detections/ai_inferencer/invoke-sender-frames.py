@@ -3,9 +3,12 @@ import torch
 from src.inference import main
 import json
 import logging
+import onnxruntime
 app = App()
 global model 
-model = torch.hub.load("ultralytics/yolov5", "yolov5s")
+# model = torch.hub.load("ultralytics/yolov5", "yolov5s")
+global session
+session = onnxruntime.InferenceSession('src/YoloAutoML/1/model.onnx')
 @app.method(name='frames-receiver')
 def framesreceiver(request: InvokeMethodRequest) -> InvokeMethodResponse:
     
@@ -21,7 +24,7 @@ def framesreceiver(request: InvokeMethodRequest) -> InvokeMethodResponse:
 
     path='events_schema/detections.avro'
 
-    main(source_id,timestamp,model,image_id,detection_threshold,path,time_trace)
+    main(source_id,timestamp,session,image_id,detection_threshold,path,time_trace)
 
 
     return InvokeMethodResponse(b'Frame Analyzed', "text/plain; charset=UTF-8")

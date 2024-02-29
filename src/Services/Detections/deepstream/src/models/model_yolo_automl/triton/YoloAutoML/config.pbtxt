@@ -1,7 +1,7 @@
 name: "YoloAutoML"
 platform: "onnxruntime_onnx",
 
-max_batch_size: 4
+max_batch_size: 10
 input [
   {
     name: "input"

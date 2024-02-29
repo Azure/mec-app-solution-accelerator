@@ -1,39 +1,74 @@
 ARG CUDA_VERSION
 
 
+
 FROM nvcr.io/nvidia/deepstream:6.3-triton-multiarch
+
+# BEGIN: get-arch
+
+ARG TARGETPLATFORM
+
+# END: get-arch
+ARG VERSION=1.1.8
 
 RUN apt-get update
 
 
 RUN mkdir -p /opt/nvidia/deepstream/deepstream-6.3/sources/apps/deepstream_python_apps && git clone https://github.com/NVIDIA-AI-IOT/deepstream_python_apps.git /opt/nvidia/deepstream/deepstream-6.3/sources/apps/deepstream_python_apps
-ADD user_additional_install_runtime.sh /opt
+ADD deepstream/user_additional_install_runtime.sh /opt
 
 # Execute local file
 RUN chmod +x /opt/user_additional_install_runtime.sh && /opt/user_additional_install_runtime.sh
 
 # Add local file to Docker image
-ADD user_deepstream_python_apps_install.sh /opt
+ADD deepstream/user_deepstream_python_apps_install.sh /opt
 
 # Execute local file
-RUN chmod +x /opt/user_deepstream_python_apps_install.sh && /opt/user_deepstream_python_apps_install.sh --version 1.1.8
+RUN chmod +x /opt/user_deepstream_python_apps_install.sh && /opt/user_deepstream_python_apps_install.sh --version ${VERSION} --arch ${TARGETPLATFORM}
 
-# WORKDIR /opt/nvidia/deepstream/deepstream
-# # COPY ./deepstream_python_apps ./deepstream_python_apps
-# COPY --chmod=777 . .
+ARG CUDA_VERSION
 
-# WORKDIR /opt/nvidia/deepstream/deepstream-6.3
-# # COPY ./deepstream_python_apps ./deepstream_python_apps
-# COPY --chmod=777 . .
-
-
-
-
-ADD requirements.txt . 
-RUN pip3 install --no-cache-dir -r requirements.txt
+# Set the value of another variable based on the value of CUDA_VERSION
+RUN echo $TARGETPLATFORM
 WORKDIR /
-COPY Dataset ./Dataset
-COPY events_schema ./events_schema
-COPY src ./src
+
+# -------------- To set up for running YOLO natively with deepstream Yolo --------------------
+# RUN if [ ${TARGETPLATFORM} = linux/amd64 ]; then \
+#         git clone https://github.com/Javipercor/DeepStream-Yolo.git /Deepstream-Yolo && cd /Deepstream-Yolo &&  CUDA_VER=12.1 make --always-make -C nvdsinfer_custom_impl_Yolo  &&\
+#         mkdir -p /src/model/nvdsinfer_custom_impl_Yolo/layers && \
+#         mv nvdsinfer_custom_impl_Yolo/*.o /src/model/nvdsinfer_custom_impl_Yolo/ && \
+#         mv nvdsinfer_custom_impl_Yolo/*.so /src/model/nvdsinfer_custom_impl_Yolo/ && \
+#         mv nvdsinfer_custom_impl_Yolo/layers/*.o /src/model/nvdsinfer_custom_impl_Yolo/layers/; \
+#     elif [ ${TARGETPLATFORM} = linux/arm64 ]; then \
+#         git clone https://github.com/Javipercor/DeepStream-Yolo.git Deepstream-Yolo && cd Deepstream-Yolo && CUDA_VER=11.4 make --always-make -C nvdsinfer_custom_impl_Yolo; \
+#     fi 
+
+# RUN rm -rf /Deepstream-Yolo
+
+
+
+
+
+
+ADD deepstream/requirements.txt . 
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+
+
+COPY shared /shared
+
+
+COPY deepstream/Dataset ./Dataset
+COPY deepstream/events_schema ./events_schema
+COPY deepstream/src ./src
+
+
+# -------------- To set up for running Automl yolo onxx ; partially reusable for other onnx models --------------------
+RUN if [ ${TARGETPLATFORM} = linux/amd64 ]; then \
+        cd src/models/model_yolo_automl/ && CUDA_VER=12.1 make --always-make -C nvdsinfer_custom_impl_YoloAutoML; \
+    elif [ ${TARGETPLATFORM} = linux/arm64 ]; then \
+        cd src/models/model_yolo_automl/ && CUDA_VER=11.4 make --always-make -C nvdsinfer_custom_impl_YoloAutoML; \
+    fi 
+RUN cd /
 
 CMD ["/bin/bash"]

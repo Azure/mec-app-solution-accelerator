@@ -5,7 +5,8 @@ RUN pip install --disable-pip-version-check --no-cache-dir -U -r requirements.tx
     && rm requirements.txt
 
 COPY ./frameSplitter/Datasets ./Datasets
-COPY ./frameSplitter/src ./src
-COPY shared ./src/shared
+COPY ./frameSplitter/src .
+COPY shared /shared
 
-CMD cd src && python3 frameSplitter.py
+
+ENTRYPOINT ["sh", "-c", " python3 frameSplitter.py"]

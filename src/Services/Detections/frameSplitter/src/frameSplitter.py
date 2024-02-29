@@ -51,7 +51,7 @@ def main():
     endpoint = os.getenv('MINIOURL')
     bucket = 'images'
     minioClient = minio.MinIOClient(endpoint, 'minio', 'minio123')
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
     
     timer=0
     timer=int(os.getenv('TIMEOUT'))
@@ -82,11 +82,11 @@ def main():
             cap.release()
             cap = VideoCapture(feed_URL)
             ret, frame = cap.read()
-
+        timestamp = int(time.time() * 1000)
         img_encode = cv2.imencode(".jpg", frame)[1]
         resized_img_bytes = img_encode.tobytes()
         bytes_string = base64.standard_b64encode(resized_img_bytes).decode()
-        timestamp = int(time.time() * 1000)
+        
         logging.info(f'Sending frame to inference')
         try:
             image_id = uuid.uuid4()
@@ -99,6 +99,7 @@ def main():
                 req_data = {"source_id": 'video_' + str(feed_id), "timestamp": timestamp, "image_id": image_id_str, 'time_trace': time_trace}
 
             # Invoke the AI Model inference service
+                time_check=int(time.time()*1000)
                 resp = client.invoke_method(
                     "invoke-sender-frames", "frames-receiver", data=json.dumps(req_data)
                 )
@@ -106,6 +107,8 @@ def main():
                 logging.info(f'Waiting for response')
                 response = resp.text()
                 logging.info(response)
+                time_check_end=int(time.time()*1000)
+                logging.info(f'time to process frame: {time_check_end-time_check}')    
         except Exception as e:
             logging.error(f'Error encountered: {e}')     
 

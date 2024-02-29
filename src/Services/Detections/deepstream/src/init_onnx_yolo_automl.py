@@ -85,6 +85,7 @@ def upload_frame(minioClient,bucket, image_id_str, n_frame):
 # def parallel(pad, info, u_data):
     
 
+
 def tiler_sink_pad_buffer_probe(pad, info, u_data):
     
     
@@ -131,8 +132,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
         l_obj = frame_meta.obj_meta_list
         num_rects = frame_meta.num_obj_meta
         source_id = str(frame_meta.source_id)
-        print("source_id "+ source_id)
-        print(time.time()*1000)
+
         is_first_obj = True
         
         
@@ -253,7 +253,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             image_id = uuid.uuid4()
             image_id_str = str(image_id)
             data['Frame'] = image_id_str
-            logging.info(f'Image uploaded with ID: {image_id}')
+            # logging.info(f'Image uploaded with ID: {image_id}')
             
             if debug != 'local':
                 #minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
@@ -280,7 +280,6 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             print('No detections found')
             logging.info('No detections found')
         
-        print("time per frame: ", int(time.time()*1000)-timestamp_init)
         try:
             l_frame = l_frame.next
         except StopIteration:
@@ -541,7 +540,7 @@ def main(args):
     pipeline.add(pgie)
     pipeline.add(tiler)
     pipeline.add(nvvidconv)
-    pipeline.add(nvdslogger)
+    # pipeline.add(nvdslogger)
     pipeline.add(filter1)
     pipeline.add(nvvidconv1)
     pipeline.add(nvosd)
@@ -555,8 +554,9 @@ def main(args):
     queue1.link(pgie)
     pgie.link(queue2)
     queue2.link(nvvidconv1)
-    nvvidconv1.link(nvdslogger)
-    nvdslogger.link(filter1)
+    # nvvidconv1.link(nvdslogger)
+    # nvdslogger.link(filter1)
+    nvvidconv1.link(filter1)
     filter1.link(tiler)
     tiler.link(nvvidconv)
     nvvidconv.link(nvosd)
@@ -575,7 +575,15 @@ def main(args):
     else:
         tiler_sink_pad.add_probe(Gst.PadProbeType.BUFFER, tiler_sink_pad_buffer_probe, 0)
         # perf callback function to print fps every 5 sec
-        GLib.timeout_add(5000, perf_data.perf_print_callback)
+        GLib.timeout_add(60000, perf_data.perf_print_callback)
+
+    # probe_perf= nvdslogger.get_static_pad("sink")
+    # if not tiler_sink_pad:
+    #     sys.stderr.write(" Unable to get src pad \n")
+    # else:
+    #     # tiler_sink_pad.add_probe(Gst.PadProbeType.BUFFER, write_perf, 0)
+    #     # perf callback function to print fps every 5 sec
+    #     GLib.timeout_add(5000, perf_data.perf_print_callback)
 
     # List the sources
     print("Now playing...")
@@ -591,6 +599,9 @@ def main(args):
     except:
         pass
     # cleanup
+    print("System Performance:")
+    
+    perf_data.perf_print_callback()
     print("Exiting app\n")
     pipeline.set_state(Gst.State.NULL)
 

@@ -29,7 +29,7 @@ spec:
           - name: MINIOURL
             value: "http://minio.mec-accelerator.svc.cluster.local:9000"
           - name: FEEDS
-            value: "/Dataset/PerimeterDemo.mp4" # Video source. Change this for a real RTSP uri like "rtsp://x.x.x.x:8554/mystream"
+            value: "/Dataset/video.mp4" # Video source. Change this for a real RTSP uri like "rtsp://x.x.x.x:8554/mystream"
         resources:
           limits:
            nvidia.com/gpu: 1

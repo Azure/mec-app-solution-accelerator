@@ -9,6 +9,9 @@ RUN pip3 install opencv-python-headless
 
 COPY shared /shared
 
-COPY ai_inferencer/ .
 
-CMD python3 invoke-sender-frames.py
+COPY ai_inferencer/events_schema ./events_schema
+COPY ai_inferencer/src ./src
+COPY ai_inferencer/invoke-sender-frames.py .
+
+ENTRYPOINT ["sh", "-c", "python3 invoke-sender-frames.py"]

@@ -27,3 +27,4 @@ IPython
 ultralytics
 requests
 boto3
+onnxruntime
