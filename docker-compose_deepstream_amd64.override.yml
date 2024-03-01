@@ -5,7 +5,7 @@ services:
 
   deepstream:
     environment:
-    - FEEDS=/Dataset/sample_720p.mp4,/Dataset/sample_720p.mp4
+    - FEEDS=/Dataset/video.mp4,/Dataset/video.mp4
     # - FEEDS=/Dataset/video.mp4
     #,/Dataset/video.mp4
     # - FEEDS=/Dataset/1.jpeg  

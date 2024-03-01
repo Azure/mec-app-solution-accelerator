@@ -115,7 +115,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
     l_frame = batch_meta.frame_meta_list
     
     while l_frame is not None:
-        
+        send_alert=False
         try:
             # Note that l_frame.data needs a cast to pyds.NvDsFrameMeta
             # The casting is done by pyds.NvDsFrameMeta.cast()
@@ -193,6 +193,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             xmax = int(obj_meta.rect_params.left) + int(obj_meta.rect_params.width)
             ymax = int(obj_meta.rect_params.top) +int(obj_meta.rect_params.height)
             obj_list.append(obj_dict)
+            
             BoundingBoxes.append({"x": xmin, "y":ymin})
             BoundingBoxes.append({"x": xmin, "y":ymax})
             BoundingBoxes.append({"x": xmax, "y":ymin})
@@ -228,10 +229,11 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             except StopIteration:
                 break
         
-        if n_frame is not None:
+        if n_frame is not None and obj_list != []:
             #print(obj_list)
             obj_json["frame_id"] = 'frame_'+str(frame_number)+'.jpg'
             obj_json['Detections'] = obj_list
+
             
 
             # update frame rate through this probe
