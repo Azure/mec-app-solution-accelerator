@@ -3,7 +3,7 @@ version: '3.4'
 services:
 
   deepstream:
-      image: ${DOCKER_REGISTRY-}deepstream:0.1
+      image: ${DOCKER_REGISTRY-}deepstream:0.2_amd64
       build:
         context: src/Services/Detections
         dockerfile: deepstream/Dockerfile

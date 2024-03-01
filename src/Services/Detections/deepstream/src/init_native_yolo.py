@@ -40,6 +40,7 @@ import json
 import avro.schema
 from avro_json_serializer import AvroJsonSerializer
 from dapr.clients import DaprClient
+import threading
 
 import uuid
 import base64
@@ -72,7 +73,13 @@ TILED_OUTPUT_HEIGHT = 1080
 def PublishEvent(pubsub_name: str, topic_name: str, data: json):
     with DaprClient() as client:
         resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data, data_content_type='application/json')
-
+def upload_frame(minioClient,bucket, image_id_str, n_frame):
+    frame_copy = np.array(n_frame, copy=True, order='C')
+    frame_copy = cv2.cvtColor(frame_copy, cv2.COLOR_RGBA2BGRA)
+    img_encode = cv2.imencode(".jpg", frame_copy)[1]
+    resized_img_bytes = img_encode.tobytes()
+    minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
+    return
 def tiler_sink_pad_buffer_probe(pad, info, u_data):
     timestamp_init=int(time.time()*1000)
     
@@ -134,9 +141,9 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
         }
 
         BoundingBoxes=[]
+        n_frame = pyds.get_nvds_buf_surface(hash(gst_buffer), frame_meta.batch_id)
         
-        frame_copy=None
-        print(frame_number,l_obj,num_rects)
+        
         while l_obj is not None:
             try:
                 # Casting l_obj.data to pyds.NvDsObjectMeta
@@ -156,9 +163,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
                 "height": int(obj_meta.rect_params.height)
             }
 
-            print('obj_meta')
-            print(obj_meta.class_id)
-            print(obj_meta.obj_label)
+
             
             xmin = int(obj_meta.rect_params.left)
             ymin = int(obj_meta.rect_params.top)
@@ -177,7 +182,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
                     is_first_obj = False
                     # Getting Image data using nvbufsurface
                     # the input should be address of buffer and batch_id
-                    n_frame = pyds.get_nvds_buf_surface(hash(gst_buffer), frame_meta.batch_id)
+                    
                     # n_frame = draw_bounding_boxes(n_frame, obj_meta, obj_meta.confidence)
                     # save output json
                     
@@ -193,7 +198,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
                 l_obj = l_obj.next
             except StopIteration:
                 break
-        if frame_copy is not None:
+        if n_frame is not None:
             obj_json["frame_id"] = 'frame_'+str(frame_number)+'.jpg'
             obj_json['Detections'] = obj_list
             
@@ -210,20 +215,17 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
                 json_path = "{}/stream_{}/detections_{}.json".format(folder_name, frame_meta.pad_index, frame_number)
                 with open(json_path, 'w') as f:
                     json.dump(data, f)
-            img_encode = cv2.imencode(".jpg", frame_copy)[1]
-            resized_img_bytes = img_encode.tobytes()
+            
             saved_count["stream_{}".format(frame_meta.pad_index)] += 1
             image_id = uuid.uuid4()
             image_id_str = str(image_id)
             data['Frame'] = image_id_str
-            logging.info(f'Image uploaded with ID: {image_id}')
-            if debug != 'local':
-                minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
             
-            try:
-                l_frame = l_frame.next
-            except StopIteration:
-                break
+            if debug != 'local':
+                upload_thread = threading.Thread(target=upload_frame, args=(minioClient, bucket, image_id_str, n_frame))
+                upload_thread.start()
+            
+            
             time_trace={"stepStart": timestamp_init, "stepEnd":int(time.time()*1000), "stepName": "deepstream"}
             data['time_trace'].append(time_trace)
             json_str = serializer.to_json(data)
@@ -235,6 +237,10 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
         else:
             print('No detections found')
             logging.info('No detections found')
+        try:
+                l_frame = l_frame.next
+        except StopIteration:
+            break
 
         return Gst.PadProbeReturn.OK
         
@@ -526,6 +532,9 @@ def main(args):
     except:
         pass
     # cleanup
+    print("System Performance:")
+    
+    perf_data.perf_print_callback()
     print("Exiting app\n")
     pipeline.set_state(Gst.State.NULL)
 

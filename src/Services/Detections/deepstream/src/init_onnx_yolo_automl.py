@@ -270,8 +270,8 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             
             if debug != 'local':
                 # asyncio.run(PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str))
-                upload_thread = threading.Thread(target=PublishEvent, args=("pubsub","newDetection", json_str))
-                upload_thread.start()
+                PublishEvent("pubsub","newDetection", json_str)
+                
         
             
             

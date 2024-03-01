@@ -44,12 +44,7 @@ instance_group [
       kind: KIND_GPU
     }
 ]
-optimization { 
-  execution_accelerators {
-  gpu_execution_accelerator : [ {
-    name : "tensorrt"
-    }]
-}}
+
 
 
 

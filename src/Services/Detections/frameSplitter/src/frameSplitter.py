@@ -72,6 +72,8 @@ def main():
         
     time.sleep(timer)
     cap = VideoCapture(feed_URL)
+    frames_count=0
+    time_count=0
     while True:
         # Capture frame-by-frame
         ret, frame = cap.read()
@@ -91,7 +93,7 @@ def main():
         try:
             image_id = uuid.uuid4()
             image_id_str = str(image_id)
-            logging.info(f'Image uploaded with ID: {image_id}')
+            # logging.info(f'Image uploaded with ID: {image_id}')
             minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
             with DaprClient() as client:
             # Create data to send to AI inference service
@@ -107,8 +109,14 @@ def main():
                 logging.info(f'Waiting for response')
                 response = resp.text()
                 logging.info(response)
+                frames_count+=1
                 time_check_end=int(time.time()*1000)
-                logging.info(f'time to process frame: {time_check_end-time_check}')    
+                time_count+=((time_check_end-timestamp)/1000)
+                if frames_count%15==0:
+                    logging.info(f'PERFORMANCE: Frame per Second: {1/(time_count/frames_count)}')
+                    time_count=0
+                    frames_count=0
+                    
         except Exception as e:
             logging.error(f'Error encountered: {e}')     
 

@@ -53,7 +53,6 @@ extern "C" bool ParserCustomAutoML (std::vector<NvDsInferLayerInfo> const& outpu
   // detections.reserve(count); // Reserve space for detections
 
   // Parse detections
-  #pragma omp parallel for
   for (size_t i = 0; i < count; ++i) {
     float* detectionPtr = data + i * 6;
     float roundedClassId = round(detectionPtr[5]);
