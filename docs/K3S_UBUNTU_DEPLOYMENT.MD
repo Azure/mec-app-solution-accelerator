@@ -12,10 +12,9 @@ If your PC has attached a NVIDIA GPU card supported by DeepStream toolkit you ca
     ```bash
     lspci | grep -i nvidia
     ```
+    This commnad should output the NVIDA GPU brand model like this:
 
-This commnad should output the NVIDA GPU brand model like this:
-
-![Alt text](image.png)
+    ![Alt text](imgs/deploy/ubuntu_gpu/check_gpu_hardware.png)
 
 2. Install OS requirements.
 
@@ -44,18 +43,6 @@ This commnad should output the NVIDA GPU brand model like this:
 
      ```bash
     sudo apt-get update
-    ```
-
-    Install CUDA SDK.
-
-    ```bash
-    sudo apt-get install cuda-toolkit
-    ```
-
-    To include all GDS packages:
-
-    ```bash
-    sudo apt-get install nvidia-gds
     ```
 
     Install the driver
@@ -91,7 +78,7 @@ This commnad should output the NVIDA GPU brand model like this:
     (Optional) Install the experimental NVIDIA Container Toolkit repository.
 
     ```bash
-    sed -i -e '/experimental/ s/^#//g' /etc/apt/sources.list.d/nvidia-container-toolkit.list
+    sudo sed -i -e '/experimental/ s/^#//g' /etc/apt/sources.list.d/nvidia-container-toolkit.list
     ```
 
     Update the Apt repository cache:
@@ -108,11 +95,30 @@ This commnad should output the NVIDA GPU brand model like this:
 
 ## Install and configure Docker Engine to use the nvida-container-toolkit
 
-6. Install using the convenience script.
+Installing Docker on Ubuntu involves a series of steps that ensure you have the latest version of Docker installed and configured correctly. You can install Docker Engine in different ways but for production scenarios we recommend the official repository with apt package manager [Docker's apt repository](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository). Complete docker installation guide can be found at [Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+
+6.  Set up the Docker repository and install the latest version.
 
     ```bash
-    curl -fsSL https://get.docker.com -o get-docker.sh
-    sudo sh ./get-docker.sh
+    # Add Docker's official GPG key:
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Add the repository to Apt sources:
+    echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    ```
+
+    To install the latest version, run:
+
+    ```bash
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     ```
 
     Add your user to the docker group and then log out and log back in so that your group membership is re-evaluated.
@@ -158,7 +164,7 @@ This commnad should output the NVIDA GPU brand model like this:
     kubectl config get-contexts
     ```
 
-8. To set the context to point to k3s defualt context:
+9. To set the context to point to k3s defualt context:
 
     **If using K3s:**
 
@@ -182,18 +188,18 @@ The NVIDIA device plugin for Kubernetes is a Daemonset that allows you to automa
 
 This example application is based on **[Dapr](https://dapr.io/)** framework which is an OSS Microsoft framework specialized on microservices architecture, so you need to install it and enable in the Kubernetes cluster, first.
 
-9. Install or make sure you have installed `Dapr` on your machine on a Kubernetes cluster as described in the [Deploy Dapr](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#install-with-dapr-cli).
+10. Install or make sure you have installed `Dapr` on your machine on a Kubernetes cluster as described in the [Deploy Dapr](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#install-with-dapr-cli).
 
     Note that if you were able to run the application on plain Docker, you should have installed DAPR already, but it needs to be initialized in Kuberentes, now.
 
-10. DAPR seems to use ``--kubeconfig`` parameeter pointing to ``$HOME/.kube/config`` at the cluster installation time. So you need to copy your ``kubeconfig`` file to this loctation.
+11. DAPR seems to use ``--kubeconfig`` parameeter pointing to ``$HOME/.kube/config`` at the cluster installation time. So you need to copy your ``kubeconfig`` file to this loctation.
 
     ```bash
     sudo cp /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
     sudo chown $USER.$USER $HOME/.kube/config
     ```
 
-11. Initialize DAPR in the Kubernetes cluster by running this command:
+12. Initialize DAPR in the Kubernetes cluster by running this command:
 
     ```bash
     dapr init -k
@@ -216,13 +222,13 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
 
 ### Deploy the application's services to Kubernetes
 
-12. Move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
+13. Move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
     ```bash
     cd <your_path>/deploy/k8s
     ```
 
-10. Deploy the application in Kuberentes by running common deployments with cpu **or** gpu deployments
+14. Deploy the application in Kuberentes by running common deployments with cpu **or** gpu deployments
 
     ```bash
     kubectl apply -f ./common/
@@ -236,12 +242,22 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
 
     > **Note:** The DeepStream docker image size is more than **10GB**, ``kubelet`` could fail pulling big images if it is not configured for this purpose. Instead of change the ``kubelet`` default configuration you can pull the DeepStream image with ``Docker CLI`` and then execute the gpu deployment.
 
+    **AMD** architecture:
     ```bash
     docker pull mecsolutionaccelerator/deepstream:0.2_amd64
     ```
+    ```bash
+    kubectl apply -f ./gpu/amd64_arch
+    ```
+
+
+    **ARM** architecture:
+    ```bash
+    docker pull mecsolutionaccelerator/deepstream:0.2_arm64
+    ```
 
     ```bash
-    kubectl apply -f ./gpu/
+    kubectl apply -f ./gpu/arm64_arch
     ```
 
     All services will be created in the specified Kubernetes namespace "mec-accelerator" for this application.
@@ -252,7 +268,17 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
     kubectl get pods --namespace mec-accelerator
     ```
 
-    When you are finished trying the application, you can always uninstall the application pods and all related resources from your Kuberentes by running this command:
+    ![alt text](imgs/deploy/ubuntu_gpu/pod_list.png)
+
+### Access the application's UI to see Alerts originated from AI model detections
+
+15. The application’s UI is accessible through the **NodePort** service defined in the alerts-ui.yaml deployment definition. Form a local web browser where k3s is installed you can open the app using the URL http://localhost:30005.
+
+    ![alt text](imgs/deploy/ubuntu_gpu/application_ui.png)
+
+### Remove the application from Kubernetes
+
+16. When you are finished trying the application, you can always uninstall the application pods and all related resources from your Kuberentes by running this command:
 
     ```bash
     kubectl delete -f ./cpu/ && kubectl delete -f ./common/
@@ -261,5 +287,6 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
     Or
 
     ```bash
-    kubectl delete -f ./gpu/ && kubectl delete -f ./common/
+    kubectl delete -f ./gpu/<arch_folder> && kubectl delete -f ./common/
     ```
+    where **arch_folder** could be ``amd64_arch`` or ``arm64_arch``.
