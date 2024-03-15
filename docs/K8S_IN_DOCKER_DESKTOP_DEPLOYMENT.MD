@@ -93,6 +93,7 @@ Note that if you were able to run the application on plain Docker, you should ha
 
 3. Update the config map that contains essential information for connecting to our Azure Mobile Network. You'll find the configuration in the file `deploy/k8s/13-control-plane-api-config-map.yaml`.
 
+
 Replace the following values in the file:
 
 ```
