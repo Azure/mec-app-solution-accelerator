@@ -5,49 +5,76 @@
 }
 
 <div class="d-flex flex-row" id="page">
-    <div class="d-flex flex-column justify-content-between" style="background-color: #777777; width: 65px;">
-        <div>
+    <div class="d-flex flex-column justify-content-between nav-menu" style="">
+        <div class="nav-menu-item">
             <img id="logo" src="assets/microsoft_logo.png" alt="MicrosoftLogo" />
-            <hr class="line">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width=".5" stroke="black" id="icon">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
-            </svg>
+            <hr class="line" />
         </div>
-        <div>
-            <hr class="line" style="margin-bottom: 5rem;">
+        <div class="nav-menu-item">
+            <icon-events color="white" size=36 />
+            <hr class="line" />
         </div>
     </div>
     <div id="content" class="d-flex flex-column">
         <h1 class="fw-semibold" id="page-title">Alerts Dashboard</h1>
-        <div class="d-flex flex-row align-items-center">
-            <button class="button-table px-2 my-2 py-1 font-sans fw-light fs-6 rounded align-self-right" id="refresh-data">Refresh Data</button>
-            <label class="m-2 font-sans fw-light fs-6">Automatic Refresh:</label>
-            <label class="switch my-2">
-                <input type="checkbox" onclick="toggleAutomaticRefresh()" id="switch" checked>
-                <span class="slider round"></span>
-            </label>
-        </div>
-        <div class="d-flex flex-row" id="data">
-            <div id="left" class="d-flex flex-column flex-grow-1 overflow-auto" style="min-width: 60%;">
-                <div id="alertsTableDiv">
-                    @await Html.PartialAsync("Alerts/_AlertsTable", Model.Alerts)
+        <div class="panel rounded">
+            <div class="panel-menu d-flex flex-row align-items-center">
+                <div class="alerts-details-selected-back">
+                    <button id="alert-details-back" class="d-flex align-items-center">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor" height="24px" width="24px" version="1.1" id="Capa_1" viewBox="0 0 219.151 219.151" xml:space="preserve">
+                            <g>
+                                <path d="M109.576,219.151c60.419,0,109.573-49.156,109.573-109.576C219.149,49.156,169.995,0,109.576,0S0.002,49.156,0.002,109.575   C0.002,169.995,49.157,219.151,109.576,219.151z M109.576,15c52.148,0,94.573,42.426,94.574,94.575   c0,52.149-42.425,94.575-94.574,94.576c-52.148-0.001-94.573-42.427-94.573-94.577C15.003,57.427,57.428,15,109.576,15z"/>
+                                <path d="M94.861,156.507c2.929,2.928,7.678,2.927,10.606,0c2.93-2.93,2.93-7.678-0.001-10.608l-28.82-28.819l83.457-0.008   c4.142-0.001,7.499-3.358,7.499-7.502c-0.001-4.142-3.358-7.498-7.5-7.498l-83.46,0.008l28.827-28.825   c2.929-2.929,2.929-7.679,0-10.607c-1.465-1.464-3.384-2.197-5.304-2.197c-1.919,0-3.838,0.733-5.303,2.196l-41.629,41.628   c-1.407,1.406-2.197,3.313-2.197,5.303c0.001,1.99,0.791,3.896,2.198,5.305L94.861,156.507z"/>
+                            </g>
+                            </svg>
+                        </span>
+                        Back
+                    </button>
+                </div>
+                <div class="d-flex flex-row align-items-center panel-menu-refresh">
+                    <button class="button-table font-sans fw-light fs-6"
+                        id="refresh-data">Refresh Data</button>
+                    <label class="m-2 font-sans fw-light text-light fs-6">Automatic Refresh:</label>
+                    <label class="switch my-2">
+                        <input type="checkbox" onclick="toggleAutomaticRefresh()" id="switch" checked>
+                        <span class="slider round"></span>
+                    </label>
                 </div>
             </div>
-            <div id="right" class="d-flex flex-column justify-content-around align-items-start mx-5">
-                <div class="info-container border border-dark d-flex flex-column border rounded justify-content-center" id="alertsDetailsDiv">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width=".5" stroke="currentColor" class="empty-folder align-self-center">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776" />
-                    </svg>
-                    <center><p class="font-sans text-2xl font-light text-dark align-self-center">No alert chosen yet...<br>Choose an alert from the table to display it!</p></center>
+            <div class="d-flex flex-row" id="data">
+                <div id="left" class="flex-column flex-grow-1 overflow-auto" style="min-width: 60%;">
+                    <div id="alertsTableDiv">
+                        @await Html.PartialAsync("Alerts/_AlertsTable", Model.Alerts)
+                        <div class="loading-container">
+                            <icon-loading size="48" />
+                        </div>
+                    </div>
+                </div>
+                <div id="right" class="flex-column justify-content-around align-items-start mx-5">
+                    <div class="info-container d-flex flex-column rounded justify-content-center text-light"
+                        id="alertsDetailsDiv">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width=".5"
+                            stroke="currentColor" class="empty-folder align-self-center">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776" />
+                        </svg>
+                        <center>
+                            <p class="font-sans text-2xl font-light align-self-center">No alert chosen
+                                yet...<br>Choose an alert from the table to display it!</p>
+                        </center>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-@section scripts{    
+@section scripts {
     <script>
         $(document).on('click', '#alertsTable tbody tr', function () {
+            $('#content').addClass('alerts-details-selected');
+            
             var elementId = $(this).attr('element-id');
             $.get({
                 url: '/?handler=Details&id=' + elementId,
@@ -57,21 +84,25 @@
             });
         });
 
+        $(document).on('click', '#alert-details-back', function() {
+            $('#content').removeClass('alerts-details-selected');
+        })
     </script>
     <script>
-        var refreshIntervalId = null;
+        function refreshAlertsTable() {
+            $.get({
+                url: '/?handler=Refresh',
+                success: function (result) {
+                    $('#alertsTableDiv').html(result);
+                }
+            });
+        }
 
+        var refreshIntervalId = null;
         function toggleAutomaticRefresh() {
             if ($('#switch').prop('checked')) {
                 // Start refreshing data automatically
-                refreshIntervalId = setInterval(function () {
-                    $.get({
-                        url: '/?handler=Refresh',
-                        success: function (result) {
-                            $('#alertsTableDiv').html(result);
-                        }
-                    });
-                }, 3000);
+                refreshIntervalId = setInterval(refreshAlertsTable, 3000);
             } else {
                 // Stop refreshing data automatically
                 clearInterval(refreshIntervalId);
@@ -79,18 +110,10 @@
             }
         }
 
+        $(document).on('click', '#refresh-data', refreshAlertsTable);
         $(document).ready(function () {
             toggleAutomaticRefresh();
-        });
-
-        $(document).on('click', '#refresh-data', function () {
-            // Manually refresh data on button click
-            $.get({
-                url: '/?handler=Refresh',
-                success: function (result) {
-                    $('#alertsTableDiv').html(result);
-                }
-            });
+            refreshAlertsTable();
         });
     </script>
 }

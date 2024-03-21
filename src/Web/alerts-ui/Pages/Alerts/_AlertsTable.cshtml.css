@@ -1,0 +1,37 @@
+﻿table,
+tr {
+    border: 1px solid;
+    width: 100%;
+}
+
+th {
+    background-color: #333347;
+    position: sticky;
+    top: 0;
+    text-align: center;
+    font-size: 26px !important;
+    border: 1px solid #626287
+}
+
+td {
+    cursor: pointer;
+    font-size: 22px !important;
+    padding: 1rem 0;
+    border: 1px solid #626287;
+}
+
+.table-header {
+    font-size: large;
+    font-weight: bold;
+    height: 3rem;
+}
+
+@media (max-height: 1200px) {
+    table td {
+        font-size: 15px !important;
+    }
+
+    table th {
+        font-size: 22px !important;
+    }
+}
