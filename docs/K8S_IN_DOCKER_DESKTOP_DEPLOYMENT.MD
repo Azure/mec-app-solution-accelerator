@@ -180,13 +180,6 @@ Here's an example execution when targeting k3s:
     
     ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/3d54066f-1d77-46b6-85c3-df9c9b1b1c62)
 
-    When you are finished using the appliction in Kubernetes, you can always uninstall the whole application pods and all related resources from your Kuberentes by running this command from the same folder:
-
-*IMPORTANT:* Do not run it now since the configuration of the application is stil not finished! 
-
-    ```powershell
-    kubectl delete -f ./
-    ```
 
 ## Deploy AKRI configuration
 
