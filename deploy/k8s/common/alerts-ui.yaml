@@ -8,9 +8,10 @@ spec:
   - protocol: TCP
     port: 88
     targetPort: 80
+    nodePort: 30005
   selector:
     app: alerts-ui
-  type: LoadBalancer
+  type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -34,7 +35,7 @@ spec:
     spec:
       containers:
       - name: alerts-ui
-        image: mecsolutionaccelerator/alerts-ui:1.6
+        image: mecsolutionaccelerator/alerts-ui:1.7
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80

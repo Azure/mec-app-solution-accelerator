@@ -134,7 +134,7 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
     ```
 
     ```bash
-    kubectl apply -f ./gpu/
+    kubectl apply -f ./gpu/arm64_arch
     ```
 
     All services will be created in the specified Kubernetes namespace "mec-accelerator" for this application.
@@ -154,5 +154,5 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
     Or
 
     ```bash
-    kubectl delete -f ./gpu/ && kubectl delete -f ./common/
+    kubectl delete -f ./gpu/arm64_arch && kubectl delete -f ./common/
     ```
