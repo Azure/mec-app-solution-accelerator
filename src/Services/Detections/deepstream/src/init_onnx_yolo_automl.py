@@ -47,6 +47,7 @@ import base64
 import logging
 import itertools
 import asyncio
+import copy
 
 if not os.path.exists('deepstream'):
     os.symlink('/opt/nvidia/deepstream/deepstream-6.3', 'deepstream')
@@ -75,14 +76,12 @@ def PublishEvent(pubsub_name: str, topic_name: str, data: json):
     return
     
 
-def upload_frame(minioClient,bucket, image_id_str, n_frame):
-    frame_copy = np.array(n_frame, copy=True, order='C')
-    frame_copy = cv2.cvtColor(frame_copy, cv2.COLOR_RGBA2BGRA)
+def upload_frame(minioClient,bucket, image_id_str, frame_copy):
+    
     img_encode = cv2.imencode(".jpg", frame_copy)[1]
     resized_img_bytes = img_encode.tobytes()
     minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
     return
-# def parallel(pad, info, u_data):
     
 
 
@@ -161,9 +160,9 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
         # save output json
         
         # convert python array into numpy array format in the copy mode.
-        if debug == 'local':
-            frame_copy = np.array(n_frame, copy=True, order='C')
-            frame_copy = cv2.cvtColor(frame_copy, cv2.COLOR_RGBA2BGRA)
+        
+        frame_copy = np.array(n_frame, copy=True, order='C')
+        frame_copy = cv2.cvtColor(frame_copy, cv2.COLOR_RGBA2BGRA)
         
         while l_obj is not None:
             try:
@@ -258,9 +257,12 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             # logging.info(f'Image uploaded with ID: {image_id}')
             
             if debug != 'local':
-                #minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
+
+                # img_encode = cv2.imencode(".jpg", frame_copy)[1]
+                # resized_img_bytes = img_encode.tobytes()
+                # minioClient.upload_bytes(bucket, image_id_str+'.jpg', resized_img_bytes)
                 # asyncio.run(upload_frame(minioClient,bucket, image_id_str, resized_img_bytes))
-                upload_thread = threading.Thread(target=upload_frame, args=(minioClient, bucket, image_id_str, n_frame))
+                upload_thread = threading.Thread(target=upload_frame, args=(minioClient, bucket, image_id_str, copy.deepcopy(frame_copy)))
                 upload_thread.start()
             
                 
@@ -272,7 +274,7 @@ def tiler_sink_pad_buffer_probe(pad, info, u_data):
             
             if debug != 'local':
                 # asyncio.run(PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str))
-                PublishEvent("pubsub","newDetection", json_str)
+                PublishEvent(pubsub_name="pubsub", topic_name="newDetection", data=json_str)
                 
         
             
