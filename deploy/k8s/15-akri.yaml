@@ -4,6 +4,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: akri-camera-discovery-daemonset
+  namespace: mec-accelerator
   labels:
     helm.sh/chart: akri-0.12.9
     app.kubernetes.io/part-of: akri
@@ -57,6 +58,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: akri-controller-deployment
+  namespace: mec-accelerator
   labels:
     helm.sh/chart: akri-0.12.9
     app.kubernetes.io/part-of: akri
@@ -267,6 +269,7 @@ apiVersion: v1
 kind: List
 metadata:
   name: akri-webhook-configuration
+  namespace: mec-accelerator
   labels:
     helm.sh/chart: akri-0.12.9
     app.kubernetes.io/part-of: akri
@@ -329,6 +332,7 @@ items:
     kind: Deployment
     metadata:
       name: akri-webhook-configuration
+      namespace: mec-accelerator
       labels:
         helm.sh/chart: akri-0.12.9
         app.kubernetes.io/part-of: akri
@@ -346,6 +350,7 @@ items:
           app.kubernetes.io/name: akri-webhook-configuration
       template:
         metadata:
+          namespace: mec-accelerator
           labels:
             helm.sh/chart: akri-0.12.9
             app.kubernetes.io/part-of: akri
@@ -390,6 +395,7 @@ items:
     kind: Service
     metadata:
       name: akri-webhook-configuration
+      namespace: mec-accelerator
       labels:
         helm.sh/chart: akri-0.12.9
         app.kubernetes.io/part-of: akri
@@ -411,6 +417,7 @@ items:
     kind: ValidatingWebhookConfiguration
     metadata:
       name: akri-webhook-configuration
+      namespace: mec-accelerator
       labels:
         helm.sh/chart: akri-0.12.9
         app.kubernetes.io/part-of: akri
@@ -466,6 +473,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: akri-webhook-configuration-patch
+  namespace: mec-accelerator
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
     "helm.sh/hook-weight": "-5"
@@ -491,6 +499,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: akri-webhook-configuration-patch
+  namespace: mec-accelerator
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade,post-install,post-upgrade
     "helm.sh/hook-weight": "-5"
@@ -583,6 +592,7 @@ spec:
   ttlSecondsAfterFinished: 0
   template:
     metadata:
+      namespace: mec-accelerator
       name: akri-webhook-configuration-create
       labels:
         helm.sh/chart: akri-0.12.9
@@ -632,6 +642,7 @@ spec:
   template:
     metadata:
       name: akri-webhook-configuration-patch
+      namespace: mec-accelerator
       labels:
         helm.sh/chart: akri-0.12.9
         app.kubernetes.io/part-of: akri
@@ -658,3 +669,4 @@ spec:
                 fieldPath: metadata.namespace
       restartPolicy: OnFailure
       serviceAccountName: akri-webhook-configuration-patch
+
