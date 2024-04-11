@@ -1,0 +1,12 @@
+apiVersion: mq.iotoperations.azure.com/v1beta1
+kind: BrokerListener
+metadata:
+  name: mec-tls-listener
+  namespace: azure-iot-operations
+spec:
+  brokerRef: broker
+  authenticationEnabled: false # If set to true, a BrokerAuthentication resource must be configured
+  authorizationEnabled: false
+  serviceType: loadBalancer # Optional; defaults to 'clusterIP'
+  serviceName: mec-tls-listener # Avoid conflicts with default service name 'aio-mq-dmqtt-frontend'
+  port: 8884

@@ -1,3 +1,11 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dapr-client
+  namespace: mec-accelerator
+  annotations:
+    aio-mq-broker-auth/group: dapr-workload
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,6 +24,7 @@ spec:
         app: inference-model
       annotations:
         dapr.io/enabled: "true"
+        dapr.io/unix-domain-socket-path: "/tmp/dapr-components-sockets"
         dapr.io/app-id: "invoke-sender-frames"
         dapr.io/app-protocol: "grpc"
         dapr.io/app-port: "2060"
@@ -23,6 +32,22 @@ spec:
         dapr.io/log-level: "debug"
         dapr.io/enable-api-logging: "true"
     spec:
+      volumes:
+        - name: dapr-unix-domain-socket
+          emptyDir: {}
+
+        # SAT token used to authenticate between Dapr and the MQTT broker
+        - name: mqtt-client-token
+          projected:
+            sources:
+              - serviceAccountToken:
+                  path: mqtt-client-token
+                  audience: aio-mq
+
+        # Certificate chain for Dapr to validate the MQTT broker
+        - name: aio-ca-trust-bundle
+          configMap:
+            name: aio-ca-trust-bundle-test-only
       containers:
       - name: inference-model
         image: mecsolutionaccelerator/aiinferencer:1.6
@@ -32,3 +57,17 @@ spec:
         env:
           - name : MINIOURL
             value: "http://minio.mec-accelerator.svc.cluster.local:9000"
+        volumeMounts:
+        - name: aio-ca-trust-bundle
+          mountPath: /var/run/certs/aio-mq-ca-cert/
+
+      # Container for the pluggable component
+      - name: pubsub
+        image: ghcr.io/azure/iot-mq-dapr-components:latest
+        volumeMounts:
+        - name: dapr-unix-domain-socket
+          mountPath: /tmp/dapr-components-sockets
+        - name: mqtt-client-token
+          mountPath: /var/run/secrets/tokens
+        - name: aio-ca-trust-bundle
+          mountPath: /var/run/certs/aio-mq-ca-cert/

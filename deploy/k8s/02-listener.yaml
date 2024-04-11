@@ -1,0 +1,28 @@
+apiVersion: mq.iotoperations.azure.com/v1beta1
+kind: BrokerAuthorization
+metadata:
+  name: my-dapr-authz-policies
+  namespace: azure-iot-operations
+spec:
+  listenerRef:
+    - mec-tls-listener # change to match your listener name as needed
+  authorizationPolicies:
+    enableCache: false
+    rules:
+      - principals:
+          attributes:
+            - group: dapr-workload # match to the attribute annotated to the service account
+        brokerResources:
+          - method: Connect
+          - method: Publish
+            topics:
+              - "$services/statestore/#"
+              - "pubsub"
+              - "sensor/data"
+              - "newDetection"
+          - method: Subscribe
+            topics:
+              - "clients/{principal.clientId}/services/statestore/#"
+              - "pubsub"
+              - "newDetection"
+              - "sensor/data"

@@ -1,17 +1,19 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: aio-mq-pubsub
+  name: aio-mq-statestore
   namespace: azure-iot-operations
 spec:
-  type: pubsub.aio-mq-pubsub-pluggable # DO NOT CHANGE
+  type: state.aio-mq-statestore-pluggable
   version: v1
   metadata:
   - name: url
-    value: "mec-tls-listener.azure-iot-operations.svc.cluster.local:8884"
+    value: "mec-tls-listener:8884"
   - name: satTokenPath
     value: "/var/run/secrets/tokens/mqtt-client-token"
   - name: tlsEnabled
     value: false
+  - name: caCertPath
+    value: "/var/run/certs/aio-mq-ca-cert/ca.crt"
   - name: logLevel
     value: "Info"
