@@ -23,13 +23,55 @@ Supported environment on top of the Kubernetes/k3s cluster:
 
 ## Install the Kubernetes/K3s cluster at the edge
 
+Install the AKS-EE-Windows cluster or the K3s-Ubuntu cluster by following the instructions in the below Microsoft official doc.
+
+Even when the below documentation link is the supported baseline environment for an Azure IoT Operations cluster, you can also follow this AKS-EE/K3s cluster installation procedure documentation even if you won't use the Azure IoT Operations alternative but the plain OSS/Mosquitto alternative:
+
+**AKS-EE-Windows alternative:** 
+
+[Create your Azure Arc-enabled Kubernetes cluster on Windows](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-prepare-cluster?tabs=aks-edge-essentials)
+
+**K3s-Ubuntu-Linux alternative:** 
+
+[Create your Azure Arc-enabled K3s cluster on Ubuntu-Linux](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=linux#connect-a-kubernetes-cluster-to-azure-arc)
+
+
+*Azure Arc support:* For most cases, it's interesting to follow the above setup instructions instead of a plain K8s/K3s setup because then you will also have your cluster as an Azure Arc-enabled cluster, so you can monitor the cluster at the edge from anywhere through Azure portal in the cloud.
+
+**IMPORTANT** If you are NOT going to use Azure IoT Operations, when following the previous setup doc, stop before the section named *"Deploy Azure IoT Operations Preview"* so the last secion to follow should be *"Verify cluster"*.
+
+
+## Setup Azure IoT Operations into your cluster
+
+### Prerequisites for Azure IoT Operations
+
+It's very important to check and install the prerequisites for Azure IoT Operations explained here:
+
+[Prerequisites for Azure IoT Operations](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=windows#prerequisites)
+
+### Deploy Azure IoT Operations Preview
+
+Install Azure IoT Operations by following the official "simplified/automated approach" documentation here:
+[Deploy Azure IoT Operations Preview](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=windows#deploy-azure-iot-operations-preview)
+
+Note that there's an alternative "Detailed step-by-step Azure IoT Operations deployment" available in Microsoft's docs, but we initially recommend to go the easy path explained above instad of the following docs which require significntly more time with many step-by-step instructions:
+
+**(OPTIONAL ALTERNATIVE) Detailed Azure IoT Operations setup** 
+- [Prepare your Azure Arc-enabled Kubernetes cluster](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-prepare-cluster?tabs=aks-edge-essentials)
+- [Deploy Azure IoT Operations Preview extensions to a Kubernetes cluster](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-deploy-iot-operations)
+- [Manage secrets for your Azure IoT Operations Preview deployment](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-manage-secrets)
+
+However, in case you want to know what's going on under the covers, it's interesting to take a look to those alternative and detailed setup docs for Azure IoT Operations.
+
+
+
 
 TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
 TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
 TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
 
 
-Install Azure IoT Operations by following the [official documentation](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-prepare-cluster?tabs=aks-edge-essentials)
+
 
 TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
 TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
