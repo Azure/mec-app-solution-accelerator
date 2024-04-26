@@ -1,22 +1,45 @@
-# MEC-Accelerator with Control-Plane-App (v1.8) - Deployment to Kubernetes in 'Docker Desktop' (or k3s in Ubuntu VM)
+# MEC-Accelerator with Control-Plane-App (v1.9) - Deployment to AKS-EE or k3s-Ubuntu
 
-Docker Desktop includes a [standalone Kubernetes](https://docs.docker.com/desktop/kubernetes/) server and client, as well as Docker CLI integration that runs on your machine.
+## Supported environment infrastructure at the edge
 
-The Kubernetes server runs locally within your Docker instance, is not configurable, and is a single-node cluster. It runs within a Docker container on your local system, and is only for local testing.
+This version of MEC-App-Accelerator supports the following Kubernetes distributions and host operating system.
 
-## Install/enable Kuberentes in Docker Desktop
+- AKS Edge Essentials on Windows
+- K3s on Ubuntu Linux
 
-Make sure you have installed ["Docker Desktop"](https://docs.docker.com/desktop/install/windows-install/).
+Supported environment on top of the Kubernetes/k3s cluster:
 
-Once you have installed Docker Desktop, enable Kubernetes by following these instructions.
+- Azure IoT Operations alternative
+    - IoT MQ as messaging broker
+    - AKRI for dynamic cameras provissioning (OSS version)
 
-### Enable Kubernetes in Docker Desktop
+- Plain OSS/Mosquitto alternative
+    - Eclipse Mosquitto as messaging broker
+    - AKRI for dynamic cameras provissioning (OSS version)
 
-1. In order to Enable Kubernetes in Docker Desktop, check out the instructions from Docker:
+**Doker-Desktop-Kubernetes** is not supported by Azure IoT Operations, however, if using the OSS/Mosquito alternative, it should also work for you, but we recommend the above environments since those are the tested environments by our team.
 
-    - [Enable Kuberentes in Docker Desktop](https://docs.docker.com/desktop/kubernetes/)
 
-2. If you previosly had already installed kubectl and it is pointing to some other environment, such as MiniKube, make sure the default kubectl context is pointing to docker-desktop. 
+
+## Install the Kubernetes/K3s cluster at the edge
+
+
+TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
+TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
+TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
+
+
+Install Azure IoT Operations by following the [official documentation](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-prepare-cluster?tabs=aks-edge-essentials)
+
+TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
+TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
+TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
+
+
+
+# Check your kubectl context
+
+2. If you previosly had already installed kubectl and it is pointing to some other environment, such as MiniKube, make sure the default kubectl context is pointing to the right cluster. 
 
     Open a new command-shell and run the following command to check your current contexts:
 
@@ -165,19 +188,18 @@ Here's an example execution when targeting k3s:
 ### Deploy MQTT Broker resources to Kubernetes
 Before continuing with the deployment, decide wether to use Azure IoT Operations E4K or Mosquitto MQTT broker.
 
-#### Deployment with Azure IoT Operations E4K
-  1. Install Azure IoT Operations by following the [official documentation](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-prepare-cluster?tabs=aks-edge-essentials)
+#### Deploy Azure IoT MQ broker listener pod (aka. E4K)
   
-  2. Open a new command-shell and move into the `deploy/k8s/E4K` folder of this repo, as current folder of the command-shell:
+  1. Open a new command-shell and move into the `deploy/k8s/E4K` folder of this repo, as current folder of the command-shell:
     ```powershell
     cd <your_path>/deploy/k8s/E4K
     ```
-  3. Deploy E4K broker listener and the required configurations by running this command:
+  2. Deploy E4K broker listener and the required configurations by running this command:
     ```powershell
     kubectl apply -f ./
     ```
 
-#### Deployment with Mosquitto
+#### Deploy Mosquitto pod
   1. Open a new command-shell and move into the `deploy/k8s/mosquitto` folder of this repo, as current folder of the command-shell:
     ```powershell
     cd <your_path>/deploy/k8s/mosquitto
