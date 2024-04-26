@@ -4,16 +4,16 @@
 
 This version of MEC-App-Accelerator supports the following Kubernetes distributions and host operating system.
 
-- AKS Edge Essentials on Windows
-- K3s on Ubuntu Linux
+- **AKS Edge Essentials on Windows**
+- **K3s on Ubuntu Linux**
 
 Supported environment on top of the Kubernetes/k3s cluster:
 
-- Azure IoT Operations alternative
+- **Azure IoT Operations alternative**
     - IoT MQ as messaging broker
     - AKRI for dynamic cameras provissioning (OSS version)
 
-- Plain OSS/Mosquitto alternative
+- **Plain OSS/Mosquitto alternative**
     - Eclipse Mosquitto as messaging broker
     - AKRI for dynamic cameras provissioning (OSS version)
 
