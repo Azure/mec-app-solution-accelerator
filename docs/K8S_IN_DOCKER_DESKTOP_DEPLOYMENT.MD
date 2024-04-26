@@ -43,7 +43,7 @@ At this point, and after verifying the cluster from the command-line, you should
 
 However, in order to check out your cluster's Workloads (pods, deployments, etc.), you need to generate and provide a *"Service account bearer token"*, by following this procedure [Service account token authentication option](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/cluster-connect?tabs=azure-powershell%2Cagent-version#service-account-token-authentication-option) and finally providing the token like in this other screenshot:
 
-![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/7a490b36-755e-440d-9eab-4c395574c58f)
+<img width="551" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/7a490b36-755e-440d-9eab-4c395574c58f">
 
 So then, you can monitor your AKS EE workloads in your cluster on-premises/edge from Azure cloud portal, thanks to Azure Arc connection to your cluster:
 
