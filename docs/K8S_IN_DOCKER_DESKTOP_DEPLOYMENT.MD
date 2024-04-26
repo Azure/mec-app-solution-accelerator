@@ -162,15 +162,39 @@ Here's an example execution when targeting k3s:
 
 ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/2ed6995f-e8d3-477e-857b-08d3ba8fca64)
 
-### Deploy the application's services to Kubernetes
+### Deploy MQTT Broker resources to Kubernetes
+Before continuing with the deployment, decide wether to use Azure IoT Operations E4K or Mosquitto MQTT broker.
 
-7. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
+#### Deployment with Azure IoT Operations E4K
+  1. Install Azure IoT Operations by following the [official documentation](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-prepare-cluster?tabs=aks-edge-essentials)
+  
+  2. Open a new command-shell and move into the `deploy/k8s/E4K` folder of this repo, as current folder of the command-shell:
+    ```powershell
+    cd <your_path>/deploy/k8s/E4K
+    ```
+  3. Deploy E4K broker listener and the required configurations by running this command:
+    ```powershell
+    kubectl apply -f ./
+    ```
+
+#### Deployment with Mosquitto
+  1. Open a new command-shell and move into the `deploy/k8s/mosquitto` folder of this repo, as current folder of the command-shell:
+    ```powershell
+    cd <your_path>/deploy/k8s/mosquitto
+    ```
+  2. Deploy mosquitto and the required configurations by running this command:
+    ```powershell
+    kubectl apply -f ./
+    ```
+
+### Deploy the application's services to Kubernetes
+8. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
     ```powershell
     cd <your_path>/deploy/k8s
     ```
 
-8. Deploy the application in Kuberentes by running this command:
+9. Deploy the application in Kuberentes by running this command:
 
     ```powershell
     kubectl apply -f ./
@@ -183,7 +207,7 @@ Here's an example execution when targeting k3s:
 
 ## Deploy AKRI configuration
 
-9. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
+10. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
 ```powershell
 ./deploy-akri-secrets.ps1
@@ -193,13 +217,13 @@ Here's an example execution when targeting k3s:
 
 ### Check the application status with Kubernetes Dashboard
 
-10. If you don't have installed/enabled the Kuberentes Dashboard, do so by running this command:
+11. If you don't have installed/enabled the Kuberentes Dashboard, do so by running this command:
 
     ```powershell
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
     ```
 
-11. Run `kubectl proxy` so you can access the dahboard:
+12. Run `kubectl proxy` so you can access the dahboard:
 
     ```powershell
     kubectl proxy
@@ -217,7 +241,7 @@ Let's do that in the following steps.
 
 ### Configure Bearer Tokens from Kuberentes to access the Dashboard
 
-12. You need to do this step **only one time**: Change the current folder to the `deploy/k8s/dashboard_auth` folder of this repo and run the instructions in commands.txt to configure the tokens. Basically, the following commands need to be run just once from that folder:
+13. You need to do this step **only one time**: Change the current folder to the `deploy/k8s/dashboard_auth` folder of this repo and run the instructions in commands.txt to configure the tokens. Basically, the following commands need to be run just once from that folder:
 
     ```powershell
     kubectl apply -f dashboard-adminuser.yaml 
@@ -230,7 +254,7 @@ Let's do that in the following steps.
 
 ### Generate and copy the token to provide to Kubernetes Dashboard
 
-13. Whenever you need a token, run this command:
+14. Whenever you need a token, run this command:
 
     ```powershell
     kubectl -n kubernetes-dashboard create token admin-user --duration=48h --output yaml
@@ -242,7 +266,7 @@ Let's do that in the following steps.
 
 ### Provide the token to Kubernetes dashboard
 
-14. Open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login in your browser and paste the token you copied previously.
+15. Open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login in your browser and paste the token you copied previously.
 
 ![image](https://user-images.githubusercontent.com/1712635/218882193-938f14f0-06ca-4bba-979f-da9266706f8e.png)
 
@@ -253,7 +277,7 @@ In the Kubernetes dashboard you should be able to explore the application's pods
 
 ### Access the 'Control Plain app' to provision cameras (and 5G network SIMs if using 5G cameras in a Private 5G network)
 
-15. In order to know the URL for the 'Control Plain web app', using a browser go to the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed ("mec-accelerator"), go to the "Services" menu in the left tab and click on the url to the right on the **"control-plane-ui-service" service** row.
+16. In order to know the URL for the 'Control Plain web app', using a browser go to the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed ("mec-accelerator"), go to the "Services" menu in the left tab and click on the url to the right on the **"control-plane-ui-service" service** row.
 
 ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/1df800f5-f5e8-4d40-8d2f-911197a7678b)
 
@@ -286,6 +310,11 @@ XX. Open a new command-shell and change the current folder to the `deploy/k8s` f
 XX. Run the following command to remove all related kubernetes resources for this application, since there is no stop action on kubectl.
 
     ```powershell
+    kubectl delete -f ./
+    ```
+XX. If Azure IoT Operations E4K broker has been used, run the following commands to remove kubernetes resouces
+    ```powershell
+    cd .\deploy\k8s\E4K\
     kubectl delete -f ./
     ```
 
