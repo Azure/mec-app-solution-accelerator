@@ -35,17 +35,15 @@ Even when the below documentation link is the supported baseline environment for
 
 [Create your Azure Arc-enabled K3s cluster on Ubuntu-Linux](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=linux#connect-a-kubernetes-cluster-to-azure-arc)
 
-
-*Azure Arc support:* For most cases, it's interesting to follow the above setup instructions instead of a plain K8s/K3s setup because then you will also have your cluster as an Azure Arc-enabled cluster, so you can monitor the cluster at the edge from anywhere through Azure portal in the cloud.
-
 **IMPORTANT** If you are NOT going to use Azure IoT Operations, when following the previous setup doc, stop before the section named *"Deploy Azure IoT Operations Preview"* so the last secion to follow should be *"Verify cluster"*.
 
+*Azure Arc support:* For most cases, it's interesting to follow the above setup instructions instead of a plain K8s/K3s setup because then you will also have your cluster as an Azure Arc-enabled cluster, so you can monitor the cluster at the edge from anywhere through Azure portal in the cloud.
 
 ## Setup Azure IoT Operations into your cluster
 
 ### Prerequisites for Azure IoT Operations
 
-It's very important to check and install the prerequisites for Azure IoT Operations explained here:
+It's important to check and install the prerequisites for Azure IoT Operations explained here:
 
 [Prerequisites for Azure IoT Operations](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=windows#prerequisites)
 
@@ -54,7 +52,7 @@ It's very important to check and install the prerequisites for Azure IoT Operati
 Install Azure IoT Operations by following the official "simplified/automated approach" documentation here:
 [Deploy Azure IoT Operations Preview](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=windows#deploy-azure-iot-operations-preview)
 
-Note that there's an alternative "Detailed step-by-step Azure IoT Operations deployment" available in Microsoft's docs, but we initially recommend to go the easy path explained above instad of the following docs which require significntly more time with many step-by-step instructions:
+Note that there's an alternative "Detailed step-by-step Azure IoT Operations deployment" available in Microsoft's docs, but we initially recommend to go the easy path explained above instead of the following docs which require significntly more time with many step-by-step instructions:
 
 **(OPTIONAL ALTERNATIVE) Detailed Azure IoT Operations setup** 
 - [Prepare your Azure Arc-enabled Kubernetes cluster](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-prepare-cluster?tabs=aks-edge-essentials)
