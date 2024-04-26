@@ -55,7 +55,7 @@ Install Azure IoT Operations by following the official "simplified/automated app
 
 Note that there's an alternative "Detailed step-by-step Azure IoT Operations deployment" available in Microsoft's docs, but we initially recommend to go the easy path explained above instead of the following docs which require significntly more time with many step-by-step instructions:
 
-**(OPTIONAL ALTERNATIVE) Detailed Azure IoT Operations setup** 
+**(OPTIONAL LEARNING) Detailed Azure IoT Operations setup** 
 - [Prepare your Azure Arc-enabled Kubernetes cluster](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-prepare-cluster?tabs=aks-edge-essentials)
 - [Deploy Azure IoT Operations Preview extensions to a Kubernetes cluster](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-deploy-iot-operations)
 - [Manage secrets for your Azure IoT Operations Preview deployment](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-manage-secrets)
@@ -145,8 +145,7 @@ Use these instructions to [Buil your own Docker Images to upload to Docker Regis
 
 ### Update the application control plane configuration
 
-3. Update the config map that contains essential information for connecting to our Azure Mobile Network. You'll find the configuration in the file `deploy/k8s/13-control-plane-api-config-map.yaml`.
-
+3. **(OPTIONAL for Azure Private 5G network)** Update the config map that contains essential information for connecting to our Azure Mobile Network. You'll find the configuration in the file `deploy/k8s/13-control-plane-api-config-map.yaml`.
 
 Replace the following values in the file:
 
