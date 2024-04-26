@@ -65,7 +65,7 @@ However, in case you want to know what's going on under the covers, it's interes
 
 ## Deploy the MEC-Application into the cluster at the edge
 
-## Check your kubectl context
+### Check your kubectl context
 
 2. If you previosly had already installed kubectl and it is pointing to some other environment, such as MiniKube, make sure the default kubectl context is pointing to the right cluster. 
 
@@ -84,11 +84,11 @@ However, in case you want to know what's going on under the covers, it's interes
     ![image](https://user-images.githubusercontent.com/1712635/218879865-f41a5a72-0f8e-4fc2-8d40-5543ce455942.png)
 
 
-## Deploy Dapr into the cluster
+### Deploy Dapr into the cluster
 
 This example application is based on **[Dapr](https://dapr.io/)** framework which is an OSS Microsoft framework specialized on microservices architecture, so you need to install it and enable in the Kubernetes cluster, first. 
 
-### Install and Initialize DAPR
+#### Install and Initialize DAPR
 
 3. Install or make sure you have installed `Dapr` on your machine on a Kubernetes cluster as described in the [Deploy dapr](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#install-with-dapr-cli). 
 
@@ -119,7 +119,7 @@ Note that if you were able to run the application on plain Docker, you should ha
     ![image](https://user-images.githubusercontent.com/1712635/218880976-94b42767-40e3-4d9c-a640-2dfa029cb510.png)
 
 
-## (Optional) Instructions for building your own Docker Images to deploy to Kubernetes
+### (Optional) Instructions for building your own Docker Images to deploy to Kubernetes
 
 This step is not needed if you directly deploy to Kubernetes and test the images we have already uploaded into Docker Hub, so creating your own Docker images and uploading to Docker Hub is optional, initially.
 
@@ -128,7 +128,7 @@ However, if you make changes in the .NET or Python code or you want to use your 
 Use these instructions to [Buil your own Docker Images to upload to Docker Registry and deploy to Kubernetes](./BUILD_AND_PUSH_IMAGES_TO_DOCKER_HUB.MD)
 
 
-## Deploy the application namespace (custom K8s namespace)
+### Deploy the application namespace (custom K8s namespace)
 1. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
     ```powershell
@@ -165,7 +165,7 @@ Replace the following values in the file:
 For just getting alerts and camera management/provisioning (i.e. Wi-Fi or Ethernet cameras provisioning), you can skip this part if you don't have an AP5GC Mobile Network and packet core deployed into an ASE, RAN, 5G UEs, etc.
 
 
-### Install AKRI
+### Install AKRI and related application discovery handler
 
 5. Install HELM in your system
 
