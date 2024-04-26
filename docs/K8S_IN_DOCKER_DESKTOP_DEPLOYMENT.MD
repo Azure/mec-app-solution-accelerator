@@ -63,22 +63,9 @@ Note that there's an alternative "Detailed step-by-step Azure IoT Operations dep
 However, in case you want to know what's going on under the covers, it's interesting to take a look to those alternative and detailed setup docs for Azure IoT Operations.
 
 
+## Deploy the MEC-Application into the cluster at the edge
 
-
-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
-
-
-
-
-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
-
-
-
-# Check your kubectl context
+## Check your kubectl context
 
 2. If you previosly had already installed kubectl and it is pointing to some other environment, such as MiniKube, make sure the default kubectl context is pointing to the right cluster. 
 
@@ -96,15 +83,8 @@ TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-TBD-
     
     ![image](https://user-images.githubusercontent.com/1712635/218879865-f41a5a72-0f8e-4fc2-8d40-5543ce455942.png)
 
-## (Optional) Instructions for building your own Docker Images to deploy to Kubernetes
 
-You can directly deploy to Kubernetes and test the images we have already uploaded into Docker Hub, so creating your own Docker images and uploading to Docker Hub is optional, initially.
-
-However, if you make changes in the code or you want to use your own Docker Images for any reason, you'd need to create your own Docker images and upload the images first to Docker Hub before deploying to Kubernetes. 
-
-Use these instructions to [Buil your own Docker Images to upload to Docker Registry and deploy to Kubernetes](./BUILD_AND_PUSH_IMAGES_TO_DOCKER_HUB.MD)
-
-## Deploy the Application to Kubernetes in 'Docker Desktop'
+## Deploy Dapr into the cluster
 
 This example application is based on **[Dapr](https://dapr.io/)** framework which is an OSS Microsoft framework specialized on microservices architecture, so you need to install it and enable in the Kubernetes cluster, first. 
 
@@ -138,7 +118,17 @@ Note that if you were able to run the application on plain Docker, you should ha
     
     ![image](https://user-images.githubusercontent.com/1712635/218880976-94b42767-40e3-4d9c-a640-2dfa029cb510.png)
 
-## Deploy namespace
+
+## (Optional) Instructions for building your own Docker Images to deploy to Kubernetes
+
+This step is not needed if you directly deploy to Kubernetes and test the images we have already uploaded into Docker Hub, so creating your own Docker images and uploading to Docker Hub is optional, initially.
+
+However, if you make changes in the .NET or Python code or you want to use your own Docker Images for any other reason, you'd need to create your own Docker images and upload the images first to Docker Hub before deploying to Kubernetes. 
+
+Use these instructions to [Buil your own Docker Images to upload to Docker Registry and deploy to Kubernetes](./BUILD_AND_PUSH_IMAGES_TO_DOCKER_HUB.MD)
+
+
+## Deploy the application namespace (custom K8s namespace)
 1. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
     ```powershell
@@ -153,7 +143,7 @@ Note that if you were able to run the application on plain Docker, you should ha
 
 ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/2407d56b-0b3e-4467-bdc3-59dce3527398)
 
-### Update control plane configuration
+### Update the application control plane configuration
 
 3. Update the config map that contains essential information for connecting to our Azure Mobile Network. You'll find the configuration in the file `deploy/k8s/13-control-plane-api-config-map.yaml`.
 
@@ -192,7 +182,7 @@ Install akri repository.
 helm repo add akri-helm-charts https://project-akri.github.io/akri/
 ```
 
-Install the application's "camera discovery handler" AKRI Helm chart and related configuration:
+Install AKRI with the application's "camera discovery handler" AKRI Helm chart and related configuration:
 
 **IMPORTANT:** If you are installing agains a K3s or K8s (Kubernetes on Docker Desktop should be "k8s"), you need to specify that distro in the `kubernetesDistro` parameter below as:
 
@@ -250,7 +240,7 @@ Before continuing with the deployment, decide wether to use Azure IoT Operations
     kubectl apply -f ./
     ```
 
-### Deploy the application's services to Kubernetes
+### Deploy the application's services into the Kubernetes cluster
 8. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
     ```powershell
