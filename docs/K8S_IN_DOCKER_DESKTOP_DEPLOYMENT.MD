@@ -27,17 +27,21 @@ Install the AKS-EE-Windows cluster or the K3s-Ubuntu cluster by following the in
 
 Even when the below documentation link is the supported baseline environment for an Azure IoT Operations cluster, you can also follow this AKS-EE/K3s cluster installation procedure documentation even if you won't use the Azure IoT Operations alternative but the plain OSS/Mosquitto alternative:
 
-**AKS-EE-Windows alternative:** 
+**Install AKS-EE-Windows alternative:** 
 
 [Create your Azure Arc-enabled Kubernetes cluster on Windows](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-prepare-cluster?tabs=aks-edge-essentials)
 
-**K3s-Ubuntu-Linux alternative:** 
+**Install K3s-Ubuntu-Linux alternative:** 
 
 [Create your Azure Arc-enabled K3s cluster on Ubuntu-Linux](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=linux#connect-a-kubernetes-cluster-to-azure-arc)
 
 **IMPORTANT** If you are NOT going to use Azure IoT Operations, when following the previous setup doc, stop before the section named *"Deploy Azure IoT Operations Preview"* so the last secion to follow should be *"Verify cluster"*.
 
 *Azure Arc support:* For most cases, it's interesting to follow the above setup instructions instead of a plain K8s/K3s setup because then you will also have your cluster as an Azure Arc-enabled cluster, so you can monitor the cluster at the edge from anywhere through Azure portal in the cloud.
+
+*Eventual removal of AKS Edge Essentials:* Eventually, if you need to install the AKS-EE, follow this procedure:
+
+[Uninstall AKS Edge Essentials](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-uninstall#uninstall-aks-edge-essentials)
 
 ## Setup Azure IoT Operations into your cluster
 
