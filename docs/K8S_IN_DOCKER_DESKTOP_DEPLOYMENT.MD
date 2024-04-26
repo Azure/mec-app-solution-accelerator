@@ -50,6 +50,7 @@ It's important to check and install the prerequisites for Azure IoT Operations e
 ### Deploy Azure IoT Operations Preview
 
 Install Azure IoT Operations by following the official "simplified/automated approach" documentation here:
+
 [Deploy Azure IoT Operations Preview](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=windows#deploy-azure-iot-operations-preview)
 
 Note that there's an alternative "Detailed step-by-step Azure IoT Operations deployment" available in Microsoft's docs, but we initially recommend to go the easy path explained above instead of the following docs which require significntly more time with many step-by-step instructions:
