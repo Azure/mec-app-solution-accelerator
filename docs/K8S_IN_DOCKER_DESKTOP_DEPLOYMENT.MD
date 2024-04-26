@@ -75,14 +75,11 @@ However, in case you want to know what's going on under the covers, it's interes
     kubectl config get-contexts
     ```
 
-    To set the context to point to Kuberentes from Docker Desktop:
+    To set the context to point to the right Kuberentes cluster, use kubectl and provide the name of the context to use:
 
     ```powershell
-    kubectl config use-context docker-desktop
+    kubectl config use-context [my-cluster-context]
     ```
-    
-    ![image](https://user-images.githubusercontent.com/1712635/218879865-f41a5a72-0f8e-4fc2-8d40-5543ce455942.png)
-
 
 ### Deploy Dapr into the cluster
 
