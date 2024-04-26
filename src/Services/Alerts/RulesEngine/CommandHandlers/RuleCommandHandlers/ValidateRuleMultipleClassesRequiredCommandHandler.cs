@@ -7,11 +7,11 @@ namespace RulesEngine.CommandHandlers.RulesCommandHandler
     {
         public async Task<bool> Handle(ValidateRuleMultipleClassesRequiredCommand request, CancellationToken cancellationToken)
         {
-            foreach(var @class in request.RuleConfig.MultipleObjects)
+            foreach (var @class in request.RuleConfig.MultipleObjects)
             {
                 var classesMatched = request.FoundClasses.Where(c => c.EventType == @class);
                 request.MatchedClassesByAlert.AddRange(classesMatched);
-                if(classesMatched.Count() == 0)
+                if (classesMatched.Count() == 0)
                 {
                     return false;
                 }

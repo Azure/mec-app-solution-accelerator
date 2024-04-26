@@ -14,21 +14,19 @@ spec:
     metadata:
       labels:
         app: rulesengine
-      annotations:
-        dapr.io/enabled: "true"
-        dapr.io/app-id: "rulesengine"
-        dapr.io/app-port: "80"
-        dapr.io/config: "dapr-config"
     spec:
       containers:
       - name: rulesengine
-        image: mecsolutionaccelerator/rulesengine:1.8.1
+        image: mecsolutionaccelerator/rulesengine:1.9
         ports:
         - containerPort: 80
         imagePullPolicy: IfNotPresent
         env:
           - name: ASPNETCORE_ENVIRONMENT
             value: Development
+        envFrom:
+        - configMapRef:
+            name: mqtt-config
       restartPolicy: Always
 ---
 

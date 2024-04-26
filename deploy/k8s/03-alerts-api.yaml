@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: alerts-api
-        image: mecsolutionaccelerator/alerts-api:1.8.1
+        image: mecsolutionaccelerator/alerts-api:1.9
         ports:
         - containerPort: 80
         imagePullPolicy: IfNotPresent
@@ -31,6 +31,9 @@ spec:
             value: Development
           - name: MONGODB__HOSTNAME
             value: mongodb.mec-accelerator.svc.cluster.local
+        envFrom:
+        - configMapRef:
+            name: mqtt-config
       restartPolicy: Always
 ---
 

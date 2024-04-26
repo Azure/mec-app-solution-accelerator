@@ -1,31 +1,25 @@
-﻿using Alerts.RulesEngine.Commands;
-using Dapr.Client;
-using MediatR;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
-using MongoDB.Driver;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
+﻿using MediatR;
+using RulesEngine.Commands;
+using RulesEngine.Configuration;
+using RulesEngine.Events;
+using RulesEngine.Events.Base;
 
-namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHandlers
+namespace RulesEngine.CommandHandlers
 {
     public class AnalyzeObjectDetectionCommandHandler : IRequestHandler<AnalyzeObjectDetectionCommand, Unit>
     {
-        private readonly DaprClient _daprClient;
         private readonly Dictionary<string, IEnumerable<AlertsConfig>> _alertsByDetectedClasses;
         private readonly IMediator _mediator;
 
-        public AnalyzeObjectDetectionCommandHandler(DaprClient daprClient, Dictionary<string, IEnumerable<AlertsConfig>> alertsByDetectedClasses, IMediator mediator)
+        public AnalyzeObjectDetectionCommandHandler(Dictionary<string, IEnumerable<AlertsConfig>> alertsByDetectedClasses, IMediator mediator)
         {
-            _daprClient = daprClient ?? throw new ArgumentNullException(nameof(daprClient));
             _alertsByDetectedClasses = alertsByDetectedClasses ?? throw new ArgumentNullException(nameof(alertsByDetectedClasses));
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         public async Task<Unit> Handle(AnalyzeObjectDetectionCommand command, CancellationToken cancellationToken)
         {
+            Console.WriteLine("ANALYZEOBJECTDETECTIONHANDLER");
             if (command.Classes is null || command.Classes.Count == 0)
             {
                 throw new ArgumentException("Classes are required", nameof(command.Classes));
@@ -45,9 +39,10 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
 
         private async Task ValidateAlertsPerDetection(DetectionClass requestClass, List<DetectionClass> foundClasses, long everyTime, string urlEncoded, string frame, List<StepTime> stepTrace, string sourceId)
         {
-            if (_alertsByDetectedClasses.TryGetValue(requestClass.EventType, out IEnumerable<AlertsConfig>? alertsConfig))
+            Console.WriteLine("VALIDATINGALERTDETECTION");
+            if (_alertsByDetectedClasses.TryGetValue(requestClass.EventType, out IEnumerable<AlertsConfig> alertsConfig))
             {
-
+                Console.WriteLine("FOUND ALERTS " + alertsConfig.Count());
                 foreach (var alertConfig in alertsConfig)
                 {
                     var validationAlertCommand = new ValidateAlertCommand()
@@ -62,7 +57,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHa
                         SourceId = sourceId,
                     };
 
-                    await this._mediator.Send(validationAlertCommand);
+                    await _mediator.Send(validationAlertCommand);
                 }
             }
         }

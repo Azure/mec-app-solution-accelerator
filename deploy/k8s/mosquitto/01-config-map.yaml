@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mqtt-config
+  namespace: mec-accelerator
+data:
+  Mqtt__ConnectionString: "mosquitto.mec-accelerator.svc.cluster.local"
+  Mqtt__Port: '1883'

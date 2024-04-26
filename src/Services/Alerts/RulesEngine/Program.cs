@@ -1,29 +1,22 @@
 using MediatR;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Injection;
-using System.Reflection;
+using RulesEngine;
+using RulesEngine.Configuration;
+using RulesEngine.InMemoryDataDI;
 
-var builder = WebApplication.CreateBuilder(args);
+IConfiguration configuration = null;
+IHost host = Host.CreateDefaultBuilder(args)
+    .ConfigureAppConfiguration(config =>
+    {
+        configuration = config.Build();
+    })
+    .ConfigureServices(services =>
+    {
+        services.AddHostedService<Worker>();
+        services.AddRulesEngineConfiguration(configuration);
+        services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddOptions<MqttConfig>().BindConfiguration(MqttConfig.SectionName);
+    })
+    .Build();
 
-// Add services to the container.
-builder.Services.AddDaprClient();
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddRulesEngineConfiguration(builder.Configuration);
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseCloudEvents();
-app.UseAuthorization();
-app.MapControllers();
-app.MapSubscribeHandler();
-app.Run();
+host.Services.GetRequiredService<IConfiguration>();
+host.Run();

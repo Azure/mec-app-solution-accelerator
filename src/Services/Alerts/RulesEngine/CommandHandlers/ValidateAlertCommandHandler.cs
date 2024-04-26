@@ -1,24 +1,27 @@
-﻿using Alerts.RulesEngine.Commands;
-using Dapr.Client;
-using MediatR;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events;
+﻿using MediatR;
+using MQTTnet;
+using MQTTnet.Client;
+using RulesEngine.Commands;
+using RulesEngine.Commands.RuleCommands;
+using RulesEngine.Configuration;
+using RulesEngine.Events;
+using RulesEngine.Events.Base;
+using Microsoft.Extensions.Options;
 using SolTechnology.Avro;
 
-namespace Alerts.RulesEngine.CommandHandlers
+namespace RulesEngine.CommandHandlers
 {
     public class ValidateAlertCommandHandler : IRequestHandler<ValidateAlertCommand, Unit>
     {
         private readonly Dictionary<string, Type> _commandsTypeByDetectionName;
         private readonly IMediator _mediator;
-        private readonly DaprClient _daprClient;
+        private readonly MqttConfig _mqttConfig;
 
-        public ValidateAlertCommandHandler(Dictionary<string, Type> commandsTypeByDetectionName, IMediator mediator, DaprClient daprClient)
+        public ValidateAlertCommandHandler(Dictionary<string, Type> commandsTypeByDetectionName, IMediator mediator, IOptions<MqttConfig> options)
         {
             _commandsTypeByDetectionName = commandsTypeByDetectionName ?? throw new ArgumentNullException(nameof(commandsTypeByDetectionName));
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            _daprClient = daprClient ?? throw new ArgumentNullException(nameof(daprClient));
+            _mqttConfig = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
         public async Task<Unit> Handle(ValidateAlertCommand request, CancellationToken cancellationToken)
@@ -41,9 +44,26 @@ namespace Alerts.RulesEngine.CommandHandlers
                 };
 
                 var serialized = AvroConvert.Serialize(alert);
-                await _daprClient.PublishEventAsync("pubsub", "newAlert", serialized);
-            }
+                var mqttFactory = new MqttFactory();
+                using var mqttClient = mqttFactory.CreateMqttClient();
+                var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer(_mqttConfig.ConnectionString, _mqttConfig.Port).Build();
+                mqttClient.ConnectedAsync += e =>
+                {
+                    Console.WriteLine("Connected");
+                    return Task.CompletedTask;
+                };
 
+                var test = await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
+                Console.WriteLine("Published new Alert result: " + test.ResultCode);
+
+                var applicationMessage = new MqttApplicationMessageBuilder()
+                    .WithTopic("newAlert")
+                    .WithPayload(serialized)
+                    .Build();
+
+                await mqttClient.PublishAsync(applicationMessage, CancellationToken.None);
+                await mqttClient.DisconnectAsync(cancellationToken: cancellationToken);
+            }
             return Unit.Value;
         }
 
@@ -52,7 +72,6 @@ namespace Alerts.RulesEngine.CommandHandlers
             Task<bool>[] tasks = new Task<bool>[config.RulesConfig.Count];
             bool exists = false;
             var i = 0;
-
             foreach (var ruleConfig in config.RulesConfig)
             {
                 if (_commandsTypeByDetectionName.TryGetValue(ruleConfig.RuleName, out Type? eventType) && eventType != null)
@@ -66,11 +85,9 @@ namespace Alerts.RulesEngine.CommandHandlers
                     exists = true;
                 }
             }
-
             await Task.WhenAll(tasks);
 
             return exists && tasks.All(task => task.IsCompletedSuccessfully && task.Result);
         }
-
     }
 }

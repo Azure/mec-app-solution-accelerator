@@ -9,11 +9,50 @@ from avro_json_serializer import AvroJsonSerializer
 import logging
 import os
 import shared.minio_utils as minio
-
+import paho.mqtt.client as mqtt
 
 def PublishEvent(pubsub_name: str, topic_name: str, data: json):
-    with DaprClient() as client:
-        resp = client.publish_event(pubsub_name=pubsub_name, topic_name=topic_name, data=data, data_content_type='application/json')
+    unacked_publish = set()
+    mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+    mqttc.on_publish = on_publish
+
+    mqttc.user_data_set(unacked_publish)
+    mqttc.connect(os.getenv('Mqtt__ConnectionString'), int(os.getenv('Mqtt__Port')))
+    mqttc.loop_start()
+
+    print("PUBLISHING!")
+    msg_info = mqttc.publish(topic_name, data, qos=1)
+    unacked_publish.add(msg_info.mid)
+
+    print("WAITING!")
+    # Wait for all message to be published
+    while len(unacked_publish):
+        time.sleep(0.1)
+
+    # Due to race-condition described above, the following way to wait for all publish is safer
+    msg_info.wait_for_publish()
+
+    print("DISCONNECTING!")
+    print(msg_info.is_published())
+    mqttc.disconnect()
+    mqttc.loop_stop()
+
+def on_publish(client, userdata, mid, reason_code, properties):
+    # reason_code and properties will only be present in MQTTv5. It's always unset in MQTTv3
+    try:
+        userdata.remove(mid)
+    except KeyError:
+        print("on_publish() is called with a mid not present in unacked_publish")
+        print("This is due to an unavoidable race-condition:")
+        print("* publish() return the mid of the message sent.")
+        print("* mid from publish() is added to unacked_publish by the main thread")
+        print("* on_publish() is called by the loop_start thread")
+        print("While unlikely (because on_publish() will be called after a network round-trip),")
+        print(" this is a race-condition that COULD happen")
+        print("")
+        print("The best solution to avoid race-condition is using the msg_info from publish()")
+        print("We could also try using a list of acknowledged mid rather than removing from pending list,")
+        print("but remember that mid could be re-used !")
 
 def main(source_id,timestamp,model,image_id,detection_threshold,path,time_trace):
     timestamp_init=int(time.time()*1000)

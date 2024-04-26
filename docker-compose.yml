@@ -3,7 +3,7 @@ version: '3.4'
 services:
 
   aiinferencer:
-    image: ${DOCKER_REGISTRY-}aiinferencer:1.6
+    image: ${DOCKER_REGISTRY-}aiinferencer:1.9
     build:
       context: src/Services/Detections
       dockerfile: ai_inferencer/Dockerfile
@@ -20,7 +20,7 @@ services:
     network_mode: "service:aiinferencer"
 
   rulesengine: 
-    image: ${DOCKER_REGISTRY-}rulesengine:1.6
+    image: ${DOCKER_REGISTRY-}rulesengine:1.9
     build:
       context: .
       dockerfile: src/Services/Alerts/RulesEngine/Dockerfile
@@ -49,7 +49,7 @@ services:
     network_mode: "service:framesplitter"
 
   alerts-api: 
-    image: ${DOCKER_REGISTRY-}alerts-api:1.6
+    image: ${DOCKER_REGISTRY-}alerts-api:1.9
     build:
       context: .
       dockerfile: src/Services/Alerts/API/Dockerfile
@@ -63,7 +63,7 @@ services:
     network_mode: "service:alerts-api"
   
   alerts-ui:
-    image: ${DOCKER_REGISTRY-}alerts-ui:1.6
+    image: ${DOCKER_REGISTRY-}alerts-ui:1.8
     build:
       context: .
       dockerfile: src/Web/alerts-ui/Dockerfile

@@ -1,0 +1,11 @@
+apiVersion: mq.iotoperations.azure.com/v1beta1
+kind: BrokerListener
+metadata:
+  name: mec-listener
+  namespace: azure-iot-operations
+spec:
+  authenticationEnabled: false
+  authorizationEnabled: false
+  brokerRef: broker
+  port: 8884
+
