@@ -31,7 +31,7 @@ namespace AlertsReader.Services
 
             mqttClient.ApplicationMessageReceivedAsync += async e =>
             {
-                Console.WriteLine("### RECEIVED ALERT READER MESSAGE ###");
+                _logger.LogInformation("Received alert reader message");
                 var now = DateTime.UtcNow;
                 var detection = AvroConvert.Deserialize<DetectedObjectAlert>(e.ApplicationMessage.PayloadSegment);
                 detection.TimeTrace.FirstOrDefault(t => t.StepName.Equals("RulesEngine")).StepEnd = (long)(now - new DateTime(1970, 1, 1)).TotalMilliseconds;
@@ -48,17 +48,16 @@ namespace AlertsReader.Services
                     Source = detection.SourceId
                 });
 
-                _logger.LogInformation("Stored generic alert");
+                _logger.LogInformation("Stored alert");
             };
 
             mqttClient.ConnectedAsync += e =>
             {
-                Console.WriteLine("Connected");
+                _logger.LogInformation("Connected to MQTT broker");
                 return Task.CompletedTask;
             };
 
-            var test = await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
-            Console.WriteLine(test.ResultCode);
+            await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
 
             var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
                 .WithTopicFilter(
@@ -69,8 +68,7 @@ namespace AlertsReader.Services
                     })
                 .Build();
             var subResult = await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
-            Console.WriteLine(subResult.ReasonString);
-            Console.WriteLine("MQTT client subscribed to topic.");
+            _logger.LogInformation("MQTT client subscribed to topic with result ${0}", subResult.ReasonString);
 
             while (true)
             {

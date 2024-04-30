@@ -19,7 +19,6 @@ namespace RulesEngine.CommandHandlers
 
         public async Task<Unit> Handle(AnalyzeObjectDetectionCommand command, CancellationToken cancellationToken)
         {
-            Console.WriteLine("ANALYZEOBJECTDETECTIONHANDLER");
             if (command.Classes is null || command.Classes.Count == 0)
             {
                 throw new ArgumentException("Classes are required", nameof(command.Classes));
@@ -39,10 +38,8 @@ namespace RulesEngine.CommandHandlers
 
         private async Task ValidateAlertsPerDetection(DetectionClass requestClass, List<DetectionClass> foundClasses, long everyTime, string urlEncoded, string frame, List<StepTime> stepTrace, string sourceId)
         {
-            Console.WriteLine("VALIDATINGALERTDETECTION");
             if (_alertsByDetectedClasses.TryGetValue(requestClass.EventType, out IEnumerable<AlertsConfig> alertsConfig))
             {
-                Console.WriteLine("FOUND ALERTS " + alertsConfig.Count());
                 foreach (var alertConfig in alertsConfig)
                 {
                     var validationAlertCommand = new ValidateAlertCommand()

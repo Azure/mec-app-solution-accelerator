@@ -1,12 +1,11 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Options;
 using MQTTnet;
 using MQTTnet.Client;
 using RulesEngine.Commands;
-using RulesEngine.Commands.RuleCommands;
 using RulesEngine.Configuration;
 using RulesEngine.Events;
 using RulesEngine.Events.Base;
-using Microsoft.Extensions.Options;
 using SolTechnology.Avro;
 
 namespace RulesEngine.CommandHandlers
@@ -15,12 +14,18 @@ namespace RulesEngine.CommandHandlers
     {
         private readonly Dictionary<string, Type> _commandsTypeByDetectionName;
         private readonly IMediator _mediator;
+        private readonly ILogger<ValidateAlertCommandHandler> _logger;
         private readonly MqttConfig _mqttConfig;
 
-        public ValidateAlertCommandHandler(Dictionary<string, Type> commandsTypeByDetectionName, IMediator mediator, IOptions<MqttConfig> options)
+        public ValidateAlertCommandHandler(
+            Dictionary<string, Type> commandsTypeByDetectionName,
+            IMediator mediator,
+            IOptions<MqttConfig> options,
+            ILogger<ValidateAlertCommandHandler> logger)
         {
             _commandsTypeByDetectionName = commandsTypeByDetectionName ?? throw new ArgumentNullException(nameof(commandsTypeByDetectionName));
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _logger = logger;
             _mqttConfig = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
@@ -49,12 +54,12 @@ namespace RulesEngine.CommandHandlers
                 var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer(_mqttConfig.ConnectionString, _mqttConfig.Port).Build();
                 mqttClient.ConnectedAsync += e =>
                 {
-                    Console.WriteLine("Connected");
+                    _logger.LogInformation("Connected to MQTT broker");
                     return Task.CompletedTask;
                 };
 
-                var test = await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
-                Console.WriteLine("Published new Alert result: " + test.ResultCode);
+                var connectionResult = await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
+                _logger.LogInformation("Published new Alert with result: " + connectionResult.ResultCode);
 
                 var applicationMessage = new MqttApplicationMessageBuilder()
                     .WithTopic("newAlert")
