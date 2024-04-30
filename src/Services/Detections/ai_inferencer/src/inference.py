@@ -20,11 +20,9 @@ def PublishEvent(pubsub_name: str, topic_name: str, data: json):
     mqttc.connect(os.getenv('Mqtt__ConnectionString'), int(os.getenv('Mqtt__Port')))
     mqttc.loop_start()
 
-    print("PUBLISHING!")
     msg_info = mqttc.publish(topic_name, data, qos=1)
     unacked_publish.add(msg_info.mid)
 
-    print("WAITING!")
     # Wait for all message to be published
     while len(unacked_publish):
         time.sleep(0.1)
@@ -32,8 +30,6 @@ def PublishEvent(pubsub_name: str, topic_name: str, data: json):
     # Due to race-condition described above, the following way to wait for all publish is safer
     msg_info.wait_for_publish()
 
-    print("DISCONNECTING!")
-    print(msg_info.is_published())
     mqttc.disconnect()
     mqttc.loop_stop()
 
