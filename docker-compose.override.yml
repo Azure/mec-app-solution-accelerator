@@ -7,6 +7,8 @@ services:
     - "2060:2060"
     environment:
     - MINIOURL=http://minio:9000
+    - Mqtt__ConnectionString=mosquitto
+    - Mqtt__Port=1883
   
   aiinferencer-dapr:
     command: [ "./daprd", "-app-id", "invoke-sender-frames", "--app-protocol", "grpc", "--app-port", "2060","--dapr-http-port", "3600", "--components-path", "./components"]
@@ -17,21 +19,19 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - Mqtt__ConnectionString=mosquitto
+      - Mqtt__Port=1883
     ports:
       - "80"
-
-  rulesengine-dapr:
-    command: [ "./daprd", "-app-id", "rulesengine", "-app-port", "80", "-components-path", "/components"]
-    volumes:
-    - "./dapr/components/:/components"
 
   framesplitter:
     environment:
     - TIMEOUT=15
-    #- FEED=rtsp://20.42.105.26:8554/mystream
-    #- FEED=../Datasets/demo.mp4
-    - FEED=../Datasets/PerimeterDemo.mp4
+    #- RTSP_URI_1=rtsp://20.42.105.26:8554/zmystream
+    #- RTSP_URI_1=../Datasets/demo.mp4
+    - RTSP_URI_1=../Datasets/PerimeterDemo.mp4
     - MINIOURL=http://minio:9000
+    - CAMERA_ID_1=VideoDemo
     ports:
     - "57090"
 
@@ -44,6 +44,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - Mqtt__ConnectionString=mosquitto
+      - Mqtt__Port=1883
     ports:
       - "50064:80"
 

@@ -27,12 +27,6 @@ services:
     depends_on:
     - mongodb
 
-  rulesengine-dapr:
-    image: "daprio/daprd:latest"
-    depends_on:
-    - rulesengine
-    network_mode: "service:rulesengine"
-
   framesplitter:
       image: ${DOCKER_REGISTRY-}framesplitter:1.6
       build:
