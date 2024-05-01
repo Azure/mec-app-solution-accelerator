@@ -69,7 +69,11 @@ Install Azure IoT Operations by following the official "simplified/automated app
 
 [Deploy Azure IoT Operations Preview](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=windows#deploy-azure-iot-operations-preview)
 
-Note that there's an alternative "Detailed step-by-step Azure IoT Operations deployment" available in Microsoft's docs, but we initially recommend to go the easy path explained above instead of the following docs which require significntly more time with many step-by-step instructions:
+When deploying Aio by following the above documentation link, you should see a console app similar to the following:
+
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/6a7be373-265c-4698-96f8-59575b4f7a0e)
+
+Note that there's an alternative "Detailed step-by-step AKS Edge-Essentials plus Azure IoT Operations deployment" available in Microsoft's docs, but we initially recommend to go the easy path explained above instead of the following docs which require significantly more time due to the many step-by-step instructions, especially on what's related to the AKS-EE cluster setup:
 
 **(OPTIONAL LEARNING) Detailed Azure IoT Operations setup** 
 - [Prepare your Azure Arc-enabled Kubernetes cluster](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-prepare-cluster?tabs=aks-edge-essentials)
