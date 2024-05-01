@@ -200,6 +200,12 @@ Install akri repository.
 helm repo add akri-helm-charts https://project-akri.github.io/akri/
 ```
 
+Update the HELM repo with this command:
+
+```powershell
+helm repo update
+```
+
 Install AKRI with the application's "camera discovery handler" AKRI Helm chart and related configuration:
 
 **IMPORTANT:** If you are installing agains a K3s or K8s (Kubernetes on Docker Desktop should be "k8s"), you need to specify that distro in the `kubernetesDistro` parameter below as:
