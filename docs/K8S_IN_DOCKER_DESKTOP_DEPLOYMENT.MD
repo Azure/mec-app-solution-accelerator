@@ -281,7 +281,7 @@ Before continuing with the deployment, decide wether to use Azure IoT Operations
     kubectl apply -f ./
     ```
 
-### Deploy the application's services into the Kubernetes cluster
+### Deploy the rest of the application's services into the Kubernetes cluster
 
 - Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
@@ -295,9 +295,9 @@ Before continuing with the deployment, decide wether to use Azure IoT Operations
     kubectl apply -f ./
     ```
 
-    All services will be created in the specified Kubernetes namespace "mec-accelerator" for this application.
-    
-    ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/3d54066f-1d77-46b6-85c3-df9c9b1b1c62)
+    All services will be created in the specified Kubernetes namespace "mec-accelerator" for this application, like in the following command execution:
+
+    ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/6cbeadc9-4d6f-44d6-863d-ec7be2339cae)
 
 
 ## Deploy AKRI configuration
