@@ -238,6 +238,12 @@ Here's an example execution when targeting k3s:
 
 But if you are deploying to a different type of Kubernetes cluster (i.e. Docker-Desktop-Kuberentes or plain Kubernetes) then you should use k8s.
 
+**WARNING:** If you get the following error, try runnning `helm repo update` and re-run the previous AKRI installation command:
+
+Error: INSTALLATION FAILED: no cached repo found. (try 'helm repo update'): open C:\Users\cesardl\AppData\Local\Temp\helm\repository\akri-helm-charts-index.yaml: The system cannot find the file specified.
+
+
+
 ### Deploy MQTT Broker resources to Kubernetes
 Before continuing with the deployment, decide wether to use Azure IoT Operations E4K or Mosquitto MQTT broker.
 
