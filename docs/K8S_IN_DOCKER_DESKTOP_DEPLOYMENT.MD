@@ -183,14 +183,16 @@ For just getting alerts and camera management/provisioning (i.e. Wi-Fi or Ethern
 
 ### Install AKRI and related application discovery handler
 
-5. Install HELM in your system
+#### Install HELM in your client machine
+
+If you don't have HELM installed in your client system, you need to have it since AKRI-OSS is deployed through HELM. 
 
 Make sure you have install [helm](https://helm.sh/) in the machine you are using with KUBECTL accessing the Kubernetes cluster.
 By default, that machine can be a Windows machine with KUBECTL installed and pointing to the right Kubernetes cluster context. 
 
 Full installation instructions of Helm can be found [here](https://helm.sh/docs/intro/install/).
 
-6. Install AKRI
+#### Install AKRI
 
 Install akri repository.
 
