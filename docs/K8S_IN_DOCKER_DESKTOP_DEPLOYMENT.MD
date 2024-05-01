@@ -107,19 +107,19 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
 
 #### Install and Initialize DAPR
 
-3. Install or make sure you have installed `Dapr` on your machine on a Kubernetes cluster as described in the [Deploy dapr](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#install-with-dapr-cli). 
+- Install or make sure you have installed `Dapr` on your machine on a Kubernetes cluster as described in the [Deploy dapr](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#install-with-dapr-cli). 
 
 Note that if you were able to run the application on plain Docker, you should have installed DAPR already, but it needs to be initialized in Kuberentes, now.
 
-4. Initialize DAPR in the Kubernetes cluster by running this command:
-5. 
+- Initialize DAPR in the Kubernetes cluster by running this command:
+ 
     ```powershell
     dapr init -k
     ```
     
     ![image](https://user-images.githubusercontent.com/1712635/218881163-9ba81fa3-f72c-4c12-bbf6-8ec25f2dba55.png)
 
-    **IMPORTANT:** This DAPR installation is okay for a dev machine with Kubernetes in Docker Desktop or a single node k3s, but when installing DAPR on a "production" AKS cluster, for example in an ASE (Azure Stack Edge) server on in Azure AKS cluster, you need to install DAPR via AKS extension following the Doc: (https://learn.microsoft.com/en-us/azure/aks/dapr) which is how DAPR should be installed in AKS and it doesn’t require cluster admin access.
+    **IMPORTANT:** This DAPR installation is okay for a dev machine with Kubernetes in AKS Edge Essentials or a single node k3s, but when installing DAPR on a "production" AKS cluster, for example in an ASE (Azure Stack Edge) server on in Azure AKS cluster in the cloud, you need to install DAPR via AKS extension following the Doc: (https://learn.microsoft.com/en-us/azure/aks/dapr) which is how DAPR should be installed in production environments and it doesn’t require cluster admin access.
     
     You can test DAPR status with:
     ```powershell
