@@ -396,25 +396,30 @@ Or you can find out the real URL from the K8s dashboard, from the Alerts-UI serv
 
 Either way, you should be able to run the application's UI and check out the Alerts originated from the AI models:
 
-![image](https://user-images.githubusercontent.com/1712635/218885207-5d720a2d-f5a6-4e29-bfd1-bad384803805.png)
-
-### Access control plane application's UI to configure and create Cameras
-
-XX. To access the front-end, go to 'http://localhost:90/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the control-plane-ui-service row.
+<img width="465" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/cd61ba50-2605-4eaa-b3e4-965d51fbab6a">
 
 
-### Remove the application from Kubernetes 
+### Remove the MEC-Application from Kubernetes 
 
-XX. Open a new command-shell and change the current folder to the `deploy/k8s` folder of this repo.
+- Open a new command-shell and change the current folder to the `deploy/k8s` folder of this repo.
 
-XX. Run the following command to remove all related kubernetes resources for this application, since there is no stop action on kubectl.
+- Run the following command to remove all related kubernetes resources for this application, since there is no stop action on kubectl.
 
     ```powershell
     kubectl delete -f ./
     ```
-XX. If Azure IoT Operations E4K broker has been used, run the following commands to remove kubernetes resouces
+
+- If Azure IoT Operations E4K broker has been used, run the following commands to remove kubernetes resouces:
+
     ```powershell
     cd .\deploy\k8s\E4K\
+    kubectl delete -f ./
+    ```
+
+- If Mosquitto broker has been used, run the following commands to remove kubernetes resouces:
+
+    ```powershell
+    cd .\deploy\k8s\mosquitto\
     kubectl delete -f ./
     ```
 
