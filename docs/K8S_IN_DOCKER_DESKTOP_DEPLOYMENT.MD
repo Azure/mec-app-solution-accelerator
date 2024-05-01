@@ -253,7 +253,9 @@ Error: INSTALLATION FAILED: no cached repo found. (try 'helm repo update'): open
 ### Deploy MQTT Broker resources to Kubernetes
 Before continuing with the deployment, decide wether to use Azure IoT Operations E4K or Mosquitto MQTT broker.
 
-#### Deploy Azure IoT MQ broker listener pod (aka. E4K)
+You only need one or the other. Either Azure IoT MQ or Mosquitto. Of course, if you deployed Azure IoT Operations into your cluster, we recommend to use Azure IoT MQ.
+
+#### Alternative A: Deploy Azure IoT MQ broker listener pod (aka. E4K)
   
   - Open a new command-shell and move into the `deploy/k8s/E4K` folder of this repo, as current folder of the command-shell:
 
@@ -267,7 +269,7 @@ Before continuing with the deployment, decide wether to use Azure IoT Operations
     kubectl apply -f ./
     ```
 
-#### Deploy Mosquitto pod
+#### Alternative B: Deploy Mosquitto pod
 
   - Open a new command-shell and move into the `deploy/k8s/mosquitto` folder of this repo, as current folder of the command-shell:
     
