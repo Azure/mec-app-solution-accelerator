@@ -210,12 +210,14 @@ or
 
 `--set kubernetesDistro=k3s`
 
+In the "by default" cluster installed by Azure IoT Operations script, it installs AKS Edge Essentials with K3s under the covers, so if using that AKS-EE cluster, you should use k3s.
+
 This is the whole command to run, but make sure of the `kubernetesDistro` parameter first depending on your target cluster:
 
 ```powershell
  helm install akri akri-helm-charts/akri `
  -n mec-accelerator `
- --set kubernetesDistro=k8s `
+ --set kubernetesDistro=k3s `
  --set custom.discovery.enabled=true `
  --set custom.discovery.image.repository=mecsolutionaccelerator/akri-camera-discovery-handler `
  --set custom.discovery.image.tag=1.8 `
@@ -233,6 +235,8 @@ This is the whole command to run, but make sure of the `kubernetesDistro` parame
 Here's an example execution when targeting k3s:
 
 ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/2ed6995f-e8d3-477e-857b-08d3ba8fca64)
+
+But if you are deploying to a different type of Kubernetes cluster (i.e. Docker-Desktop-Kuberentes or plain Kubernetes) then you should use k8s.
 
 ### Deploy MQTT Broker resources to Kubernetes
 Before continuing with the deployment, decide wether to use Azure IoT Operations E4K or Mosquitto MQTT broker.
