@@ -382,8 +382,7 @@ You can also directly access the URL for the Control Plane App, but if not using
 
 `http://<your-IP>:90/`
 
-![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/f3957480-d9f4-4155-a5ff-fda03da1c0a2)
-
+<img width="599" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/9e84321e-ef1f-40a9-872e-9c39d8e2f362">
 
 ### Access the Alerts dashboard UI with Alerts from AI model detections
 
