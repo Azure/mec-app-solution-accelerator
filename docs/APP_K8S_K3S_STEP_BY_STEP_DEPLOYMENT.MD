@@ -386,9 +386,13 @@ You can also directly access the URL for the Control Plane App, but if not using
 
 ### Access the Alerts dashboard UI with Alerts from AI model detections
 
-XX. To access the front-end, go to 'http://localhost/' on your browser or using the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed, go to the services menu in the left tab and click on the url to the right on the UI service row.
+- To access the Alerts dashboard UI front-end, you can either click on the link from the Control-Plane app here:
 
-![image](https://user-images.githubusercontent.com/1712635/218883329-5641f19c-f3d9-402f-a75e-2fe44aa6c9eb.png)
+<img width="617" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/53f28434-c200-42e7-917e-e3118ee0257f">
+
+Or you can find out the real URL from the K8s dashboard, from the Alerts-UI service config, select the Kuberentes namespace where the application is deployed (MEC-Accelerator), go to the services menu in the left tab and click on the url to the right on the Alerts-UI service row:
+
+<img width="814" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/76ca5777-65a3-40de-b5c2-6d9975fca968">
 
 Either way, you should be able to run the application's UI and check out the Alerts originated from the AI models:
 
