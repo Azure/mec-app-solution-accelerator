@@ -128,7 +128,7 @@ Note that if you were able to run the application on plain Docker, you should ha
     
     If DAPR is initialized, you should get this list of Dapr pods running:
     
-    ![image](https://user-images.githubusercontent.com/1712635/218881242-aa2c74ef-14a4-4a79-a149-3bbd12f4fa3d.png)
+    ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/e5d54136-caf1-4211-84d5-f466b5768e13)
 
     
     Otherwise, if it's not initialized it'd be like this:
