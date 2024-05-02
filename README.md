@@ -60,15 +60,15 @@ A typical deployment of this application/services would be performed at the Edge
 
 | | |
 |--------|--------|
-| **"TECHNOLOGY:** <img width="120" alt="image" src="TBD">| TBD EXPLANATION FOR WHAT |
-| **"Azure IoT Operations:** <img width="120" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/52328f11-b36d-4725-9bbe-3a700b59931c">| Sub-components used:  Aio MQ (aka. E4K) as MQTT broker and AKRI for dynamic provisioning of video cameras stream ingestion |
-| **"Kubernetes:** <img width="120" alt="image" src="TBD">| Supported: AKS Edge Essentials for Windows and K3s on Ubuntu Linux - Docker-Desktop-Kubernetes only for limited configurations |
-| **"Azure Arc:** <img width="120" alt="image" src="[TBD](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/9de20cd4-6247-4604-984b-453cf296922c)">| Used with AKS-EE and k3s Arrc enabled for edge-cluster visualization and monitoring from Azure cloud|
-| **"Docker host:** <img width="120" alt="image" src="TBD">| For development and debugging environments. Docker host does not support Azure IoT Operations so it'd be only the application pods/containers without AKRI (no dynamic number of cameras but a single one) and using Mosquitto instead of Azure IoT MQ from Aio|
-| **"Dapr:** <img width="120" alt="image" src="TBD">| Framework specially made for microservices architectures. In this app it's mostly used for the Dapr sidecar-containers feature. |
-| **"AI Object Detection model:** <img width="120" alt="image" src="TBD">| By default Yolo model is used but it can be easily replaced by any custom AI model for Object Detection. |
-| **"Languages:** <img width="120" alt="image" src="TBD">| Python, .NET/C# and Rust |
-| **"Databases:** <img width="120" alt="image" src="TBD">| MongoDB for standard data and MinIO for Images/Frames |
+| **TECHNOLOGY:** <img width="120" alt="image" src="TBD">| TBD EXPLANATION FOR WHAT |
+| **Azure IoT Operations:** <img width="120" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/52328f11-b36d-4725-9bbe-3a700b59931c">| Sub-components used:  Aio MQ (aka. E4K) as MQTT broker and AKRI for dynamic provisioning of video cameras stream ingestion |
+| **Kubernetes:** <img width="120" alt="image" src="TBD">| Supported: AKS Edge Essentials for Windows and K3s on Ubuntu Linux - Docker-Desktop-Kubernetes only for limited configurations |
+| **Azure Arc:** <img width="120" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/9de20cd4-6247-4604-984b-453cf296922c">| Used with AKS-EE and k3s Arrc enabled for edge-cluster visualization and monitoring from Azure cloud|
+| **Docker host:** <img width="120" alt="image" src="TBD">| For development and debugging environments. Docker host does not support Azure IoT Operations so it'd be only the application pods/containers without AKRI (no dynamic number of cameras but a single one) and using Mosquitto instead of Azure IoT MQ from Aio|
+| **Dapr:** <img width="120" alt="image" src="TBD">| Framework specially made for microservices architectures. In this app it's mostly used for the Dapr sidecar-containers feature. |
+| **AI Object Detection model:** <img width="120" alt="image" src="TBD">| By default Yolo model is used but it can be easily replaced by any custom AI model for Object Detection. |
+| **Languages:** <img width="120" alt="image" src="TBD">| Python, .NET/C# and Rust |
+| **Databases:** <img width="120" alt="image" src="TBD">| MongoDB for standard data and MinIO for Images/Frames |
 
 ## High level architecture overview
 
