@@ -51,16 +51,29 @@ The initial use case is about video analytics, but video analytics / computer vi
 
 | | |
 |--------|--------|
-| **"Production" environment:** <img width="120" alt="image" src="https://user-images.githubusercontent.com/1712635/214693427-4d906e3a-7a1e-4623-b413-006219af1da6.png">| On any Kubernetes cluster typically deployed at Edge compute, such as on-premises AKS like AKS Edge Essentials, AKS from Azure Stack Edge server or AKS from Azure Stack HCI / Arc-Enabled. For testing purposes, it can also be deployed on most Kubernetes distributions such as 'Kubernetes in Docker for Desktop', K3s, or even in AKS in Azure cloud for a test environment. (Note: We mean a hypothetical "production" environment, since this is an example app.) |
-| **Development environment:** <img width="120" alt="image" src="https://user-images.githubusercontent.com/1712635/214693693-092921c1-7fb5-4878-87d4-559b075afc30.png"> | On any local Docker host, with 'docker compose' directly from a console command prompt (Windows/Linux/MacOS) or from Visual Studio in Windows (running Docker host with Linux, under the covers), for easy test and development in dev environments. |
+| **"Production" environment:** <img width="120" alt="image" src="https://user-images.githubusercontent.com/1712635/214693427-4d906e3a-7a1e-4623-b413-006219af1da6.png">| On any Kubernetes cluster typically deployed at Edge compute, such as on-premises AKS Edge Essentials, AKS from Azure Stack HCI / Arc-Enabled or K3s on Ubuntu Linux or even in AKS in Azure cloud for a testing environment. (Note: We mean a hypothetical "production" environment, since this is an example app.) |
+| **Development environment:** <img width="120" alt="image" src="https://user-images.githubusercontent.com/1712635/214693693-092921c1-7fb5-4878-87d4-559b075afc30.png"> | On any local Docker host, with 'docker compose' directly from a console command prompt (Windows/Linux/MacOS) or from Visual Studio in Windows (running Docker host with Linux, under the covers), for easy testing and development in dev environments. |
 
-A typical deployment of this application/services would be performed at the Edge, such as in a 5G Private MEC, using a wireless 5G network to connect the devices, cameras, etc. to the application's services. However, this application can be tested by itself without any specific network requirement.
+A typical deployment of this application/services would be performed at the Edge, such as in a 5G Private MEC, using a wireless 5G network to connect the devices, cameras, etc. to the application's services. However, this application can be tested by itself without any specific network requirement (you can try it on a single laptop/computer!).
 
-## Architecture overview
+## Technologies used
 
-This reference application proposes an event-driven and microservice oriented architecture implementation with multiple autonomous microservices. The main goal is to ingress data from client IoT/edge devices. The initial functionality for this sample application is to ingress video from wireless cameras, analyze it with AI models, detect issues, create events and submit them to a messaging broker thorugh a Publish/Subscription approach so additional microservices evaluate if the events need to be converted to Alerts and publish the alerts to the multiple event handlers related, such as an "Alerts dashboard" app or any other integrated process that needs to react in real-time thanks to the low latency provided by the Edge, as shown in the below architecture diagram.
+<img width="356" alt="image" src="">
 
-<img width="1048" alt="image" src="https://user-images.githubusercontent.com/1712635/226389328-b2fd033b-6ecd-422b-b2bd-d526ad5293b4.png">
+| **"TECHNOLOGY:** <img width="120" alt="image" src="TBD">| TBD EXPLANATION FOR WHAT |
+| **"Azure IoT Operations:** <img width="120" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/fef521e5-2835-4624-a6e6-71950684039e">| Subomponents used:  Aio MQ as MQTT broker and AKRI for dynamic provisioning of video cameras stream ingestion |
+| **"Kubernetes:** <img width="120" alt="image" src="TBD">| Supported: AKS Edge Essentials for Windows and K3s on Ubuntu Linux - Docker-Desktop-Kubernetes only for limited configurations |
+| **"Docker host:** <img width="120" alt="image" src="TBD">| For development and debugging environments. Docker host does not support Azure IoT Operations so it'd be only the application pods/containers without AKRI (no dynamic number of cameras but a single one) and using Mosquitto instead of Azure IoT MQ from Aio|
+| **"Dapr:** <img width="120" alt="image" src="TBD">| Framework specially made for microservices architectures. In this app it's mostly used for the Dapr sidecar-containers feature. |
+| **"AI Object Detection model:** <img width="120" alt="image" src="TBD">| By default Yolo model is used but it can be easily replaced by any custom AI model for Object Detection. |
+| **"Languages:** <img width="120" alt="image" src="TBD">| Python, .NET/C# and Rust |
+| **"Databases:** <img width="120" alt="image" src="TBD">| MongoDB for standard data and MinIO for Images/Frames |
+
+## High level architecture overview
+
+This reference application proposes an event-driven and microservice oriented architecture implementation with multiple autonomous microservices. The main goal is to ingress data/video from client edge devices. The initial functionality for this sample application is to ingress video from wireless IP cameras, analyze it with AI models, detect issues, create events and submit them to a messaging broker thorugh a Publish/Subscription approach so additional microservices evaluate if the events need to be converted to Alerts and publish the alerts to the multiple event handlers related, such as an "Alerts dashboard" app or any other integrated process that needs to react in real-time thanks to the low latency provided by the Edge, as shown in the below architecture diagram.
+
+<img width="1048" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/965df8f7-a465-4475-835e-bd82c6b8d950">
 
 However, this is not just about 'Video analytics'. The important value of this architecture and reference applications is based on the event-driven architecture which can be very easily customized to support different types of "input data" from IoT devices, so instead of video, it coud ingress data from IoT sensors, or manufacturing machines, analyze it with different type of AI models in the same MEC's network and again generate comparable events and derived alerts with a very low latency.
 
