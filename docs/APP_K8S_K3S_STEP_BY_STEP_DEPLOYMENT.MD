@@ -403,12 +403,6 @@ Either way, you should be able to run the application's UI and check out the Ale
 
 - Open a new command-shell and change the current folder to the `deploy/k8s` folder of this repo.
 
-- Run the following command to remove all related kubernetes resources for this application, since there is no stop action on kubectl.
-
-    ```powershell
-    kubectl delete -f ./
-    ```
-
 - If Azure IoT Operations E4K broker has been used, run the following commands to remove kubernetes resouces:
 
     ```powershell
@@ -420,6 +414,12 @@ Either way, you should be able to run the application's UI and check out the Ale
 
     ```powershell
     cd .\deploy\k8s\mosquitto\
+    kubectl delete -f ./
+    ```
+
+- Run the following command to remove the rest of the kubernetes resources for this application, since there is no stop action on kubectl.
+
+    ```powershell
     kubectl delete -f ./
     ```
 
