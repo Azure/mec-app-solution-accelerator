@@ -230,7 +230,7 @@ Or you can find out the real URL from the K8s dashboard, from the Alerts-UI serv
 
 Either way, you should be able to run the application's UI and check out the Alerts originated from the AI models:
 
-<img width="465" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/e2d8ddbf-036e-4b9a-8faa-c30d3018a7fa">
+<img width="814" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/e2d8ddbf-036e-4b9a-8faa-c30d3018a7fa">
 
 
 ### Remove the MEC-Application from Kubernetes 
