@@ -1,7 +1,23 @@
-param(
-    [string]$kubernetesDistro,
-    [string]$mqttBroker
+param (
+    [string]$kubernetesDistro = "",
+    [string]$mqttBroker = "",
+    [switch]$uninstall
 )
+
+if ($uninstall) {
+    Write-Host "Uninstalling MEC accelerator"
+    kubectl delete -f ./E4K/
+    kubectl delete -f ./mosquitto/
+    kubectl delete -f ./dashboard_auth/
+    kubectl delete -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+    kubectl delete -f ./
+    exit 1
+}
+
+if (-not $kubernetesDistro -or -not $mqttBroker) {
+    Write-Host "Expecting parameters --kubernetesDistro and --mqttBroker"
+    exit 1
+}
 
 if ($kubernetesDistro -ne "k3s" -and $kubernetesDistro -ne "k8s") {
     Write-Host "Akri kubernetes distro must be k3s or k8s"
@@ -14,49 +30,56 @@ if ($mqttBroker -ne "E4K" -and $mqttBroker -ne "mosquitto") {
 }
 
 if ($mqttBroker -eq "E4K") {
-    $azureArcNS = kubectl get ns | Select-String 'azure-arc'
-    $azureIoTOperationsNS = kubectl get ns | Select-String 'azure-iot-operations'
-
-    if (-not $azureArcNS) {
+    if (-not (kubectl get ns | Select-String 'azure-arc')) {
         Write-Host "Azure Arc is not configured. Please configure it before running the script"
         exit 1
     }
 
-    if (-not $azureIoTOperationsNS) {
+    if (-not (kubectl get ns | Select-String 'azure-iot-operations')) {
         Write-Host "Azure IoT Operations is not installed. Please install it before running the script"
         exit 1
     }
-
-    $deployment = "E4K"
-    Write-Host "1. Installing Mec-Accelerator with E4K MQTT broker"
-} else {
-    $deployment = "mosquitto"
-    Write-Host "1. Installing Mec-Accelerator with mosquitto MQTT broker"
+    Write-Host "Installing Mec-Accelerator with E4K MQTT broker"
+}
+else {
+    Write-Host "Installing Mec-Accelerator with mosquitto MQTT broker"
 }
 
-Write-Host "2. Creating Mec-Accelerator namespace"
-kubectl apply -f .\00-namespace.yaml
+Write-Host "1. Installing Helm"
+winget install Helm.Helm
 
-Write-Host "3. Installing Akri"
+if (-not (kubectl get ns | Select-String 'dapr-system')) {
+    Write-Host "2. Installing Dapr in cluster"
+    powershell -Command "iwr -useb https://raw.githubusercontent.com/dapr/cli/master/install/install.ps1 | iex"
+    dapr init -k
+}
+
+Write-Host "3. Creating Mec-Accelerator namespace"
+kubectl apply -f ./00-namespace.yaml
+
+Write-Host "4. Installing Akri"
 helm repo add akri-helm-charts https://project-akri.github.io/akri/
 helm repo update
 helm install akri akri-helm-charts/akri -n mec-accelerator --set kubernetesDistro=$kubernetesDistro --set custom.discovery.enabled=true --set custom.discovery.image.repository=mecsolutionaccelerator/akri-camera-discovery-handler --set custom.discovery.image.tag=1.8 --set custom.discovery.name=akri-camera-discovery --set custom.configuration.enabled=true --set custom.configuration.name=akri-camera --set custom.configuration.discoveryHandlerName=camera --set custom.configuration.discoveryDetails.connectionString="mongodb://control-plane-mongodb.mec-accelerator:27017" --set custom.configuration.discoveryDetails.database="ControlPlane" --set custom.configuration.discoveryDetails.collection="Cameras" --set custom.configuration.brokerPod.image.repository=mecsolutionaccelerator/framesplitter --set custom.configuration.brokerPod.image.tag=1.8
+Start-Sleep -Seconds 30
 
-Write-Host "4. Deploying MQTT Broker"
-kubectl apply -f .\$deployment\
+Write-Host "5. Deploying MQTT Broker"
+kubectl apply -f ./"$mqttBroker"/
 
-Write-Host "5. Deploying Mec-Accelerator resources"
-kubectl apply -f .\
-.\deploy-akri-secrets.sh
+Write-Host "6. Deploying Mec-Accelerator resources"
+kubectl apply -f ./
+Unblock-File ./deploy-akri-secrets.ps1
+./deploy-akri-secrets.ps1
 
+if (-not (kubectl get ns | Select-String 'kubernetes-dashboard')) {
+    Write-Host "7. Deploying Kubernetes dashboards"
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+    kubectl apply -f ./dashboard_auth/dashboard-adminuser.yaml 
+    kubectl apply -f ./dashboard_auth/adminuser-cluster-role-binding.yaml
 
-Write-Host "6. Deploying Kubernetes dashboards"
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
-kubectl apply -f ./dashboard_auth/dashboard-adminuser.yaml 
-kubectl apply -f ./dashboard_auth/adminuser-cluster-role-binding.yaml
-
-Write-Host "Kubernetes dashboards installed."
-Write-Host "Please run 'kubectl proxy' to access the dashboard at http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
-Write-Host "Generate a valid bearer token for the dashboard with 'kubectl -n kubernetes-dashboard create token admin-user --duration=48h --output yaml'"
+    Write-Host "Kubernetes dashboards installed."
+    Write-Host "Please run 'kubectl proxy' to access the dashboard at http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
+    Write-Host "Generate a valid bearer token for the dashboard with 'kubectl -n kubernetes-dashboard create token admin-user --duration=48h --output yaml'"
+}
 
 Write-Host "Successfully installed MEC-Accelerator!"

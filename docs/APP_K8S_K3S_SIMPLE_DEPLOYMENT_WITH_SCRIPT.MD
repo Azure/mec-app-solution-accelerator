@@ -178,19 +178,6 @@ The script with make the following deployments:
 - Deploy selected MQTT broker
 - Deploy the rest of the accelerator resources
 
-#### Executing script in Linux
-Execute the script `deploy-accelerator.sh` while providing the parameters for the Kubernetes distro and MQTT Broker.
-
-Example of a K3S + E4K deployment will be:
-```
-./deploy-accelerator.sh k3s E4K
-```
-
-Example of a K3S + mosquitto deployment:
-```
-./deploy-accelerator.sh k3s mosquitto
-```
-
 #### Executing script in Windows
 Execute the script `deploy-accelerator.ps1` while providing the following parameters:
 - kubernetesDistro - for the Kubernetes distro (k3s or k8s)
@@ -204,6 +191,19 @@ Example of a K3S + E4K deployment:
 Example of a K3S + mosquitto deployment:
 ```
 .\deploy-accelerator.ps1 -kubernetesDistro k3s -mqttBroker mosquitto
+```
+
+#### Executing script in Linux
+Execute the script `deploy-accelerator.sh` while providing the parameters for the Kubernetes distro and MQTT Broker.
+
+Example of a K3S + E4K deployment will be:
+```
+./deploy-accelerator.sh --kubernetesDistro k3s --mqttBroker E4K
+```
+
+Example of a K3S + mosquitto deployment:
+```
+./deploy-accelerator.sh --kubernetesDistro k3s --mqttBroker mosquitto
 ```
 
 ### Access the 'Control Plain app' to provision cameras (and 5G network SIMs if using 5G cameras in a Private 5G network)
@@ -237,26 +237,14 @@ Either way, you should be able to run the application's UI and check out the Ale
 
 - Open a new command-shell and change the current folder to the `deploy/k8s` folder of this repo.
 
-- Run the following command to remove all related kubernetes resources for this application, since there is no stop action on kubectl.
+- Run the `deploy-accelerator` command with the `-uninstall` parameter to remove all related kubernetes resources for this application, since there is no stop action on kubectl.
 
-    ```powershell
-    kubectl delete -f ./
-    ```
+Windows:
+```
+.\deploy-accelerator.ps1 -uninstall
+```
 
-- If Azure IoT Operations E4K broker has been used, run the following commands to remove kubernetes resouces:
-
-    ```powershell
-    cd .\deploy\k8s\E4K\
-    kubectl delete -f ./
-    ```
-
-- If Mosquitto broker has been used, run the following commands to remove kubernetes resouces:
-
-    ```powershell
-    cd .\deploy\k8s\mosquitto\
-    kubectl delete -f ./
-    ```
-
-
-
-
+Linux:
+```
+.\deploy-accelerator.sh -- uninstall
+```
