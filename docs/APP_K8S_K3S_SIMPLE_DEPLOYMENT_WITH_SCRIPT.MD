@@ -90,7 +90,7 @@ However, in case you want to know what's going on under the covers, it's interes
 
 ### Check your kubectl context
 
-2. If you previosly had already installed kubectl and it is pointing to some other environment, such as MiniKube, make sure the default kubectl context is pointing to the right cluster. 
+If you previosly had already installed kubectl and it is pointing to some other Kubernetes environment, make sure the default kubectl context is pointing to the right cluster. 
 
     Open a new command-shell and run the following command to check your current contexts:
 
@@ -110,33 +110,40 @@ This example application is based on **[Dapr](https://dapr.io/)** framework whic
 
 #### Install and Initialize DAPR
 
-- Install or make sure you have installed `Dapr` on your machine on a Kubernetes cluster as described in the [Deploy dapr](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#install-with-dapr-cli). 
+Install or make sure you have installed `Dapr CLI` on the machine that you use/run KUBECTL with the following instructions:
 
-Note that if you were able to run the application on plain Docker, you should have installed DAPR already, but it needs to be initialized in Kuberentes, now.
+[Install Dapr CLI](https://docs.dapr.io/getting-started/install-dapr-cli/)
 
-- Initialize DAPR in the Kubernetes cluster by running this command:
+Then, from the same machine/environment you use KUBECTL against your Kubernetes cluster, install/initialize DAPR in the Kubernetes cluster by running this command:
  
-    ```powershell
-    dapr init -k
-    ```
-    
-    ![image](https://user-images.githubusercontent.com/1712635/218881163-9ba81fa3-f72c-4c12-bbf6-8ec25f2dba55.png)
+  ```powershell
+  dapr init -k
+  ```
+  
+  ![image](https://user-images.githubusercontent.com/1712635/218881163-9ba81fa3-f72c-4c12-bbf6-8ec25f2dba55.png)
+
+  For further details on Dapr deployment, check this doc.
+  
+  [Dapr deployment details](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#install-with-dapr-cli). 
+
+  **IMPORTANT:** This DAPR installation is okay for a dev machine or edge machine with Kubernetes in AKS Edge Essentials or a single node k3s, but when installing DAPR on a larger "production" AKS cluster, for example in an ASE (Azure Stack Edge) or HCI server on in Azure AKS cluster in the cloud, you need to install DAPR via AKS extension following the Doc: (https://learn.microsoft.com/en-us/azure/aks/dapr) which is how DAPR should be installed in production environments and it doesn’t require cluster admin access.
+  
+  You can test DAPR status with:
+  ```powershell
+  dapr status -k
+  ```
+  
+  If DAPR is initialized, you should get this list of Dapr pods running:
+  
+  ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/e5d54136-caf1-4211-84d5-f466b5768e13)
+
+  Otherwise, if it's not initialized it'd be like this:
+  
+  ![image](https://user-images.githubusercontent.com/1712635/218880976-94b42767-40e3-4d9c-a640-2dfa029cb510.png)
+
 
     **IMPORTANT:** This DAPR installation is okay for a dev machine with Kubernetes in AKS Edge Essentials or a single node k3s, but when installing DAPR on a "production" AKS cluster, for example in an ASE (Azure Stack Edge) server on in Azure AKS cluster in the cloud, you need to install DAPR via AKS extension following the Doc: (https://learn.microsoft.com/en-us/azure/aks/dapr) which is how DAPR should be installed in production environments and it doesn’t require cluster admin access.
     
-    You can test DAPR status with:
-    ```powershell
-    dapr status -k
-    ```
-    
-    If DAPR is initialized, you should get this list of Dapr pods running:
-    
-    ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/e5d54136-caf1-4211-84d5-f466b5768e13)
-
-    
-    Otherwise, if it's not initialized it'd be like this:
-    
-    ![image](https://user-images.githubusercontent.com/1712635/218880976-94b42767-40e3-4d9c-a640-2dfa029cb510.png)
 
 #### Install HELM in your client machine
 
