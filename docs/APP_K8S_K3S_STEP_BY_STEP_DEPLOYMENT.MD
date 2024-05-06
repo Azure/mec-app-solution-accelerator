@@ -20,7 +20,6 @@ Supported environment on top of the Kubernetes/k3s cluster:
 **Doker-Desktop-Kubernetes** is not supported by Azure IoT Operations, however, if using the OSS/Mosquito alternative, it should also work for you, but we recommend the above environments since those are the tested environments by our team.
 
 
-
 ## Install the Kubernetes/K3s cluster at the edge
 
 Install the AKS-EE-Windows cluster or the K3s-Ubuntu cluster by following the instructions in the below Microsoft official doc.
@@ -142,7 +141,7 @@ Then, from the same machine/environment you use KUBECTL against your Kubernetes 
     **IMPORTANT:** This DAPR installation is okay for a dev machine with Kubernetes in AKS Edge Essentials or a single node k3s, but when installing DAPR on a "production" AKS cluster, for example in an ASE (Azure Stack Edge) server on in Azure AKS cluster in the cloud, you need to install DAPR via AKS extension following the Doc: (https://learn.microsoft.com/en-us/azure/aks/dapr) which is how DAPR should be installed in production environments and it doesn’t require cluster admin access.
     
 
-#### Install HELM in your client machine
+### Install HELM in your client machine
 
 If you don't have HELM installed in your client system, you need to have it since AKRI-OSS is deployed through HELM. 
 
