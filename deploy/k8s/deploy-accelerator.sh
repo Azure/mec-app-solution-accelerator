@@ -83,7 +83,7 @@ kubectl apply -f ./
 chmod a+x ./deploy-akri-secrets.sh
 ./deploy-akri-secrets.sh
 
-if kubectl get ns | grep -q 'kubernetes-dashboard'
+if ! kubectl get ns | grep -q 'kubernetes-dashboard'
 then
     echo "7. Deploying Kubernetes dashboards"
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
