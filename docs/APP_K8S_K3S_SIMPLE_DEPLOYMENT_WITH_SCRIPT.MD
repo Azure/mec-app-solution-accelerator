@@ -90,7 +90,7 @@ However, in case you want to know what's going on under the covers, it's interes
 
 ### Check your kubectl context
 
-If you previosly had already installed kubectl and it is pointing to some other Kubernetes environment, make sure the default kubectl context is pointing to the right cluster. 
+Make sure the default kubectl context is pointing to the right cluster: 
 
     Open a new command-shell and run the following command to check your current contexts:
 
