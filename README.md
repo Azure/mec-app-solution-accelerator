@@ -70,7 +70,24 @@ A typical deployment of this application/services would be performed at the Edge
 | **Languages:** <img width="120" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/25adb512-88d3-4521-8502-0ce620c3e416">| Python for video stream ingestion service and AI model scoring. .NET/C# for domain logic services and Rust for AKRI custom code |
 | **Databases:** <img width="120" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/c92b960b-520c-4e20-83e6-2052fab5f6ed">| MongoDB for data and MinIO for Images/Frames storage |
 
-## High level architecture overview
+## High level modules architecture
+
+The solution involves the following high level modules or related applications:
+
+- A control-plane application in charge of:
+  - Dynamically provision video cameras (n cameras).
+  - (Optional) Dynamically provision related 5G SIMs in Azure Private 5G Core.
+
+- A video analytics and event-driven alerts system in charge of:
+  - Scalable video stream ingestion (n streams).
+  - Scalable object/issue detection based on an AI model.
+  - Alert rules engine to determine if an event should be really an alert.
+  - Alerts dashboard UI.
+
+  Below you can see a high-level diagram with the above modules and interaction:
+
+
+## TBD - TBD -TBD --- DETAILED ARCHITECTURE 
 
 This reference application proposes an event-driven and microservice oriented architecture implementation with multiple autonomous microservices. The main goal is to ingress data/video from client edge devices. The initial functionality for this sample application is to ingress video from wireless IP cameras, analyze it with AI models, detect issues, create events and submit them to a messaging broker thorugh a Publish/Subscription approach so additional microservices evaluate if the events need to be converted to Alerts and publish the alerts to the multiple event handlers related, such as an "Alerts dashboard" app or any other integrated process that needs to react in real-time thanks to the low latency provided by the Edge, as shown in the below architecture diagram.
 
