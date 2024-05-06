@@ -55,7 +55,10 @@ So then, you can monitor your AKS EE workloads in your cluster on-premises/edge 
 
 [Uninstall AKS Edge Essentials](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-uninstall#uninstall-aks-edge-essentials)
 
-## Setup Azure IoT Operations into your cluster (only if deploying with E4K)
+## Install Azure IoT Operations into your cluster
+
+**Note:** You need to install Azure IoT operations if your selected MQTT broker is Azure IoT MQ (aka. E4K) instead of Mosquitto.
+For using AKRI, since we use the OSS version of AKRI, it get's installed on any Kubernetes cluster without needing to have Azure IoT Operations installed.
 
 ### Prerequisites for Azure IoT Operations
 
