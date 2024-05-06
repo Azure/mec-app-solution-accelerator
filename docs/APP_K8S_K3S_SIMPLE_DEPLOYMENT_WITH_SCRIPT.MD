@@ -88,23 +88,38 @@ However, in case you want to know what's going on under the covers, it's interes
 
 ## Deploy the MEC-Application into the cluster at the edge
 
-### Check your kubectl context
+There are a few prerequisites and steps for the application itself, explained in the following sections.
 
-Make sure the default kubectl context is pointing to the right cluster: 
+### Clone the MEC-Accelerator GitHub repo
 
-    Open a new command-shell and run the following command to check your current contexts:
+You need to clone the MEC-Accelerator GitHub repo in the client machine from where you will deploy the application against your Kubernetes/k3s cluster.
 
-    ```powershell
-    kubectl config get-contexts
-    ```
+Basically, you need to have the cloned repo in the same machine from where you also use KUBECTL against your K8s/K3s cluster.
 
-    To set the context to point to the right Kuberentes cluster, use kubectl and provide the name of the context to use:
+Logically, you need to have [installed Git](https://git-scm.com/downloads) in the first place.
 
-    ```powershell
-    kubectl config use-context [my-cluster-context]
-    ```
+Then, using a command-line tool (PowerShell in Windows or Bash in Linux) clone the repo:
 
-### Update the application control plane configuration (OPTIONAL for Azure Private 5G network)
+```
+git clone https://github.com/Azure/mec-app-solution-accelerator.git
+```
+
+**TEMPORAL NOTE:** Until v2 is in the **main branch**, please use the branch **"mec-accelerator-aio-dev"** by positioning within the folder of the cloned repo and running this command:
+
+```
+git checkout mec-accelerator-aio-dev
+```
+
+### Move to the deployment folder
+
+From the console, move to the deployment folder within the cloned repo:
+
+```
+cd <YOUR PATH>/deploy/k8s
+```
+
+### (OPTIONAL) Update the application control plane configuration for accesing your Azure Private 5G network
+
 Update the config map that contains essential information for connecting to our Azure Mobile Network. You'll find the configuration in the file `deploy/k8s/13-control-plane-api-config-map.yaml`.
 
 Replace the following values in the file:
@@ -122,6 +137,23 @@ Replace the following values in the file:
 
 *Note:* This step is required if you want to manage SIMs provisioning from this app against AP5GC (Azure Private 5G Core) in Azure. 
 For just getting alerts and camera management/provisioning (i.e. Wi-Fi or Ethernet cameras provisioning), you can skip this part if you don't have an AP5GC Mobile Network and packet core deployed into an ASE, RAN, 5G UEs, etc.
+
+### Check your kubectl context
+
+Make sure that your default kubectl context is pointing to the right cluster: 
+
+    Open a new command-shell and run the following command to check your current contexts:
+
+    ```powershell
+    kubectl config get-contexts
+    ```
+
+    To set the context to point to the right Kuberentes cluster, use kubectl and provide the name of the context to use:
+
+    ```powershell
+    kubectl config use-context [my-cluster-context]
+    ```
+
 
 ### Execute script
 Inside the `deploy/k8s` folder theres a script called `deploy-accelerator` that handles of the needed operations to deploy the MEC-Application.
