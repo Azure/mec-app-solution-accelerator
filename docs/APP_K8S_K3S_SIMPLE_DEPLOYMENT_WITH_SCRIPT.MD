@@ -35,7 +35,7 @@ Even when the below documentation link is the supported baseline environment for
 
 [Create your Azure Arc-enabled K3s cluster on Ubuntu-Linux](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=linux#connect-a-kubernetes-cluster-to-azure-arc)
 
-**IMPORTANT** If you are NOT going to use Azure IoT Operations, when following the previous setup doc, stop before the section named *"Deploy Azure IoT Operations Preview"* so the last secion to follow should be *"Verify cluster"*.
+**IMPORTANT** If you are NOT going to use Azure IoT Operations, when following the previous setup doc, stop before the section named *"Deploy Azure IoT Operations"* so the last secion to follow should be *"Verify cluster"*.
 
 At this point, and after verifying the cluster from the command-line, you should also be able to check it out from the Azure portal because even when it's deployed on a machine on-premises or at the edge, it's connected to Azure through Azure Arc, so you can monitor the cluster from there, like in the following screenshot:
 
@@ -66,7 +66,7 @@ It's important to check and install the prerequisites for Azure IoT Operations e
 
 [Prerequisites for Azure IoT Operations](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=windows#prerequisites)
 
-### Deploy Azure IoT Operations Preview
+### Deploy Azure IoT Operations
 
 Install Azure IoT Operations by following the official "simplified/automated approach" documentation here:
 
