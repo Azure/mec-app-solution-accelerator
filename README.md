@@ -104,7 +104,7 @@ It's very straightforward because even the IP to be provided comes from the a qu
 
 ### IP video cameras dynamic provisioning
 
-The most important asset to provision are te video cameras. This application allows to dynamically provision 'n' number of IP cameras without having to update any code or configuration settings. A user can directly do it from the UI and the pods in Kubernetes will dynamically support the new stream ingestion, as in the following screenshot:
+The most important asset to provision are the video cameras. This application allows to dynamically provision 'n' number of IP cameras without having to update any code or configuration settings. A user can directly do it from the UI and the pods in Kubernetes will dynamically support the new stream ingestion, as in the following screenshot:
 
 <img width="1000" alt="image" src="./docs/imgs/ui_features_03.png">
 
