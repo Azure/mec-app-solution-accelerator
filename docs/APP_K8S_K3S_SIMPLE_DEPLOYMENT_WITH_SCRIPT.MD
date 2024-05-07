@@ -184,7 +184,7 @@ Basically, the only difference in usage related to the operating system of the h
 
 Here's an example of the application's setup script execution:
 
-<img width="1000" alt="image" src="./docs/imgs/deploy_00.png">
+<img width="1000" alt="image" src="./imgs/deploy_00.png">
 
 ### Try the 'Control Plain app' to provision cameras
 
@@ -194,17 +194,17 @@ In order to know the URL for the 'Control Plain web app' (IP and port to use), t
 kubectl get services --namespace mec-accelerator
 ```
 
-<img width="1000" alt="image" src="./docs/imgs/deploy_06.png">
+<img width="1000" alt="image" src="./imgs/deploy_06.png">
 
 Then search for the service with name **"control-plane-ui-service"** and related IP and external port, so you write a URL similar to the following in a browser:
 
 `http://<your-IP>:90/`
 
-<img width="1000" alt="image" src="./docs/imgs/deploy_02.png">
+<img width="1000" alt="image" src="./imgs/deploy_02.png">
 
 You could also find out the IP and port by using the Kubernetes dashboard, select the Kubernetes  namespace where the application is deployed ("mec-accelerator"), go to the "Services" menu in the left tab and click on the url to the right on the **"control-plane-ui-service" service** row.
 
-<img width="1000" alt="image" src="./docs/imgs/deploy_01.png">
+<img width="1000" alt="image" src="./imgs/deploy_01.png">
 
 ### Access the Alerts dashboard UI with Alerts originated from AI model detections
 
@@ -215,7 +215,7 @@ In order to know the URL for the 'Alerts dashboard UI' front-end (IP and port to
 kubectl get services --namespace mec-accelerator
 ```
 
-<img width="1000" alt="image" src="./docs/imgs/deploy_07.png">
+<img width="1000" alt="image" src="./imgs/deploy_07.png">
 
 Then search for the service with name **"alerts-ui"** and related IP and external port, so you write a URL similar to the following in a browser:
 
@@ -223,15 +223,15 @@ Then search for the service with name **"alerts-ui"** and related IP and externa
 
 Alternatively, you can also click on the link "Alerts Dashboard" from the Control-Plane app here:
 
-<img width="1000" alt="image" src="./docs/imgs/deploy_03.png">
+<img width="1000" alt="image" src="./imgs/deploy_03.png">
 
 As a third alternative and again using the K8s dashboard, you can also find out the real URL from the K8s dashboard, select the Kubernetes namespace where the application is deployed (MEC-Accelerator), go to the services menu in the left tab and click on the url to the right on the Alerts-UI service row:
 
-<img width="1000" alt="image" src="./docs/imgs/deploy_04.png">
+<img width="1000" alt="image" src="./imgs/deploy_04.png">
 
 Following any of those ways you should be able to run the 'Alerts dashboard UI' and check out the Alerts originated from the AI models when analyzing the video:
 
-<img width="1000" alt="image" src="./docs/imgs/deploy_05.png">
+<img width="1000" alt="image" src="./imgs/deploy_05.png">
 
 
 ### Remove the MEC-Application from Kubernetes 
