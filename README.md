@@ -93,16 +93,11 @@ In order to test your own scenarios you might want to try the following operatio
 
 | | |
 |--------|--------|
-| <img width="70" alt="Camera icon" src="https://user-images.githubusercontent.com/1712635/220493758-47ec3c24-7a29-4e85-8f20-ee141e2f538a.png"> | **[How to provision your own video RTSP feed in the app with configuration](/docs/HOW_TO_PROVISION_NEW_FEED.MD)** |
-| <img width="70" alt="VM icon" src="https://user-images.githubusercontent.com/1712635/220493850-b6391852-78d4-4b53-9dac-841ecdad2551.png"> | **[How to create your own VM in Azure with a RTSP faking a camera](/docs/HOW_TO_CREATE_RTSP_SERVER.MD)** |
+| <img width="70" alt="Camera icon" src="https://user-images.githubusercontent.com/1712635/220493758-47ec3c24-7a29-4e85-8f20-ee141e2f538a.png"> | **[How to provision your own video RTSP feed in the app](/docs/HOW_TO_PROVISION_NEW_FEED.MD)** |
 | <img width="80" alt="Model's classes cat dog" src="https://user-images.githubusercontent.com/1712635/220493891-de118a4c-c228-4078-8536-efd5680227a8.png"> | **[How to use your own 'classes' to be detected by the AI model](/docs/HOW_TO_USE_OWN_MODEL_CLASSES.MD)** |
 | <img width="70" alt="Kubernetes scalability icon" src="https://user-images.githubusercontent.com/1712635/220494004-d638e5e0-41e6-4aa7-a004-b85e73418022.png"> | **[How to scale up the number of pods in Kubernetes deployment configuration](/docs/HOW_TO_SCALE_UP_K8S_PODS.MD)** |
 | | |
 
-
-# Backlog
-
-The backlog is defined in detail here: [Backlog](BACKLOG.MD)
 
 
 # Contributing
