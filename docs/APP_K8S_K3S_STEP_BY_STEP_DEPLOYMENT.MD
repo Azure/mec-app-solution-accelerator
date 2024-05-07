@@ -85,7 +85,7 @@ Note that there's an alternative "Detailed step-by-step AKS Edge-Essentials plus
 
 However, in case you want to know what's going on under the covers, it's interesting to take a look to those alternative and detailed setup docs for Azure IoT Operations.
 
-## Deploy the MEC-Application into the cluster at the edge
+## Deploy the MEC-Application into the cluster (Step by step components deployment)
 
 ### Check your kubectl context
 
