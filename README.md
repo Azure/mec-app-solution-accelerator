@@ -66,11 +66,7 @@ This sample microservices application is supported on the following deployment c
 
 <img width="1000" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/152b170c-6443-4141-ac5c-fa2b0e5b06ee">
 
-We have grouped the multiple combination alternatives in two different setup procedures docs:
-
-
-
-
+We have grouped the multiple combination alternatives in two different setup procedure docs:
 
 | | | |
 |--------|--------|--------|
