@@ -1,4 +1,4 @@
-# MEC-Accelerator with Control-Plane-App (v1.9) - Deployment to AKS-EE-Windows or k3s-Ubuntu-Linux
+# Step-by-step application components deployment into AKS-EE-Windows or k3s-Ubuntu-Linux
 
 ## Supported environment infrastructure at the edge
 
