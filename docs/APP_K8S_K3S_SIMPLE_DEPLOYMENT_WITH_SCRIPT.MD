@@ -145,7 +145,9 @@ The script needs two arguments to be provided depending on the cluster type and 
 
 Note that if using Azure IoT MQ broker, **Azure Arc** and **Azure IoT Operations** must be installed in the cluster based on the provided initial instructions above.
 
-**IMPORTANT:** The application setup script has to be executed on the same machine/environment where you would typically run KUBECTL against your cluster, so it can be on the same cluster's machine (i.e. where you have installed AKS Edge Essentials) or on any client machine able to use KUBECTL against your k3s/Ubuntu-VM cluster.
+**IMPORTANT:** The application **setup script has to be executed on the same machine/environment where you would typically run KUBECTL against your cluster**. Hence, it can be from the same cluster's machine (i.e. where you have installed AKS Edge Essentials) or from any client machine able to use KUBECTL against your k3s/Ubuntu-VM cluster.
+
+For example, even if your k3s/k8s cluster is deployed on an UBUNTU VM, if your client machine is a Windows laptop and your KUBECTL context is configured to run against that k3s/k8s cluster in the UBUNTU VM, you can still run the deployment script from Windows.
 
 #### OPTION A: Execute the script in Windows
 
