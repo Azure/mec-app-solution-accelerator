@@ -125,6 +125,143 @@ To set the context to point to the right Kuberentes cluster, use kubectl and pro
 kubectl config use-context [my-cluster-context]
 ```
 
+### Run the application deployment script
+
+Within the `deploy/k8s` folder there are two Script files, one for Windows and one for Linux that handle the application  deployment into the cluster, including dependencies such as Dapr and AKRI.
+
+The script will run the following deployment steps:
+
+- Install Dapr and Helm.
+- Initialize mec-accelerator namespace in the cluster where all the resources will be deployed.
+- Install Akri with the specific version depending on the Kubernetes distro used (k8s/k3s).
+- Deploy the selected MQTT broker.
+- Deploy the rest of the accelerator resources (microservices pods).
+
+The script needs two arguments to be provided depending on the cluster type and the MQTT broker selected:
+
+- **Kubernetes distro:** The `kubernetesDistro` parameter supports Kubernetes and K3s. Supported choice arguments are `k8s` and `k3s`.
+
+- **MQTT broker:** The `mqttBroker`  parameter supports Azure IoT MQ broker (aka. E4K) and Mosquitto. Supported choice arguments are `E4K` and `mosquitto`.
+
+Note that if using Azure IoT MQ broker, **Azure Arc** and **Azure IoT Operations** must be installed in the cluster based on the provided initial instructions above.
+
+**IMPORTANT:** The application setup script has to be executed on the same machine/environment where you would typically run KUBECTL against your cluster, so it can be on the same cluster's machine (i.e. where you have installed AKS Edge Essentials) or on any client machine able to use KUBECTL against your k3s/Ubuntu-VM cluster.
+
+#### OPTION A: Execute the script in Windows
+
+Execute the script `deploy-accelerator.ps1` while providing the selected parameters:
+
+**ALTERNATIVE A.a:** For deploying with Azure IoT MQ (aka.E4K) into AKS Edge Essentials or a plain K3S in a Windows box, the command is the following:
+
+```powershell
+.\deploy-accelerator.ps1 -kubernetesDistro k3s -mqttBroker E4K
+```
+
+**ALTERNATIVE A.b:** For deploying with Mosquitto into AKS Edge Essentials or a plain K3S in a Windows box, the command is the following:
+
+```
+.\deploy-accelerator.ps1 -kubernetesDistro k3s -mqttBroker mosquitto
+```
+
+
+#### OPTION B: Execute the script in Linux
+
+Execute the script `deploy-accelerator.sh` while providing the selected parameters: 
+
+**ALTERNATIVE B.a:** For deploying with Azure IoT MQ (aka.E4K) into AKS Edge Essentials or a plain K3S in an Ubuntu-Linux box, the command is the following:
+
+```powershell
+./deploy-accelerator.sh --kubernetesDistro k3s --mqttBroker E4K
+```
+
+**ALTERNATIVE B.b:** For deploying with Mosquitto into AKS Edge Essentials or a plain K3S in an Ubuntu-Linux box, the command is the following:
+
+```powershell
+./deploy-accelerator.sh --kubernetesDistro k3s --mqttBroker mosquitto
+```
+
+Basically, the only difference in usage related to the operating system of the host should be the script file name (**.ps1** vs. **.sh**).
+
+Here's an example of the application's setup script execution:
+
+<img width="1000" alt="image" src="./docs/imgs/deploy_00.png">
+
+### Try the 'Control Plain app' to provision cameras
+
+In order to know the URL for the 'Control Plain web app' (IP and port to use), type the following command:
+
+```powershell
+kubectl get services --namespace mec-accelerator
+```
+
+<img width="1000" alt="image" src="./docs/imgs/deploy_06.png">
+
+Then search for the service with name **"control-plane-ui-service"** and related IP and external port, so you write a URL similar to the following in a browser:
+
+`http://<your-IP>:90/`
+
+<img width="1000" alt="image" src="./docs/imgs/deploy_02.png">
+
+You could also find out the IP and port by using the Kubernetes dashboard, select the Kubernetes  namespace where the application is deployed ("mec-accelerator"), go to the "Services" menu in the left tab and click on the url to the right on the **"control-plane-ui-service" service** row.
+
+<img width="1000" alt="image" src="./docs/imgs/deploy_01.png">
+
+### Access the Alerts dashboard UI with Alerts originated from AI model detections
+
+To access the  front-end, 
+In order to know the URL for the 'Alerts dashboard UI' front-end (IP and port to use), type the following command:
+
+```powershell
+kubectl get services --namespace mec-accelerator
+```
+
+<img width="1000" alt="image" src="./docs/imgs/deploy_07.png">
+
+Then search for the service with name **"alerts-ui"** and related IP and external port, so you write a URL similar to the following in a browser:
+
+`http://<your-IP>:88/`
+
+Alternatively, you can also click on the link "Alerts Dashboard" from the Control-Plane app here:
+
+<img width="1000" alt="image" src="./docs/imgs/deploy_03.png">
+
+As a third alternative and again using the K8s dashboard, you can also find out the real URL from the K8s dashboard, select the Kubernetes namespace where the application is deployed (MEC-Accelerator), go to the services menu in the left tab and click on the url to the right on the Alerts-UI service row:
+
+<img width="1000" alt="image" src="./docs/imgs/deploy_04.png">
+
+Following any of those ways you should be able to run the 'Alerts dashboard UI' and check out the Alerts originated from the AI models when analyzing the video:
+
+<img width="1000" alt="image" src="./docs/imgs/deploy_05.png">
+
+
+### Remove the MEC-Application from Kubernetes 
+
+- Open a new command-shell and change the current folder to the `deploy/k8s` folder of this repo.
+
+- Run the `deploy-accelerator` script with the **uninstall** parameter to remove all related application's resources from Kubernetes.
+
+Windows:
+
+```powershell
+.\deploy-accelerator.ps1 -uninstall
+```
+
+Linux:
+
+```powershell
+.\deploy-accelerator.sh -- uninstall
+```
+
+
+
+
+
+
+
+
+
+
+##############################################
 
 ### Execute script
 Inside the `deploy/k8s` folder theres a script called `deploy-accelerator` that handles of the needed operations to deploy the MEC-Application.
