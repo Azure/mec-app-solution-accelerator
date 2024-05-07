@@ -54,7 +54,10 @@ So then, you can monitor your AKS EE workloads in your cluster on-premises/edge 
 
 [Uninstall AKS Edge Essentials](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-uninstall#uninstall-aks-edge-essentials)
 
-## Setup Azure IoT Operations into your cluster
+## Install Azure IoT Operations into your cluster
+
+**Note:** You only need to install Azure IoT operations if you want to use Azure IoT MQ (aka. E4K) instead of Mosquitto, as your selected selected MQTT broker.
+For using AKRI, since we're curently using the OSS version of AKRI, it can be installed on any Kubernetes cluster without needing to have Azure IoT Operations installed.
 
 ### Prerequisites for Azure IoT Operations
 
@@ -62,25 +65,25 @@ It's important to check and install the prerequisites for Azure IoT Operations e
 
 [Prerequisites for Azure IoT Operations](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=windows#prerequisites)
 
-### Deploy Azure IoT Operations Preview
+### Deploy Azure IoT Operations
 
 Install Azure IoT Operations by following the official "simplified/automated approach" documentation here:
 
 [Deploy Azure IoT Operations Preview](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=windows#deploy-azure-iot-operations-preview)
 
-When deploying Aio by following the above documentation link, you should see a console app similar to the following:
+When deploying Azure IoT Operations by following the above documentation link, you should see a console app similar to the following execution:
 
 ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/6a7be373-265c-4698-96f8-59575b4f7a0e)
 
+**(OPTIONAL LEARNING) Detailed Azure IoT Operations setup** 
+
 Note that there's an alternative "Detailed step-by-step AKS Edge-Essentials plus Azure IoT Operations deployment" available in Microsoft's docs, but we initially recommend to go the easy path explained above instead of the following docs which require significantly more time due to the many step-by-step instructions, especially on what's related to the AKS-EE cluster setup:
 
-**(OPTIONAL LEARNING) Detailed Azure IoT Operations setup** 
 - [Prepare your Azure Arc-enabled Kubernetes cluster](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-prepare-cluster?tabs=aks-edge-essentials)
 - [Deploy Azure IoT Operations Preview extensions to a Kubernetes cluster](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-deploy-iot-operations)
 - [Manage secrets for your Azure IoT Operations Preview deployment](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-manage-secrets)
 
 However, in case you want to know what's going on under the covers, it's interesting to take a look to those alternative and detailed setup docs for Azure IoT Operations.
-
 
 ## Deploy the MEC-Application into the cluster at the edge
 
