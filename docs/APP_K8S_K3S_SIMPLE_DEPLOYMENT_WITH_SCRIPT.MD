@@ -202,9 +202,6 @@ Then search for the service with name **"control-plane-ui-service"** and related
 
 <img width="1000" alt="image" src="./imgs/deploy_02.png">
 
-You could also find out the IP and port by using the Kubernetes dashboard, select the Kubernetes  namespace where the application is deployed ("mec-accelerator"), go to the "Services" menu in the left tab and click on the url to the right on the **"control-plane-ui-service" service** row.
-
-<img width="1000" alt="image" src="./imgs/deploy_01.png">
 
 ## Access the Alerts dashboard UI with Alerts originated from AI model detections
 
@@ -224,10 +221,6 @@ Then search for the service with name **"alerts-ui"** and related IP and externa
 Alternatively, you can also click on the link "Alerts Dashboard" from the Control-Plane app here:
 
 <img width="1000" alt="image" src="./imgs/deploy_03.png">
-
-As a third alternative and again using the K8s dashboard, you can also find out the real URL from the K8s dashboard, select the Kubernetes namespace where the application is deployed (MEC-Accelerator), go to the services menu in the left tab and click on the url to the right on the Alerts-UI service row:
-
-<img width="1000" alt="image" src="./imgs/deploy_04.png">
 
 Following any of those ways you should be able to run the 'Alerts dashboard UI' and check out the Alerts originated from the AI models when analyzing the video:
 
