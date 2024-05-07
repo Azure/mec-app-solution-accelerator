@@ -1,4 +1,4 @@
-# MEC-Accelerator with Control-Plane-App (v1.9) - Deployment to AKS-EE-Windows or k3s-Ubuntu-Linux with script
+# Simplified setup with application deployment script into AKS-EE-Windows or k3s-Ubuntu-Linux
 
 ## Supported environment infrastructure at the edge
 
@@ -7,18 +7,17 @@ This version of MEC-App-Accelerator supports the following Kubernetes distributi
 - **AKS Edge Essentials on Windows**
 - **K3s on Ubuntu Linux**
 
-Supported environment on top of the Kubernetes/k3s cluster:
+**Kubernetes from Docker-Desktop** is not supported by Azure IoT Operations, however, if using the below OSS/Mosquito alternative, it should also work for you, but we recommend the above environments since those are the tested environments by our team.
+
+Supported edge components on top of the Kubernetes/k3s cluster:
 
 - **Azure IoT Operations alternative**
-    - IoT MQ as messaging broker
+    - Azure IoT MQ as messaging broker
     - AKRI for dynamic cameras provissioning (OSS version)
 
-- **Plain OSS/Mosquitto alternative**
+- **Plain OSS alternative**
     - Eclipse Mosquitto as messaging broker
     - AKRI for dynamic cameras provissioning (OSS version)
-
-**Doker-Desktop-Kubernetes** is not supported by Azure IoT Operations, however, if using the OSS/Mosquito alternative, it should also work for you, but we recommend the above environments since those are the tested environments by our team.
-
 
 
 ## Install the Kubernetes/K3s cluster at the edge
@@ -35,7 +34,7 @@ Even when the below documentation link is the supported baseline environment for
 
 [Create your Azure Arc-enabled K3s cluster on Ubuntu-Linux](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=linux#connect-a-kubernetes-cluster-to-azure-arc)
 
-**IMPORTANT** If you are NOT going to use Azure IoT Operations, when following the previous setup doc, stop before the section named *"Deploy Azure IoT Operations"* so the last secion to follow should be *"Verify cluster"*.
+**IMPORTANT** If you are NOT going to use Azure IoT Operations, when following the previous setup doc, stop before the section named *"Deploy Azure IoT Operations"*. Hence, the last secion to follow should be *"Verify cluster"*.
 
 At this point, and after verifying the cluster from the command-line, you should also be able to check it out from the Azure portal because even when it's deployed on a machine on-premises or at the edge, it's connected to Azure through Azure Arc, so you can monitor the cluster from there, like in the following screenshot:
 
