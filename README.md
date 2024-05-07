@@ -62,7 +62,9 @@ A typical deployment of this application/services would be performed at the Edge
 
 ## Kubernetes deployment alternatives ("Production" environment)
 
-This sample microservices application is supported on the following deployment alternatives:
+This sample microservices application is supported on the following deployment combination alternatives:
+
+<img width="1000" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/101f5ddc-ec2b-4544-ae38-d783309c4b8b">
 
 | | |
 |--------|--------|
