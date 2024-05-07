@@ -113,17 +113,17 @@ For just getting alerts and camera management/provisioning (i.e. Wi-Fi or Ethern
 
 Make sure that your default kubectl context is pointing to the right cluster: 
 
-    Open a new command-shell and run the following command to check your current contexts:
+Open a new command-shell and run the following command to check your current contexts:
 
-    ```powershell
-    kubectl config get-contexts
-    ```
+```powershell
+kubectl config get-contexts
+```
 
-    To set the context to point to the right Kuberentes cluster, use kubectl and provide the name of the context to use:
+To set the context to point to the right Kuberentes cluster, use kubectl and provide the name of the context to use:
 
-    ```powershell
-    kubectl config use-context [my-cluster-context]
-    ```
+```powershell
+kubectl config use-context [my-cluster-context]
+```
 
 
 ### Execute script
