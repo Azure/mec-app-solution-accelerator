@@ -57,7 +57,7 @@ When deploying Azure IoT Operations by following the above documentation link, y
 
 ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/6a7be373-265c-4698-96f8-59575b4f7a0e)
 
-## Deploy the MEC-Application into the cluster at the edge
+## Deploy the MEC-Application into the cluster (With deployment script)
 
 There are a few prerequisites and steps for the application itself, explained in the following sections.
 
