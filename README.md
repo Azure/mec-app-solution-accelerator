@@ -50,7 +50,8 @@ The initial use case is about video analytics, but video analytics / computer vi
 > However, this is still an example application with no "production-ready" code but just for exploring architecture and implementation approaches.
 > This application's code will be evolving, new features will be added and growing in the spirit of improving its quality thanks to open source contributions (PRs) from you.
 
-## Supported deployments for this example application:
+
+# Supported application deployment alternatives 
 
 | | |
 |--------|--------|
@@ -59,17 +60,17 @@ The initial use case is about video analytics, but video analytics / computer vi
 
 A typical deployment of this application/services would be performed at the Edge, such as in a 5G Private MEC, using a wireless 5G network to connect the devices, cameras, etc. to the application's services. However, this application can be tested by itself without any specific network requirement (you can try it on a single laptop/computer!).
 
-# Getting Started
+## Kubernetes deployment alternatives ("Production" environment)
 
-> **IMPORTANT NOTE:** Get the stable code from the **main branch**. But for  getting the latest version of the code, **use the DEV branch** of the repo. However, the DEV branch might still be in testing phase and could be less stable. 
+This sample microservices application is supported on the following deployment alternatives:
 
-## Grab the GitHub repo code
-
-Get the GitHub repo's code:
-
-```powershell
-git clone git@github.com:Azure/mec-app-solution-accelerator.git
-```
+| | |
+|--------|--------|
+| <img width="250" alt="image" src="https://user-images.githubusercontent.com/1712635/220757242-ee4bc4dc-2e70-4718-bcd6-12a800f84669.png"> | **Deploy application services to [local AKS Edge Essentials](/docs/K8S_AKS_EDGE_ESSENTIALS.MD)** |
+| <img width="270" alt="image" src="https://user-images.githubusercontent.com/1712635/220753221-9bcbaf08-8de8-4064-a1ca-3b78e2dceff4.png"> | **Deploy application services to [local Kubernetes in 'Docker Desktop'](/docs/K8S_IN_DOCKER_DESKTOP_DEPLOYMENT.MD)** |
+| <img width="200" alt="image" src="https://user-images.githubusercontent.com/1712635/220753664-79e9c307-54b8-40d3-8702-9b1d64349284.png"> | **Deploy application services to [local MiniKube](/docs/K8S_MINIKUBE_DEPLOYMENT.MD)** |
+| <img width="190" alt="image" src="https://user-images.githubusercontent.com/1712635/220753942-2d66681c-8560-43bb-9ffc-85a787356549.png"> | **Deploy application services to [Azure Kubernetes Services](/docs/K8S_AKS_DEPLOYMENT.md)** in Azure cloud (Testing in the cloud) |
+| | |
 
 ## Local Docker deployment alternatives (Development and Test environment)
 
@@ -82,21 +83,7 @@ When developing, testing and debugging the MEC application it's easier and more 
 | | |
 
 
-## Kubernetes deployment alternatives ("Production" environment)
 
-This sample microservices application can be deployed on most Kubernetes distributions clusters. 
-
-Because we're targeting deployment at the Edge and also development environments, in most cases (unless you need significant process power when scaling out to many video sources/cameras) your Kubernetes clusters will be composed by a single cluster node (like a dev machine environment or light edge environment). 
-
-Refer to the following procedure information pages to learn how to deploy this example application to your selected Kubernetes distribution:
-
-| | |
-|--------|--------|
-| <img width="250" alt="image" src="https://user-images.githubusercontent.com/1712635/220757242-ee4bc4dc-2e70-4718-bcd6-12a800f84669.png"> | **Deploy application services to [local AKS Edge Essentials](/docs/K8S_AKS_EDGE_ESSENTIALS.MD)** |
-| <img width="270" alt="image" src="https://user-images.githubusercontent.com/1712635/220753221-9bcbaf08-8de8-4064-a1ca-3b78e2dceff4.png"> | **Deploy application services to [local Kubernetes in 'Docker Desktop'](/docs/K8S_IN_DOCKER_DESKTOP_DEPLOYMENT.MD)** |
-| <img width="200" alt="image" src="https://user-images.githubusercontent.com/1712635/220753664-79e9c307-54b8-40d3-8702-9b1d64349284.png"> | **Deploy application services to [local MiniKube](/docs/K8S_MINIKUBE_DEPLOYMENT.MD)** |
-| <img width="190" alt="image" src="https://user-images.githubusercontent.com/1712635/220753942-2d66681c-8560-43bb-9ffc-85a787356549.png"> | **Deploy application services to [Azure Kubernetes Services](/docs/K8S_AKS_DEPLOYMENT.md)** in Azure cloud (Testing in the cloud) |
-| | |
 
 # Configurations for easy customization
 
