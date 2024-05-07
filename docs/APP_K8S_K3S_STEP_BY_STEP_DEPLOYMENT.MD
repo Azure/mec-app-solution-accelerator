@@ -439,58 +439,20 @@ Following any of those ways you should be able to run the 'Alerts dashboard UI' 
 
 
 
-
-
-
-
-
-
-
-
-####################### OLD ########################
-
-### Access the 'Control Plain app' to provision cameras (and 5G network SIMs if using 5G cameras in a Private 5G network)
-
-- In order to know the URL for the 'Control Plain web app', using a browser go to the Kubernetes dashboard, select the Kuberentes namespace where the application is deployed ("mec-accelerator"), go to the "Services" menu in the left tab and click on the url to the right on the **"control-plane-ui-service" service** row.
-
-![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/1df800f5-f5e8-4d40-8d2f-911197a7678b)
-
-You can also directly access the URL for the Control Plane App, but if not using LOCALHOST, the service IP will vary:
-
-`http://<your-IP>:90/`
-
-<img width="599" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/9e84321e-ef1f-40a9-872e-9c39d8e2f362">
-
-### Access the Alerts dashboard UI with Alerts from AI model detections
-
-- To access the Alerts dashboard UI front-end, you can either click on the link from the Control-Plane app here:
-
-<img width="617" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/53f28434-c200-42e7-917e-e3118ee0257f">
-
-Or you can find out the real URL from the K8s dashboard, from the Alerts-UI service config, select the Kuberentes namespace where the application is deployed (MEC-Accelerator), go to the services menu in the left tab and click on the url to the right on the Alerts-UI service row:
-
-<img width="814" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/76ca5777-65a3-40de-b5c2-6d9975fca968">
-
-Either way, you should be able to run the application's UI and check out the Alerts originated from the AI models:
-
-<img width="814" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/e2d8ddbf-036e-4b9a-8faa-c30d3018a7fa">
-
 ### Remove the MEC-Application from Kubernetes 
 
-- Open a new command-shell and change the current folder to the `deploy/k8s` folder of this repo.
+- From command-line (PowerShell or Bash) change the current folder to the `deploy/k8s` folder of this repo.
 
 - If Azure IoT Operations E4K broker has been used, run the following commands to remove kubernetes resouces:
 
     ```powershell
-    cd .\deploy\k8s\E4K\
-    kubectl delete -f ./
+    kubectl delete -f ./E4K/
     ```
 
 - If Mosquitto broker has been used, run the following commands to remove kubernetes resouces:
 
     ```powershell
-    cd .\deploy\k8s\mosquitto\
-    kubectl delete -f ./
+    kubectl delete -f ./mosquitto/
     ```
 
 - Run the following command to remove the rest of the kubernetes resources for this application, since there is no stop action on kubectl.
