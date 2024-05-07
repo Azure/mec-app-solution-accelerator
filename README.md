@@ -72,11 +72,11 @@ We have grouped the multiple combination alternatives in two different setup pro
 
 
 
-| | |
+| | | |
 |--------|--------|--------|
 |--------| [Simplified setup with application deployment script]() | The infrastructure installation is the same but the application components deployment is simplified with a single Script (For Windows PowerShell of for Linux Bash) |
 |--------| [Step-by-step application components deployment]() | The infrastructure installation is the same but in this case the application components are deployed one by one into Kubernetes so developers can know what's going on under the covers |
-| | |
+| | | |
 
 ## Local Docker deployment alternatives (Development and Test environment)
 
