@@ -186,7 +186,7 @@ Here's an example of the application's setup script execution:
 
 <img width="1000" alt="image" src="./imgs/deploy_00.png">
 
-### Try the 'Control Plain app' to provision cameras
+## Try the 'Control Plain app' to provision cameras
 
 In order to know the URL for the 'Control Plain web app' (IP and port to use), type the following command:
 
@@ -206,7 +206,7 @@ You could also find out the IP and port by using the Kubernetes dashboard, selec
 
 <img width="1000" alt="image" src="./imgs/deploy_01.png">
 
-### Access the Alerts dashboard UI with Alerts originated from AI model detections
+## Access the Alerts dashboard UI with Alerts originated from AI model detections
 
 To access the  front-end, 
 In order to know the URL for the 'Alerts dashboard UI' front-end (IP and port to use), type the following command:
@@ -234,7 +234,7 @@ Following any of those ways you should be able to run the 'Alerts dashboard UI' 
 <img width="1000" alt="image" src="./imgs/deploy_05.png">
 
 
-### Remove the MEC-Application from Kubernetes 
+## Remove the MEC-Application from Kubernetes 
 
 - Open a new command-shell and change the current folder to the `deploy/k8s` folder of this repo.
 
