@@ -330,7 +330,7 @@ You only need one or the other. Either Azure IoT MQ or Mosquitto. Of course, if 
 
 ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/26175770-b114-4c9a-9c1b-01e87ffb4d3d)
 
-### Check the application status with Kubernetes Dashboard
+## Check the application status with Kubernetes Dashboard
 
 - If you don't have installed/enabled the Kuberentes Dashboard, do so by running this command:
 
