@@ -69,6 +69,7 @@ This sample microservices application is supported on the following deployment c
 We have grouped the multiple combination alternatives in two different setup procedures docs:
 
 <img width="266" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/dc7bca61-6f1e-4182-a1a7-c38ff41fbc33">
+
 | | |
 |--------|--------|
 | [Simplified setup with application deployment script]() | The infrastructure installation is the same but the application components deployment is simplified with a single Script (For Windows PowerShell of for Linux Bash) |
