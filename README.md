@@ -70,10 +70,12 @@ We have grouped the multiple combination alternatives in two different setup pro
 
 <img width="266" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/dc7bca61-6f1e-4182-a1a7-c38ff41fbc33">
 
+
+
 | | |
-|--------|--------|
-| [Simplified setup with application deployment script]() | The infrastructure installation is the same but the application components deployment is simplified with a single Script (For Windows PowerShell of for Linux Bash) |
-| [Step-by-step application components deployment]() | The infrastructure installation is the same but in this case the application components are deployed one by one into Kubernetes so developers can know what's going on under the covers |
+|--------|--------|--------|
+|--------| [Simplified setup with application deployment script]() | The infrastructure installation is the same but the application components deployment is simplified with a single Script (For Windows PowerShell of for Linux Bash) |
+|--------| [Step-by-step application components deployment]() | The infrastructure installation is the same but in this case the application components are deployed one by one into Kubernetes so developers can know what's going on under the covers |
 | | |
 
 ## Local Docker deployment alternatives (Development and Test environment)
