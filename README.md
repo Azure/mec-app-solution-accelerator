@@ -60,11 +60,11 @@ The initial use case is about video analytics, but video analytics / computer vi
 
 A typical deployment of this application/services would be performed at the Edge, such as in a 5G Private MEC, using a wireless 5G network to connect the devices, cameras, etc. to the application's services. However, this application can be tested by itself without any specific network requirement (you can try it on a single laptop/computer!).
 
-## Kubernetes deployment alternatives ("Production" environment)
+## Deployment alternatives for Kubernetes ("Production" environment)
 
-This sample microservices application is supported on the following deployment combination alternatives:
+This sample microservices application is supported on the following deployment combination alternatives for different distros and host operating system:
 
-<img width="1000" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/6ab129b7-0497-46a8-b641-175536254fc0">
+<img width="1000" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/152b170c-6443-4141-ac5c-fa2b0e5b06ee">
 
 We have grouped the multiple combination alternatives in two different setup procedures docs:
 
