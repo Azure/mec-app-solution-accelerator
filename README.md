@@ -158,7 +158,7 @@ When developing, testing and debugging the MEC application it's easier and more 
 
 
 
-# Provisioning and customizing the application
+# Provisioning and customizing
 
 In order to test your own scenarios you might want to try the following operations even before customizing or forking the application's code:
 
