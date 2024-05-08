@@ -79,7 +79,9 @@ The internal software architecture (event-driven and microservice oriented archi
 
 ## Functional features of the application
 
-You can get an overview of this application's functionality by watching the following video:
+You can get an overview of this application's functionality by watching the following video.
+
+IMPORTANT: Note that the 5G cellular network is optional. You can also try this application with Wi-Fi, Ethernet cameras and even a camera simulator with an RTSP video stream Docker container.
 
 <video src="https://private-user-images.githubusercontent.com/1712635/329047025-3dfdf79c-d3b1-493b-935b-6cb52d7a9729.mp4" controls="controls" style="max-width: 640px;">
 </video>
