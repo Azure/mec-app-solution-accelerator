@@ -437,9 +437,15 @@ Following any of those ways you should be able to run the 'Alerts dashboard UI' 
 
 <img width="1000" alt="image" src="./imgs/deploy_05.png">
 
+## Expose Kubernetes services to external devices (Important if using AKS EE)
 
+If you use **K3s** on an **Ubuntu Linux VM**, it's straightforward since the IP used for your Kubernetes services is usually the same IP used by the VM in the real IP network, so you should be able to access the application services (UI apps in this case) from remote client machines.
 
-### Remove the MEC-Application from Kubernetes 
+However, if you deployed the application into **AKS edge Essentials**, you might need to make Kubernetes services accessible to external devices so they can interact with the web applications you've deployed. Follow the next article that explains how to expose Kubernetes services running on an AKS Edge Essentials cluster to external devices:
+
+[AKS Edge Essentials - Expose Kubernetes services to external devices](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-expose-service)
+
+## Remove the MEC-Application from Kubernetes 
 
 - From command-line (PowerShell or Bash) change the current folder to the `deploy/k8s` folder of this repo.
 
