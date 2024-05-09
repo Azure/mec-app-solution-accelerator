@@ -1,4 +1,4 @@
-## Try the 'Control Plain app' to provision cameras
+## Use the 'Control Plain app' to provision cameras
 
 In order to know the URL for the 'Control Plain web app' (IP and port to use), type the following command:
 
