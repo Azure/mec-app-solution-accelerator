@@ -41,7 +41,7 @@ In order to know the URL for the 'Alerts dashboard UI' front-end (IP and port to
 kubectl get services --namespace mec-accelerator
 ```
 
-<img width="1000" alt="image" src="./docs/imgs/deploy_07.png">
+<img width="1000" alt="image" src="./imgs/deploy_07.png">
 
 Then search for the service with name **"alerts-ui"** and related IP and external port, so you write a URL similar to the following in a browser:
 
@@ -49,8 +49,8 @@ Then search for the service with name **"alerts-ui"** and related IP and externa
 
 Alternatively, you can also click on the link "Alerts Dashboard" from the Control-Plane app here:
 
-<img width="1000" alt="image" src="./docs/imgs/deploy_03.png">
+<img width="1000" alt="image" src="./imgs/deploy_03.png">
 
 Following any of those ways you should be able to run the 'Alerts dashboard UI' and check out the Alerts originated from the AI models when analyzing the video:
 
-<img width="1000" alt="image" src="./docs/imgs/deploy_05.png">
+<img width="1000" alt="image" src="./imgs/deploy_05.png">
