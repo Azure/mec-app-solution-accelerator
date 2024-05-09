@@ -204,6 +204,23 @@ Then search for the service with name **"control-plane-ui-service"** and related
 
 <img width="1000" alt="image" src="./imgs/deploy_02.png">
 
+### Provision a camera simulator with the out-of-the-box RTSP stream container
+
+As a first try, before trying with any real IP camera, you can test the solution with our out-of-the-box camera simulator which is a Docker container that is streaming a video through RTSP.
+
+In order to provision such "camera simulator", click on the "Cameras Provisioning" menu option, then "Add new Camera".
+
+In that dialog, write a name for that camera simulator, select "Container" as the Type and finally select "Default RTSP Stream Container" as the Model.
+With that, the app will automatically select the internal IP used in Kubernetes for the RTSP pod (IP = "rtsp-video-streamer") and it will also automatically generate its related RTSP Uri:
+
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/2cf4de62-392b-441d-b997-2701fcc28669)
+
+After that you can check that the video stream is working by clicking to the "Cameras Dashboard" menu option so you should see it like the following:
+
+<img width="806" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/62043726-6202-4983-9470-f2350b6727d6">
+
+**Important:** Note that the cameras dashboard intended use is just to check that the camera streams are working properly. This dashboard is not working with the object detection AI model. The object detections and alerts are shown in the "Alerts Dashboard" explained in the next section. 
+
 
 ## Access the Alerts dashboard UI with Alerts originated from AI model detections
 
