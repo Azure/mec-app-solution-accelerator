@@ -3,7 +3,6 @@ if ! options=$(getopt -o kmu --long kubernetesDistro:,mqttBroker:,uninstall -- "
 then
     exit 1
 fi
-
 eval set -- $options
 
 while [ $# -gt 0 ]
@@ -17,17 +16,22 @@ do
 done
 
 if [ ! -z "$uninstall" ]; then
+   if ! kubectl get ns | grep 'mec-accelerator'; then
+       exit 1
+   fi
    echo "Uninstalling MEC accelerator"
-   kubectl delete -f ./E4K/
-   kubectl delete -f ./mosquitto/
-   kubectl delete -f ./dashboard_auth/
-   kubectl delete -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+   if kubectl get pods -n azure-iot-operations | grep -q 'mec-listener'; then
+      kubectl delete -f ./E4K/
+   fi
+   if kubectl get pods -n mec-accelerator | grep -q 'mosquitto'; then
+      kubectl delete -f ./mosquitto/
+   fi
    kubectl delete -f ./
    exit 1
 fi
 
 if [ -z "$kubernetesDistro" ] || [ -z "$mqttBroker" ]; then
-   echo "Expecting parameters --kubernetesDistro and --mqttBroker"
+   echo "Expecting parameters -kubernetesDistro and -mqttBroker"
    exit 1
 fi
 
@@ -89,10 +93,13 @@ then
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
     kubectl apply -f ./dashboard_auth/dashboard-adminuser.yaml 
     kubectl apply -f ./dashboard_auth/adminuser-cluster-role-binding.yaml
-
     echo "Kubernetes dashboards installed."
     echo "Please run 'kubectl proxy' to access the dashboard at http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
     echo "Generate a valid bearer token for the dashboard with 'kubectl -n kubernetes-dashboard create token admin-user --duration=48h --output yaml'"
 fi
 
 echo "Successfully installed MEC-Accelerator!"
+echo ""
+sleep 5
+echo "Alerts-UI and Control-Plane-UI services deployed in:"
+kubectl get services -n mec-accelerator -o=custom-columns=NAME:.metadata.name,IP:.status.loadBalancer.ingress[*].ip,PORT:.spec.ports[*].port | grep -E 'alerts-ui[^-]|control-plane-ui-service'

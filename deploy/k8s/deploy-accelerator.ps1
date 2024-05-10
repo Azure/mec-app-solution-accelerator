@@ -5,11 +5,16 @@ param (
 )
 
 if ($uninstall) {
+    if (-not (kubectl get ns | Select-String 'mec-accelerator')) {
+        exit 1
+    }
     Write-Host "Uninstalling MEC accelerator"
-    kubectl delete -f ./E4K/
-    kubectl delete -f ./mosquitto/
-    kubectl delete -f ./dashboard_auth/
-    kubectl delete -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+    if (kubectl get pods -n azure-iot-operations | Select-String 'mec-listener') {
+      kubectl delete -f ./E4K/
+    }
+    if (kubectl get pods -n mec-accelerator | Select-String 'mosquitto') {
+      kubectl delete -f ./mosquitto/
+    }
     kubectl delete -f ./
     exit 1
 }
@@ -83,3 +88,6 @@ if (-not (kubectl get ns | Select-String 'kubernetes-dashboard')) {
 }
 
 Write-Host "Successfully installed MEC-Accelerator!"
+Write-Host ""
+Write-Host "Alerts-UI and Control-Plane-UI services deployed in:"
+kubectl get services -n mec-accelerator -o=custom-columns=NAME:.metadata.name,IP:.status.loadBalancer.ingress[*].ip,PORT:.spec.ports[*].port | grep -E 'alerts-ui[^-]|control-plane-ui-service'
