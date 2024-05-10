@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 
-function useAlertsDashboardUri() {
+export const AlertsUrlStorageKey = "alerts_url";
+function useAlertsDashboardUri() { 
     const [alertsUiUri, setAlertsUiUri] = useState('');
     useEffect(() => {
-        const newUri = `${window.location.protocol}//${window.location.hostname}:88`;
-        setAlertsUiUri(newUri);
-    }, []);
-
+        const alertsUrl = localStorage.getItem(AlertsUrlStorageKey) || undefined;
+        setAlertsUiUri(alertsUrl ?? `${window.location.protocol}//${window.location.hostname}:88`);
+    }, [localStorage.getItem(AlertsUrlStorageKey)]);
     return alertsUiUri;
 }
 

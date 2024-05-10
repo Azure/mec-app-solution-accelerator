@@ -8,6 +8,7 @@ import { AppDispatch, RootState } from '@/stores/store';
 import CheckBox from '../form/CheckBox';
 import { updateSettings } from '@/stores/settingsSlice';
 import ComboBox, { ComboBoxOption } from '../form/ComboBox';
+import { AlertsUrlStorageKey } from '@/app/hooks/useAlertsDashboardUri';
 
 export type SettingsModalProps = {
     show: boolean;
@@ -24,9 +25,36 @@ export const SettingsModal = ({
     const reset = () => {
         setTempSettings({ ...settings });
     }
+
+    let value = localStorage.getItem(AlertsUrlStorageKey) || null
+    const [alertsUrl, setAlertsUrl] = useState(value)
+    const [alertsUrlError, setAlertsUrlError] = useState(false)
+
+    const storeValues = () => {
+        let alertsUrlError = false;
+        if(alertsUrl){
+            const regex = new RegExp('https?:\/\/(www\.)?[-a-zA-Z0-9]{1,256}\.[a-zA-Z0-9()]{1,6}(:[0-9]{4})?(/.*)?')
+            if(!!regex.test(alertsUrl ?? '')){
+                localStorage.setItem(AlertsUrlStorageKey, alertsUrl!);
+            }else{
+                alertsUrlError=true;
+            }
+        }
+        if(alertsUrlError){
+            setAlertsUrlError(alertsUrlError)
+        }else{
+            setAlertsUrlError(false)
+            dispatch(updateSettings(tempSettings));
+            onClose();
+        }
+    }
+
     return (<Modal title='Settings'
         isOpen={show}
-        onClose={onClose}>
+        onClose={() => {
+            onClose();
+            setAlertsUrl(localStorage.getItem(AlertsUrlStorageKey) || null);
+        }}>
         <form className='mt-9'>
             <div className='mt-4 grid gap-4 items-center grid-cols-[auto_1fr]'>
                 <TextInput label='Api Key' value={tempSettings.apiKey ?? ''} onChange={(val) => {
@@ -34,6 +62,9 @@ export const SettingsModal = ({
                         ...tempSettings,
                         apiKey: val,
                     });
+                }} />
+                <TextInput label='Alerts UI app URL' value={alertsUrl ?? ''} hasError={alertsUrlError} onChange={(val) => {
+                    setAlertsUrl(val)
                 }} />
 
                 <ComboBox label='Logo'
@@ -71,10 +102,7 @@ export const SettingsModal = ({
                 </button>
                 <button type='button'
                     className='py-2 px-6 border rounded-full flex items-center gap-5 flex-grow justify-center bg-gradient-brand border-none text-black'
-                    onClick={() => {
-                        dispatch(updateSettings(tempSettings));
-                        onClose();
-                    }}>
+                    onClick={storeValues}>
                     Save
                     <Plus className='w-6 h-6' />
                 </button>
