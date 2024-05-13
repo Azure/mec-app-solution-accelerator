@@ -40,8 +40,13 @@ namespace Microsoft.MecSolutionAccelerator.Services.MinIOInfraestructure
                     BucketName = bucketName,
                     Key = fileName
                 };
-                using var response = await _s3Client.GetObjectAsync(requestFile);
                 var responseStream = new MemoryStream();
+                if (!await AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketName))
+                {
+                    return responseStream;
+                }
+                using var response = await _s3Client.GetObjectAsync(requestFile);
+
                 await response.ResponseStream.CopyToAsync(responseStream);
                 responseStream.Position = 0;
 
@@ -62,6 +67,11 @@ namespace Microsoft.MecSolutionAccelerator.Services.MinIOInfraestructure
                 {
                     BucketName = bucketName
                 };
+
+                if (!await AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketName)){
+                    return;
+                }
+
                 var response = await _s3Client.ListObjectsV2Async(listObjectsRequest);
                 var currentTime = DateTime.UtcNow;
 

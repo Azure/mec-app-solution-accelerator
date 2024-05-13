@@ -1,6 +1,4 @@
 using Coravel;
-using MediatR;
-using Microsoft.MecSolutionAccelerator.Services.Files.CommandHandlers;
 using Microsoft.MecSolutionAccelerator.Services.Files.Infraestructure;
 using Microsoft.MecSolutionAccelerator.Services.FilesManagement.Jobs;
 using Microsoft.MecSolutionAccelerator.Services.MinIOInfraestructure;
@@ -12,7 +10,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IFileStorage, MinIOService>();
-builder.Services.AddMediatR(typeof(DownloadFileCommandHandler).Assembly);
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+});
 builder.Services.AddScoped<MinioCleanUpJob>();
 builder.Services.AddScheduler();
 

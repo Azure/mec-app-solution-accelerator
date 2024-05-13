@@ -17,12 +17,12 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: "files-management"
-        dapr.io/app-port: "80"
+        dapr.io/app-port: "8080"
         dapr.io/config: "dapr-config"
     spec:
       containers:
-      - name: files-management # Corregido el nombre del contenedor
-        image: mecsolutionaccelerator/files-management:1.6.1
+      - name: files-management
+        image: mecsolutionaccelerator/files-management:1.9
         ports:
         - containerPort: 80
         imagePullPolicy: IfNotPresent
@@ -30,7 +30,7 @@ spec:
           - name: ASPNETCORE_ENVIRONMENT
             value: Development
           - name: MINIO__SERVICEURL
-            value: http://minio.mec-accelerator.svc.cluster.local:9000 # Corregido el URL
+            value: http://minio.mec-accelerator.svc.cluster.local:9000
       restartPolicy: Always
 
 ---

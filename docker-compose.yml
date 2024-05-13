@@ -71,7 +71,7 @@ services:
     network_mode: "service:alerts-ui"
 
   files-management:
-    image: ${DOCKER_REGISTRY-}files-manegement:1.6
+    image: ${DOCKER_REGISTRY-}files-management:1.9
     build:
       context: .
       dockerfile: src/Services/Files/Management/Dockerfile
