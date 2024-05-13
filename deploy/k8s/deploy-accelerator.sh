@@ -26,7 +26,7 @@ if [ ! -z "$uninstall" ]; then
    if kubectl get pods -n mec-accelerator | grep -q 'mosquitto'; then
       kubectl delete -f ./mosquitto/
    fi
-   kubectl delete -f ./
+   kubectl delete -f ./00-namespace.yaml
    exit 1
 fi
 
