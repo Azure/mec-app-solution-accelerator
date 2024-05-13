@@ -90,4 +90,4 @@ if (-not (kubectl get ns | Select-String 'kubernetes-dashboard')) {
 Write-Host "Successfully installed MEC-Accelerator!"
 Write-Host ""
 Write-Host "Alerts-UI and Control-Plane-UI services deployed in:"
-kubectl get services -n mec-accelerator -o=custom-columns=NAME:.metadata.name,IP:.status.loadBalancer.ingress[*].ip,PORT:.spec.ports[*].port | grep -E 'alerts-ui[^-]|control-plane-ui-service'
+kubectl get services -n mec-accelerator -o=custom-columns=NAME:.metadata.name,IP:.status.loadBalancer.ingress[*].ip,PORT:.spec.ports[*].port | Select-String -Pattern alerts-ui[^-], control-plane-ui-service
