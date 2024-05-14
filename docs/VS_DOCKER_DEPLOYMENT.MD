@@ -37,7 +37,7 @@ Now that we have established the appropriate startup project, we will recompile 
 
 After a few seconds, depending on the capacity of the device, the alert dashboard should open in our browser with url:
 
-http://localhost:50052/
+http://localhost:1002/
 
 ![dashboard](https://user-images.githubusercontent.com/101176997/221211358-6ca056f6-35aa-46d4-a02d-27de1e542f73.PNG)
 
