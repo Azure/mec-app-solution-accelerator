@@ -17,7 +17,7 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: "alerts-api"
-        dapr.io/app-port: "80"
+        dapr.io/app-port: "8080"
         dapr.io/config: "dapr-config"
     spec:
       containers:

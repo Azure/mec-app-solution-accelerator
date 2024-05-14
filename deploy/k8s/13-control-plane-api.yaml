@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: control-plane-api
-        image: mecsolutionaccelerator/control-plane-api:1.8.1
+        image: mecsolutionaccelerator/control-plane-api:1.9
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080

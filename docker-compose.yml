@@ -57,7 +57,7 @@ services:
     network_mode: "service:alerts-api"
   
   alerts-ui:
-    image: ${DOCKER_REGISTRY-}alerts-ui:1.8
+    image: ${DOCKER_REGISTRY-}alerts-ui:1.9
     build:
       context: .
       dockerfile: src/Web/alerts-ui/Dockerfile

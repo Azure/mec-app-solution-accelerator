@@ -29,12 +29,12 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: "alerts-ui"
-        dapr.io/port: "80"
+        dapr.io/port: "88"
         dapr.io/config: "dapr-config"
     spec:
       containers:
       - name: alerts-ui
-        image: mecsolutionaccelerator/alerts-ui:1.8
+        image: mecsolutionaccelerator/alerts-ui:1.9
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80

@@ -1,11 +1,11 @@
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.CommandHandlers;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
-using Dapr.Client;
 using MediatR;
 using RulesEngine.Commands.RuleCommands;
 using RulesEngine.CommandHandlers.RulesCommandHandler;
+using RulesEngine.CommandHandlers;
+using RulesEngine.Configuration;
+using RulesEngine.Commands;
+using RulesEngine.Events.Base;
+using RulesEngine.CommandHandlers.RuleCommandHandlers;
 
 namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
 {
@@ -16,19 +16,11 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
         {
 
             //arrange pending add to fixture.
-            var mockDaprClient = new Mock<DaprClient>();
-
             var alertsByDetectedClasses = new Dictionary<string, IEnumerable<AlertsConfig>>();
             var commandsTypeByDetectionName = new Dictionary<string, Type>();
             var mockMediator = new Mock<IMediator>();
 
-            mockDaprClient.Setup(d => d.PublishEventAsync<byte[]>("pubsub",
-                    "alerts",
-                    It.IsAny<byte[]>(),
-                    It.IsAny<CancellationToken>()))
-                    .Returns(Task.CompletedTask);
-
-            var commandHandler = new AnalyzeObjectDetectionCommandHandler(mockDaprClient.Object, alertsByDetectedClasses, mockMediator.Object);
+            var commandHandler = new AnalyzeObjectDetectionCommandHandler(alertsByDetectedClasses, mockMediator.Object);
 
             //assert
             await Assert.ThrowsAsync<ArgumentException>(async () => await commandHandler.Handle(new AnalyzeObjectDetectionCommand(), CancellationToken.None));
@@ -38,19 +30,10 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
         public async Task TestWithClassesWorksCorrectlyNotAlertTriggered()
         {
             //arrange
-            var mockDaprClient = new Mock<DaprClient>();
-
             var alertsByDetectedClasses = new Dictionary<string, IEnumerable<AlertsConfig>>();
-            var commandsTypeByDetectionName = new Dictionary<string, Type>();
             var mockMediator = new Mock<IMediator>();
 
-            mockDaprClient.Setup(d => d.PublishEventAsync<byte[]>("pubsub",
-                    "alerts",
-                    It.IsAny<byte[]>(),
-                    It.IsAny<CancellationToken>()))
-                    .Returns(Task.CompletedTask);
-
-            var commandHandler = new AnalyzeObjectDetectionCommandHandler(mockDaprClient.Object, alertsByDetectedClasses, mockMediator.Object);
+            var commandHandler = new AnalyzeObjectDetectionCommandHandler(alertsByDetectedClasses, mockMediator.Object);
 
             //act
             var task = await commandHandler.Handle(new AnalyzeObjectDetectionCommand()
@@ -71,8 +54,6 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
         public async Task TestWithClassesWorksCorrectlyAlertTriggered()
         {
             //arrange
-            var mockDaprClient = new Mock<DaprClient>();
-
             var alertsByDetectedClasses = new Dictionary<string, IEnumerable<AlertsConfig>>();
             alertsByDetectedClasses.Add("person", new List<AlertsConfig>() 
             {
@@ -90,18 +71,9 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Test
                 }
             }) ;
 
-            var commandsTypeByDetectionName = new Dictionary<string, Type>();
-            commandsTypeByDetectionName.Add("MinimumThresholdValidation", typeof(ValidateRuleMinimumThresholdRequiredCommand));
-
             var mockMediator = new Mock<IMediator>();
 
-            mockDaprClient.Setup(d => d.PublishEventAsync<byte[]>("pubsub",
-                    "alerts",
-                    It.IsAny<byte[]>(),
-                    It.IsAny<CancellationToken>()))
-                    .Returns(Task.CompletedTask);
-
-            var commandHandler = new AnalyzeObjectDetectionCommandHandler(mockDaprClient.Object, alertsByDetectedClasses, mockMediator.Object);
+            var commandHandler = new AnalyzeObjectDetectionCommandHandler(alertsByDetectedClasses, mockMediator.Object);
 
             //act
             var task = await commandHandler.Handle(new AnalyzeObjectDetectionCommand()
