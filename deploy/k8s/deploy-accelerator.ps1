@@ -15,6 +15,10 @@ if ($uninstall) {
     if (kubectl get pods -n mec-accelerator | Select-String 'mosquitto') {
       kubectl delete -f ./mosquitto/
     }
+
+    kubectl delete clusterrole akri-webhook-configuration-patch
+    kubectl delete clusterrolebinding akri-webhook-configuration-patch
+    kubectl delete ValidatingWebhookConfiguration akri-webhook-configuration
     kubectl delete -f ./00-namespace.yaml
     exit 1
 }
