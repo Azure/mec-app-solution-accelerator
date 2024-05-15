@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
+using RulesEngine.Configuration;
 using System.Data;
 using System.Reflection;
 
-namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Injection
+namespace RulesEngine.InMemoryDataDI
 {
     public static class RulesEngineServiceConfiguration
     {

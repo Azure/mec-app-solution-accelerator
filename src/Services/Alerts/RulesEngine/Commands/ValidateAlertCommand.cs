@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
+using RulesEngine.Configuration;
+using RulesEngine.Events;
+using RulesEngine.Events.Base;
 
-namespace Alerts.RulesEngine.Commands
+namespace RulesEngine.Commands
 {
     public class ValidateAlertCommand : IRequest
     {
@@ -14,5 +14,6 @@ namespace Alerts.RulesEngine.Commands
         public string Frame { get; set; }
         public List<StepTime> StepTrace { get; set; }
         public AlertsConfig AlertConfig { get; set; }
+        public string SourceId { get; set; }
     }
 }

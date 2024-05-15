@@ -1,4 +1,4 @@
-﻿namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Injection
+﻿namespace RulesEngine.InMemoryDataDI
 {
     public class RuleTagAttribute : Attribute
     {

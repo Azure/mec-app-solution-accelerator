@@ -1,6 +1,7 @@
 dapr-ext-grpc
 dapr
 setuptools==58.2.0
+paho-mqtt
 
 # Base ----------------------------------------
 matplotlib>=3.2.2

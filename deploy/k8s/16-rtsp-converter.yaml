@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rtsp-converter-deployment
+  namespace: mec-accelerator
+spec:
+  selector:
+    matchLabels:
+      app: rtsp-converter
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rtsp-converter
+    spec:
+      containers:
+      - name: rtsp-converter
+        image: mecsolutionaccelerator/rtsp-converter:1.8.1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+        env:
+          - name: MongoDB__ConnectionString
+            value: "mongodb://control-plane-mongodb:27017"
+          - name: MongoDB__DatabaseName
+            value: "ControlPlane"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rtsp-converter-service
+  namespace: mec-accelerator
+spec:
+  selector:
+    app: rtsp-converter
+  ports:
+  - protocol: TCP
+    port: 91
+    targetPort: 3000
+  type: LoadBalancer

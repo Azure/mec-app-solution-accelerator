@@ -1,3 +1,4 @@
+from SettingsProvider import SettingsProvider
 import cv2
 import queue
 import threading
@@ -48,6 +49,7 @@ class VideoCapture:
         self.cap.release()
 
 def main():
+    settings_provider = SettingsProvider()
     endpoint = os.getenv('MINIOURL')
     bucket = 'images'
     minioClient = minio.MinIOClient(endpoint, 'minio', 'minio123')
@@ -55,19 +57,9 @@ def main():
     
     timer=0
     timer=int(os.getenv('TIMEOUT'))
-    try:
-        MY_POD_NAME=(os.getenv('MY_POD_NAME'))
-        FEEDS=(os.getenv('FEEDS'))
-        FEEDS=list(eval(FEEDS))
-        dict_pos=MY_POD_NAME.split('-')[-1]
-        feeds_dict=FEEDS[int(dict_pos)]
-
-        feed_id=feeds_dict['id']
-        feed_URL=feeds_dict['url']
-    except:
-        feed_URL=(os.getenv('FEED'))
-        feed_id=1
-
+    feed_URL = settings_provider.get_rtsp_uri()
+    feed_id = settings_provider.get_camera_id()
+    logging.info(f'Camera Id: {feed_id}')
     logging.info(f'feed url: {feed_URL}')
         
     time.sleep(timer)
@@ -96,7 +88,7 @@ def main():
             with DaprClient() as client:
             # Create data to send to AI inference service
                 time_trace = {"stepStart": timestamp_init, "stepEnd": int(time.time() * 1000), "stepName": "frameSplitter"}
-                req_data = {"source_id": 'video_' + str(feed_id), "timestamp": timestamp, "image_id": image_id_str, 'time_trace': time_trace}
+                req_data = {"source_id": feed_id, "timestamp": timestamp, "image_id": image_id_str, 'time_trace': time_trace}
 
             # Invoke the AI Model inference service
                 resp = client.invoke_method(

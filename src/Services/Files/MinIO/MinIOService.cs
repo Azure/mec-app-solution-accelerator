@@ -40,8 +40,13 @@ namespace Microsoft.MecSolutionAccelerator.Services.MinIOInfraestructure
                     BucketName = bucketName,
                     Key = fileName
                 };
-                using var response = await _s3Client.GetObjectAsync(requestFile);
                 var responseStream = new MemoryStream();
+                if (!await AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketName))
+                {
+                    return responseStream;
+                }
+                using var response = await _s3Client.GetObjectAsync(requestFile);
+
                 await response.ResponseStream.CopyToAsync(responseStream);
                 responseStream.Position = 0;
 
@@ -65,23 +70,23 @@ namespace Microsoft.MecSolutionAccelerator.Services.MinIOInfraestructure
                     BucketName = bucketName
                 };
 
-                ListObjectsV2Response response;
-                do
-                {
-                    response = await _s3Client.ListObjectsV2Async(listObjectsRequest, cancellationToken);
-                    var currentTime = DateTime.UtcNow;
+                if (!await AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketName)){
+                    return;
+                }
 
-                    foreach (var s3Object in response.S3Objects)
+                var response = await _s3Client.ListObjectsV2Async(listObjectsRequest);
+                var currentTime = DateTime.UtcNow;
+
+                foreach (var s3Object in response.S3Objects)
+                {
+                    if (s3Object.LastModified < currentTime.AddHours(-hours))
                     {
-                        if (s3Object.LastModified < currentTime.AddMinutes(-minutes))
+                        var deleteRequest = new DeleteObjectRequest
                         {
-                            var deleteRequest = new DeleteObjectRequest
-                            {
-                                BucketName = bucketName,
-                                Key = s3Object.Key
-                            };
-                            await _s3Client.DeleteObjectAsync(deleteRequest, cancellationToken);
-                        }
+                            BucketName = bucketName,
+                            Key = s3Object.Key
+                        };
+                        await _s3Client.DeleteObjectAsync(deleteRequest);
                     }
 
                     listObjectsRequest.ContinuationToken = response.NextContinuationToken;

@@ -12,8 +12,8 @@
         timeZone = HttpContextAccessor.HttpContext.Request.Cookies["timezone"];
     }
 <img src="data:image/jpeg;base64,@Model.Frame" alt="Alert Information Image" class="alert-image">
-<div class="alert-description border border-dark position-relative rounded overflow-auto">
-    <pre class="alert-text position-absolute top-0 left-0 font-sans p-1">
+<div class="alert-description position-relative rounded overflow-auto">
+    <pre class="alert-text font-sans p-1">
 <b>Alert: @Model.Id</b><br>
 <b>@Model.Type</b><br>
 &emsp; – Position: (@Model.Source.Lat,@Model.Source.Lon)

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: control-plane-api-deployment
+  namespace: mec-accelerator
+spec:
+  selector:
+    matchLabels:
+      app: control-plane-api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: control-plane-api
+    spec:
+      containers:
+      - name: control-plane-api
+        image: mecsolutionaccelerator/control-plane-api:1.9
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: control-plane-api-config
+        env:
+          - name: MongoDB__ConnectionString
+            value: "mongodb://control-plane-mongodb:27017"
+          - name: MongoDB__DatabaseName
+            value: "ControlPlane"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: control-plane-api-service
+  namespace: mec-accelerator
+spec:
+  selector:
+    app: control-plane-api
+  ports:
+  - protocol: TCP
+    port: 89
+    targetPort: 8080
+  type: LoadBalancer

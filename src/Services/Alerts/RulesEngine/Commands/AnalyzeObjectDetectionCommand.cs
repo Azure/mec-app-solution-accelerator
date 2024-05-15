@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
+using RulesEngine.Events;
+using RulesEngine.Events.Base;
 
-namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Commands
+namespace RulesEngine.Commands
 {
     public class AnalyzeObjectDetectionCommand : IRequest
     {

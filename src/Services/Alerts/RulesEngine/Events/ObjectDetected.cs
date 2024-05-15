@@ -1,5 +1,4 @@
-﻿
-namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events
+﻿namespace RulesEngine.Events
 {
     public class ObjectDetected : DetectionEvent
     {

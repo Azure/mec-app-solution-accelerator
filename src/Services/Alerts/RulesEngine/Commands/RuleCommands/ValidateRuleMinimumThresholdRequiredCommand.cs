@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base;
-using Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Injection;
+using RulesEngine.Configuration;
+using RulesEngine.Events.Base;
+using RulesEngine.InMemoryDataDI;
 
 namespace RulesEngine.Commands.RuleCommands
 {

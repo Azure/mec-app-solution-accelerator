@@ -1,0 +1,9 @@
+version: '3.4'
+
+services:
+  control-plane-ui:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - API_URL=http://localhost:8080

@@ -1,4 +1,4 @@
-﻿namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Configuration
+﻿namespace RulesEngine.Configuration
 {
     public class ClassesConfig
     {

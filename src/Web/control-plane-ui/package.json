@@ -1,0 +1,42 @@
+{
+  "name": "control-plane",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.0.1",
+    "@types/react-redux": "^7.1.33",
+    "classnames": "^2.3.2",
+    "next": "14.0.4",
+    "next-runtime-env": "^3.2.0",
+    "papaparse": "^5.4.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-flv-player": "^1.0.9",
+    "react-player": "^2.14.1",
+    "react-redux": "^9.1.0",
+    "redux": "^5.0.1"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "@types/node": "^20",
+    "@types/papaparse": "^5.3.14",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.4",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5",
+    "url-loader": "^4.1.1"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}

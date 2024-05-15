@@ -1,0 +1,472 @@
+# Step-by-step application components deployment into AKS-EE-Windows or k3s-Ubuntu-Linux
+
+## Supported environment infrastructure at the edge
+
+This version of MEC-App-Accelerator supports the following Kubernetes distributions and host operating system.
+
+- **AKS Edge Essentials on Windows**
+- **K3s on Ubuntu Linux**
+
+**Kubernetes from Docker-Desktop** is not supported by Azure IoT Operations, however, if using the below OSS/Mosquito alternative, it should also work for you, but we recommend the above environments since those are the tested environments by our team.
+
+Supported edge components on top of the Kubernetes/k3s cluster:
+
+- **Azure IoT Operations alternative**
+    - Azure IoT MQ as messaging broker
+    - AKRI for dynamic cameras provissioning (OSS version)
+
+- **Plain OSS alternative**
+    - Eclipse Mosquitto as messaging broker
+    - AKRI for dynamic cameras provissioning (OSS version)
+
+
+## Install the Kubernetes/K3s cluster at the edge
+
+Install the AKS-EE-Windows cluster or the K3s-Ubuntu cluster by following the instructions in the below Microsoft official doc.
+
+Even when the below documentation link is the supported baseline environment for an Azure IoT Operations cluster, you can also follow this AKS-EE/K3s cluster installation procedure documentation even if you won't use the Azure IoT Operations alternative but the plain OSS/Mosquitto alternative:
+
+**Install AKS-EE-Windows alternative:** 
+
+[Create your Azure Arc-enabled Kubernetes cluster on Windows](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-prepare-cluster?tabs=aks-edge-essentials)
+
+**Install K3s-Ubuntu-Linux alternative:** 
+
+[Create your Azure Arc-enabled K3s cluster on Ubuntu-Linux](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=linux#connect-a-kubernetes-cluster-to-azure-arc)
+
+**IMPORTANT** If you are NOT going to use Azure IoT Operations, when following the previous setup doc, stop before the section named *"Deploy Azure IoT Operations"*. Hence, the last secion to follow should be *"Verify cluster"*.
+
+At this point, and after verifying the cluster from the command-line, you should also be able to check it out from the Azure portal because even when it's deployed on a machine on-premises or at the edge, it's connected to Azure through Azure Arc, so you can monitor the cluster from there, like in the following screenshot:
+
+<img width="725" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/e3637858-32bd-433a-8143-f27d0ac87b83">
+
+However, in order to check out your cluster's Workloads (pods, deployments, etc.), you need to generate and provide a *"Service account bearer token"*, by following this procedure [Service account token authentication option](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/cluster-connect?tabs=azure-powershell%2Cagent-version#service-account-token-authentication-option) and finally providing the token like in this other screenshot:
+
+<img width="551" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/7a490b36-755e-440d-9eab-4c395574c58f">
+
+So then, you can monitor your AKS EE workloads in your cluster on-premises/edge from Azure cloud portal, thanks to Azure Arc connection to your cluster:
+
+<img width="551" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/99734c5e-894b-4a31-8d26-842fa6c6aa45">
+
+*Azure Arc support:* For most cases, it's interesting to follow the above setup instructions instead of a plain K8s/K3s setup because then you will also have your cluster as an Azure Arc-enabled cluster, so you can monitor the cluster at the edge from anywhere through Azure portal in the cloud.
+
+*Eventual removal of AKS Edge Essentials:* Eventually, if you need to install the AKS-EE, follow this procedure:
+
+[Uninstall AKS Edge Essentials](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-uninstall#uninstall-aks-edge-essentials)
+
+## Install Azure IoT Operations into your cluster
+
+**Note:** You only need to install Azure IoT operations if you want to use Azure IoT MQ (aka. E4K) instead of Mosquitto, as your selected selected MQTT broker.
+For using AKRI, since we're curently using the OSS version of AKRI, it can be installed on any Kubernetes cluster without needing to have Azure IoT Operations installed.
+
+### Prerequisites for Azure IoT Operations
+
+It's important to check and install the prerequisites for Azure IoT Operations explained here:
+
+[Prerequisites for Azure IoT Operations](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=windows#prerequisites)
+
+### Deploy Azure IoT Operations
+
+Install Azure IoT Operations by following the official "simplified/automated approach" documentation here:
+
+[Deploy Azure IoT Operations Preview](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=windows#deploy-azure-iot-operations-preview)
+
+When deploying Azure IoT Operations by following the above documentation link, you should see a console app similar to the following execution:
+
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/6a7be373-265c-4698-96f8-59575b4f7a0e)
+
+**(OPTIONAL LEARNING) Detailed Azure IoT Operations setup** 
+
+Note that there's an alternative "Detailed step-by-step AKS Edge-Essentials plus Azure IoT Operations deployment" available in Microsoft's docs, but we initially recommend to go the easy path explained above instead of the following docs which require significantly more time due to the many step-by-step instructions, especially on what's related to the AKS-EE cluster setup:
+
+- [Prepare your Azure Arc-enabled Kubernetes cluster](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-prepare-cluster?tabs=aks-edge-essentials)
+- [Deploy Azure IoT Operations Preview extensions to a Kubernetes cluster](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-deploy-iot-operations)
+- [Manage secrets for your Azure IoT Operations Preview deployment](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-manage-secrets)
+
+However, in case you want to know what's going on under the covers, it's interesting to take a look to those alternative and detailed setup docs for Azure IoT Operations.
+
+## Deploy the MEC-Application into the cluster (Step by step components deployment)
+
+### Check your kubectl context
+
+2. If you previosly had already installed kubectl and it is pointing to some other environment, such as MiniKube, make sure the default kubectl context is pointing to the right cluster. 
+
+    Open a new command-shell and run the following command to check your current contexts:
+
+    ```powershell
+    kubectl config get-contexts
+    ```
+
+    To set the context to point to the right Kuberentes cluster, use kubectl and provide the name of the context to use:
+
+    ```powershell
+    kubectl config use-context [my-cluster-context]
+    ```
+
+### Deploy Dapr into the cluster
+
+This example application is based on **[Dapr](https://dapr.io/)** framework which is an OSS Microsoft framework specialized on microservices architecture, so you need to install it and enable in the Kubernetes cluster, first. 
+
+#### Install and Initialize DAPR
+
+Install or make sure you have installed `Dapr CLI` on the machine that you use/run KUBECTL with the following instructions:
+
+[Install Dapr CLI](https://docs.dapr.io/getting-started/install-dapr-cli/)
+
+Then, from the same machine/environment you use KUBECTL against your Kubernetes cluster, install/initialize DAPR in the Kubernetes cluster by running this command:
+ 
+  ```powershell
+  dapr init -k
+  ```
+  
+  ![image](https://user-images.githubusercontent.com/1712635/218881163-9ba81fa3-f72c-4c12-bbf6-8ec25f2dba55.png)
+
+  For further details on Dapr deployment, check this doc.
+  
+  [Dapr deployment details](https://docs.dapr.io/operations/hosting/kubernetes/kubernetes-deploy/#install-with-dapr-cli). 
+
+  **IMPORTANT:** This DAPR installation is okay for a dev machine or edge machine with Kubernetes in AKS Edge Essentials or a single node k3s, but when installing DAPR on a larger "production" AKS cluster, for example in an ASE (Azure Stack Edge) or HCI server on in Azure AKS cluster in the cloud, you need to install DAPR via AKS extension following the Doc: (https://learn.microsoft.com/en-us/azure/aks/dapr) which is how DAPR should be installed in production environments and it doesn’t require cluster admin access.
+  
+  You can test DAPR status with:
+  ```powershell
+  dapr status -k
+  ```
+  
+  If DAPR is initialized, you should get this list of Dapr pods running:
+  
+  ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/e5d54136-caf1-4211-84d5-f466b5768e13)
+
+  Otherwise, if it's not initialized it'd be like this:
+  
+  ![image](https://user-images.githubusercontent.com/1712635/218880976-94b42767-40e3-4d9c-a640-2dfa029cb510.png)
+
+
+    **IMPORTANT:** This DAPR installation is okay for a dev machine with Kubernetes in AKS Edge Essentials or a single node k3s, but when installing DAPR on a "production" AKS cluster, for example in an ASE (Azure Stack Edge) server on in Azure AKS cluster in the cloud, you need to install DAPR via AKS extension following the Doc: (https://learn.microsoft.com/en-us/azure/aks/dapr) which is how DAPR should be installed in production environments and it doesn’t require cluster admin access.
+    
+
+### Install HELM in your client machine
+
+If you don't have HELM installed in your client system, you need to have it since AKRI-OSS is deployed through HELM. 
+
+Make sure you have install [helm](https://helm.sh/) in the machine you are using with KUBECTL accessing the Kubernetes cluster.
+By default, that machine can be a Windows machine with KUBECTL installed and pointing to the right Kubernetes cluster context. 
+
+Full installation instructions of Helm can be found [here](https://helm.sh/docs/intro/install/).
+
+
+### (Optional) Instructions for building your own Docker Images to deploy to Kubernetes
+
+This step is not needed if you directly deploy to Kubernetes and test the images we have already uploaded into Docker Hub, so creating your own Docker images and uploading to Docker Hub is optional, initially.
+
+However, if you make changes in the .NET or Python code or you want to use your own Docker Images for any other reason, you'd need to create your own Docker images and upload the images first to Docker Hub before deploying to Kubernetes. 
+
+Use these instructions to [Buil your own Docker Images to upload to Docker Registry and deploy to Kubernetes](./BUILD_AND_PUSH_IMAGES_TO_DOCKER_HUB.MD)
+
+
+### Deploy the application namespace (custom K8s namespace)
+1. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
+
+    ```powershell
+    cd <your_path>/deploy/k8s
+    ```
+
+2. Deploy the mec-accelerator namespace in Kuberentes by running this command:
+
+    ```powershell
+    kubectl apply -f ./00-namespace.yaml
+    ```
+
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/2407d56b-0b3e-4467-bdc3-59dce3527398)
+
+### Update the application control plane configuration
+
+3. **(OPTIONAL for Azure Private 5G network)** Update the config map that contains essential information for connecting to our Azure Mobile Network. You'll find the configuration in the file `deploy/k8s/13-control-plane-api-config-map.yaml`.
+
+Replace the following values in the file:
+
+```
+  MobileNetwork__SubscriptionId: "your_subscription_id"
+  MobileNetwork__ResourceGroup: "your_resource_group"
+  MobileNetwork__Name: "your_network_name"
+  MobileNetwork__AttachedDataNetwork: "your_attachedDataNetwork_fullID"
+  MobileNetwork__Slice: "your_slice_fullID"
+  ClientCredentials__TenantId: "your_tenant_id"
+  ClientCredentials__ClientId: "your_client_id"
+  ClientCredentials__ClientSecret: "your_client_secret"
+```
+
+*Note:* This step is required if you want to manage SIMs provisioning from this app against AP5GC (Azure Private 5G Core) in Azure. 
+For just getting alerts and camera management/provisioning (i.e. Wi-Fi or Ethernet cameras provisioning), you can skip this part if you don't have an AP5GC Mobile Network and packet core deployed into an ASE, RAN, 5G UEs, etc.
+
+
+### Install AKRI and related application discovery handler
+
+#### Install HELM in your client machine
+
+If you don't have HELM installed in your client system, you need to have it since AKRI-OSS is deployed through HELM. 
+
+Make sure you have install [helm](https://helm.sh/) in the machine you are using with KUBECTL accessing the Kubernetes cluster.
+By default, that machine can be a Windows machine with KUBECTL installed and pointing to the right Kubernetes cluster context. 
+
+Full installation instructions of Helm can be found [here](https://helm.sh/docs/intro/install/).
+
+#### Install AKRI
+
+Install akri repository.
+
+```powershell
+helm repo add akri-helm-charts https://project-akri.github.io/akri/
+```
+
+Update the HELM repo with this command:
+
+```powershell
+helm repo update
+```
+
+Install AKRI with the application's "camera discovery handler" AKRI Helm chart and related configuration:
+
+**IMPORTANT:** If you are installing agains a K3s or K8s (Kubernetes on Docker Desktop should be "k8s"), you need to specify that distro in the `kubernetesDistro` parameter below as:
+
+`--set kubernetesDistro=k8s`
+
+or 
+
+`--set kubernetesDistro=k3s`
+
+In the "by default" cluster installed by Azure IoT Operations script, it installs AKS Edge Essentials with K3s under the covers, so if using that AKS-EE cluster, you should use k3s.
+
+This is the whole command to run, but make sure of the `kubernetesDistro` parameter first depending on your target cluster:
+
+```powershell
+ helm install akri akri-helm-charts/akri `
+ -n mec-accelerator `
+ --set kubernetesDistro=k3s `
+ --set custom.discovery.enabled=true `
+ --set custom.discovery.image.repository=mecsolutionaccelerator/akri-camera-discovery-handler `
+ --set custom.discovery.image.tag=1.8 `
+ --set custom.discovery.name=akri-camera-discovery `
+ --set custom.configuration.enabled=true `
+ --set custom.configuration.name=akri-camera `
+ --set custom.configuration.discoveryHandlerName=camera `
+ --set custom.configuration.discoveryDetails.connectionString="mongodb://control-plane-mongodb.mec-accelerator:27017" `
+ --set custom.configuration.discoveryDetails.database="ControlPlane" `
+ --set custom.configuration.discoveryDetails.collection="Cameras" `
+ --set custom.configuration.brokerPod.image.repository=mecsolutionaccelerator/framesplitter `
+ --set custom.configuration.brokerPod.image.tag=1.8
+```
+
+Here's an example execution when targeting k3s:
+
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/2ed6995f-e8d3-477e-857b-08d3ba8fca64)
+
+But if you are deploying to a different type of Kubernetes cluster (i.e. Docker-Desktop-Kuberentes or plain Kubernetes) then you should use k8s.
+
+**WARNING:** If you get the following error, try runnning `helm repo update` and re-run the previous AKRI installation command:
+
+Error: INSTALLATION FAILED: no cached repo found. (try 'helm repo update'): open C:\Users\cesardl\AppData\Local\Temp\helm\repository\akri-helm-charts-index.yaml: The system cannot find the file specified.
+
+
+
+### Deploy MQTT Broker resources to Kubernetes
+Before continuing with the deployment, decide wether to use Azure IoT Operations E4K or Mosquitto MQTT broker.
+
+You only need one or the other. Either Azure IoT MQ or Mosquitto. Of course, if you deployed Azure IoT Operations into your cluster, we recommend to use Azure IoT MQ.
+
+#### Alternative A: Deploy Azure IoT MQ broker listener pod (aka. E4K)
+  
+  - Open a new command-shell and move into the `deploy/k8s/E4K` folder of this repo, as current folder of the command-shell:
+
+    ```powershell
+    cd <your_path>/deploy/k8s/E4K
+    ```
+
+  - Deploy E4K broker listener and the required configurations by running this command:
+
+    ```powershell
+    kubectl apply -f ./
+    ```
+
+#### Alternative B: Deploy Mosquitto pod
+
+  - Open a new command-shell and move into the `deploy/k8s/mosquitto` folder of this repo, as current folder of the command-shell:
+    
+    ```powershell
+    cd <your_path>/deploy/k8s/mosquitto
+    ```
+
+  - Deploy mosquitto and the required configurations by running this command:
+    
+    ```powershell
+    kubectl apply -f ./
+    ```
+
+### Deploy the rest of the application's services into the Kubernetes cluster
+
+- Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
+
+    ```powershell
+    cd <your_path>/deploy/k8s
+    ```
+
+- Deploy the application in Kuberentes by running this command:
+
+    ```powershell
+    kubectl apply -f ./
+    ```
+
+    All services will be created in the specified Kubernetes namespace "mec-accelerator" for this application, like in the following command execution:
+
+    ![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/6cbeadc9-4d6f-44d6-863d-ec7be2339cae)
+
+
+## Deploy AKRI configuration
+
+- Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
+
+```powershell
+./deploy-akri-secrets.ps1
+```
+
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/26175770-b114-4c9a-9c1b-01e87ffb4d3d)
+
+## Check the application status with Kubernetes Dashboard
+
+- If you don't have installed/enabled the Kuberentes Dashboard, do so by running this command:
+
+    ```powershell
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+    ```
+
+- Run `kubectl proxy` so you can access the dahboard:
+
+    ```powershell
+    kubectl proxy
+    ```
+    
+    ![image](https://user-images.githubusercontent.com/1712635/218886875-0f4f1c1f-1791-4bdb-93e0-cc3ab437750a.png)
+
+    Kubectl will make Dashboard available at  
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+![image](https://user-images.githubusercontent.com/1712635/218886986-d838bc24-b103-437c-8f60-ebe5c2cc1095.png)
+
+However, at this point you need to provide a security token to athenticate and enter the dashboard.
+Let's do that in the following steps.
+
+### Configure Bearer Tokens from Kuberentes to access the Dashboard
+
+- You need to do this step **only one time**: Change the current folder to the `deploy/k8s/dashboard_auth` folder of this repo and run the instructions in commands.txt to configure the tokens. Basically, the following commands need to be run just once from that folder:
+
+    ```powershell
+    kubectl apply -f dashboard-adminuser.yaml 
+
+    kubectl apply -f adminuser-cluster-role-binding.yaml
+    ```
+    
+    ![image](https://user-images.githubusercontent.com/1712635/218881848-92de552c-a0f3-4fa8-ab87-2ca2512956f2.png)
+
+
+### Generate and copy the token to provide to Kubernetes Dashboard
+
+- Whenever you need a token, run this command:
+
+    ```powershell
+    kubectl -n kubernetes-dashboard create token admin-user --duration=48h --output yaml
+    ```
+    
+    Select and copy the token to the clipboard.
+    
+    ![image](https://user-images.githubusercontent.com/1712635/218882035-61318473-b7e1-4fe5-b253-69479e8a20b0.png)
+
+### Provide the token to Kubernetes dashboard
+
+- Open http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login in your browser and paste the token you copied previously.
+
+![image](https://user-images.githubusercontent.com/1712635/218882193-938f14f0-06ca-4bba-979f-da9266706f8e.png)
+
+In the Kubernetes dashboard you should be able to explore the application's pods, services, etc.
+
+![image](https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/63af4277-e4f7-413a-b0c5-abc0080ac955)
+
+
+## Try the 'Control Plain app' to provision cameras
+
+In order to know the URL for the 'Control Plain web app' (IP and port to use), type the following command:
+
+```powershell
+kubectl get services --namespace mec-accelerator
+```
+
+<img width="1000" alt="image" src="./imgs/deploy_06.png">
+
+Then search for the service with name **"control-plane-ui-service"** and related IP and external port, so you write a URL similar to the following in a browser:
+
+`http://<your-IP>:90/`
+
+<img width="1000" alt="image" src="./imgs/deploy_02.png">
+
+You could also find out the IP and port by using the Kubernetes dashboard, select the Kubernetes  namespace where the application is deployed ("mec-accelerator"), go to the "Services" menu in the left tab and click on the url to the right on the **"control-plane-ui-service" service** row.
+
+<img width="1000" alt="image" src="./imgs/deploy_01.png">
+
+## Access the Alerts dashboard UI with Alerts originated from AI model detections
+
+To access the  front-end, 
+In order to know the URL for the 'Alerts dashboard UI' front-end (IP and port to use), type the following command:
+
+```powershell
+kubectl get services --namespace mec-accelerator
+```
+
+<img width="1000" alt="image" src="./imgs/deploy_07.png">
+
+Then search for the service with name **"alerts-ui"** and related IP and external port, so you write a URL similar to the following in a browser:
+
+`http://<your-IP>:88/`
+
+Alternatively, you can also click on the link "Alerts Dashboard" from the Control-Plane app here:
+
+<img width="1000" alt="image" src="./imgs/deploy_03.png">
+
+As a third alternative and again using the K8s dashboard, you can also find out the real URL from the K8s dashboard, select the Kubernetes namespace where the application is deployed (MEC-Accelerator), go to the services menu in the left tab and click on the url to the right on the Alerts-UI service row:
+
+<img width="1000" alt="image" src="./imgs/deploy_04.png">
+
+Following any of those ways you should be able to run the 'Alerts dashboard UI' and check out the Alerts originated from the AI models when analyzing the video:
+
+<img width="1000" alt="image" src="./imgs/deploy_05.png">
+
+## Expose Kubernetes services to external devices (Important if using AKS EE)
+
+If you use **K3s** on an **Ubuntu Linux VM**, it's straightforward since the IP used for your Kubernetes services is usually the same IP used by the VM in the real IP network, so you should be able to access the application services (UI apps in this case) from remote client machines.
+
+However, if you deployed the application into **AKS edge Essentials**, you might need to make Kubernetes services accessible to external devices so they can interact with the web applications you've deployed. Follow the next article that explains how to expose Kubernetes services running on an AKS Edge Essentials cluster to external devices:
+
+[AKS Edge Essentials - Expose Kubernetes services to external devices](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-expose-service)
+
+## Remove the MEC-Application from Kubernetes 
+
+- From command-line (PowerShell or Bash) change the current folder to the `deploy/k8s` folder of this repo.
+
+- If Azure IoT Operations E4K broker has been used, run the following commands to remove kubernetes resouces:
+
+    ```powershell
+    kubectl delete -f ./E4K/
+    ```
+
+- If Mosquitto broker has been used, run the following commands to remove kubernetes resouces:
+
+    ```powershell
+    kubectl delete -f ./mosquitto/
+    ```
+
+- Run the following command to remove the rest of the kubernetes resources for this application, since there is no stop action on kubectl.
+
+    ```powershell
+    kubectl delete -f ./
+    ```
+
+
+
+

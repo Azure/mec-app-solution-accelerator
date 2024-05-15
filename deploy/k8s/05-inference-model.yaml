@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inference-model
+  namespace: mec-accelerator
+  labels:
+    app: inference-model
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inference-model
+  template:
+    metadata:
+      labels:
+        app: inference-model
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "invoke-sender-frames"
+        dapr.io/app-protocol: "grpc"
+        dapr.io/app-port: "2060"
+        dapr.io/config: "dapr-config"
+        dapr.io/log-level: "debug"
+        dapr.io/enable-api-logging: "true"
+    spec:
+      containers:
+      - name: inference-model
+        image: mecsolutionaccelerator/aiinferencer:1.9
+        ports:
+        - containerPort: 2060
+        imagePullPolicy: IfNotPresent
+        env:
+          - name : MINIOURL
+            value: "http://minio.mec-accelerator.svc.cluster.local:9000"
+        envFrom:
+        - configMapRef:
+            name: mqtt-config

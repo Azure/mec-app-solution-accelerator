@@ -16,12 +16,10 @@ namespace Microsoft.MecSolutionAccelerator.Services.Files.CommandHandlers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<Unit> Handle(DeleteFilesCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeleteFilesCommand request, CancellationToken cancellationToken)
         {
             await this._filesService.DeleteOlderThanFiles(request.containerName, MAX_FILE_TIME_ALIVE, cancellationToken);
-            _logger.LogInformation($"Correctly, deleted files olders than {MAX_FILE_TIME_ALIVE} minutes");
-
-            return Unit.Value;
+            _logger.LogInformation($"Correctly, deleted files olders than {MAX_FILE_TIME_ALIVE} hours");
         }
     }
 }

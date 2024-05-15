@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: control-plane-ui-deployment
+  namespace: mec-accelerator
+spec:
+  selector:
+    matchLabels:
+      app: control-plane-ui
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: control-plane-ui
+    spec:
+      containers:
+      - name: control-plane-ui
+        image: mecsolutionaccelerator/control-plane-ui:1.9
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+        env:
+          - name: API_URL
+            value: "http://control-plane-api-service:89"
+          - name: STREAMER_URL
+            value: "http://rtsp-converter-service:91"
+          - name: NEXT_PUBLIC_LOGO
+            value: microsoft
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: control-plane-ui-service
+  namespace: mec-accelerator
+spec:
+  selector:
+    app: control-plane-ui
+  ports:
+  - protocol: TCP
+    port: 90
+    targetPort: 3000
+  type: LoadBalancer

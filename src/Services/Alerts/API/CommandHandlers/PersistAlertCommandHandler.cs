@@ -19,7 +19,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
             var id = Guid.NewGuid();
             TimeSpan time = TimeSpan.FromMilliseconds(request.CaptureTime);
             DateTime captureDate = new DateTime(1970, 1, 1) + time;
-            DateTime alertDate =  DateTime.UtcNow;
+            DateTime alertDate = DateTime.UtcNow;
 
             var durations = SetDurations(request.StepTrace);
             var entity = new Alert()
@@ -34,7 +34,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                 MsExecutionTime = (double)durations.Sum(x => x.StepDuration),
                 MsExecutionTimeWithCommunications = (alertDate - captureDate).TotalMilliseconds,
                 AlertTime = alertDate,
-                Source = this.SetHardwareMockInformation(),
+                Source = this.SetSourceAndMockLocation(request.Source),
                 MatchesClasses = request.MatchingClasses,
             };
 
@@ -57,6 +57,18 @@ namespace Microsoft.MecSolutionAccelerator.Services.Alerts.CommandHandlers
                 previousEnd = stepTraceItem.StepEnd;
                 return contextualTraces;
             }).ToList();
+        }
+
+        private Source SetSourceAndMockLocation(string sourceId) //Mocking lat/long
+        {
+            var randomGenerator = new Random();
+            var source = new Source();
+            source.Name = sourceId;
+            source.lat = randomGenerator.Next(1, 100);
+            source.@lon = randomGenerator.Next(1, 10);
+            source.Type = "Camera";
+
+            return source;
         }
 
         private Source SetHardwareMockInformation() //Mocking real hardware

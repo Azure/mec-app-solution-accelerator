@@ -1,4 +1,4 @@
-﻿namespace Microsoft.MecSolutionAccelerator.Services.Alerts.RulesEngine.Events.Base
+﻿namespace RulesEngine.Events.Base
 {
     public class BoundingBox
     {

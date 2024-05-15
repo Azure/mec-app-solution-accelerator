@@ -1,5 +1,10 @@
 # Deploy on Docker ('Visual Studio F5 experience')
 
+**IMPORTANT:** Note that in a Docker host ("docker compose up" or Docker from with Visual Studio), only the MEC-Accelerator "Alerts app" is supported.
+The "Control Plan app", since it uses AKRI for dynamic provisioning of Kubernetes pods, it's only supported on Kubernetes/K3s, not in a plain Docker host.
+
+## Prerequisites
+
 Make sure you have [installed](https://docs.docker.com/desktop/install/windows-install/) and configured docker in your environment. After that, you can run the below commands from the solution's root directory and get started trying it.
 
 ## Grab the GitHub repo code
@@ -32,7 +37,7 @@ Now that we have established the appropriate startup project, we will recompile 
 
 After a few seconds, depending on the capacity of the device, the alert dashboard should open in our browser with url:
 
-http://localhost:50052/
+http://localhost:1002/
 
 ![dashboard](https://user-images.githubusercontent.com/101176997/221211358-6ca056f6-35aa-46d4-a02d-27de1e542f73.PNG)
 
