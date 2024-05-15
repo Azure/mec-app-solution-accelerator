@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alerts.UI", "src\Web\alerts
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alerts.API", "src\Services\Alerts\API\Alerts.API.csproj", "{143BE7C0-C8F1-4516-9540-D571F1382849}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alerts.RulesEngine", "src\Services\Alerts\RulesEngine\Alerts.RulesEngine.csproj", "{551253B0-4724-4615-A729-7115BDF37276}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alerts.Test", "src\Services\Alerts\Tests\Alerts.Test.csproj", "{E1F5F275-8CFF-47C2-B2B1-FD77330FB6B6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Management", "src\Services\Files\Management\Files.Management.csproj", "{FC68E076-AD3B-4B06-8055-50B0AD0EFF28}"
@@ -18,6 +16,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.MinIOInfraestructure", "src\Services\Files\MinIO\Files.MinIOInfraestructure.csproj", "{CA63DC21-1BAC-4F78-8421-55664D5D083F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Contracts", "src\Services\Files\Contracts\Files.Contracts.csproj", "{F933CFE8-BB71-48B3-B5FD-7B8FF9D6FC9B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RulesEngine", "src\Services\Alerts\RulesEngine\RulesEngine.csproj", "{CEE48022-2172-4694-997D-524338CC4A78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +37,6 @@ Global
 		{143BE7C0-C8F1-4516-9540-D571F1382849}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{143BE7C0-C8F1-4516-9540-D571F1382849}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{143BE7C0-C8F1-4516-9540-D571F1382849}.Release|Any CPU.Build.0 = Release|Any CPU
-		{551253B0-4724-4615-A729-7115BDF37276}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{551253B0-4724-4615-A729-7115BDF37276}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{551253B0-4724-4615-A729-7115BDF37276}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{551253B0-4724-4615-A729-7115BDF37276}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E1F5F275-8CFF-47C2-B2B1-FD77330FB6B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E1F5F275-8CFF-47C2-B2B1-FD77330FB6B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1F5F275-8CFF-47C2-B2B1-FD77330FB6B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,6 +53,10 @@ Global
 		{F933CFE8-BB71-48B3-B5FD-7B8FF9D6FC9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F933CFE8-BB71-48B3-B5FD-7B8FF9D6FC9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F933CFE8-BB71-48B3-B5FD-7B8FF9D6FC9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEE48022-2172-4694-997D-524338CC4A78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEE48022-2172-4694-997D-524338CC4A78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEE48022-2172-4694-997D-524338CC4A78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEE48022-2172-4694-997D-524338CC4A78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
