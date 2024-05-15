@@ -75,7 +75,7 @@ Then, using a command-line tool (PowerShell in Windows or Bash in Linux) clone t
 git clone https://github.com/Azure/mec-app-solution-accelerator.git
 ```
 
-Make sure you are using the MAIN branch by typing the following:
+Make sure you are using the MAIN branch by typing the following and checking the current branch in use in the information shown:
 ```
 git status
 ```
