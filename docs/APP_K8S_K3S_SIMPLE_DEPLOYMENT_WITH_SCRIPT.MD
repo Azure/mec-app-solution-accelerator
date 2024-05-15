@@ -75,10 +75,9 @@ Then, using a command-line tool (PowerShell in Windows or Bash in Linux) clone t
 git clone https://github.com/Azure/mec-app-solution-accelerator.git
 ```
 
-**TEMPORAL NOTE:** Until v2 is in the **main branch**, please use the branch **"mec-accelerator-aio-dev"** by positioning within the folder of the cloned repo and running this command:
-
+Make sure you are using the MAIN branch by typing the following:
 ```
-git checkout mec-accelerator-aio-dev
+git status
 ```
 
 ### Move to the deployment folder
