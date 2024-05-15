@@ -163,6 +163,34 @@ However, if you make changes in the .NET or Python code or you want to use your 
 Use these instructions to [Buil your own Docker Images to upload to Docker Registry and deploy to Kubernetes](./BUILD_AND_PUSH_IMAGES_TO_DOCKER_HUB.MD)
 
 
+### Clone the MEC-Accelerator GitHub repo
+
+You need to clone the MEC-Accelerator GitHub repo in the client machine from where you will deploy the application against your Kubernetes/k3s cluster.
+
+Basically, you need to have the cloned repo in the same machine from where you also use KUBECTL against your K8s/K3s cluster.
+
+Logically, you need to have [installed Git](https://git-scm.com/downloads) in the first place.
+
+Then, using a command-line tool (PowerShell in Windows or Bash in Linux) clone the repo:
+
+```
+git clone https://github.com/Azure/mec-app-solution-accelerator.git
+```
+
+Make sure you are using the MAIN branch by typing the following:
+```
+git status
+```
+
+### Move to the deployment folder
+
+From the console, move to the deployment folder within the cloned repo:
+
+```
+cd <YOUR PATH>/deploy/k8s
+```
+
+
 ### Deploy the application namespace (custom K8s namespace)
 1. Open a new command-shell and move into the `deploy/k8s` folder of this repo, as current folder of the command-shell:
 
