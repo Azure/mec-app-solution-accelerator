@@ -449,7 +449,7 @@ items:
           - v1
           - v1beta1
         sideEffects: None
-        timeoutSeconds: 20
+
 ---
 # Source: akri/templates/webhook-cert-autogen.yaml
 apiVersion: v1
