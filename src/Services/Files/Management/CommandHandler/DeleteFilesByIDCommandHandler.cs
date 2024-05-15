@@ -8,7 +8,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.Files.CommandHandlers
     {
         private readonly IFileStorage _filesService;
         private readonly ILogger<DeleteFilesByIDCommandHandler> _logger;
-        private const int MAX_FILE_TIME_ALIVE = 1;
+        private const int MAX_FILE_TIME_ALIVE = 15;
 
         public DeleteFilesByIDCommandHandler(IFileStorage filesService, ILogger<DeleteFilesByIDCommandHandler> logger)
         {

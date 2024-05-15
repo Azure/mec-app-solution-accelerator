@@ -59,10 +59,12 @@ namespace Microsoft.MecSolutionAccelerator.Services.MinIOInfraestructure
             }
         }
 
-        public async Task DeleteOlderThanFiles(string bucketName, int hours, CancellationToken cancellationToken)
+        public async Task DeleteOlderThanFiles(string bucketName, int minutes, CancellationToken cancellationToken)
         {
             try
             {
+                await EnsureBucketExistsAsync(bucketName, cancellationToken);
+
                 var listObjectsRequest = new ListObjectsV2Request
                 {
                     BucketName = bucketName
@@ -86,24 +88,27 @@ namespace Microsoft.MecSolutionAccelerator.Services.MinIOInfraestructure
                         };
                         await _s3Client.DeleteObjectAsync(deleteRequest);
                     }
-                }
+
+                    listObjectsRequest.ContinuationToken = response.NextContinuationToken;
+                } while (response.IsTruncated);
             }
             catch (AmazonS3Exception ex)
             {
-                Console.WriteLine($"Error encountered on server. Message:'{ex.Message}' when deleting old files");
+                _logger.LogError(ex, $"Error encountered on server when deleting old files: {ex.Message}");
                 throw;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Unknown encountered on server. Message:'{ex.Message}' when deleting old files");
+                _logger.LogError(ex, $"Unknown error encountered when deleting old files: {ex.Message}");
                 throw;
             }
         }
 
+
         public async Task<Guid> Handle(IFormFile FormFile, string bucketName, string sourceId, long timestamp, CancellationToken cancellationToken)
         {
             var fileId = Guid.NewGuid();
-            await EnsureBucketExistsAsync(bucketName);
+            await EnsureBucketExistsAsync(bucketName, cancellationToken);
             var fileTransferUtility = new TransferUtility(_s3Client);
             var extension = Path.GetExtension(FormFile.FileName);
             var keyName = $"{fileId}{extension}";
@@ -125,7 +130,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.MinIOInfraestructure
             return fileId;
         }
 
-        private async Task EnsureBucketExistsAsync(string bucketName)
+        private async Task EnsureBucketExistsAsync(string bucketName, CancellationToken cancellationToken)
         {
             try
             {
@@ -138,6 +143,7 @@ namespace Microsoft.MecSolutionAccelerator.Services.MinIOInfraestructure
                     };
 
                     var response = await _s3Client.PutBucketAsync(putBucketRequest);
+                    var response2 = ConfigureBucketLifecycleAsync(bucketName, 1, cancellationToken);
                 }
             }
             catch (AmazonS3Exception e)
@@ -147,6 +153,45 @@ namespace Microsoft.MecSolutionAccelerator.Services.MinIOInfraestructure
             catch (Exception e)
             {
                 Console.WriteLine($"Unknown encountered on server. Message:'{e.Message}' when checking for bucket existence");
+            }
+        }
+
+        public async Task ConfigureBucketLifecycleAsync(string bucketName, int expirationDays, CancellationToken cancellationToken)
+        {
+            var lifecycleConfiguration = new LifecycleConfiguration
+            {
+                Rules = new List<LifecycleRule>
+                {
+                    new LifecycleRule
+                    {
+                        Id = "ExpireObjectsPolicy",
+                        Filter = new LifecycleFilter { LifecycleFilterPredicate = new LifecyclePrefixPredicate { Prefix = "" } },
+                        Status = LifecycleRuleStatus.Enabled,
+                        Expiration = new LifecycleRuleExpiration { Days = expirationDays }
+                    }
+                }
+            };
+
+            var putRequest = new PutLifecycleConfigurationRequest
+            {
+                BucketName = bucketName,
+                Configuration = lifecycleConfiguration
+            };
+
+            try
+            {
+                await _s3Client.PutLifecycleConfigurationAsync(putRequest, cancellationToken);
+                _logger.LogInformation($"Lifecycle policy configured for bucket {bucketName} to expire objects after {expirationDays} days.");
+            }
+            catch (AmazonS3Exception ex)
+            {
+                _logger.LogError(ex, $"Error setting lifecycle configuration for bucket {bucketName}: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Unknown error setting lifecycle configuration for bucket {bucketName}: {ex.Message}");
+                throw;
             }
         }
     }
