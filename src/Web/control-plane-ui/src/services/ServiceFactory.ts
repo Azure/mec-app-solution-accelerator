@@ -6,7 +6,7 @@ import CameraInMemoryService from './CameraInMemoryService';
 import { ICameraService } from './CameraService';
 import SimApiService from './SimApiService';
 import SimInMemoryService from './SimInMemoryService';
-import ISimService from './SimService';
+import ISimService from './SimService1';
 
 export type ServiceSettings = {
     apiKey: string | null,

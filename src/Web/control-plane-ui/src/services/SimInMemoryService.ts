@@ -1,5 +1,5 @@
 import { SIM, SimGroup, SimPolicy } from '@/models/sim';
-import ISimService from './SimService';
+import ISimService from './SimService1';
 
 class SimInMemoryService implements ISimService {
     private sims: SIM[] = [
