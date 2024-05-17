@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: control-plane-ui
-        image: mecsolutionaccelerator/control-plane-ui:1.9
+        image: mecsolutionaccelerator/control-plane-ui:2.0
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
