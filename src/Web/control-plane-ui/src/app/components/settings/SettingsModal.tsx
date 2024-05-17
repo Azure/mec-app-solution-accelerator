@@ -8,7 +8,7 @@ import { AppDispatch, RootState } from '@/stores/store';
 import CheckBox from '../form/CheckBox';
 import { updateSettings } from '@/stores/settingsSlice';
 import ComboBox, { ComboBoxOption } from '../form/ComboBox';
-import useAlertsDashboardUri, { AlertsUrlStorageKey } from '@/app/hooks/useAlertsDashboardUri';
+import { AlertsUrlStorageKey } from '@/app/hooks/useAlertsDashboardUri';
 
 export type SettingsModalProps = {
     show: boolean;
@@ -20,7 +20,6 @@ export const SettingsModal = ({
     onClose
 }: SettingsModalProps) => {
     const dispatch = useDispatch<AppDispatch>();
-    const alertsUiUri = useAlertsDashboardUri();
     const settings = useSelector((state: RootState) => state.settings);
     const [tempSettings, setTempSettings] = useState({ ...settings });
     const reset = () => {
@@ -64,7 +63,7 @@ export const SettingsModal = ({
                         apiKey: val,
                     });
                 }} />
-                <TextInput label='Alerts UI app URL' value={alertsUiUri} hasError={alertsUrlError} onChange={(val) => {
+                <TextInput label='Alerts UI app URL' value={alertsUrl ?? `${window.location.protocol}//${window.location.hostname}:88`} hasError={alertsUrlError} onChange={(val) => {
                     setAlertsUrl(val)
                 }} />
 
