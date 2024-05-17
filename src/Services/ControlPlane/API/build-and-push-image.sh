@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Build and publish control plane ui image
-tag="1.8.1"
+tag="2.0"
 image_name="mecsolutionaccelerator/control-plane-api:$tag"
 
 docker build --tag=$image_name --file=./Dockerfile .
