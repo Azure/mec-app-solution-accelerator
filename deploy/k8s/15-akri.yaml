@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: akri-camera-discovery
-        image: "mecsolutionaccelerator/akri-camera-discovery-handler:1.8"
+        image: "mecsolutionaccelerator/akri-camera-discovery-handler:2.0"
         resources:
           requests:
             memory: 11Mi
@@ -117,7 +117,7 @@ spec:
     brokerPodSpec:
       containers:
       - name: akri-camera-broker
-        image: "mecsolutionaccelerator/framesplitter:1.8"
+        image: "mecsolutionaccelerator/framesplitter:2.0"
         resources:
           requests:
             "{{PLACEHOLDER}}" : "1"
