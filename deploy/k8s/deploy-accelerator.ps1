@@ -9,8 +9,10 @@ if ($uninstall) {
         exit 1
     }
     Write-Host "Uninstalling MEC accelerator"
-    if (kubectl get BrokerListener -n azure-iot-operations | Select-String 'mec-listener') {
-      kubectl delete -f ./E4K/
+    if (kubectl get ns | Select-String 'azure-iot-operations') {
+        if (kubectl get BrokerListener -n azure-iot-operations | Select-String 'mec-listener') {
+        kubectl delete -f ./E4K/
+        }
     }
     if (kubectl get pods -n mec-accelerator | Select-String 'mosquitto') {
       kubectl delete -f ./mosquitto/
