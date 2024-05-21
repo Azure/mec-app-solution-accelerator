@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: files-management
-        image: mecsolutionaccelerator/files-management:1.9
+        image: mecsolutionaccelerator/files-management:2.0
         ports:
         - containerPort: 80
         imagePullPolicy: IfNotPresent

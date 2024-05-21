@@ -272,7 +272,7 @@ This is the whole command to run, but make sure of the `kubernetesDistro` parame
  --set kubernetesDistro=k3s `
  --set custom.discovery.enabled=true `
  --set custom.discovery.image.repository=mecsolutionaccelerator/akri-camera-discovery-handler `
- --set custom.discovery.image.tag=1.8 `
+ --set custom.discovery.image.tag=2.0 `
  --set custom.discovery.name=akri-camera-discovery `
  --set custom.configuration.enabled=true `
  --set custom.configuration.name=akri-camera `
@@ -281,7 +281,7 @@ This is the whole command to run, but make sure of the `kubernetesDistro` parame
  --set custom.configuration.discoveryDetails.database="ControlPlane" `
  --set custom.configuration.discoveryDetails.collection="Cameras" `
  --set custom.configuration.brokerPod.image.repository=mecsolutionaccelerator/framesplitter `
- --set custom.configuration.brokerPod.image.tag=1.8
+ --set custom.configuration.brokerPod.image.tag=2.0
 ```
 
 Here's an example execution when targeting k3s:

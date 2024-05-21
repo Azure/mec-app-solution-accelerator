@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: rtsp-converter
-        image: mecsolutionaccelerator/rtsp-converter:1.8.1
+        image: mecsolutionaccelerator/rtsp-converter:2.0
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000

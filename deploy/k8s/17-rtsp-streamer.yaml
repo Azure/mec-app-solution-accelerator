@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: rtsp-video-streamer
-        image: mecsolutionaccelerator/rtsp-video-streamer:1.8.1
+        image: mecsolutionaccelerator/rtsp-video-streamer:2.0
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8554

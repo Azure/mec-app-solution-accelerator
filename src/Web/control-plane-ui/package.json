@@ -12,7 +12,7 @@
     "@reduxjs/toolkit": "^2.0.1",
     "@types/react-redux": "^7.1.33",
     "classnames": "^2.3.2",
-    "next": "14.0.4",
+    "next": "14.1.1",
     "next-runtime-env": "^3.2.0",
     "papaparse": "^5.4.1",
     "react": "^18",

@@ -63,7 +63,7 @@ export const SettingsModal = ({
                         apiKey: val,
                     });
                 }} />
-                <TextInput label='Alerts UI app URL' value={alertsUrl ?? ''} hasError={alertsUrlError} onChange={(val) => {
+                <TextInput label='Alerts UI app URL' value={alertsUrl ?? `${window.location.protocol}//${window.location.hostname}:88`} hasError={alertsUrlError} onChange={(val) => {
                     setAlertsUrl(val)
                 }} />
 

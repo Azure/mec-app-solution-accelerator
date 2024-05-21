@@ -4,7 +4,7 @@ $rtsp_host="localhost"
 $rtsp_uri="video"
 
 
-$containterImage="mecsolutionaccelerator/rtsp-video-streamer:1.8"
+$containterImage="mecsolutionaccelerator/rtsp-video-streamer:2.0"
 
 docker pull $containterImage
 

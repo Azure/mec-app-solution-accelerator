@@ -3,7 +3,7 @@ version: '3.4'
 services:
 
   aiinferencer:
-    image: ${DOCKER_REGISTRY-}aiinferencer:1.9
+    image: ${DOCKER_REGISTRY-}aiinferencer:2.0
     build:
       context: src/Services/Detections
       dockerfile: ai_inferencer/Dockerfile
@@ -20,7 +20,7 @@ services:
     network_mode: "service:aiinferencer"
 
   rulesengine: 
-    image: ${DOCKER_REGISTRY-}rulesengine:1.9
+    image: ${DOCKER_REGISTRY-}rulesengine:2.0
     build:
       context: .
       dockerfile: src/Services/Alerts/RulesEngine/Dockerfile
@@ -28,7 +28,7 @@ services:
     - mongodb
 
   framesplitter:
-      image: ${DOCKER_REGISTRY-}framesplitter:1.6
+      image: ${DOCKER_REGISTRY-}framesplitter:2.0
       build:
         context: src/Services/Detections
         dockerfile: frameSplitter/Dockerfile
@@ -43,7 +43,7 @@ services:
     network_mode: "service:framesplitter"
 
   alerts-api: 
-    image: ${DOCKER_REGISTRY-}alerts-api:1.9
+    image: ${DOCKER_REGISTRY-}alerts-api:2.0
     build:
       context: .
       dockerfile: src/Services/Alerts/API/Dockerfile
@@ -57,7 +57,7 @@ services:
     network_mode: "service:alerts-api"
   
   alerts-ui:
-    image: ${DOCKER_REGISTRY-}alerts-ui:1.9
+    image: ${DOCKER_REGISTRY-}alerts-ui:2.0
     build:
       context: .
       dockerfile: src/Web/alerts-ui/Dockerfile
@@ -71,7 +71,7 @@ services:
     network_mode: "service:alerts-ui"
 
   files-management:
-    image: ${DOCKER_REGISTRY-}files-management:1.9
+    image: ${DOCKER_REGISTRY-}files-management:2.0
     build:
       context: .
       dockerfile: src/Services/Files/Management/Dockerfile

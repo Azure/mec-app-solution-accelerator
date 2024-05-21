@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: alerts-ui
-        image: mecsolutionaccelerator/alerts-ui:1.9
+        image: mecsolutionaccelerator/alerts-ui:2.0
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
