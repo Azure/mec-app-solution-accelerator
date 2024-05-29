@@ -55,6 +55,6 @@ At this point, you should be able to run the "Alerts Dashboard" web app with the
 ```code
 http://localhost:1002
 ```
-<img width="800" alt="image" src="https://user-images.githubusercontent.com/1712635/214684282-2aa3739e-cd61-47b5-a7e9-2a01e9d040ae.png">
+<img width="800" alt="image" src="https://github.com/Azure/mec-app-solution-accelerator/assets/1712635/4f235fed-e7ad-4f1e-8888-966169eeba6b">
 
 Note that the same alerts could be reaching to other systems such as additional IoT devices, machinery to react or any other alert systems, all of them getting the same alert events based on the Publish/Subscription pattern using the MQTT message broker.
