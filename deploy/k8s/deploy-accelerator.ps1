@@ -68,6 +68,11 @@ if (-not (kubectl get ns | Select-String 'dapr-system')) {
     powershell -Command "iwr -useb https://raw.githubusercontent.com/dapr/cli/master/install/install.ps1 | iex"
     dapr init -k
 }
+else {
+    Write-Host ""
+    Write-Host "----------------------------------------------------------------------------------" 
+    Write-Host "2. Dapr is already installed in cluster, skipping this step."
+}
 
 Write-Host ""
 Write-Host "----------------------------------------------------------------------------------"    
@@ -111,11 +116,13 @@ if (-not (kubectl get ns | Select-String 'kubernetes-dashboard')) {
 
 Write-Host ""
 Write-Host "----------------------------------------------------------------------------------"    
-Write-Host "Successfully installed MEC-Accelerator!"
+Write-Host "MEC-Accelerator application successfully installed!"
 Write-Host ""
 Write-Host "Alerts-UI and Control-Plane-UI services deployed in:"
 Write-Host "----------------------------------------------------------------------------------"
-kubectl get service -n mec-accelerator control-plane-ui-service -o jsonpath='| Control Plane web app URL (control-plane-ui-service pod) | http://{.status.loadBalancer.ingress[*].ip}:{.spec.ports[*].port} |{"\n"}'
+kubectl get service -n mec-accelerator control-plane-ui-service -o jsonpath='| Control Plane web app URL (control-plane-ui-service pod) | http://{.status.loadBalancer.ingress[*].ip}:{.spec.ports[*].port} |'
+Write-Host ""
 Write-Host "----------------------------------------------------------------------------------"
-kubectl get service -n mec-accelerator alerts-ui -o jsonpath='| Alerts Dashboard web app (alerts-ui pod)                 | http://{.status.loadBalancer.ingress[*].ip}:{.spec.ports[*].port} |{"\n"}'
+kubectl get service -n mec-accelerator alerts-ui -o jsonpath='| Alerts Dashboard web app (alerts-ui pod)                 | http://{.status.loadBalancer.ingress[*].ip}:{.spec.ports[*].port} |'
+Write-Host ""
 Write-Host "----------------------------------------------------------------------------------"
