@@ -20,7 +20,7 @@ if [ ! -z "$uninstall" ]; then
        exit 1
    fi
    echo "Uninstalling MEC accelerator"
-   if [ kubectl get ns | grep -q 'azure-iot-operations' ]; then
+   if kubectl get ns | grep -q 'azure-iot-operations'; then
         if kubectl get BrokerListener -n azure-iot-operations | grep -q 'mec-listener'; then
             kubectl delete -f ./E4K/
         fi
