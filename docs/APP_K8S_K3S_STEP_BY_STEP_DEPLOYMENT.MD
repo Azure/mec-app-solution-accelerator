@@ -30,6 +30,8 @@ Even when the below documentation link is the supported baseline environment for
 
 [Create your Azure Arc-enabled Kubernetes cluster on Windows](https://learn.microsoft.com/en-us/azure/iot-operations/deploy-iot-ops/howto-prepare-cluster?tabs=aks-edge-essentials)
 
+**IMPORTANT:** AKS-EE has no persistent storage solution out of the box which is needed by accelerator's mongodb. You can either configure a [storage binding manually](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-use-storage-nfs) or use [Rancher Labs Local-Path-Provisioner](https://learn.microsoft.com/en-us/azure/aks/hybrid/aks-edge-howto-use-storage-local-path). Persistent storage solution must be configured before deploying the accelerator.
+
 **Install K3s-Ubuntu-Linux alternative:** 
 
 [Create your Azure Arc-enabled K3s cluster on Ubuntu-Linux](https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy?tabs=linux#connect-a-kubernetes-cluster-to-azure-arc)
