@@ -1,6 +1,6 @@
 dapr-ext-grpc
 dapr
-setuptools==65.5.1
+setuptools==70.0.0
 paho-mqtt
 
 # Base ----------------------------------------
